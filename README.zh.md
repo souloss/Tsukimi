@@ -110,7 +110,7 @@
 
 1. **克隆仓库：**
    ```bash
-   git clone https://github.com/souloss/Mizuki.git
+   git clone https://github.com/souloss/Tsukimi.git
    cd Tsukimi
    ```
 
@@ -360,15 +360,15 @@ Tsukimi 基于 [Mizuki](https://github.com/LyraVoid/Mizuki)（作者 LyraVoid）
 
 ## 🍀 贡献者
 
-感谢以下贡献者对本项目做出的贡献，如有问题或建议，请提交 [Issue](https://github.com/souloss/Mizuki/issues) 或 [Pull Request](https://github.com/souloss/Mizuki/pulls)。
+感谢以下贡献者对本项目做出的贡献，如有问题或建议，请提交 [Issue](https://github.com/souloss/Tsukimi/issues) 或 [Pull Request](https://github.com/souloss/Tsukimi/pulls)。
 
-<a href="https://github.com/souloss/Mizuki/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
+<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
 ---
 
 ⭐ 如果您觉得这个项目有帮助，请考虑给它一个星标!

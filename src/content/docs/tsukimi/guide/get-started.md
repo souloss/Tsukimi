@@ -70,7 +70,7 @@ git --version
 首先，克隆 Tsukimi 项目到本地：
 
 ```bash
-git clone https://github.com/souloss/Mizuki.git
+git clone https://github.com/souloss/Tsukimi.git
 cd Tsukimi
 ```
 

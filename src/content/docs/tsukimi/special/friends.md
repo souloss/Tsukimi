@@ -201,16 +201,6 @@ export const friendsData: FriendItem[] = [
         weight: 10,
         enabled: true,
       },
-      {
-        id: 2,
-        name: "Tsukimi Docs",
-        avatar: "http://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
-        url: "https://docs.tsukimi.mysqil.com",
-        description: "Tsukimi User Manual",
-        tags: ["Docs"],
-        weight: 5,
-        enabled: true,
-      },
       // ... 其他友情链接 ...
       // --- 这是我们新添加的友情链接 ---
       {

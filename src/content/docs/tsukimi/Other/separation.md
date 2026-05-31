@@ -24,7 +24,7 @@ copyright:
 
 ```bash
 # 克隆项目
-git clone https://github.com/souloss/Mizuki.git
+git clone https://github.com/souloss/Tsukimi.git
 cd Tsukimi
 
 # 安装依赖
@@ -512,7 +512,7 @@ git clone https://github.com/your-username/Tsukimi-Content.git content
 
 ## 🤝 需要帮助?
 
-- 查看 [GitHub Issues](https://github.com/souloss/Mizuki/issues)
+- 查看 [GitHub Issues](https://github.com/souloss/Tsukimi/issues)
 - 运行 `pnpm run check-env` 检查配置
 
 祝你使用愉快! 🎉

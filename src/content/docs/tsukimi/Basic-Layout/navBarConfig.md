@@ -187,7 +187,7 @@ LinkPreset.Archive,
     children: [
         {
             name: "GitHub",
-            url: "https://github.com/souloss/Mizuki",
+            url: "https://github.com/souloss/Tsukimi",
             external: true,
             icon: "fa6-brands:github",
         },

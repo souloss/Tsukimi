@@ -84,5 +84,5 @@ copyright:
 
 ## 附：核心资源速查
 - 官方文档：[/docs/tsukimi//](/docs/tsukimi//)
-- 项目仓库：GitHub（[souloss/Mizuki](https://github.com/souloss/Mizuki)）
+- 项目仓库：GitHub（[souloss/Tsukimi](https://github.com/souloss/Tsukimi)）
 - 常见问题：文档“FAQ”模块、群聊置顶消息、仓库 Issues 区（搜索关键词）

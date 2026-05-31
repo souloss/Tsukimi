@@ -52,7 +52,7 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 // 本站信息
 const mySiteInfo = {
 	name: siteConfig.title || "Tsukimi Blog",
-	url: siteConfig.siteURL || "https://tsukimi.mysqil.com/",
+	url: siteConfig.siteURL || "https://tsukimi.souloss.cn",
 	avatar: (profileConfig.avatar || "/favicon.png").startsWith("/")
 		? profileConfig.avatar || "/favicon.png"
 		: `/${profileConfig.avatar || "favicon.png"}`,

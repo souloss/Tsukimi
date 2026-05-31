@@ -1,7 +1,7 @@
 
-This website is built with the **Astro** framework using the [Tsukimi](https://github.com/souloss/Mizuki) theme.
+This website is built with the **Astro** framework using the [Tsukimi](https://github.com/souloss/Tsukimi) theme.
 
-::github{repo="souloss/Mizuki"}
+::github{repo="souloss/Tsukimi"}
 
 ## 🌟 Theme Features
 

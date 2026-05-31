@@ -57,7 +57,7 @@ cat > README.md << 'EOF'
 
 此仓库作为 Tsukimi 代码仓库的内容源,通过 Git Submodule 或独立模式关联。
 
-详细说明请查看: https://github.com/souloss/Mizuki
+详细说明请查看: https://github.com/souloss/Tsukimi
 EOF
 ```
 

@@ -109,7 +109,7 @@ Get started quickly with our comprehensive documentation. Whether you're customi
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/souloss/Mizuki.git
+   git clone https://github.com/souloss/Tsukimi.git
    cd Tsukimi
    ```
 
@@ -359,15 +359,15 @@ which is based on [Fuwari](https://github.com/saicaca/fuwari) by saicaca.
 
 ## 🍀 Contributors
 
-Thanks to all contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/souloss/Mizuki/issues) or [Pull Request](https://github.com/souloss/Mizuki/pulls).
+Thanks to all contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/souloss/Tsukimi/issues) or [Pull Request](https://github.com/souloss/Tsukimi/pulls).
 
-<a href="https://github.com/souloss/Mizuki/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
+<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
 ---
 
 ⭐ If you find this project helpful, please consider giving it a star!
