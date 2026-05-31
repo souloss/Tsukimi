@@ -1,7 +1,8 @@
 import type { NavBarConfig } from "../types/config";
 import { LinkPreset } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const navBarConfig: NavBarConfig = {
+const defaults: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		{
@@ -134,3 +135,5 @@ export const navBarConfig: NavBarConfig = {
 		},
 	],
 };
+
+export const navBarConfig = withOverride("navBarConfig", defaults);

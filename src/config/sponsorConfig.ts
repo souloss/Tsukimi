@@ -1,7 +1,8 @@
 import type { SponsorConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
 // 赞助页面配置
-export const sponsorConfig: SponsorConfig = {
+const defaults: SponsorConfig = {
 	// 页面标题
 	title: "支持与赞助",
 	// 页面描述
@@ -38,3 +39,5 @@ export const sponsorConfig: SponsorConfig = {
 	// 是否在文章详情页底部显示赞助按钮
 	showButtonInPost: true,
 };
+
+export const sponsorConfig = withOverride("sponsorConfig", defaults);

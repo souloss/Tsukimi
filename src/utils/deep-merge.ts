@@ -4,7 +4,7 @@ export function isPlainObject(val: unknown): val is Record<string, unknown> {
 	return typeof val === "object" && val !== null && !Array.isArray(val);
 }
 
-export function deepMerge<T extends Record<string, unknown>>(
+export function deepMerge<T extends object>(
 	target: T,
 	source: RecursivePartial<T>,
 ): T {

@@ -1,6 +1,7 @@
 import type { MusicPlayerConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const musicPlayerConfig: MusicPlayerConfig = {
+const defaults: MusicPlayerConfig = {
 	enable: true,
 	showFloatingPlayer: true,
 	floatingEntryMode: "fab",
@@ -12,3 +13,5 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 		type: "playlist",
 	},
 };
+
+export const musicPlayerConfig = withOverride("musicConfig", defaults);

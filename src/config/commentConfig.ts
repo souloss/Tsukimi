@@ -1,7 +1,8 @@
 import type { CommentConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 import { SITE_LANG } from "./siteConfig";
 
-export const commentConfig: CommentConfig = {
+const defaults: CommentConfig = {
 	enable: false,
 	system: "twikoo",
 	twikoo: {
@@ -22,3 +23,5 @@ export const commentConfig: CommentConfig = {
 		loading: "lazy",
 	},
 };
+
+export const commentConfig = withOverride("commentConfig", defaults);

@@ -1,8 +1,9 @@
 import { WALLPAPER_BANNER } from "../constants/constants";
 import type { BackgroundWallpaperConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
 // 背景壁纸配置（图片资源 + 模式控制）
-export const backgroundWallpaperConfig: BackgroundWallpaperConfig = {
+const defaults: BackgroundWallpaperConfig = {
 	// 通用配置（各模式可覆盖）
 	common: {
 		navbar: {
@@ -106,3 +107,8 @@ export const backgroundWallpaperConfig: BackgroundWallpaperConfig = {
 		},
 	},
 };
+
+export const backgroundWallpaperConfig = withOverride(
+	"backgroundWallpaper",
+	defaults,
+);

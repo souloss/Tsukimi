@@ -1,6 +1,7 @@
 import type { PioConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const pioConfig: PioConfig = {
+const defaults: PioConfig = {
 	enable: true,
 	models: ["/pio/models/NOIR/noir.model3.json"],
 	position: "left",
@@ -23,3 +24,5 @@ export const pioConfig: PioConfig = {
 		link: "https://github.com/souloss/tsukimi",
 	},
 };
+
+export const pioConfig = withOverride("pioConfig", defaults);

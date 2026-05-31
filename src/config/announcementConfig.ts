@@ -1,6 +1,7 @@
 import type { AnnouncementConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const announcementConfig: AnnouncementConfig = {
+const defaults: AnnouncementConfig = {
 	title: "",
 	content: "欢迎来到我的博客！这是一条示例公告",
 	closable: true,
@@ -11,3 +12,5 @@ export const announcementConfig: AnnouncementConfig = {
 		external: false,
 	},
 };
+
+export const announcementConfig = withOverride("announcementConfig", defaults);

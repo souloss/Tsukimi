@@ -1,6 +1,7 @@
 import type { RelatedPostsConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const relatedPostsConfig: RelatedPostsConfig = {
+const defaults: RelatedPostsConfig = {
 	enable: true,
 	maxCount: 5,
 
@@ -14,3 +15,5 @@ export const relatedPostsConfig: RelatedPostsConfig = {
 	},
 	freshnessHalfLife: 180,
 };
+
+export const relatedPostsConfig = withOverride("relatedPostsConfig", defaults);

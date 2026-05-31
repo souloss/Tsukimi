@@ -1,7 +1,8 @@
 import type { EffectsConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
 // 特效配置
-export const effectsConfig: EffectsConfig = {
+const defaults: EffectsConfig = {
 	sakura: {
 		enable: false,
 		switchable: true,
@@ -32,3 +33,5 @@ export const effectsConfig: EffectsConfig = {
 		},
 	},
 };
+
+export const effectsConfig = withOverride("effectsConfig", defaults);

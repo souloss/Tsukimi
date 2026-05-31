@@ -1,7 +1,8 @@
 import type { FontConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
 // 字体配置
-export const fontConfig: FontConfig = {
+const defaults: FontConfig = {
 	// 是否允许用户切换字体
 	switchable: true,
 	// 默认字体选项
@@ -58,3 +59,5 @@ export const fontConfig: FontConfig = {
 		},
 	],
 };
+
+export const fontConfig = withOverride("fontConfig", defaults);

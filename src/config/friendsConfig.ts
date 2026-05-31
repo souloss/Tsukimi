@@ -1,7 +1,8 @@
 import type { FriendsPageConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
 // 友链页面配置
-export const friendsConfig: FriendsPageConfig = {
+const defaults: FriendsPageConfig = {
 	// 页面标题
 	title: "友情链接",
 	// 页面描述
@@ -19,3 +20,5 @@ export const friendsConfig: FriendsPageConfig = {
 	// 每个友链最多抓取条目数
 	circleMaxItemsPerFriend: 3,
 };
+
+export const friendsConfig = withOverride("friendsConfig", defaults);

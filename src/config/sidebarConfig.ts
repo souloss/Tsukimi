@@ -1,6 +1,7 @@
 import type { SidebarLayoutConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const sidebarLayoutConfig: SidebarLayoutConfig = {
+const defaults: SidebarLayoutConfig = {
 	properties: [
 		{
 			type: "profile",
@@ -84,3 +85,5 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 		},
 	},
 };
+
+export const sidebarLayoutConfig = withOverride("sidebarConfig", defaults);

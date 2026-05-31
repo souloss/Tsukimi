@@ -6,10 +6,7 @@ import { deepMerge } from "./deep-merge";
  * If no override file exists, returns defaults unchanged.
  * Override files are loaded eagerly at build time via import.meta.glob.
  */
-export function withOverride<T extends Record<string, unknown>>(
-	name: string,
-	defaults: T,
-): T {
+export function withOverride<T extends object>(name: string, defaults: T): T {
 	const modules = import.meta.glob<Record<string, RecursivePartial<T>>>(
 		"../overrides/*.ts",
 		{ eager: true },

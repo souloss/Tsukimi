@@ -1,6 +1,7 @@
 import type { ProfileConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
-export const profileConfig: ProfileConfig = {
+const defaults: ProfileConfig = {
 	avatar: "assets/images/avatar.png",
 	name: "Souloss",
 	bio: "向下深挖一英里，向上构建一厘米",
@@ -17,3 +18,5 @@ export const profileConfig: ProfileConfig = {
 		},
 	],
 };
+
+export const profileConfig = withOverride("profileConfig", defaults);
