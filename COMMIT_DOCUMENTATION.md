@@ -9,12 +9,11 @@ This document summarizes all significant changes from commit `ff15935` up to `26
 1. **Talking (Moments), Guestbook, and Sponsor Pages** (67ac05b)
    - Added `src/components/features/talking/` with MomentCard component
    - New pages: `guestbook.astro`, `sponsor.astro`
-   - Documentation: `src/content/docs/mizuki/special/talking.md`
+   - Documentation: `src/content/docs/tsukimi/special/talking.md`
 
 2. **Docs Layout System** (6205f4c)
    - New documentation layout with sidebar, breadcrumb, TOC, and theming
    - Added comprehensive docs in `src/content/docs/`
-   - New scripts: `check-docs-mizuki.mjs`, `sync-docs-mizuki.mjs`
 
 3. **OG Image Fallback** (71c0f14)
    - Support using post cover or banner for OG images when `generateOgImages` is disabled
@@ -111,7 +110,7 @@ This document summarizes all significant changes from commit `ff15935` up to `26
    - Removed entire diary feature from the codebase
 
 2. **Outdated Documentation** (693c7a4)
-   - Removed outdated docs in `src/content/docs/mizuki-en/`
+   - Removed outdated docs in `src/content/docs/tsukimi-en/`
 
 3. **Submodule Removal** (2620eb2)
    - Removed vhAstro-Theme submodule
@@ -181,4 +180,4 @@ git show <commit-hash>
 - Always refer to the official [Astro 6.3.0 documentation](https://docs.astro.build/en/guides/integrations-guide/) for framework-specific changes
 - For i18n updates, check `src/i18n/languages/` for all language files
 - All new configuration files live in `src/config/`
-- The new docs system is located in `src/content/docs/mizuki/`
+- The new docs system is located in `src/content/docs/tsukimi/`

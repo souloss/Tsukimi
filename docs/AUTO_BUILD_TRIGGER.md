@@ -2,7 +2,7 @@
 
 ## 🎯 问题
 
-启用内容分离后,内容仓库 (Mizuki-Content) 更新不会自动触发代码仓库 (Mizuki) 的重新部署。
+启用内容分离后,内容仓库 (Tsukimi-Content) 更新不会自动触发代码仓库 (Tsukimi) 的重新部署。
 
 ## ✅ 解决方案 (推荐)
 
@@ -17,13 +17,13 @@
 访问: https://github.com/settings/tokens
 
 - 点击 **Generate new token (classic)**
-- Note: `Mizuki Content Trigger`
+- Note: `Tsukimi Content Trigger`
 - Scopes: 勾选 ✅ `repo`
 - 点击生成并**复制 Token** ⚠️ (只显示一次)
 
 ### Step 2: 添加 Secret
 
-在**内容仓库** (Mizuki-Content):
+在**内容仓库** (Tsukimi-Content):
 
 Settings → Secrets and variables → Actions → New repository secret
 
@@ -37,10 +37,10 @@ Settings → Secrets and variables → Actions → New repository secret
 找到第 27 行,修改为你的代码仓库:
 
 ```yaml
-repository: your-username/Mizuki  # 改为你的
+repository: your-username/Tsukimi  # 改为你的
 ```
 
-例如: `souloss/Mizuki`
+例如: `souloss/Tsukimi`
 
 ### Step 4: 更新代码仓库工作流
 
@@ -93,7 +93,7 @@ git push
 **解决**:
 - 确认格式: `owner/repo` (用斜杠分隔)
 - 确认拼写正确
-- 示例: `souloss/Mizuki`
+- 示例: `souloss/Tsukimi`
 
 ### 代码仓库未触发
 
@@ -108,7 +108,7 @@ git push
 
 需要更多配置选项? 查看:
 - [部署指南 - 完整说明](./DEPLOYMENT.md#内容仓库更新触发构建) - 包含 Webhook、定时构建等其他方案
-- [内容仓库配置指南](../Mizuki-Content/.github/workflows/README.md) - 工作流详细说明
+- [内容仓库配置指南](../Tsukimi-Content/.github/workflows/README.md) - 工作流详细说明
 
 ---
 

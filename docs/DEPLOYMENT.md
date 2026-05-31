@@ -1,6 +1,6 @@
-# Mizuki 部署指南
+# Tsukimi 部署指南
 
-本文档提供 Mizuki 博客在各个平台的部署配置说明。
+本文档提供 Tsukimi 博客在各个平台的部署配置说明。
 
 ## 📖 目录
 
@@ -61,7 +61,7 @@ export default defineConfig({
 
 1. **添加仓库 Secrets**:
    - Settings → Secrets and variables → Actions → New repository secret
-   - 添加 `CONTENT_REPO_URL`: `https://github.com/your-username/Mizuki-Content.git`
+   - 添加 `CONTENT_REPO_URL`: `https://github.com/your-username/Tsukimi-Content.git`
 
 2. **修改 `.github/workflows/deploy.yml`**:
 
@@ -137,7 +137,7 @@ export default defineConfig({
 1. **连接仓库**:
    - 访问 [Vercel](https://vercel.com)
    - Import Git Repository
-   - 选择你的 Mizuki 仓库
+   - 选择你的 Tsukimi 仓库
 
 2. **配置项目**:
    - Framework Preset: Astro
@@ -160,7 +160,7 @@ export default defineConfig({
 | 变量名 | 值 |
 |-------|---|
 | `ENABLE_CONTENT_SYNC` | `true` |
-| `CONTENT_REPO_URL` | `https://github.com/your-username/Mizuki-Content.git` |
+| `CONTENT_REPO_URL` | `https://github.com/your-username/Tsukimi-Content.git` |
 | `USE_SUBMODULE` | `false` 或 `true` (推荐 `false`) |
 
 > ⚠️ **重要提示**: 如果使用 `USE_SUBMODULE=true`,请确保 `.gitignore` 中的 `content/` 行已被注释掉,否则会导致部署失败。推荐在 Vercel 上使用 `USE_SUBMODULE=false` (独立仓库模式)。
@@ -176,7 +176,7 @@ export default defineConfig({
 ```
 ENABLE_CONTENT_SYNC=true
 GITHUB_TOKEN=ghp_your_personal_access_token
-CONTENT_REPO_URL=https://${GITHUB_TOKEN}@github.com/your-username/Mizuki-Content-Private.git
+CONTENT_REPO_URL=https://${GITHUB_TOKEN}@github.com/your-username/Tsukimi-Content-Private.git
 USE_SUBMODULE=true
 ```
 
@@ -198,7 +198,7 @@ USE_SUBMODULE=true
 1. **连接仓库**:
    - 访问 [Netlify](https://www.netlify.com)
    - New site from Git
-   - 选择你的 Mizuki 仓库
+   - 选择你的 Tsukimi 仓库
 
 2. **配置构建**:
    - Build command: `pnpm build`
@@ -209,7 +209,7 @@ USE_SUBMODULE=true
 在 Site settings → Environment variables 中添加:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 USE_SUBMODULE=true
 ```
 
@@ -231,7 +231,7 @@ USE_SUBMODULE=true
   PNPM_VERSION = "9"
   # 如果使用内容分离
   ENABLE_CONTENT_SYNC = "true"
-  CONTENT_REPO_URL = "https://github.com/your-username/Mizuki-Content.git"
+  CONTENT_REPO_URL = "https://github.com/your-username/Tsukimi-Content.git"
   USE_SUBMODULE = "true"
 ```
 
@@ -256,7 +256,7 @@ USE_SUBMODULE=true
 添加以下变量:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 USE_SUBMODULE=false  # ⚠️ Cloudflare Pages 默认不支持 submodule
 ```
 
@@ -346,7 +346,7 @@ fatal: Failed to add submodule 'content'
 
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 USE_SUBMODULE=false  # 改为 false
 ```
 
@@ -448,8 +448,8 @@ fatal: could not read Username for 'https://github.com'
 ### 问题说明
 
 当使用**内容代码分离**架构时，默认情况下：
-- ✅ 代码仓库 (Mizuki) 更新会触发自动构建
-- ❌ 内容仓库 (Mizuki-Content) 更新**不会**触发构建
+- ✅ 代码仓库 (Tsukimi) 更新会触发自动构建
+- ❌ 内容仓库 (Tsukimi-Content) 更新**不会**触发构建
 
 这意味着您在内容仓库中发布新文章后，需要手动触发代码仓库的重新部署才能看到更新。
 
@@ -482,14 +482,14 @@ fatal: could not read Username for 'https://github.com'
 1. 访问 [GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens)
 2. 点击 **Generate new token (classic)**
 3. 配置 Token:
-   - Note: `Mizuki Content Trigger` (名称随意)
+   - Note: `Tsukimi Content Trigger` (名称随意)
    - Expiration: `No expiration` 或选择合适的期限
    - Scopes: 勾选 `repo` (完整仓库访问权限)
 4. 点击 **Generate token**，复制生成的 Token (只显示一次！)
 
 **Step 2: 在内容仓库添加 Secret**
 
-1. 打开内容仓库 (Mizuki-Content): `https://github.com/your-username/Mizuki-Content`
+1. 打开内容仓库 (Tsukimi-Content): `https://github.com/your-username/Tsukimi-Content`
 2. Settings → Secrets and variables → Actions → New repository secret
 3. 添加:
    - Name: `DISPATCH_TOKEN`
@@ -521,7 +521,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.DISPATCH_TOKEN }}
-          repository: your-username/Mizuki  # 改为你的代码仓库
+          repository: your-username/Tsukimi  # 改为你的代码仓库
           event-type: content-updated
           client-payload: |
             {
@@ -532,7 +532,7 @@ jobs:
 ```
 
 **注意事项**:
-- 将 `your-username/Mizuki` 替换为你的代码仓库完整名称
+- 将 `your-username/Tsukimi` 替换为你的代码仓库完整名称
 - 可以根据需要调整 `paths`，只在特定文件变化时触发
 
 **Step 4: 在代码仓库更新 GitHub Actions 工作流**
@@ -776,7 +776,7 @@ on:
 
 1. **在内容仓库修改文章**:
    ```bash
-   cd /path/to/Mizuki-Content
+   cd /path/to/Tsukimi-Content
    # 编辑文章
    git add .
    git commit -m "test: trigger build"
@@ -784,11 +784,11 @@ on:
    ```
 
 2. **查看内容仓库 Actions**:
-   - 访问 `https://github.com/your-username/Mizuki-Content/actions`
+   - 访问 `https://github.com/your-username/Tsukimi-Content/actions`
    - 确认 "Trigger Build" 工作流运行成功
 
 3. **查看代码仓库 Actions**:
-   - 访问 `https://github.com/your-username/Mizuki/actions`
+   - 访问 `https://github.com/your-username/Tsukimi/actions`
    - 确认部署工作流被触发
    - 查看日志确认内容同步成功
 
@@ -815,7 +815,7 @@ on:
 # 在内容仓库工作流中添加调试步骤
 - name: Debug
   run: |
-    echo "Repository: your-username/Mizuki"
+    echo "Repository: your-username/Tsukimi"
     echo "Event type: content-updated"
 ```
 

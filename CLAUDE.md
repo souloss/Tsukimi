@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Mizuki is a feature-rich static blog built with **Astro 6** (static output mode), **Svelte 5**, **Tailwind CSS 4**, and **TypeScript**. It is based on the Fuwari template and extended with anime tracking, diary, music player, Live2D mascot, and more. The site uses Swup for page transitions and Pagefind for search.
+Tsukimi is a feature-rich static blog built with **Astro 6** (static output mode), **Svelte 5**, **Tailwind CSS 4**, and **TypeScript**. It is based on the Fuwari template and extended with anime tracking, diary, music player, Live2D mascot, and more. The site uses Swup for page transitions and Pagefind for search.
 
 ## Commands
 

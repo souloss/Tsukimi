@@ -311,4 +311,4 @@ import Badge from "@/components/atoms/Badge/Badge.astro";
 ---
 
 **最后更新**: 2026-03-21
-**维护者**: Mizuki 开发团队
+**维护者**: Tsukimi 开发团队

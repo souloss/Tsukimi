@@ -2,7 +2,7 @@
 
 ## 概述
 
-本文档定义了 Mizuki 项目的组件化架构设计原则和最佳实践，旨在提高代码的可维护性、可复用性和性能。
+本文档定义了 Tsukimi 项目的组件化架构设计原则和最佳实践，旨在提高代码的可维护性、可复用性和性能。
 
 ## 核心原则
 
@@ -168,7 +168,7 @@ import Avatar from '../atoms/Avatar.astro'
 <WidgetLayout name="个人资料">
   <Avatar src="/avatar.png" />
   <div class="profile-info">
-    <h3>Mizuki</h3>
+    <h3>Tsukimi</h3>
     <p>前端开发者</p>
   </div>
 </WidgetLayout>
@@ -843,4 +843,4 @@ const categories = await getCategories()
 ---
 
 **最后更新**: 2026-03-17
-**维护者**: Mizuki 开发团队
+**维护者**: Tsukimi 开发团队

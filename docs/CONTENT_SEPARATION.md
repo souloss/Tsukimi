@@ -1,6 +1,6 @@
-# Mizuki 内容分离完整指南
+# Tsukimi 内容分离完整指南
 
-本指南详细说明如何在 Mizuki 中使用内容分离功能,包括基础配置、私有仓库、CI/CD 部署等所有场景。
+本指南详细说明如何在 Tsukimi 中使用内容分离功能,包括基础配置、私有仓库、CI/CD 部署等所有场景。
 
 ## 📖 目录
 
@@ -22,8 +22,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/souloss/Mizuki.git
-cd Mizuki
+git clone https://github.com/souloss/Tsukimi.git
+cd Tsukimi
 
 # 安装依赖
 pnpm install
@@ -44,7 +44,7 @@ cp .env.example .env
 
 # 2. 编辑 .env,启用内容分离
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 
 # 3. 同步内容
 pnpm run sync-content
@@ -116,7 +116,7 @@ git push
 ```bash
 # .env
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 ```
 
 **工作流程**:
@@ -125,7 +125,7 @@ CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
 pnpm dev
 
 # 内容在独立仓库编辑
-cd /path/to/Mizuki-Content
+cd /path/to/Tsukimi-Content
 # 编辑文章
 git add .
 git commit -m "Update article"
@@ -140,7 +140,7 @@ git push
 2. 编辑 `.env`:
    ```bash
    ENABLE_CONTENT_SYNC=true
-   CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+   CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
    ```
 3. 同步内容: `pnpm run sync-content`
 
@@ -179,7 +179,7 @@ ENABLE_CONTENT_SYNC=false
 # 公开仓库: https://github.com/username/repo.git
 # 私有仓库 (SSH): git@github.com:username/repo.git
 # 私有仓库 (Token): https://TOKEN@github.com/username/repo.git
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 
 # 内容目录路径 (默认 ./content 一般无需改动)
 CONTENT_DIR=./content
@@ -201,7 +201,7 @@ ENABLE_CONTENT_SYNC=false
 ```bash
 # .env
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 ```
 
 #### 示例 3: 私有仓库 (SSH)
@@ -209,7 +209,7 @@ CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
 ```bash
 # .env
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=git@github.com:your-username/Mizuki-Content-Private.git
+CONTENT_REPO_URL=git@github.com:your-username/Tsukimi-Content-Private.git
 ```
 
 ---
@@ -227,7 +227,7 @@ CONTENT_REPO_URL=git@github.com:your-username/Mizuki-Content-Private.git
 详细步骤请查看:
 - **[自动构建触发快速参考](./AUTO_BUILD_TRIGGER.md)** - 最简洁的配置指南 ⭐
 - **[部署文档 - 完整说明](./DEPLOYMENT.md#内容仓库更新触发构建)** - 包含多种方案
-- **[内容仓库配置指南](../Mizuki-Content/.github/workflows/README.md)** - 工作流详细说明
+- **[内容仓库配置指南](../Tsukimi-Content/.github/workflows/README.md)** - 工作流详细说明
 
 ---
 
@@ -269,13 +269,13 @@ Get-Content ~/.ssh/id_ed25519.pub
 **Gitee**: 
 - 设置 → SSH 公钥 → 添加公钥
 
-#### 3. 配置 Mizuki
+#### 3. 配置 Tsukimi
 
 在 `.env` 文件中使用 SSH URL:
 
 ```bash
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=git@github.com:your-username/Mizuki-Content-Private.git
+CONTENT_REPO_URL=git@github.com:your-username/Tsukimi-Content-Private.git
 ```
 
 #### 4. 测试连接
@@ -311,7 +311,7 @@ pnpm run sync-content
 
 ```bash
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://YOUR_TOKEN@github.com/your-username/Mizuki-Content-Private.git
+CONTENT_REPO_URL=https://YOUR_TOKEN@github.com/your-username/Tsukimi-Content-Private.git
 ```
 
 ⚠️ **安全提示**:
@@ -404,7 +404,7 @@ ENABLE_CONTENT_SYNC=true
 **解决**:
 ```bash
 # 在 .env 中添加
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 ```
 
 ### 问题 3: 私有仓库认证失败
@@ -469,7 +469,7 @@ pnpm run sync-content
 ls -la content/
 
 # 手动克隆内容仓库
-git clone https://github.com/your-username/Mizuki-Content.git content
+git clone https://github.com/your-username/Tsukimi-Content.git content
 ```
 
 ### 问题 6: 部署时内容未同步
@@ -518,7 +518,7 @@ git clone https://github.com/your-username/Mizuki-Content.git content
 
 ## 🤝 需要帮助?
 
-- 查看 [GitHub Issues](https://github.com/souloss/Mizuki/issues)
+- 查看 [GitHub Issues](https://github.com/souloss/Tsukimi/issues)
 - 阅读 [完整文档](../README.zh.md)
 - 运行 `pnpm run check-env` 检查配置
 

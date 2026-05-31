@@ -7,7 +7,7 @@ description: Comprehensive upstream sync and enhancement plan — Biome migratio
 
 **Date**: 2026-05-31
 **Status**: Approved
-**Scope**: Selective sync of upstream (https://github.com/LyraVoid/Mizuki.git) improvements while maintaining codebase independence
+**Scope**: Selective sync of upstream (https://github.com/LyraVoid/Tsukimi.git) improvements while maintaining codebase independence
 
 ## Executive Summary
 
