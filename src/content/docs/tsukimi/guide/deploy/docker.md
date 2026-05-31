@@ -13,14 +13,14 @@ copyright:
     url: https://github.com/limitationai
 ---
 
-使用 Docker 部署 Mizuki 博客可以实现环境隔离、快速部署和轻松扩展。本文将详细介绍如何使用 Docker 容器化并部署 Mizuki 博客。
+使用 Docker 部署 Tsukimi 博客可以实现环境隔离、快速部署和轻松扩展。本文将详细介绍如何使用 Docker 容器化并部署 Tsukimi 博客。
 
 ## 前提条件
 
 开始之前，请确保您已准备好以下环境：
 
 1. 已安装 Docker（推荐使用最新稳定版）
-2. 已安装 pnpm（Mizuki 使用的包管理器）
+2. 已安装 pnpm（Tsukimi 使用的包管理器）
 3. 基本的 Linux 命令行知识
 
 ## 准备工作
@@ -43,11 +43,11 @@ sudo systemctl enable docker
 
 ### 2. 准备项目文件
 
-将 Mizuki 项目克隆到本地：
+将 Tsukimi 项目克隆到本地：
 
 ```bash title="克隆项目"
 git clone https://github.com/souloss/Tsukimi.git
-cd Mizuki
+cd Tsukimi
 ```
 
 ## 创建 Docker 配置文件
@@ -150,11 +150,11 @@ server {
 完成上述配置后，使用以下命令构建 Docker 镜像：
 
 ```bash title="构建镜像"
-docker build -t mizuki-blog .
+docker build -t tsukimi-blog .
 ```
 
 ::: tip
-- `-t mizuki-blog`：为构建的镜像添加标签，命名为 mizuki-blog
+- `-t tsukimi-blog`：为构建的镜像添加标签，命名为 tsukimi-blog
 - `.`：表示使用当前目录作为构建上下文
 :::
 
@@ -163,12 +163,12 @@ docker build -t mizuki-blog .
 使用以下命令运行容器：
 
 ```bash title="运行容器"
-docker run -d --name mizuki-blog -p 5090:80 mizuki-blog
+docker run -d --name tsukimi-blog -p 5090:80 tsukimi-blog
 ```
 
 ::: tip
 - `-d`：在后台运行容器
-- `--name mizuki-blog`：为容器指定名称
+- `--name tsukimi-blog`：为容器指定名称
 - `-p 5090:80`：将主机的 5090 端口映射到容器的 80 端口
 :::
 
@@ -195,32 +195,32 @@ docker ps
 
 ```bash
 # 停止容器
-docker stop mizuki-blog
+docker stop tsukimi-blog
 
 # 启动容器
-docker start mizuki-blog
+docker start tsukimi-blog
 
 # 重启容器
-docker restart mizuki-blog
+docker restart tsukimi-blog
 ```
 
 # 查看日志
 
 ```bash
 # 查看容器日志
-docker logs mizuki-blog
+docker logs tsukimi-blog
 
 # 实时查看日志
-docker logs -f mizuki-blog
+docker logs -f tsukimi-blog
 ```
 
 # 删除容器
 
 ```bash
 # 先停止容器
-docker stop mizuki-blog
+docker stop tsukimi-blog
 # 再删除容器
-docker rm mizuki-blog
+docker rm tsukimi-blog
 ```
 
 :::
@@ -230,10 +230,10 @@ docker rm mizuki-blog
 如果需要持久化日志或数据，可以使用卷映射：
 
 ```bash title="使用卷映射"
-docker run -d --name mizuki-blog \
+docker run -d --name tsukimi-blog \
   -p 5090:80 \
   -v /path/to/logs:/var/log/nginx \
-  mizuki-blog
+  tsukimi-blog
 ```
 
 ## 高级配置
@@ -246,9 +246,9 @@ docker run -d --name mizuki-blog \
 version: '3'
 
 services:
-  mizuki-blog:
+  tsukimi-blog:
     build: .
-    container_name: mizuki-blog
+    container_name: tsukimi-blog
     ports:
       - "5090:80"
     restart: unless-stopped
@@ -267,31 +267,31 @@ docker-compose up -d
 添加 `--restart` 参数确保容器在崩溃后自动重启：
 
 ```bash title="自动重启"
-docker run -d --name mizuki-blog \
+docker run -d --name tsukimi-blog \
   --restart unless-stopped \
   -p 5090:80 \
-  mizuki-blog
+  tsukimi-blog
 ```
 
 ### 自动更新脚本参考
 ```bash
 #!/bin/bash
 
-# 脚本功能: 自动构建并部署 mizuki-blog Docker 容器
+# 脚本功能: 自动构建并部署 tsukimi-blog Docker 容器
 
 # 构建Docker镜像
 # docker build: Docker构建命令
-# -t mizuki-blog: 为构建的镜像添加标签，命名为 mizuki-blog
+# -t tsukimi-blog: 为构建的镜像添加标签，命名为 tsukimi-blog
 # .: 使用当前目录作为构建上下文，包含Dockerfile和相关文件
 echo "正在构建Docker镜像..."
-docker build -t mizuki-blog .
+docker build -t tsukimi-blog .
 
 # 检查是否有正在运行的容器并停止
 echo "检查是否有正在运行的容器..."
-# docker ps -q --filter "name=mizuki-blog": 查找名称包含 mizuki-blog 的正在运行的容器ID
+# docker ps -q --filter "name=tsukimi-blog": 查找名称包含 tsukimi-blog 的正在运行的容器ID
 # -q: 仅返回容器ID，不显示其他信息
-# --filter "name=mizuki-blog": 按容器名称过滤
-container_id=$(docker ps -q --filter "name=mizuki-blog")
+# --filter "name=tsukimi-blog": 按容器名称过滤
+container_id=$(docker ps -q --filter "name=tsukimi-blog")
 
 # 条件判断: 如果找到了容器ID (即 $container_id 不为空)
 if [ -n "$container_id" ]; then
@@ -307,14 +307,14 @@ echo "启动新容器..."
 # docker run: 运行Docker容器
 # -d: 在后台运行容器
 # -p 5090:5090: 将主机的5090端口映射到容器的5090端口
-# --name mizuki-blog: 为容器指定名称
-# mizuki-blog: 使用的镜像名称
-docker run -d -p 5090:5090 --name mizuki-blog mizuki-blog
+# --name tsukimi-blog: 为容器指定名称
+# tsukimi-blog: 使用的镜像名称
+docker run -d -p 5090:5090 --name tsukimi-blog tsukimi-blog
 
 # 显示容器日志 (已注释掉)
 # 取消注释下面两行可以在部署完成后自动查看容器实时日志
 # echo "显示容器日志..."
-# docker logs -f mizuki-blog
+# docker logs -f tsukimi-blog
 ```
 
 
@@ -325,7 +325,7 @@ docker run -d -p 5090:5090 --name mizuki-blog mizuki-blog
 如果端口 5090 已被占用，可以修改端口映射：
 
 ```bash title="修改端口"
-docker run -d --name mizuki-blog -p 8080:80 mizuki-blog
+docker run -d --name tsukimi-blog -p 8080:80 tsukimi-blog
 ```
 
 这样应用将通过 `http://localhost:8080` 访问。
@@ -344,15 +344,15 @@ docker run -d --name mizuki-blog -p 8080:80 mizuki-blog
 
 1. 检查容器是否正在运行：`docker ps`
 2. 检查端口映射是否正确
-3. 查看容器日志：`docker logs mizuki-blog`
+3. 查看容器日志：`docker logs tsukimi-blog`
 
 ## 总结
 
-使用 Docker 部署 Mizuki 博客具有以下优势：
+使用 Docker 部署 Tsukimi 博客具有以下优势：
 
 - 🚀 快速部署：一次构建，随处运行
 - 🔒 环境隔离：避免依赖冲突
 - 📦 版本管理：轻松回滚到之前的版本
 - 🔄 水平扩展：轻松创建多个实例
 
-通过本教程，您应该能够成功使用 Docker 部署 Mizuki 博客，并掌握基本的容器管理技能。
+通过本教程，您应该能够成功使用 Docker 部署 Tsukimi 博客，并掌握基本的容器管理技能。

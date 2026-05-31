@@ -14,7 +14,7 @@ copyright:
 
 ## 🎯 问题
 
-启用内容分离后,内容仓库 (Mizuki-Content) 更新不会自动触发代码仓库 (Mizuki) 的重新部署。
+启用内容分离后,内容仓库 (Tsukimi-Content) 更新不会自动触发代码仓库 (Tsukimi) 的重新部署。
 
 ## ✅ 解决方案 (推荐)
 
@@ -29,13 +29,13 @@ copyright:
 访问: https://github.com/settings/tokens
 
 - 点击 **Generate new token (classic)**
-- Note: `Mizuki Content Trigger`
+- Note: `Tsukimi Content Trigger`
 - Scopes: 勾选 ✅ `repo`
 - 点击生成并**复制 Token** ⚠️ (只显示一次)
 
 ### Step 2: 添加 Secret
 
-在**内容仓库** (Mizuki-Content):
+在**内容仓库** (Tsukimi-Content):
 
 Settings → Secrets and variables → Actions → New repository secret
 
@@ -49,7 +49,7 @@ Settings → Secrets and variables → Actions → New repository secret
 找到第 27 行,修改为你的代码仓库:
 
 ```yaml
-repository: your-username/Mizuki  # 改为你的
+repository: your-username/Tsukimi  # 改为你的
 ```
 
 例如: `souloss/Tsukimi`

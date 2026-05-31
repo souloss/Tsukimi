@@ -12,27 +12,27 @@ copyright:
 
 # Typecho相关问题
 
-## Q: Typecho可以使用Mizuki主题吗？
-**A:** 很抱歉，Mizuki是一个基于Astro构建的静态网站主题，不能直接在Typecho上使用。
+## Q: Typecho可以使用Tsukimi主题吗？
+**A:** 很抱歉，Tsukimi是一个基于Astro构建的静态网站主题，不能直接在Typecho上使用。
 
 ### 技术架构差异
 
 1. **底层技术完全不同**
-   - Mizuki是基于[Astro](https://astro.build/)的现代化静态网站生成器
+   - Tsukimi是基于[Astro](https://astro.build/)的现代化静态网站生成器
    - Typecho是一个基于PHP的传统动态博客系统
    - 两者在渲染方式、数据存储和部署方式上完全不同
 
 2. **工作方式差异**
-   - Mizuki：构建时生成静态HTML，部署简单高效
+   - Tsukimi：构建时生成静态HTML，部署简单高效
    - Typecho：运行时动态生成页面，需要PHP环境支持
 
-### 好消息：从Typecho迁移到Mizuki非常简单！
+### 好消息：从Typecho迁移到Tsukimi非常简单！
 
-虽然不能直接在Typecho上使用Mizuki主题，但**从Typecho迁移到Mizuki相对简单**，主要原因如下：
+虽然不能直接在Typecho上使用Tsukimi主题，但**从Typecho迁移到Tsukimi相对简单**，主要原因如下：
 
 #### 1. 共同的Markdown文章架构
 - Typecho支持Markdown语法编写文章
-- Mizuki完全基于Markdown内容系统构建
+- Tsukimi完全基于Markdown内容系统构建
 - 文章内容几乎无需修改即可直接使用
 
 #### 2. 内容导出便利
@@ -42,7 +42,7 @@ copyright:
 
 #### 3. 迁移成本极低
 ```
-Typecho文章结构 → Mizuki文章结构
+Typecho文章结构 → Tsukimi文章结构
 ├── 标题        → ├── title (frontmatter)
 ├── 发布时间    → ├── createTime (frontmatter)
 ├── 分类        → ├── categories (frontmatter)
@@ -60,7 +60,7 @@ Typecho文章结构 → Mizuki文章结构
 
 ### 如何进行迁移
 
-我们提供了详细的[Typecho迁移指南](/transfer/typecho-to-mizuki/)，包含：
+我们提供了详细的[Typecho迁移指南](/transfer/typecho-to-tsukimi/)，包含：
 - 文章内容导出工具推荐
 - 批量转换脚本
 - 图片资源迁移方法
@@ -68,7 +68,7 @@ Typecho文章结构 → Mizuki文章结构
 
 ### 实际迁移案例
 
-许多用户已经成功从Typecho迁移到Mizuki，反馈普遍认为：
+许多用户已经成功从Typecho迁移到Tsukimi，反馈普遍认为：
 - 迁移过程比预期简单得多
 - 只需几小时即可完成整个站点迁移
 - 迁移后网站性能显著提升
@@ -83,7 +83,7 @@ Typecho文章结构 → Mizuki文章结构
 
 ---
 
-## Q: 为什么推荐从Typecho迁移到Mizuki？
+## Q: 为什么推荐从Typecho迁移到Tsukimi？
 **A:** 除了性能和安全优势外，还有以下原因：
 
 1. **现代化开发体验**
@@ -112,7 +112,7 @@ Typecho文章结构 → Mizuki文章结构
 **A:** 主要注意事项：
 
 1. **图片资源迁移**
-   - 确保所有图片正确导出并放置在Mizuki的public目录
+   - 确保所有图片正确导出并放置在Tsukimi的public目录
    - 更新图片路径引用
 
 2. **URL结构保持**
@@ -129,4 +129,4 @@ Typecho文章结构 → Mizuki文章结构
 
 ---
 
-如果您正在考虑从Typecho迁移到Mizuki，强烈建议您尝试。相比其他博客系统，Typecho用户通常能在最短时间内完成迁移，并立即享受静态网站带来的各种优势。
+如果您正在考虑从Typecho迁移到Tsukimi，强烈建议您尝试。相比其他博客系统，Typecho用户通常能在最短时间内完成迁移，并立即享受静态网站带来的各种优势。

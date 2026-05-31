@@ -15,7 +15,7 @@ copyright:
 
 # 构建脚本配置
 
-Mizuki 提供多个构建脚本用于自动化部署流程，位于 `scripts/` 目录中。
+Tsukimi 提供多个构建脚本用于自动化部署流程，位于 `scripts/` 目录中。
 
 ## 构建流程
 
@@ -77,7 +77,7 @@ INDEXNOW_HOST=yourdomain.com      # 网站域名
 
 ## robots.txt 生成
 
-Mizuki 在构建时自动生成 `robots.txt` 文件，由 `src/pages/robots.txt.ts` 生成：
+Tsukimi 在构建时自动生成 `robots.txt` 文件，由 `src/pages/robots.txt.ts` 生成：
 
 ```
 User-agent: *
@@ -160,6 +160,6 @@ pnpm update-bilibili
 | `load-env.js` | 环境变量加载工具 |
 | `update-feeds.mjs` | 朋友圈 RSS 订阅更新 |
 | `benchmark-bugs.mjs` | 性能基准测试 |
-| `check-docs-mizuki.mjs` | 文档完整性检查 |
-| `sync-docs-mizuki.mjs` | 文档同步 |
+| `check-docs-tsukimi.mjs` | 文档完整性检查 |
+| `sync-docs-tsukimi.mjs` | 文档同步 |
 | `check-docs-render.mjs` | 文档渲染检查 |

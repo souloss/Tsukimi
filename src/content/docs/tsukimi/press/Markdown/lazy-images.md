@@ -15,7 +15,7 @@ copyright:
 
 ## 图片懒加载插件
 
-Mizuki 内置了 `rehype-lazy-image` 插件，为 Markdown 内容中的图片自动添加懒加载功能和过渡动画效果。
+Tsukimi 内置了 `rehype-lazy-image` 插件，为 Markdown 内容中的图片自动添加懒加载功能和过渡动画效果。
 
 ### 功能说明
 

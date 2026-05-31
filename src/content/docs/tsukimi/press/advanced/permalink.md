@@ -13,7 +13,7 @@ copyright:
     url: https://github.com/souloss
 ---
 
-这是在Mizuki7.2以上加入的新特性,支持你为文章配置固定链接,优化SEO!
+这是在Tsukimi7.2以上加入的新特性,支持你为文章配置固定链接,优化SEO!
 
 ## 使用方法
 
@@ -25,4 +25,4 @@ permalink: "encrypted-example"
 ---
 ```
 
-他会相对于`posts`构建路径生成一个固定链接, 例如: `https://mizuki.site/posts/encrypted-example`
+他会相对于`posts`构建路径生成一个固定链接, 例如: `https://tsukimi.site/posts/encrypted-example`

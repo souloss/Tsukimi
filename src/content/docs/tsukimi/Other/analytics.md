@@ -15,7 +15,7 @@ copyright:
 
 # 统计分析配置
 
-Mizuki 支持多种统计分析服务，包括 Google Analytics、Microsoft Clarity、Umami 和 51la。所有配置位于 `src/config.ts` 中的 `siteConfig.analytics` 对象。
+Tsukimi 支持多种统计分析服务，包括 Google Analytics、Microsoft Clarity、Umami 和 51la。所有配置位于 `src/config.ts` 中的 `siteConfig.analytics` 对象。
 
 ## 综合分析配置 (analytics)
 

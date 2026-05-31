@@ -9,15 +9,15 @@ copyright:
     name: souloss
     url: https://github.com/souloss
 ---
-# Mizuki 内容仓库结构说明
+# Tsukimi 内容仓库结构说明
 
-本文档说明如何创建和组织 Mizuki 博客的内容仓库。
+本文档说明如何创建和组织 Tsukimi 博客的内容仓库。
 
 ## 📁 推荐的目录结构
 
 ::: file-tree
 
-- Mizuki-Content/
+- Tsukimi-Content/
   - posts/              # 博客文章
     - post-1.md
     - post-2.md
@@ -49,57 +49,57 @@ copyright:
 
 ```bash
 # 创建新仓库
-mkdir Mizuki-Content
-cd Mizuki-Content
+mkdir Tsukimi-Content
+cd Tsukimi-Content
 git init
 
 # 创建基本目录结构
 mkdir -p posts spec data images/albums images/diary images/posts
 
 # 创建 README
-echo "# Mizuki 博客内容" > README.md
+echo "# Tsukimi 博客内容" > README.md
 ```
 
-### 2. 从现有 Mizuki 项目迁移内容
+### 2. 从现有 Tsukimi 项目迁移内容
 
-如果你已经有一个 Mizuki 项目,可以将内容迁移到新仓库:
+如果你已经有一个 Tsukimi 项目,可以将内容迁移到新仓库:
 
 ```bash
-# 在 Mizuki 项目根目录执行
-cd /path/to/Mizuki
+# 在 Tsukimi 项目根目录执行
+cd /path/to/Tsukimi
 
 # 复制内容到新仓库
-cp -r src/content/posts/* /path/to/Mizuki-Content/posts/
-cp -r src/content/spec/* /path/to/Mizuki-Content/spec/
-cp -r src/data/* /path/to/Mizuki-Content/data/
-cp -r public/images/* /path/to/Mizuki-Content/images/
+cp -r src/content/posts/* /path/to/Tsukimi-Content/posts/
+cp -r src/content/spec/* /path/to/Tsukimi-Content/spec/
+cp -r src/data/* /path/to/Tsukimi-Content/data/
+cp -r public/images/* /path/to/Tsukimi-Content/images/
 ```
 
 ### 3. 提交到 Git
 
 ```bash
-cd /path/to/Mizuki-Content
+cd /path/to/Tsukimi-Content
 
 git add .
 git commit -m "Initial commit: Add blog content"
 
 # 添加远程仓库并推送
-git remote add origin https://github.com/your-username/Mizuki-Content.git
+git remote add origin https://github.com/your-username/Tsukimi-Content.git
 git branch -M main
 git push -u origin main
 ```
 
-## 🔗 连接到 Mizuki 代码仓库
+## 🔗 连接到 Tsukimi 代码仓库
 
 ### 方式一: Git Submodule (推荐)
 
-在 Mizuki 代码仓库中:
+在 Tsukimi 代码仓库中:
 
 ```bash
-cd /path/to/Mizuki
+cd /path/to/Tsukimi
 
 # 添加内容仓库作为 submodule
-git submodule add https://github.com/your-username/Mizuki-Content.git content
+git submodule add https://github.com/your-username/Tsukimi-Content.git content
 
 # 提交 submodule 配置
 git add .gitmodules content
@@ -110,7 +110,7 @@ git push
 配置环境变量 `.env`:
 
 ```bash
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 USE_SUBMODULE=true
 ```
 
@@ -119,7 +119,7 @@ USE_SUBMODULE=true
 配置环境变量 `.env`:
 
 ```bash
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 CONTENT_DIR=./content
 USE_SUBMODULE=false
 ```
@@ -176,7 +176,7 @@ lang: zh-CN
 2. 提交并推送更改
 3. 在代码仓库中同步内容:
    ```bash
-   cd /path/to/Mizuki
+   cd /path/to/Tsukimi
    pnpm run sync-content
    ```
 
@@ -184,7 +184,7 @@ lang: zh-CN
 
 ```bash
 # 更新 submodule
-cd /path/to/Mizuki
+cd /path/to/Tsukimi
 git submodule update --remote --merge
 
 # 或者使用同步脚本
@@ -260,7 +260,7 @@ pnpm run sync-content
 
 **本地开发**: 推荐使用 SSH 密钥
 ```bash
-CONTENT_REPO_URL=git@github.com:your-username/Mizuki-Content-Private.git
+CONTENT_REPO_URL=git@github.com:your-username/Tsukimi-Content-Private.git
 USE_SUBMODULE=true
 ```
 
@@ -271,7 +271,7 @@ USE_SUBMODULE=true
 ## 📚 参考资源
 
 - [Git Submodule 文档](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)
-- [Mizuki 文档](https://docs.tsukimi.mysqil.com/)
+- [Tsukimi 文档](https://docs.tsukimi.mysqil.com/)
 - [Astro Content Collections](https://docs.astro.build/zh-cn/guides/content-collections/)
 
 ---

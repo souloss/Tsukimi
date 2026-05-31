@@ -15,7 +15,7 @@ copyright:
 
 # 自定义字体配置
 
-Mizuki 主题支持自定义字体配置，让您可以自定义站点的字体风格，提升用户体验和品牌识别度。
+Tsukimi 主题支持自定义字体配置，让您可以自定义站点的字体风格，提升用户体验和品牌识别度。
 
 ## 配置概述
 
@@ -79,7 +79,7 @@ font: {
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - public
     - fonts
       - ZenMaruGothic-Medium.ttf

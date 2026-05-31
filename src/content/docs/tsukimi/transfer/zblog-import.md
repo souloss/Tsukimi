@@ -1,5 +1,5 @@
 ---
-title: Z-Blog 迁移到 Mizuki
+title: Z-Blog 迁移到 Tsukimi
 createTime: 2025/08/16 23:56:17
 permalink: /transfer/zblog-import/
 order: 10
@@ -13,22 +13,22 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Z-Blog 迁移到 Mizuki 指南
+# Z-Blog 迁移到 Tsukimi 指南
 
-本指南将帮助您将现有的 Z-Blog 博客内容迁移到 Mizuki 主题。
+本指南将帮助您将现有的 Z-Blog 博客内容迁移到 Tsukimi 主题。
 
-## 什么是 Mizuki？
+## 什么是 Tsukimi？
 
-Mizuki 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
+Tsukimi 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
 - 快速的静态站点生成
 - 现代化的设计风格
 - 优秀的 SEO 支持
 - 响应式布局
 - 支持多种内容格式
 
-## Z-Blog 与 Mizuki 文章格式差异
+## Z-Blog 与 Tsukimi 文章格式差异
 
-Z-Blog 通常将文章内容存储在数据库中，并以 HTML 或富文本形式呈现。Mizuki 文章的核心是 Markdown 文件，并需要包含特定的 Frontmatter（YAML 头部信息）来定义文章的元数据。
+Z-Blog 通常将文章内容存储在数据库中，并以 HTML 或富文本形式呈现。Tsukimi 文章的核心是 Markdown 文件，并需要包含特定的 Frontmatter（YAML 头部信息）来定义文章的元数据。
 
 迁移的关键在于将 Z-Blog 数据库中的文章内容导出，并转换为 Markdown 格式，同时提取必要的元数据生成 Frontmatter。
 
@@ -39,7 +39,7 @@ Z-Blog 通常将文章内容存储在数据库中，并以 HTML 或富文本形�
 <p>更多内容...</p>
 ```
 
-### Mizuki 格式示例（转换为 Markdown 并添加 Frontmatter）：
+### Tsukimi 格式示例（转换为 Markdown 并添加 Frontmatter）：
 ```yaml
 ---
 title: Markdown Tutorial
@@ -67,7 +67,7 @@ draft: false
 
 ### 1. 准备工作
 
-1. 确保已安装 Mizuki 主题。
+1. 确保已安装 Tsukimi 主题。
 2. 准备文章存放目录：`src/content/posts/`。
 3. 访问您的 Z-Blog 后台，了解文章、分类、标签、附件等数据结构。
 4. 准备数据库访问工具（如 phpMyAdmin, Navicat, DBeaver 等），以便导出数据。
@@ -185,23 +185,23 @@ def migrate_zblog_posts(db_path, output_dir):
     conn.close()
 
 # 示例用法
-# migrate_zblog_posts('path/to/your/zblog.db', 'path/to/mizuki/src/content/posts')
+# migrate_zblog_posts('path/to/your/zblog.db', 'path/to/tsukimi/src/content/posts')
 ```
 
 ### 4. 静态资源处理
 
-Z-Blog 文章中的图片通常存储在 `zb_users/upload/` 目录下。您需要将这些图片复制到 Mizuki 的 `public/` 目录下，并更新文章中的图片路径。
+Z-Blog 文章中的图片通常存储在 `zb_users/upload/` 目录下。您需要将这些图片复制到 Tsukimi 的 `public/` 目录下，并更新文章中的图片路径。
 
-1. **复制资源文件**：将 Z-Blog 的 `zb_users/upload/` 目录下的所有图片、视频等媒体文件复制到 Mizuki 的 `public/images/` 或 `public/assets/` 目录下。
+1. **复制资源文件**：将 Z-Blog 的 `zb_users/upload/` 目录下的所有图片、视频等媒体文件复制到 Tsukimi 的 `public/images/` 或 `public/assets/` 目录下。
 
-2. **更新文件路径**：在转换后的 Markdown 文件中，批量替换图片链接，使其指向 Mizuki 项目中的正确路径。
+2. **更新文件路径**：在转换后的 Markdown 文件中，批量替换图片链接，使其指向 Tsukimi 项目中的正确路径。
    - 示例：将 `![alt](/zb_users/upload/2024/01/image.jpg)` 替换为 `![alt](/images/2024/01/image.jpg)`。
 
 ### 5. 更新内部链接
 
-如果您的 Z-Blog 文章中包含指向其他文章或页面的内部链接，请确保这些链接在 Mizuki 中仍然有效。
+如果您的 Z-Blog 文章中包含指向其他文章或页面的内部链接，请确保这些链接在 Tsukimi 中仍然有效。
 
-- Mizuki 的文章链接通常是 `/posts/your-post-slug/`。
+- Tsukimi 的文章链接通常是 `/posts/your-post-slug/`。
 - 您可能需要编写脚本来解析和更新这些内部链接。
 
 ### 6. 验证导入结果
@@ -218,14 +218,14 @@ Z-Blog 文章中的图片通常存储在 `zb_users/upload/` 目录下。您需�
 ## 常见问题
 
 ### Q: 如何处理 Z-Blog 的评论？
-A: Mizuki 不自带评论系统。您可以考虑集成第三方评论系统，如 Disqus、Gitalk、Waline 等，并尝试将 Z-Blog 的评论数据导入到这些系统中。
+A: Tsukimi 不自带评论系统。您可以考虑集成第三方评论系统，如 Disqus、Gitalk、Waline 等，并尝试将 Z-Blog 的评论数据导入到这些系统中。
 
 ### Q: Z-Blog 的自定义字段如何迁移？
-A: 如果您的 Z-Blog 文章使用了自定义字段，您需要根据这些字段的重要性，决定是否将其内容合并到 Markdown 正文，或作为 Frontmatter 的额外字段（如果 Mizuki 支持）。
+A: 如果您的 Z-Blog 文章使用了自定义字段，您需要根据这些字段的重要性，决定是否将其内容合并到 Markdown 正文，或作为 Frontmatter 的额外字段（如果 Tsukimi 支持）。
 
 ### Q: 如何处理 Z-Blog 的页面？
-A: Z-Blog 的页面（Page）可以作为 Mizuki 的独立页面进行迁移。将其内容转换为 Markdown，并创建对应的 `.md` 文件在 Mizuki 的 `src/content/pages/` 目录下。
+A: Z-Blog 的页面（Page）可以作为 Tsukimi 的独立页面进行迁移。将其内容转换为 Markdown，并创建对应的 `.md` 文件在 Tsukimi 的 `src/content/pages/` 目录下。
 
 ## 总结
 
-将 Z-Blog 迁移到 Mizuki 是一个涉及数据导出、格式转换、元数据提取和资源处理的复杂过程。通过编写自动化脚本，可以大大提高效率。请务必在迁移后进行彻底的验证，确保所有内容和功能正常。
+将 Z-Blog 迁移到 Tsukimi 是一个涉及数据导出、格式转换、元数据提取和资源处理的复杂过程。通过编写自动化脚本，可以大大提高效率。请务必在迁移后进行彻底的验证，确保所有内容和功能正常。

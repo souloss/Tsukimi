@@ -1,5 +1,5 @@
 ---
-title: Mizuki-Ultra
+title: Tsukimi
 tagline: Astro Next Theme
 description: 一个简约&功能丰富的 Astro 博客 主题
 image: /favicon.png

@@ -15,7 +15,7 @@ copyright:
 
 **朋友圈功能说明**
 
-Mizuki 主题内置了朋友圈（Friends Circle）功能，可以通过 RSS 聚合友链博客的最新文章，形成一个文章广场。
+Tsukimi 主题内置了朋友圈（Friends Circle）功能，可以通过 RSS 聚合友链博客的最新文章，形成一个文章广场。
 
 ---
 
@@ -24,7 +24,7 @@ Mizuki 主题内置了朋友圈（Friends Circle）功能，可以通过 RSS 聚
 朋友圈功能的文件结构：
 
 ::: file-tree
-- Mizuki
+- Tsukimi
   - src/
     - data/
       - friends-circle.ts    # 朋友圈配置和聚合逻辑
@@ -94,11 +94,11 @@ export const friendsCircleConfig = {
 // 手动添加的精选文章
 export const featuredPosts: FriendsCirclePost[] = [
     {
-        title: '欢迎使用 Mizuki',
+        title: '欢迎使用 Tsukimi',
         link: 'https://example.com/post/1',
         pubDate: new Date('2025-01-01'),
         author: 'Admin',
-        blogName: 'Mizuki Blog',
+        blogName: 'Tsukimi Blog',
         blogUrl: 'https://example.com',
         description: '这是一篇精选文章示例',
     },
@@ -209,13 +209,13 @@ export const friends: FriendItem[] = [
 
 ## 缓存机制
 
-为了避免每次页面加载都去请求 RSS，Mizuki 使用了缓存机制：
+为了避免每次页面加载都去请求 RSS，Tsukimi 使用了缓存机制：
 
 1. **构建时缓存**: 生产构建时会预抓取 RSS 并缓存
 2. **运行时缓存**: 浏览器端也会缓存结果到 `localStorage`
 3. **过期策略**: 根据 `cacheExpireTime` 自动过期并重新抓取
 
-**缓存键**: `mizuki-friends-circle-cache`
+**缓存键**: `tsukimi-friends-circle-cache`
 
 ---
 
@@ -244,13 +244,13 @@ export const friendsCircleConfig = {
 
 export const featuredPosts: FriendsCirclePost[] = [
     {
-        title: 'Mizuki 主题发布',
-        link: 'https://example.com/post/mizuki-release',
+        title: 'Tsukimi 主题发布',
+        link: 'https://example.com/post/tsukimi-release',
         pubDate: new Date('2025-01-01'),
         author: 'souloss',
         blogName: 'souloss Blog',
         blogUrl: 'https://example.com',
-        description: 'Mizuki 是一个精美的 Astro 博客主题...',
+        description: 'Tsukimi 是一个精美的 Astro 博客主题...',
     },
 ]
 ```

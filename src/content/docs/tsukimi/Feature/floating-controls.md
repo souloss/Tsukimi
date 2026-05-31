@@ -15,7 +15,7 @@ copyright:
 
 # 浮动控件与进度条配置
 
-Mizuki 提供浮动控件组（FloatingControls）和页面阅读进度条（PageProgressBar），增强页面导航体验。
+Tsukimi 提供浮动控件组（FloatingControls）和页面阅读进度条（PageProgressBar），增强页面导航体验。
 
 ## 页面进度条 (PageProgressBar)
 

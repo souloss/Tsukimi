@@ -39,7 +39,7 @@ customHtml: "",
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - config.ts
     - FooterConfig.html

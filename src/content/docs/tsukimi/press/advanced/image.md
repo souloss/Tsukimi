@@ -13,7 +13,7 @@ copyright:
     url: https://github.com/souloss
 ---
 
-这是在Mizuki8.0以上加入的新特性，支持你为图片设置缩放比例、标题和居中对齐！
+这是在Tsukimi8.0以上加入的新特性，支持你为图片设置缩放比例、标题和居中对齐！
 
 ## 使用方法
 

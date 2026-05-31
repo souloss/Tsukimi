@@ -15,7 +15,7 @@ copyright:
 
 ## 文档系统
 
-Mizuki 内置了一个完整的文档系统，用于编写和展示项目文档。
+Tsukimi 内置了一个完整的文档系统，用于编写和展示项目文档。
 
 ### 功能特性
 
@@ -34,7 +34,7 @@ Mizuki 内置了一个完整的文档系统，用于编写和展示项目文档�
 
 ```
 src/content/docs/
-├── mizuki/
+├── tsukimi/
 │   ├── index.md
 │   ├── guide/
 │   │   ├── intro.md
@@ -59,7 +59,7 @@ src/content/docs/
 title: 页面标题
 createTime: 2025/08/17 17:21:41
 permalink: /路径/到/页面/
-docSlug: mizuki
+docSlug: tsukimi
 lang: zh_CN
 ---
 
@@ -78,25 +78,25 @@ lang: zh_CN
 
 ### 侧边栏配置
 
-侧边栏导航在 `src/data/docs-mizuki.ts` 中配置：
+侧边栏导航在 `src/data/docs-tsukimi.ts` 中配置：
 
 ```typescript
-import type { DocsMizukiSidebarItem } from "./docs-mizuki";
+import type { DocsTsukimiSidebarItem } from "./docs-tsukimi";
 
-export const docsMizukiSidebar: DocsMizukiSidebarItem[] = [
+export const docsTsukimiSidebar: DocsTsukimiSidebarItem[] = [
   {
     name: "指南",
     icon: "material-symbols:menu-book-outline-rounded",
     items: [
-      { id: "mizuki/guide/intro", title: "介绍", order: 1 },
-      { id: "mizuki/guide/get-started", title: "快速开始", order: 2 },
+      { id: "tsukimi/guide/intro", title: "介绍", order: 1 },
+      { id: "tsukimi/guide/get-started", title: "快速开始", order: 2 },
     ],
   },
   {
     name: "基础配置",
     icon: "material-symbols:settings-rounded",
     items: [
-      { id: "mizuki/Basic-Layout/site-config", title: "站点配置", order: 1 },
+      { id: "tsukimi/Basic-Layout/site-config", title: "站点配置", order: 1 },
     ],
   },
 ];
@@ -118,7 +118,7 @@ export const docsMizukiSidebar: DocsMizukiSidebarItem[] = [
 
 ```
 src/content/docs/
-└── mizuki/
+└── tsukimi/
     ├── guide/
     │   ├── intro.md              # 默认语言
     │   ├── intro.zh_CN.md        # 简体中文
@@ -134,18 +134,18 @@ src/content/docs/
 
 ### 文档首页配置
 
-文档项目首页在 `src/data/docs-mizuki.ts` 中配置：
+文档项目首页在 `src/data/docs-tsukimi.ts` 中配置：
 
 ```typescript
-export const docsMizukiProject = {
-  slug: "mizuki",
-  title: "Mizuki",
+export const docsTsukimiProject = {
+  slug: "tsukimi",
+  title: "Tsukimi",
   description: "A beautiful Astro blog theme",
   defaultLang: "zh_CN",
 };
 
-export const docsMizukiHome = {
-  id: "mizuki/guide/intro",
+export const docsTsukimiHome = {
+  id: "tsukimi/guide/intro",
   title: "文档首页",
 };
 ```
@@ -157,7 +157,7 @@ export const docsMizukiHome = {
 | URL | 说明 |
 |-----|-----|
 | `/docs/` | 文档项目列表页 |
-| `/docs/tsukimi/` | Mizuki 文档首页 |
+| `/docs/tsukimi/` | Tsukimi 文档首页 |
 | `/docs/tsukimi/guide/get-started/` | 具体文档页面 |
 | `/docs/tsukimi/<permalink>/` | 使用自定义 permalink 的页面 |
 
@@ -203,7 +203,7 @@ export const docsMizukiHome = {
 
 1. 在 `src/content/docs/tsukimi/<目录>/` 下创建 Markdown 文件
 2. 添加 Frontmatter
-3. 在 `src/data/docs-mizuki.ts` 中添加侧边栏配置
+3. 在 `src/data/docs-tsukimi.ts` 中添加侧边栏配置
 4. （可选）添加其他语言版本
 
 ### 样式定制

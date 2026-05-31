@@ -15,7 +15,7 @@ copyright:
 
 # RSS/Atom 订阅配置
 
-Mizuki 内置 RSS 和 Atom 两种订阅格式，读者可以通过订阅链接获取博客更新。
+Tsukimi 内置 RSS 和 Atom 两种订阅格式，读者可以通过订阅链接获取博客更新。
 
 ## 订阅地址
 
@@ -61,4 +61,4 @@ siteConfig: {
 
 ## robots.txt
 
-Mizuki 自动生成 `robots.txt` 文件（`src/pages/robots.txt.ts`），其中包含订阅文件的引用，便于搜索引擎和订阅工具发现。
+Tsukimi 自动生成 `robots.txt` 文件（`src/pages/robots.txt.ts`），其中包含订阅文件的引用，便于搜索引擎和订阅工具发现。

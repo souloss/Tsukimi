@@ -15,7 +15,7 @@ copyright:
 
 ## 相对链接解析插件
 
-Mizuki 内置了 `remark-relative-links` 插件，可以自动将 Markdown 文章中的相对文件链接转换为正确的 URL 链接。
+Tsukimi 内置了 `remark-relative-links` 插件，可以自动将 Markdown 文章中的相对文件链接转换为正确的 URL 链接。
 
 ### 功能说明
 

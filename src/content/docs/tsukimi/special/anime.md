@@ -15,7 +15,7 @@ copyright:
 
 ### 番剧页面配置教程
 
-Mizuki 主题内置了一个优雅的番剧（Anime）页面，支持两种数据源模式：
+Tsukimi 主题内置了一个优雅的番剧（Anime）页面，支持两种数据源模式：
 - **Bangumi 模式**：自动从 Bangumi API 同步观看记录
 - **BiliBili 模式**：自动从 BiliBili API 同步观看记录
 - **本地模式**：手动管理本地番剧数据
@@ -30,7 +30,7 @@ Mizuki 主题内置了一个优雅的番剧（Anime）页面，支持两种数�
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - pages
       - anime.astro
@@ -38,7 +38,7 @@ Mizuki 主题内置了一个优雅的番剧（Anime）页面，支持两种数�
       - anime.ts
       :::
 
-在 Mizuki 主题中，番剧页面的**展示逻辑**和**内容数据**是分开的：
+在 Tsukimi 主题中，番剧页面的**展示逻辑**和**内容数据**是分开的：
 
 *   **展示逻辑**: `src/pages/anime.astro`
     *   这个文件负责番剧页面的HTML结构、CSS样式和JavaScript交互逻辑。

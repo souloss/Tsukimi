@@ -12,7 +12,7 @@ copyright:
 
 ### 项目页面配置教程
 
-Mizuki 主题内置了一个专业的项目展示（Projects）页面，用于展示您参与或开发的项目作品。这个页面可以帮助访客了解您的技术能力和项目经验。
+Tsukimi 主题内置了一个专业的项目展示（Projects）页面，用于展示您参与或开发的项目作品。这个页面可以帮助访客了解您的技术能力和项目经验。
 
 本教程将详细指导你如何添加、修改和管理项目数据。
 
@@ -22,7 +22,7 @@ Mizuki 主题内置了一个专业的项目展示（Projects）页面，用于�
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - pages
       - projects.astro
@@ -30,7 +30,7 @@ Mizuki 主题内置了一个专业的项目展示（Projects）页面，用于�
       - projects.ts
 :::
 
-在 Mizuki 主题中，项目页面的**展示逻辑**和**内容数据**是分开的：
+在 Tsukimi 主题中，项目页面的**展示逻辑**和**内容数据**是分开的：
 
 *   **展示逻辑**: `src/pages/projects.astro`
     *   这个文件负责项目页面的HTML结构、CSS样式和JavaScript交互逻辑。
@@ -68,15 +68,15 @@ export interface Project {
 
 export const projectsData: Project[] = [
 	{
-		id: "mizuki-blog",
-		title: "Mizuki Blog Theme",
+		id: "tsukimi-blog",
+		title: "Tsukimi Blog Theme",
 		description: "Modern blog theme developed based on Astro framework, supporting multilingual, dark mode, and responsive design features.",
 		image: "",
 		category: "web",
 		techStack: ["Astro", "TypeScript", "Tailwind CSS", "Svelte"],
 		status: "completed",
 		liveDemo: "https://blog.example.com",
-		sourceCode: "https://github.com/example/mizuki",
+		sourceCode: "https://github.com/example/tsukimi",
 		visitUrl: "https://blog.example.com",
 		startDate: "2024-01-01",
 		endDate: "2024-06-01",
@@ -153,8 +153,8 @@ export const projectsData: Project[] = [
     ```typescript title="src/data/projects.ts"
     export const projectsData: Project[] = [
       {
-        id: "mizuki-blog",
-        title: "Mizuki Blog Theme",
+        id: "tsukimi-blog",
+        title: "Tsukimi Blog Theme",
         description: "Modern blog theme developed based on Astro framework...",
         // ... 其他字段 ...
       },

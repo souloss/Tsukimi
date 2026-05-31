@@ -1,7 +1,7 @@
 ---
-title: Hexo 迁移到 Mizuki
+title: Hexo 迁移到 Tsukimi
 createTime: 2025/08/16 23:56:17
-permalink: /transfer/hexo-to-mizuki/
+permalink: /transfer/hexo-to-tsukimi/
 order: 3
 icon: ri:exchange-line
 badge:
@@ -13,20 +13,20 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Hexo 迁移到 Mizuki 指南
+# Hexo 迁移到 Tsukimi 指南
 
-本指南将帮助您将 Hexo 博客文章迁移到 Mizuki 主题。
+本指南将帮助您将 Hexo 博客文章迁移到 Tsukimi 主题。
 
-## 什么是 Mizuki？
+## 什么是 Tsukimi？
 
-Mizuki 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
+Tsukimi 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
 - 快速的静态站点生成
 - 现代化的设计风格
 - 优秀的 SEO 支持
 - 响应式布局
 - 支持多种内容格式
 
-## Hexo 与 Mizuki 文章格式差异
+## Hexo 与 Tsukimi 文章格式差异
 
 ### Hexo 格式示例：
 ```yaml
@@ -39,7 +39,7 @@ categories:
   - 随笔
 ```
 
-### Mizuki 格式示例：
+### Tsukimi 格式示例：
 ```yaml
 ---
 title: Markdown Tutorial
@@ -60,12 +60,12 @@ draft: false
 ### 1. 准备工作
 
 1. 备份您的 Hexo 博客文件
-2. 确保已安装 Mizuki 主题
+2. 确保已安装 Tsukimi 主题
 3. 准备文章存放目录：`src/content/posts/`
 
 ### 2. 文章内容迁移
 
-将 Hexo 的 `source/_posts/` 目录下的所有 `.md` 文件复制到 Mizuki 的 `src/content/posts/` 目录。
+将 Hexo 的 `source/_posts/` 目录下的所有 `.md` 文件复制到 Tsukimi 的 `src/content/posts/` 目录。
 
 ### 3. 手动调整 Frontmatter
 
@@ -81,16 +81,16 @@ draft: false
 
 #### 图片和媒体文件
 
-1. 将 Hexo 的 `source/images/` 目录复制到 Mizuki 的 `public/images/`
+1. 将 Hexo 的 `source/images/` 目录复制到 Tsukimi 的 `public/images/`
 2. 图片路径通常保持不变：
    - Hexo: `![图片](/images/example.jpg)`
-   - Mizuki: `![图片](/images/example.jpg)`
+   - Tsukimi: `![图片](/images/example.jpg)`
 
 ### 5. 更新内部链接
 
 更新文章中的内部链接格式：
 - Hexo: `[链接](/2023/01/01/post-name/)`
-- Mizuki: `[链接](/posts/post-name/)`
+- Tsukimi: `[链接](/posts/post-name/)`
 
 ### 6. 验证迁移结果
 
@@ -105,7 +105,7 @@ draft: false
 ## 常见问题
 
 ### Q: 日期格式转换问题
-A: 确保将 Hexo 的 `YYYY-MM-DD HH:mm:ss` 格式转换为 Mizuki 的 `YYYY-MM-DD` 格式。
+A: 确保将 Hexo 的 `YYYY-MM-DD HH:mm:ss` 格式转换为 Tsukimi 的 `YYYY-MM-DD` 格式。
 
 ### Q: 图片无法显示
 A: 检查图片路径是否正确，确保图片文件已复制到 `public/images/` 目录。
@@ -116,7 +116,7 @@ A: 检查 frontmatter 中的 `tags` 是否为数组格式，`category` 是否为
 ## 高级功能迁移
 
 ### 评论系统
-Mizuki 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
+Tsukimi 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
 
 ### SEO 优化
 - 确保每篇文章都有 `description` 字段
@@ -124,8 +124,8 @@ Mizuki 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
 - 验证 sitemap 和 RSS 订阅功能
 
 ### RSS 订阅
-Mizuki 会自动生成 RSS 订阅，无需额外配置。
+Tsukimi 会自动生成 RSS 订阅，无需额外配置。
 
 ## 总结
 
-通过以上步骤，您可以成功将 Hexo 博客迁移到 Mizuki 主题。迁移过程中最重要的是确保 frontmatter 格式正确，以及静态资源路径的正确性。如果遇到问题，请仔细检查文件格式和路径配置。
+通过以上步骤，您可以成功将 Hexo 博客迁移到 Tsukimi 主题。迁移过程中最重要的是确保 frontmatter 格式正确，以及静态资源路径的正确性。如果遇到问题，请仔细检查文件格式和路径配置。

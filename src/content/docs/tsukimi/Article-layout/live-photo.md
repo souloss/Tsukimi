@@ -15,7 +15,7 @@ copyright:
 
 ## LivePhoto / Lazy Images
 
-Mizuki支持图片懒加载和LivePhoto动图功能，提升页面加载性能和视觉体验。
+Tsukimi支持图片懒加载和LivePhoto动图功能，提升页面加载性能和视觉体验。
 
 ---
 
@@ -59,7 +59,7 @@ LivePhoto功能支持在文章中嵌入短动图，点击时播放。
 
 ### 图片优化
 
-Mizuki支持自动图片格式转换和优化，使用Sharp库。
+Tsukimi支持自动图片格式转换和优化，使用Sharp库。
 
 在 `astro.config.mjs` 中配置：
 

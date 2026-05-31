@@ -15,7 +15,7 @@ copyright:
 
 ### 友链页面配置教程
 
-Mizuki 主题内置了一个美观的友情链接（Friends）页面，用于展示与您的博客相关的其他网站或朋友的博客链接。与传统博客文章不同，友情链接更侧重于快速访问和分类管理。
+Tsukimi 主题内置了一个美观的友情链接（Friends）页面，用于展示与您的博客相关的其他网站或朋友的博客链接。与传统博客文章不同，友情链接更侧重于快速访问和分类管理。
 
 本教程将详细指导你如何添加、修改和管理友情链接数据。
 
@@ -25,7 +25,7 @@ Mizuki 主题内置了一个美观的友情链接（Friends）页面，用于展
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - pages
       - friends.astro
@@ -35,7 +35,7 @@ Mizuki 主题内置了一个美观的友情链接（Friends）页面，用于展
       - friends.ts
 :::
 
-在 Mizuki 主题中，友情链接页面的**展示逻辑**、**配置**和**内容数据**是分开的：
+在 Tsukimi 主题中，友情链接页面的**展示逻辑**、**配置**和**内容数据**是分开的：
 
 *   **展示逻辑**: `src/pages/friends.astro`
     *   这个文件负责友情链接页面的HTML结构、CSS样式和JavaScript交互逻辑。
@@ -203,10 +203,10 @@ export const friendsData: FriendItem[] = [
       },
       {
         id: 2,
-        name: "Mizuki Docs",
+        name: "Tsukimi Docs",
         avatar: "http://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
         url: "https://docs.tsukimi.mysqil.com",
-        description: "Mizuki User Manual",
+        description: "Tsukimi User Manual",
         tags: ["Docs"],
         weight: 5,
         enabled: true,

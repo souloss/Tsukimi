@@ -15,7 +15,7 @@ copyright:
 
 ### 设备页面配置教程
 
-Mizuki 主题内置了一个简洁的设备展示（Devices）页面，用于展示您使用或拥有的数码设备。这个页面可以帮助访客了解您的设备偏好和技术环境。
+Tsukimi 主题内置了一个简洁的设备展示（Devices）页面，用于展示您使用或拥有的数码设备。这个页面可以帮助访客了解您的设备偏好和技术环境。
 
 本教程将详细指导你如何添加、修改和管理设备数据。
 
@@ -25,7 +25,7 @@ Mizuki 主题内置了一个简洁的设备展示（Devices）页面，用于展
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - pages
       - devices.astro
@@ -33,7 +33,7 @@ Mizuki 主题内置了一个简洁的设备展示（Devices）页面，用于展
       - devices.ts
 :::
 
-在 Mizuki 主题中，设备页面的**展示逻辑**和**内容数据**是分开的：
+在 Tsukimi 主题中，设备页面的**展示逻辑**和**内容数据**是分开的：
 
 *   **展示逻辑**: `src/pages/devices.astro`
     *   这个文件负责设备页面的HTML结构、CSS样式和JavaScript交互逻辑。

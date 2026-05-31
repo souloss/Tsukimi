@@ -15,7 +15,7 @@ copyright:
 
 # 页面过渡动画配置
 
-Mizuki 使用 `@swup/astro` 集成实现页面间的平滑过渡动画，提供类似单页应用（SPA）的浏览体验。
+Tsukimi 使用 `@swup/astro` 集成实现页面间的平滑过渡动画，提供类似单页应用（SPA）的浏览体验。
 
 ## 基本配置
 

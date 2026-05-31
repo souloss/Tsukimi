@@ -13,7 +13,7 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Mizuki Markdown 语法说明
+# Tsukimi Markdown 语法说明
 ## 一、GitHub 仓库卡片（GitHub Repository Cards）
 支持添加动态 GitHub 仓库卡片，页面加载时会通过 GitHub API 拉取仓库实时信息（如星标数、分支数等）。
 

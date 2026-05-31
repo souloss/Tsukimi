@@ -15,7 +15,7 @@ copyright:
 
 ## 相关文章功能
 
-Mizuki 支持在文章详情页显示相关文章推荐，帮助读者发现更多感兴趣的内容。
+Tsukimi 支持在文章详情页显示相关文章推荐，帮助读者发现更多感兴趣的内容。
 
 ### 配置
 
@@ -38,7 +38,7 @@ export const relatedPostsConfig: RelatedPostsConfig = {
 
 ## 随机文章功能
 
-除了相关文章外，Mizuki 还支持显示随机文章推荐，帮助发现可能错过的内容。
+除了相关文章外，Tsukimi 还支持显示随机文章推荐，帮助发现可能错过的内容。
 
 ### 配置
 

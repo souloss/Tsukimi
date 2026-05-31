@@ -13,9 +13,9 @@ copyright:
 
 ![](/image.png)
 
-**欢迎使用Mizuki主题👏!**  
+**欢迎使用Tsukimi主题👏!**  
 
- ==Astro-theme-Mizuki== 是一个基于`Astro`的现代化静态博客模板，具有丰富的功能和美观的设计，无论您是想写 **生活类博客**、**技术类博客**、 或者是 **知识库、系列文档** 等，主题都可以满足您的需求。  
+ ==Astro-theme-Tsukimi== 是一个基于`Astro`的现代化静态博客模板，具有丰富的功能和美观的设计，无论您是想写 **生活类博客**、**技术类博客**、 或者是 **知识库、系列文档** 等，主题都可以满足您的需求。  
 
 如果能给我一个star那将是对我莫大的鼓励。使用这个主题之前，你应该明白它是一个Astro主题，它的基本逻辑离不开Astro，关于如何新建分类，如何新建标签这些问题应该在使用之前就从互联网或官方文档了解详情🔎。  
 
@@ -25,8 +25,9 @@ copyright:
 </CardGrid>
 
 
-QQ群1007524064 (主题交流群)  
-Discord频道(面向全世界的Mizuki用户): [https://discord.gg/MqW6TcQtVM](https://discord.gg/MqW6TcQtVM)
+<!-- TODO: Update community links for Tsukimi -->
+QQ群1007524064 (主题交流群)
+Discord频道(面向全世界的Tsukimi用户): [https://discord.gg/MqW6TcQtVM](https://discord.gg/MqW6TcQtVM)
 
 ::: collapse
 - 不了解Astro?

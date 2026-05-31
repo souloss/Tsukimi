@@ -15,7 +15,7 @@ copyright:
 
 # 侧边栏布局配置
 
-Mizuki 的侧边栏布局配置位于 `src/config.ts` 中的 `sidebarLayoutConfig` 对象，控制侧边栏的组件排列、动画效果和响应式行为。
+Tsukimi 的侧边栏布局配置位于 `src/config.ts` 中的 `sidebarLayoutConfig` 对象，控制侧边栏的组件排列、动画效果和响应式行为。
 
 ## 基本配置
 

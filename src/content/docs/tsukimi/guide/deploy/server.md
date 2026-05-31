@@ -14,7 +14,7 @@ copyright:
 ---
 
 
-将 Mizuki 博客部署到自己的服务器可以获得更高的自由度和控制权。本文介绍三种常见的部署方案：宝塔面板、1Panel 和纯命令行部署。
+将 Tsukimi 博客部署到自己的服务器可以获得更高的自由度和控制权。本文介绍三种常见的部署方案：宝塔面板、1Panel 和纯命令行部署。
 
 ## 准备工作
 
@@ -59,7 +59,7 @@ if [ -f /usr/bin/curl ];then curl -sSO https://download.bt.cn/install/install_pa
 有两种方式上传代码：
 
 **方式一：直接上传压缩包**
-1. 在本地将 Mizuki 项目打包为 zip 文件
+1. 在本地将 Tsukimi 项目打包为 zip 文件
 2. 在宝塔文件管理中上传压缩包
 3. 解压到网站根目录
 4. 删除压缩包文件
@@ -167,8 +167,8 @@ npm install -g pnpm pm2
 ### 第三步：创建网站目录
 
 ```bash
-mkdir -p /var/www/mizuki
-cd /var/www/mizuki
+mkdir -p /var/www/tsukimi
+cd /var/www/tsukimi
 ```
 
 ### 第四步：克隆项目
@@ -189,7 +189,7 @@ pnpm build
 创建 Nginx 配置文件：
 
 ```bash
-nano /etc/nginx/sites-available/mizuki
+nano /etc/nginx/sites-available/tsukimi
 ```
 
 输入以下内容：
@@ -198,7 +198,7 @@ nano /etc/nginx/sites-available/mizuki
 server {
     listen 80;
     server_name your-domain.com www.your-domain.com;
-    root /var/www/mizuki/dist;
+    root /var/www/tsukimi/dist;
     index index.html;
 
     location / {
@@ -216,7 +216,7 @@ server {
 启用站点：
 
 ```bash
-ln -s /etc/nginx/sites-available/mizuki /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/tsukimi /etc/nginx/sites-enabled/
 nginx -t  # 测试配置
 systemctl restart nginx
 ```
@@ -233,7 +233,7 @@ nano /var/www/deploy.sh
 
 ```bash
 #!/bin/bash
-cd /var/www/mizuki
+cd /var/www/tsukimi
 git pull
 pnpm install
 pnpm build
@@ -250,7 +250,7 @@ chmod +x /var/www/deploy.sh
 设置 Git 自动触发部署：
 
 ```bash
-cd /var/www/mizuki
+cd /var/www/tsukimi
 nano .git/hooks/post-receive
 ```
 

@@ -12,7 +12,7 @@ copyright:
 
 ## 概述
 
-Mizuki 项目的番剧页面支持通过 Bangumi API 获取用户的动漫收藏数据。Bangumi 是一个专注于动漫、游戏和文化的社区，其 API 提供了丰富的动漫元数据接口。
+Tsukimi 项目的番剧页面支持通过 Bangumi API 获取用户的动漫收藏数据。Bangumi 是一个专注于动漫、游戏和文化的社区，其 API 提供了丰富的动漫元数据接口。
 
 ## 配置
 

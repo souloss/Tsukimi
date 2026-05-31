@@ -15,7 +15,7 @@ copyright:
 
 # 目录配置
 
-Mizuki 支持文章目录（TOC）功能，帮助读者快速导航文章内容。配置位于 `src/config.ts` 中的 `siteConfig.toc` 对象。
+Tsukimi 支持文章目录（TOC）功能，帮助读者快速导航文章内容。配置位于 `src/config.ts` 中的 `siteConfig.toc` 对象。
 
 ## 基本配置
 

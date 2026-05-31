@@ -15,7 +15,7 @@ copyright:
 
 # 字体配置
 
-Mizuki 主题支持自定义字体配置，用户可以在显示设置面板中自由切换字体方案。字体配置位于 `src/config/fontConfig.ts` 文件中。
+Tsukimi 主题支持自定义字体配置，用户可以在显示设置面板中自由切换字体方案。字体配置位于 `src/config/fontConfig.ts` 文件中。
 
 ## 基本配置
 
@@ -107,7 +107,7 @@ export const fontConfig: FontConfig = {
 
 ## 字体加载方式
 
-Mizuki 支持三种字体加载方式：
+Tsukimi 支持三种字体加载方式：
 
 | 方式 | 配置字段 | 说明 |
 |------|----------|------|

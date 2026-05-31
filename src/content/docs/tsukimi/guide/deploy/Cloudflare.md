@@ -12,11 +12,11 @@ copyright:
 
 # Cloudflare Pages 部署指南
 
-Cloudflare Pages 是一个优秀的静态网站托管平台，具有全球 CDN、自动部署和免费 SSL 证书等特性。本指南将详细介绍如何将 Mizuki (Astro项目) 部署到 Cloudflare Pages。
+Cloudflare Pages 是一个优秀的静态网站托管平台，具有全球 CDN、自动部署和免费 SSL 证书等特性。本指南将详细介绍如何将 Tsukimi (Astro项目) 部署到 Cloudflare Pages。
 
 ## 准备工作
 
-1. **Git 仓库**：确保您的 Mizuki 项目已上传到 GitHub、GitLab 或其他支持的 Git 平台
+1. **Git 仓库**：确保您的 Tsukimi 项目已上传到 GitHub、GitLab 或其他支持的 Git 平台
 2. **Cloudflare 账号**：注册一个免费的 Cloudflare 账号
 
 ## 部署步骤
@@ -29,7 +29,7 @@ Cloudflare Pages 是一个优秀的静态网站托管平台，具有全球 CDN�
 
 1. 点击 "Create a project" 或 "Connect to Git" 按钮
 2. 选择您的 Git 提供商（GitHub、GitLab 等）并授权
-3. 从列表中选择您的 Mizuki 项目仓库
+3. 从列表中选择您的 Tsukimi 项目仓库
 
 ### 3. 配置构建设置
 
@@ -37,7 +37,7 @@ Cloudflare Pages 是一个优秀的静态网站托管平台，具有全球 CDN�
 
 #### 基本设置
 
-- **Project name**: 输入您的项目名称（如 `mizuki-blog`）
+- **Project name**: 输入您的项目名称（如 `tsukimi-blog`）
 - **Production branch**: 设置主分支（通常为 `main` 或 `master`）
 
 #### 构建配置
@@ -73,7 +73,7 @@ Root directory: /
 
 部署完成后，您将获得：
 
-- **站点 URL**：如 `https://mizuki-blog.pages.dev`
+- **站点 URL**：如 `https://tsukimi-blog.pages.dev`
 - **自动生成的 SSL 证书**
 - **全球 CDN 分发**
 
@@ -207,7 +207,7 @@ Cloudflare Pages 的免费计划包括：
 
 ## 总结
 
-Cloudflare Pages 是部署 Mizuki (Astro项目) 的优秀选择，具有以下优势：
+Cloudflare Pages 是部署 Tsukimi (Astro项目) 的优秀选择，具有以下优势：
 
 - 🚀 部署简单，配置直观
 - 🌍 全球 CDN，访问速度快
@@ -215,4 +215,4 @@ Cloudflare Pages 是部署 Mizuki (Astro项目) 的优秀选择，具有以下�
 - 🔄 自动部署
 - 📊 内置分析工具
 
-按照本指南操作，您应该能够成功将 Mizuki 博客部署到 Cloudflare Pages，享受快速、稳定的访问体验。
+按照本指南操作，您应该能够成功将 Tsukimi 博客部署到 Cloudflare Pages，享受快速、稳定的访问体验。

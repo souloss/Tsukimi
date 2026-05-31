@@ -15,7 +15,7 @@ copyright:
 
 **显示设置面板说明**
 
-Mizuki 主题内置了一个功能强大的统一显示设置面板，位于 `src/components/features/settings/DisplaySettings.svelte`。用户可以在前端实时调整多种显示选项，所有设置都会自动保存到浏览器的 `localStorage` 中。
+Tsukimi 主题内置了一个功能强大的统一显示设置面板，位于 `src/components/features/settings/DisplaySettings.svelte`。用户可以在前端实时调整多种显示选项，所有设置都会自动保存到浏览器的 `localStorage` 中。
 
 ---
 
@@ -162,7 +162,7 @@ postLayout: 'list' | 'grid'; // 文章列表布局
 
 ## localStorage 持久化
 
-所有用户设置都会自动保存到浏览器的 `localStorage` 中，键名为 `mizuki-settings`。
+所有用户设置都会自动保存到浏览器的 `localStorage` 中，键名为 `tsukimi-settings`。
 
 **保存的数据结构**:
 ```typescript

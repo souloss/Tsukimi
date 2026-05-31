@@ -15,7 +15,7 @@ copyright:
 
 ## OG 图片配置
 
-Open Graph（OG）图片是社交媒体分享时显示的预览图片。Mizuki 支持自动生成美观的 OG 图片。
+Open Graph（OG）图片是社交媒体分享时显示的预览图片。Tsukimi 支持自动生成美观的 OG 图片。
 
 ### 配置选项
 

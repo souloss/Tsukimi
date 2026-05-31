@@ -10,9 +10,9 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Mizuki 内容迁移指南
+# Tsukimi 内容迁移指南
 
-本指南将帮助你将现有的 Mizuki 博客从单仓库模式迁移到代码内容分离模式。
+本指南将帮助你将现有的 Tsukimi 博客从单仓库模式迁移到代码内容分离模式。
 
 > 💡 **提示**: 如果是新项目,建议先阅读内容分离完整指南
 
@@ -31,8 +31,8 @@ copyright:
 
 ```bash
 # 创建并进入新目录
-mkdir Mizuki-Content
-cd Mizuki-Content
+mkdir Tsukimi-Content
+cd Tsukimi-Content
 
 # 初始化 Git 仓库
 git init
@@ -42,9 +42,9 @@ mkdir -p posts spec data images/albums images/diary images/posts
 
 # 创建 README
 cat > README.md << 'EOF'
-# Mizuki 博客内容
+# Tsukimi 博客内容
 
-这是 Mizuki 博客的内容仓库,包含所有文章、数据和图片。
+这是 Tsukimi 博客的内容仓库,包含所有文章、数据和图片。
 
 ## 目录结构
 
@@ -55,18 +55,18 @@ cat > README.md << 'EOF'
 
 ## 使用方法
 
-此仓库作为 Mizuki 代码仓库的内容源,通过 Git Submodule 或独立模式关联。
+此仓库作为 Tsukimi 代码仓库的内容源,通过 Git Submodule 或独立模式关联。
 
 详细说明请查看: https://github.com/souloss/Tsukimi
 EOF
 ```
 
-### 步骤 2: 从 Mizuki 项目复制内容
+### 步骤 2: 从 Tsukimi 项目复制内容
 
 ```bash
 # 设置路径变量
-MIZUKI_PATH="/path/to/your/Mizuki"
-CONTENT_PATH="/path/to/Mizuki-Content"
+MIZUKI_PATH="/path/to/your/Tsukimi"
+CONTENT_PATH="/path/to/Tsukimi-Content"
 
 # 复制文章
 cp -r "$MIZUKI_PATH/src/content/posts/"* "$CONTENT_PATH/posts/"
@@ -96,10 +96,10 @@ cd "$CONTENT_PATH"
 git add .
 
 # 提交
-git commit -m "Initial commit: Migrate content from Mizuki monorepo"
+git commit -m "Initial commit: Migrate content from Tsukimi monorepo"
 
 # 添加远程仓库 (替换为你的仓库地址)
-git remote add origin https://github.com/your-username/Mizuki-Content.git
+git remote add origin https://github.com/your-username/Tsukimi-Content.git
 
 # 推送
 git branch -M master
@@ -108,7 +108,7 @@ git push -u origin master
 echo "✅ 内容仓库已推送!"
 ```
 
-### 步骤 4: 配置 Mizuki 代码仓库
+### 步骤 4: 配置 Tsukimi 代码仓库
 
 ```bash
 cd "$MIZUKI_PATH"
@@ -122,7 +122,7 @@ cat > .env << 'EOF'
 ENABLE_CONTENT_SYNC=true
 
 # 内容仓库配置
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 USE_SUBMODULE=true
 EOF
 
@@ -145,11 +145,11 @@ git push
 cd "$MIZUKI_PATH"
 
 # 备份原内容 (以防万一)
-mkdir -p ../mizuki-content-backup
-cp -r src/content/posts ../mizuki-content-backup/
-cp -r src/content/spec ../mizuki-content-backup/
-cp -r src/data ../mizuki-content-backup/
-cp -r public/images ../mizuki-content-backup/
+mkdir -p ../tsukimi-content-backup
+cp -r src/content/posts ../tsukimi-content-backup/
+cp -r src/content/spec ../tsukimi-content-backup/
+cp -r src/data ../tsukimi-content-backup/
+cp -r public/images ../tsukimi-content-backup/
 
 # 删除已迁移的内容 (保留目录结构)
 rm -rf src/content/posts/*
@@ -241,7 +241,7 @@ git push
 
 ```bash
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 USE_SUBMODULE=true
 ```
 

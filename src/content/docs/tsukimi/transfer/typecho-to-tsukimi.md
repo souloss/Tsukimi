@@ -1,7 +1,7 @@
 ---
-title: Typecho 迁移到 Mizuki
+title: Typecho 迁移到 Tsukimi
 createTime: 2025/08/16 23:56:17
-permalink: /transfer/typecho-to-mizuki/
+permalink: /transfer/typecho-to-tsukimi/
 order: 8
 icon: ri:exchange-line
 badge:
@@ -13,20 +13,20 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Typecho 迁移到 Mizuki 指南
+# Typecho 迁移到 Tsukimi 指南
 
-本指南将帮助您将 Typecho 博客文章迁移到 Mizuki 主题。
+本指南将帮助您将 Typecho 博客文章迁移到 Tsukimi 主题。
 
-## 什么是 Mizuki？
+## 什么是 Tsukimi？
 
-Mizuki 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
+Tsukimi 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
 - 快速的静态站点生成
 - 现代化的设计风格
 - 优秀的 SEO 支持
 - 响应式布局
 - 支持多种内容格式
 
-## Typecho 与 Mizuki 文章格式差异
+## Typecho 与 Tsukimi 文章格式差异
 
 ### Typecho 数据库结构
 Typecho 将文章存储在数据库中，主要包含以下字段：
@@ -38,7 +38,7 @@ Typecho 将文章存储在数据库中，主要包含以下字段：
 - `tags`: 标签
 - `category`: 分类
 
-### Mizuki 格式示例：
+### Tsukimi 格式示例：
 ```yaml
 ---
 title: Markdown Tutorial
@@ -59,7 +59,7 @@ draft: false
 ### 1. 准备工作
 
 1. 备份您的 Typecho 网站和数据库
-2. 确保已安装 Mizuki 主题
+2. 确保已安装 Tsukimi 主题
 3. 准备文章存放目录：`src/content/posts/`
 4. 准备数据库访问工具（如 phpMyAdmin、Navicat 等）
 
@@ -106,7 +106,7 @@ Typecho 的文章内容通常已经是 Markdown 格式，但需要进行以下�
 
 #### Frontmatter 字段对应关系
 
-| Typecho 字段 | Mizuki 字段 | 说明 |
+| Typecho 字段 | Tsukimi 字段 | 说明 |
 |-------------|-------------|------|
 | `title` | `title` | 文章标题 |
 | `created` | `pubDate` | 发布日期（转换为 YYYY-MM-DD 格式） |
@@ -145,13 +145,13 @@ draft: false
    - 通过 FTP 下载整个上传目录
    - 或使用服务器文件管理器
 
-3. **整理到 Mizuki**：
+3. **整理到 Tsukimi**：
    - 将文件复制到 `public/images/` 目录
    - 保持原有目录结构或重新组织
 
 4. **更新图片路径**：
    - Typecho: `![图片](/usr/uploads/2024/01/image.jpg)`
-   - Mizuki: `![图片](/images/2024/01/image.jpg)`
+   - Tsukimi: `![图片](/images/2024/01/image.jpg)`
 
 ### 5. 处理 Typecho 特有功能
 
@@ -176,7 +176,7 @@ Typecho 的独立页面（type='page'）需要单独处理：
 
 更新文章中的内部链接格式：
 - Typecho: `[链接](/archives/123/)`
-- Mizuki: `[链接](/posts/post-slug/)`
+- Tsukimi: `[链接](/posts/post-slug/)`
 
 ### 7. 验证迁移结果
 
@@ -196,21 +196,21 @@ Typecho 的独立页面（type='page'）需要单独处理：
 A: 推荐直接查询数据库，可以编写脚本批量生成 Markdown 文件。也可以使用 Typecho 的导出插件。
 
 ### Q: Typecho 的评论如何处理？
-A: Mizuki 目前只支持 Twikoo 评论系统，Typecho 的评论可以导出备份，但无法直接迁移到新系统。
+A: Tsukimi 目前只支持 Twikoo 评论系统，Typecho 的评论可以导出备份，但无法直接迁移到新系统。
 
 ### Q: 如何处理 Typecho 的主题自定义功能？
-A: Typecho 主题的自定义功能需要在 Mizuki 中重新实现，或寻找类似的替代方案。
+A: Typecho 主题的自定义功能需要在 Tsukimi 中重新实现，或寻找类似的替代方案。
 
 ### Q: 数据库中的时间戳如何转换？
 A: Typecho 使用 Unix 时间戳，需要转换为标准日期格式。可以使用 `FROM_UNIXTIME()` 函数或编程语言的日期转换功能。
 
 ### Q: 如何处理 Typecho 的分类层级？
-A: Mizuki 只支持单级分类，如果 Typecho 使用了多级分类，建议选择最具体的分类，或将层级信息添加到标签中。
+A: Tsukimi 只支持单级分类，如果 Typecho 使用了多级分类，建议选择最具体的分类，或将层级信息添加到标签中。
 
 ## 高级功能迁移
 
 ### 评论系统
-Mizuki 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
+Tsukimi 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
 
 ### SEO 优化
 - 确保每篇文章都有 `description` 字段
@@ -219,15 +219,15 @@ Mizuki 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
 - 检查 meta 标签设置
 
 ### RSS 订阅
-Mizuki 会自动生成 RSS 订阅，无需额外配置。
+Tsukimi 会自动生成 RSS 订阅，无需额外配置。
 
 ### 搜索功能
-Mizuki 内置了搜索功能，可以替代 Typecho 的搜索插件。
+Tsukimi 内置了搜索功能，可以替代 Typecho 的搜索插件。
 
 ### 重定向设置
-为了保持 SEO 价值，建议设置从旧 Typecho URL 到新 Mizuki URL 的重定向：
+为了保持 SEO 价值，建议设置从旧 Typecho URL 到新 Tsukimi URL 的重定向：
 - Typecho: `/archives/123/`
-- Mizuki: `/posts/post-slug/`
+- Tsukimi: `/posts/post-slug/`
 
 ## 迁移脚本示例
 
@@ -286,7 +286,7 @@ function sanitize_filename($filename) {
 
 ## 总结
 
-从 Typecho 迁移到 Mizuki 需要处理数据库导出、格式转换和功能替代等多个方面。由于 Typecho 使用数据库存储，迁移过程相对复杂，建议分步骤进行：
+从 Typecho 迁移到 Tsukimi 需要处理数据库导出、格式转换和功能替代等多个方面。由于 Typecho 使用数据库存储，迁移过程相对复杂，建议分步骤进行：
 
 1. 先导出核心文章内容
 2. 处理图片和附件

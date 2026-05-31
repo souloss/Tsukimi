@@ -15,7 +15,7 @@ copyright:
 
 ### 留言板页面配置教程
 
-Mizuki 主题内置了一个优雅的留言板页面，访客可以在这里留下消息、评论和互动。
+Tsukimi 主题内置了一个优雅的留言板页面，访客可以在这里留下消息、评论和互动。
 
 本教程将详细指导你如何配置和使用留言板页面。
 
@@ -25,7 +25,7 @@ Mizuki 主题内置了一个优雅的留言板页面，访客可以在这里留�
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - pages
       - guestbook.astro
@@ -34,7 +34,7 @@ Mizuki 主题内置了一个优雅的留言板页面，访客可以在这里留�
         - guestbook.md
 :::
 
-在 Mizuki 主题中，留言板页面的**展示逻辑**和**内容数据**是分开的：
+在 Tsukimi 主题中，留言板页面的**展示逻辑**和**内容数据**是分开的：
 
 *   **展示逻辑**: `src/pages/guestbook.astro`
     *   这个文件负责留言板页面的 HTML 结构、CSS 样式和 JavaScript 交互逻辑。
@@ -66,7 +66,7 @@ title: Guestbook
 
 #### **3. 评论系统集成**
 
-留言板页面使用 Mizuki 的评论系统。要启用留言功能，你需要：
+留言板页面使用 Tsukimi 的评论系统。要启用留言功能，你需要：
 
 1.  确保在 `src/config.ts` 中启用了评论系统
 2.  配置好你选择的评论服务（Twikoo、Waline、Giscus、Artalk 等）

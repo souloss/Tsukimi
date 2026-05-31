@@ -12,7 +12,7 @@ copyright:
 
 # Mermaid 图表指南
 
-Mizuki 主题内置了 Mermaid 支持，让你可以在 Markdown 文档中轻松创建各种类型的图表和流程图。
+Tsukimi 主题内置了 Mermaid 支持，让你可以在 Markdown 文档中轻松创建各种类型的图表和流程图。
 
 ## 基本语法
 

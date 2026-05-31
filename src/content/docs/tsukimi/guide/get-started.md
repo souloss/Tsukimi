@@ -10,13 +10,13 @@ copyright:
     url: https://github.com/souloss
 ---
 
-Mizuki 项目入门指南
+Tsukimi 项目入门指南
 
 
 
 ## 环境依赖
 
-在开始使用 Mizuki 之前，您需要确保系统满足以下要求：
+在开始使用 Tsukimi 之前，您需要确保系统满足以下要求：
 
 - **Node.js >= 22**
 - **pnpm >= 9**
@@ -67,11 +67,11 @@ git --version
 
 ### 1. 克隆项目
 
-首先，克隆 Mizuki 项目到本地：
+首先，克隆 Tsukimi 项目到本地：
 
 ```bash
 git clone https://github.com/souloss/Tsukimi.git
-cd Mizuki
+cd Tsukimi
 ```
 
 ### 2. 安装依赖

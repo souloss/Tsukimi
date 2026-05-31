@@ -12,7 +12,7 @@ copyright:
 
 # 公告栏配置
 
-Mizuki 侧边栏支持公告栏组件，可以展示网站公告、通知等信息。配置位于 `src/config.ts` 中的 `announcementConfig` 对象。
+Tsukimi 侧边栏支持公告栏组件，可以展示网站公告、通知等信息。配置位于 `src/config.ts` 中的 `announcementConfig` 对象。
 
 ::: note
 公告栏的启用/禁用现在通过 `sidebarLayoutConfig` 统一控制，不再使用 `enable` 字段。如需隐藏公告栏，从侧边栏布局中移除 `announcement` 组件即可。

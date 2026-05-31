@@ -15,7 +15,7 @@ copyright:
 
 # 图片优化配置
 
-Mizuki 内置图片优化功能，可在构建时自动转换图片格式、压缩质量，并解决防盗链图片加载问题。配置位于 `src/config.ts` 中 `siteConfig.imageOptimization` 对象。
+Tsukimi 内置图片优化功能，可在构建时自动转换图片格式、压缩质量，并解决防盗链图片加载问题。配置位于 `src/config.ts` 中 `siteConfig.imageOptimization` 对象。
 
 ## 基本配置
 

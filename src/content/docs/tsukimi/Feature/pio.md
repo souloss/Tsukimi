@@ -12,7 +12,7 @@ copyright:
 
 # Live2D 看板娘配置
 
-Mizuki 支持通过 Pio 组件集成 Live2D 看板娘。配置位于 `src/config.ts` 中的 `pioConfig` 对象。
+Tsukimi 支持通过 Pio 组件集成 Live2D 看板娘。配置位于 `src/config.ts` 中的 `pioConfig` 对象。
 
 ## 基本配置
 
@@ -26,7 +26,7 @@ export const pioConfig: PioConfig = {
   mode: "draggable", // 交互模式
   hiddenOnMobile: true, // 移动端隐藏
   dialog: {
-    welcome: "Welcome to Mizuki Website!",
+    welcome: "Welcome to Tsukimi Website!",
     touch: ["What are you doing?", "Stop touching me!", "HENTAI!", "Don't bully me like that!"],
     home: "Click here to go back to homepage!",
     skin: ["Want to see my new outfit?", "The new outfit looks great~"],

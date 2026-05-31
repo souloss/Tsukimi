@@ -1,5 +1,5 @@
 ---
-title: HTML 文件导入 Mizuki
+title: HTML 文件导入 Tsukimi
 createTime: 2025/08/16 23:56:17
 permalink: /transfer/html-import/
 order: 4
@@ -13,22 +13,22 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# HTML 文件导入 Mizuki 指南
+# HTML 文件导入 Tsukimi 指南
 
-本指南将帮助您将现有的 HTML 文件内容导入到 Mizuki 主题。
+本指南将帮助您将现有的 HTML 文件内容导入到 Tsukimi 主题。
 
-## 什么是 Mizuki？
+## 什么是 Tsukimi？
 
-Mizuki 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
+Tsukimi 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
 - 快速的静态站点生成
 - 现代化的设计风格
 - 优秀的 SEO 支持
 - 响应式布局
 - 支持多种内容格式
 
-## HTML 文件与 Mizuki 文章格式差异
+## HTML 文件与 Tsukimi 文章格式差异
 
-Mizuki 文章的核心是 Markdown 文件，并需要包含特定的 Frontmatter（YAML 头部信息）来定义文章的元数据。直接导入 HTML 文件内容需要将其转换为 Markdown 格式，并添加 Frontmatter。
+Tsukimi 文章的核心是 Markdown 文件，并需要包含特定的 Frontmatter（YAML 头部信息）来定义文章的元数据。直接导入 HTML 文件内容需要将其转换为 Markdown 格式，并添加 Frontmatter。
 
 ### 纯 HTML 文件示例：
 ```html
@@ -48,14 +48,14 @@ Mizuki 文章的核心是 Markdown 文件，并需要包含特定的 Frontmatter
 </html>
 ```
 
-### Mizuki 格式示例（转换为 Markdown 并添加 Frontmatter）：
+### Tsukimi 格式示例（转换为 Markdown 并添加 Frontmatter）：
 ```yaml
 ---
 title: HTML 导入指南
 published: 2025-01-20
 pinned: true
-description: 将 HTML 内容导入 Mizuki 的详细指南。
-tags: [Import, HTML, Mizuki]
+description: 将 HTML 内容导入 Tsukimi 的详细指南。
+tags: [Import, HTML, Tsukimi]
 category: Import Guides
 licenseName: "Unlicensed"
 author: Your Name
@@ -77,12 +77,12 @@ draft: false
 
 ### 1. 准备工作
 
-1. 确保已安装 Mizuki 主题。
+1. 确保已安装 Tsukimi 主题。
 2. 准备文章存放目录：`src/content/posts/`。
 
 ### 2. HTML 到 Markdown 的转换
 
-由于 Mizuki 使用 Markdown 作为内容格式，您需要将 HTML 内容转换为 Markdown。这通常需要借助工具或库来完成。
+由于 Tsukimi 使用 Markdown 作为内容格式，您需要将 HTML 内容转换为 Markdown。这通常需要借助工具或库来完成。
 
 #### 推荐工具：
 - **在线转换工具**：例如 `html2markdown.com` 或 `pandoc` 的在线版本。
@@ -125,11 +125,11 @@ const markdown = turndownService.turndown('<h1>我的第一篇 HTML 文章</h1><
 console.log(markdown)
 ```
 
-将转换后的 Markdown 内容保存为 `.md` 文件，并放置到 Mizuki 的文章目录 `src/content/posts/`。
+将转换后的 Markdown 内容保存为 `.md` 文件，并放置到 Tsukimi 的文章目录 `src/content/posts/`。
 
 ### 3. 添加 Frontmatter
 
-对于每个转换后的 Markdown 文件，您需要手动或通过脚本添加 Mizuki 所需的 Frontmatter。这是导入过程中最关键的一步。
+对于每个转换后的 Markdown 文件，您需要手动或通过脚本添加 Tsukimi 所需的 Frontmatter。这是导入过程中最关键的一步。
 
 #### 必需字段：
 - `title`: 文章标题
@@ -163,16 +163,16 @@ draft: false
 
 如果您的 HTML 文件中包含图片或其他媒体文件，您需要手动处理这些资源。
 
-1. **复制资源文件**：将图片、视频等媒体文件复制到 Mizuki 的 `public/` 目录下，通常建议放在 `public/images/` 或 `public/assets/`。
+1. **复制资源文件**：将图片、视频等媒体文件复制到 Tsukimi 的 `public/` 目录下，通常建议放在 `public/images/` 或 `public/assets/`。
 
-2. **更新文件路径**：确保 Markdown 文件中的图片链接指向 Mizuki 项目中的正确路径。
+2. **更新文件路径**：确保 Markdown 文件中的图片链接指向 Tsukimi 项目中的正确路径。
    - 示例：`![图片描述](/images/your-image.jpg)`
 
 ### 5. 更新内部链接
 
-如果您的 HTML 文件中包含指向其他文章或页面的内部链接，请确保这些链接在 Mizuki 中仍然有效。
+如果您的 HTML 文件中包含指向其他文章或页面的内部链接，请确保这些链接在 Tsukimi 中仍然有效。
 
-- Mizuki 的文章链接通常是 `/posts/your-post-slug/`。
+- Tsukimi 的文章链接通常是 `/posts/your-post-slug/`。
 
 ### 6. 验证导入结果
 
@@ -201,4 +201,4 @@ A: 检查以下几点：
 
 ## 总结
 
-将 HTML 文件内容导入 Mizuki 涉及 HTML 到 Markdown 的转换，以及为转换后的 Markdown 文件添加正确的 Frontmatter 和处理静态资源路径。虽然比纯 Markdown 导入复杂，但通过合适的工具和细致的检查，可以高效完成。
+将 HTML 文件内容导入 Tsukimi 涉及 HTML 到 Markdown 的转换，以及为转换后的 Markdown 文件添加正确的 Frontmatter 和处理静态资源路径。虽然比纯 Markdown 导入复杂，但通过合适的工具和细致的检查，可以高效完成。

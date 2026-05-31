@@ -15,12 +15,12 @@ copyright:
 
 # 部署到 EdgeOne Pages
 
-EdgeOne Pages 是腾讯云提供的静态网站托管服务，支持自动部署，与 GitHub 集成良好，非常适合部署 Mizuki 博客。
+EdgeOne Pages 是腾讯云提供的静态网站托管服务，支持自动部署，与 GitHub 集成良好，非常适合部署 Tsukimi 博客。
 
 ## 准备工作
 
 1. 拥有一个 GitHub 账号
-2. 准备好你的 Mizuki 博客项目代码
+2. 准备好你的 Tsukimi 博客项目代码
 3. 注册腾讯云账号（如果还没有）
 
 ## 部署步骤
@@ -29,11 +29,11 @@ EdgeOne Pages 是腾讯云提供的静态网站托管服务，支持自动部署
 
 1. 登录你的 [GitHub](https://github.com) 账号
 2. 点击右上角的 "+" 号，选择 "New repository"
-3. 填写仓库名称（如：mizuki-blog）
+3. 填写仓库名称（如：tsukimi-blog）
 4. 选择公开（Public）或私有（Private）仓库
 5. 勾选 "Add a README file"（可选）
 6. 点击 "Create repository" 创建仓库
-7. 将你的 Mizuki 博客代码推送到这个仓库
+7. 将你的 Tsukimi 博客代码推送到这个仓库
 
 ### 第二步：配置 EdgeOne Pages
 
@@ -76,7 +76,7 @@ EdgeOne Pages 是腾讯云提供的静态网站托管服务，支持自动部署
 pnpm i && pnpm build
 ```
 
-**注意**：不要使用默认的 `npm install` 或 `yarn install`，因为 Mizuki 项目使用 pnpm 作为包管理器。
+**注意**：不要使用默认的 `npm install` 或 `yarn install`，因为 Tsukimi 项目使用 pnpm 作为包管理器。
 
 ### 2. 构建失败排查
 
@@ -112,7 +112,7 @@ EdgeOne Pages 会自动监听你的 GitHub 仓库变化：
 
 ## 总结
 
-通过 EdgeOne Pages 部署 Mizuki 博客非常简单，只需要：
+通过 EdgeOne Pages 部署 Tsukimi 博客非常简单，只需要：
 
 1. 创建 GitHub 仓库
 2. 在 EdgeOne 中连接仓库

@@ -12,7 +12,7 @@ copyright:
 
 ### 技能页面配置教程
 
-Mizuki 主题内置了一个专业的技能展示（Skills）页面，用于展示您掌握的技术栈、工具和专业能力。这个页面可以帮助访客了解您的技术专长和专业水平。
+Tsukimi 主题内置了一个专业的技能展示（Skills）页面，用于展示您掌握的技术栈、工具和专业能力。这个页面可以帮助访客了解您的技术专长和专业水平。
 
 本教程将详细指导你如何添加、修改和管理技能数据。
 
@@ -22,7 +22,7 @@ Mizuki 主题内置了一个专业的技能展示（Skills）页面，用于展�
 
 ::: file-tree
 
-- Mizuki
+- Tsukimi
   - src
     - pages
       - skills.astro
@@ -30,7 +30,7 @@ Mizuki 主题内置了一个专业的技能展示（Skills）页面，用于展�
       - skills.ts
 :::
 
-在 Mizuki 主题中，技能页面的**展示逻辑**和**内容数据**是分开的：
+在 Tsukimi 主题中，技能页面的**展示逻辑**和**内容数据**是分开的：
 
 *   **展示逻辑**: `src/pages/skills.astro`
     *   这个文件负责技能页面的HTML结构、CSS样式和JavaScript交互逻辑。
@@ -74,7 +74,7 @@ export const skillsData: Skill[] = [
 		category: "frontend",
 		level: "advanced",
 		experience: { years: 3, months: 6 },
-		projects: ["mizuki-blog", "portfolio-website", "data-visualization-tool"],
+		projects: ["tsukimi-blog", "portfolio-website", "data-visualization-tool"],
 		color: "#F7DF1E",
 	},
 ];

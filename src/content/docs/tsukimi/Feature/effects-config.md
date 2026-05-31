@@ -15,7 +15,7 @@ copyright:
 
 # 特效配置
 
-Mizuki 主题内置了视觉特效配置，目前支持樱花飘落特效。特效配置位于 `src/config/effectsConfig.ts` 文件中，类型定义为 `EffectsConfig`。
+Tsukimi 主题内置了视觉特效配置，目前支持樱花飘落特效。特效配置位于 `src/config/effectsConfig.ts` 文件中，类型定义为 `EffectsConfig`。
 
 ## 基本配置
 

@@ -1,7 +1,7 @@
 ---
-title: Halo 迁移到 Mizuki
+title: Halo 迁移到 Tsukimi
 createTime: 2025/08/16 23:56:17
-permalink: /transfer/halo-to-mizuki/
+permalink: /transfer/halo-to-tsukimi/
 order: 2
 icon: ri:exchange-line
 badge:
@@ -13,20 +13,20 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Halo 迁移到 Mizuki 指南
+# Halo 迁移到 Tsukimi 指南
 
-本指南将帮助您将 Halo 博客文章迁移到 Mizuki 主题。
+本指南将帮助您将 Halo 博客文章迁移到 Tsukimi 主题。
 
-## 什么是 Mizuki？
+## 什么是 Tsukimi？
 
-Mizuki 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
+Tsukimi 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
 - 快速的静态站点生成
 - 现代化的设计风格
 - 优秀的 SEO 支持
 - 响应式布局
 - 支持多种内容格式
 
-## Halo 与 Mizuki 文章格式差异
+## Halo 与 Tsukimi 文章格式差异
 
 ### Halo 导出格式示例：
 
@@ -40,14 +40,14 @@ Halo 导出的 Markdown 文件通常没有 Frontmatter，而是纯 Markdown 格�
 
 文章的元数据（标题、日期、标签等）通常包含在导出的 JSON 文件中或需要从 Halo 后台单独获取。
 
-### Mizuki 格式示例：
+### Tsukimi 格式示例：
 ```yaml
 ---
-title: Halo 迁移到 Mizuki
+title: Halo 迁移到 Tsukimi
 published: 2025-01-20
 pinned: true
-description: Halo 迁移到 Mizuki 的详细指南。
-tags: [Migration, Halo, Mizuki]
+description: Halo 迁移到 Tsukimi 的详细指南。
+tags: [Migration, Halo, Tsukimi]
 category: Migration Guides
 licenseName: "Unlicensed"
 author: Your Name
@@ -62,7 +62,7 @@ draft: false
 
 1. 从 Halo 后台导出所有文章为 Markdown 格式
 2. 备份您的 Halo 博客数据
-3. 确保已安装 Mizuki 主题
+3. 确保已安装 Tsukimi 主题
 4. 准备文章存放目录：`src/content/posts/`
 
 ### 2. 导出 Halo 文章和数据
@@ -88,15 +88,15 @@ draft: false
 
 ### 3. 文章内容迁移
 
-将导出的 Markdown 文件复制到 Mizuki 的 `src/content/posts/` 目录：
+将导出的 Markdown 文件复制到 Tsukimi 的 `src/content/posts/` 目录：
 
 ```bash
-cp halo-export/*.md mizuki/src/content/posts/
+cp halo-export/*.md tsukimi/src/content/posts/
 ```
 
 ### 4. 添加 Frontmatter
 
-由于 Halo 导出的文章没有 Frontmatter，您需要手动为每篇文章添加 Mizuki 所需的 Frontmatter：
+由于 Halo 导出的文章没有 Frontmatter，您需要手动为每篇文章添加 Tsukimi 所需的 Frontmatter：
 
 #### 方法一：手动添加
 
@@ -123,9 +123,9 @@ draft: false
 
 #### 图片和媒体文件
 
-1. 将 Halo 的 `静态文件目录` 目录复制到 Mizuki 的 `public/images/`或者自己喜欢的位置
+1. 将 Halo 的 `静态文件目录` 目录复制到 Tsukimi 的 `public/images/`或者自己喜欢的位置
 2. 更新文章中的图片路径：
-   - Mizuki: `![图片](/images/example.jpg)`
+   - Tsukimi: `![图片](/images/example.jpg)`
 
 
 
@@ -134,7 +134,7 @@ draft: false
 ### 6. 更新内部链接
 
 更新文章中的内部链接格式：
-- Mizuki: `[链接](/posts/post-slug/)`
+- Tsukimi: `[链接](/posts/post-slug/)`
 
 ### 7. 补充文章元数据
 
@@ -160,25 +160,25 @@ draft: false
 ## 常见问题
 
 ### Q: 日期格式转换问题
-A: Halo 使用 ISO 8601 格式（如 `2024-01-15T10:30:00+08:00`），需要转换为 Mizuki 的 `YYYY-MM-DD` 格式。
+A: Halo 使用 ISO 8601 格式（如 `2024-01-15T10:30:00+08:00`），需要转换为 Tsukimi 的 `YYYY-MM-DD` 格式。
 
 ### Q: 标签和分类显示异常
 A: 由于 Halo 导出的文章没有 frontmatter，需要手动添加标签和分类信息。可以参考原 Halo 后台的分类和标签设置。
 
 ### Q: 文章 slug 问题
-A: Mizuki 会根据文件名自动生成 slug。建议将 Halo 导出的文件重命名为有意义的英文名称，如 `my-first-post.md`。
+A: Tsukimi 会根据文件名自动生成 slug。建议将 Halo 导出的文件重命名为有意义的英文名称，如 `my-first-post.md`。
 
 ## 高级功能迁移
 
 ### 评论系统
-Mizuki 目前只支持 Twikoo 评论系统。如果您在 Halo 中使用了其他评论系统，需要：
+Tsukimi 目前只支持 Twikoo 评论系统。如果您在 Halo 中使用了其他评论系统，需要：
 1. 导出现有评论数据
 2. 配置 Twikoo 评论系统
 3. 如有需要，手动导入重要评论
 
 ### 自定义页面
 如果您在 Halo 中创建了自定义页面（如关于页面、友链页面），需要：
-1. 将页面内容复制到 Mizuki 的 `src/pages/` 目录
+1. 将页面内容复制到 Tsukimi 的 `src/pages/` 目录
 2. 调整页面格式以符合 Astro 的要求
 3. 更新导航菜单配置
 
@@ -186,10 +186,10 @@ Mizuki 目前只支持 Twikoo 评论系统。如果您在 Halo 中使用了其�
 - 确保每篇文章都有 `description` 字段
 - 检查文章的 URL 结构是否符合 SEO 要求
 - 验证 sitemap 和 RSS 订阅功能
-- 如果 Halo 中设置了自定义 meta 标签，需要在 Mizuki 中重新配置
+- 如果 Halo 中设置了自定义 meta 标签，需要在 Tsukimi 中重新配置
 
 ### RSS 订阅
-Mizuki 会自动生成 RSS 订阅，无需额外配置。订阅地址通常为 `/rss.xml`。
+Tsukimi 会自动生成 RSS 订阅，无需额外配置。订阅地址通常为 `/rss.xml`。
 
 ## 迁移后优化建议
 
@@ -205,7 +205,7 @@ Mizuki 会自动生成 RSS 订阅，无需额外配置。订阅地址通常为 `
 
 ## 总结
 
-通过以上步骤，您可以成功将 Halo 博客迁移到 Mizuki 主题。迁移过程中最重要的是：
+通过以上步骤，您可以成功将 Halo 博客迁移到 Tsukimi 主题。迁移过程中最重要的是：
 1. 正确转换 frontmatter 格式
 2. 处理好静态资源路径
 3. 验证所有功能正常工作

@@ -15,7 +15,7 @@ copyright:
 
 # 背景壁纸配置
 
-背景壁纸配置位于 `src/config/backgroundWallpaper.ts` 文件中，是 Mizuki 主题的核心配置之一。它支持四种不同的壁纸模式：Banner（横幅模式）、Fullscreen（全屏模式）、Overlay（覆盖层模式）和 None（无壁纸模式）。
+背景壁纸配置位于 `src/config/backgroundWallpaper.ts` 文件中，是 Tsukimi 主题的核心配置之一。它支持四种不同的壁纸模式：Banner（横幅模式）、Fullscreen（全屏模式）、Overlay（覆盖层模式）和 None（无壁纸模式）。
 
 ## 基本配置
 

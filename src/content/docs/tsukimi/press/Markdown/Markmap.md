@@ -15,7 +15,7 @@ copyright:
 
 # Markmap 思维导图
 
-Mizuki 支持在 Markdown 文章中使用 Markmap 语法绘制交互式思维导图。Markmap 代码块会在客户端动态渲染为可交互的 SVG 图表，支持亮暗主题自动适配、缩放、拖拽和全屏查看。
+Tsukimi 支持在 Markdown 文章中使用 Markmap 语法绘制交互式思维导图。Markmap 代码块会在客户端动态渲染为可交互的 SVG 图表，支持亮暗主题自动适配、缩放、拖拽和全屏查看。
 
 ## 基本配置
 
@@ -66,7 +66,7 @@ export const markmapConfig: MarkmapConfig = {
 示例：
 
 ```markmap
-# Mizuki 主题
+# Tsukimi 主题
 
 ## 核心功能
 

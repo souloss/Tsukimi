@@ -16,7 +16,7 @@ copyright:
 
 # 错误排查常见问题
 
-本页面收录了使用Mizuki主题时可能遇到的常见错误及其解决方法，帮助您快速定位并解决问题。
+本页面收录了使用Tsukimi主题时可能遇到的常见错误及其解决方法，帮助您快速定位并解决问题。
 
 ## 页面404错误专题
 
@@ -368,7 +368,7 @@ copyright:
    // 正确 (astro.config.mjs)
    export default defineConfig({
      integrations: [
-       mizuki({
+       tsukimi({
        // 主题配置放在这里
        })
      ]
@@ -446,7 +446,7 @@ copyright:
 
 1. **提供详细信息**
    - 操作系统、浏览器版本
-   - Mizuki和依赖版本
+   - Tsukimi和依赖版本
    - 完整的错误信息和重现步骤
 
 2. **提供最小复现示例**

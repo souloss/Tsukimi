@@ -12,7 +12,7 @@ copyright:
 
 # 樱花特效配置
 
-Mizuki 支持在页面中添加樱花飘落特效。配置位于 `src/config.ts` 中的 `sakuraConfig` 对象。
+Tsukimi 支持在页面中添加樱花飘落特效。配置位于 `src/config.ts` 中的 `sakuraConfig` 对象。
 
 ## 基本配置
 

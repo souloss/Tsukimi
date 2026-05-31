@@ -15,7 +15,7 @@ copyright:
 
 # 搜索功能配置
 
-Mizuki 使用 [Pagefind](https://pagefind.app/) 作为站内搜索引擎。Pagefind 是一个静态搜索库，构建时自动索引站点内容，无需后端服务，搜索速度快且体积小。
+Tsukimi 使用 [Pagefind](https://pagefind.app/) 作为站内搜索引擎。Pagefind 是一个静态搜索库，构建时自动索引站点内容，无需后端服务，搜索速度快且体积小。
 
 ## 工作原理
 

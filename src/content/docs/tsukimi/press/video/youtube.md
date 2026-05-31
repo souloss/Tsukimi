@@ -12,7 +12,7 @@ copyright:
 
 # YouTube视频嵌入
 
-在Mizuki文章中嵌入YouTube视频非常简单，只需从YouTube复制嵌入代码，然后粘贴到Markdown文件中即可。
+在Tsukimi文章中嵌入YouTube视频非常简单，只需从YouTube复制嵌入代码，然后粘贴到Markdown文件中即可。
 
 ## 基本步骤
 
@@ -110,4 +110,4 @@ tags: [视频, YouTube]
 
 ---
 
-通过以上方法，你可以在Mizuki文章中轻松嵌入YouTube视频，丰富你的内容表现。
+通过以上方法，你可以在Tsukimi文章中轻松嵌入YouTube视频，丰富你的内容表现。

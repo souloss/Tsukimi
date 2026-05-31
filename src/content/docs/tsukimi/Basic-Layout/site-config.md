@@ -103,7 +103,7 @@ export const siteConfig: SiteConfig = {
 ```typescript
 	navbarTitle: {
 		mode: "text-icon", // 显示模式："text-icon" 显示图标+文本，"logo" 仅显示Logo
-		text: "MizukiUI", // 顶栏标题文本
+		text: "TsukimiUI", // 顶栏标题文本
 		icon: "assets/home/home.webp", // 顶栏标题图标路径
 		logo: "assets/home/default-logo.webp", // 网站Logo图片路径
 	},
@@ -123,7 +123,7 @@ export const siteConfig: SiteConfig = {
 			value: "material-symbols:home", // icon名、本地图片路径或网络图片url
 			alt: "Home", // 图片alt文本
 		},
-		title: "Mizuki", // 导航栏标题，如果不设置则使用 siteConfig.title
+		title: "Tsukimi", // 导航栏标题，如果不设置则使用 siteConfig.title
 		widthFull: false, // 导航栏是否占满屏幕宽度
 		menuAlign: "left", // 导航菜单对齐方式（仅桌面端菜单）："left" 或 "center"
 		followTheme: false, // 导航栏图标和标题是否跟随主题色

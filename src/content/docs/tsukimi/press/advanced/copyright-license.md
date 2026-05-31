@@ -15,7 +15,7 @@ copyright:
 
 ## 版权许可系统
 
-Mizuki 内置了完整的版权许可系统，支持多种 Creative Commons 许可证以及自定义版权声明。
+Tsukimi 内置了完整的版权许可系统，支持多种 Creative Commons 许可证以及自定义版权声明。
 
 ---
 

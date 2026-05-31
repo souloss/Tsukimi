@@ -15,9 +15,9 @@ copyright:
 
 # Umami 统计配置教程(V3版本)
 
-Umami 是一个开源、注重隐私的网站分析工具，可以替代 Google Analytics。本教程将指导您如何在 Mizuki 主题中配置 Umami 统计功能。  
+Umami 是一个开源、注重隐私的网站分析工具，可以替代 Google Analytics。本教程将指导您如何在 Tsukimi 主题中配置 Umami 统计功能。  
 
-注意：本教程适用于 Mizuki 8.2(1dcaa61) 或更高版本。
+注意：本教程适用于 Tsukimi 8.2(1dcaa61) 或更高版本。
 
 ## 什么是 Umami？
 

@@ -15,7 +15,7 @@ copyright:
 
 ## 部署到 GitHub Pages(不在推荐)
 
-如果您希望将博客托管在 GitHub Pages 上，Mizuki 项目通常会包含一个 GitHub Actions 工作流，可以帮助您自动化部署过程。您需要确保在 `astro.config.mjs` 中配置正确的 `base` 路径。
+如果您希望将博客托管在 GitHub Pages 上，Tsukimi 项目通常会包含一个 GitHub Actions 工作流，可以帮助您自动化部署过程。您需要确保在 `astro.config.mjs` 中配置正确的 `base` 路径。
 
 ### 部署到 github.io 网址
 在 `astro.config.mjs` 中配置文件设置 `base` 选项。

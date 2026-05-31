@@ -15,7 +15,7 @@ copyright:
 
 ## Encrypted Posts 加密文章功能
 
-Mizuki 支持加密文章功能，可以创建需要密码才能查看的文章。
+Tsukimi 支持加密文章功能，可以创建需要密码才能查看的文章。
 
 ---
 

@@ -15,7 +15,7 @@ copyright:
 
 # 广告组件配置
 
-Mizuki 侧边栏支持广告组件，可以展示推广信息、友情推荐等内容。配置位于 `src/config.ts` 中的 `adConfig` 对象。
+Tsukimi 侧边栏支持广告组件，可以展示推广信息、友情推荐等内容。配置位于 `src/config.ts` 中的 `adConfig` 对象。
 
 ## 基本配置
 

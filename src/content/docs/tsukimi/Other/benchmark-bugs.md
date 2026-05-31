@@ -15,7 +15,7 @@ copyright:
 
 ## Bug Benchmark 脚本
 
-`scripts/benchmark-bugs.mjs` 是一个静态分析基准测试脚本，用于扫描 Mizuki Astro 博客源代码中已知的 bug 类别。
+`scripts/benchmark-bugs.mjs` 是一个静态分析基准测试脚本，用于扫描 Tsukimi Astro 博客源代码中已知的 bug 类别。
 
 ### 功能特性
 

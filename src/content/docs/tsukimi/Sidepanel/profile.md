@@ -12,14 +12,14 @@ copyright:
 
 # 个人信息配置
 
-Mizuki 侧边栏支持展示个人信息卡片，包含头像、名称、描述和社交链接。配置位于 `src/config.ts` 中的 `profileConfig` 对象。
+Tsukimi 侧边栏支持展示个人信息卡片，包含头像、名称、描述和社交链接。配置位于 `src/config.ts` 中的 `profileConfig` 对象。
 
 ## 基本配置
 
 ```typescript title="src/config.ts"
 export const profileConfig: ProfileConfig = {
   avatar: "assets/images/avatar.webp", // 头像图片路径
-  name: "Mizuki",                       // 显示名称
+  name: "Tsukimi",                       // 显示名称
   bio: "A blog based on Astro",         // 个人简介
   typewriter: {
     enable: true,                        // 启用个人简介打字机效果

@@ -12,7 +12,7 @@ copyright:
 
 ## 如何部署到 Netlify
 
-Netlify 也是一个流行的静态网站托管平台。您可以直接从 GitHub 部署您的 Mizuki 博客。Netlify 会自动构建和部署您的项目，并提供持续部署功能。
+Netlify 也是一个流行的静态网站托管平台。您可以直接从 GitHub 部署您的 Tsukimi 博客。Netlify 会自动构建和部署您的项目，并提供持续部署功能。
 
 ### 网站用户操作界面部署方式
 如果你的项目存储在 GitHub、GitLab、BitBucket 或 Azure DevOps 中，你可以使用 Netlify 的网站用户操作界面来部署你的 Astro 网站.

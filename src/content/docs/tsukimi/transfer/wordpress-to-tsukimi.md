@@ -1,7 +1,7 @@
 ---
-title: WordPress 迁移到 Mizuki
+title: WordPress 迁移到 Tsukimi
 createTime: 2025/08/16 23:56:17
-permalink: /transfer/wordpress-to-mizuki/
+permalink: /transfer/wordpress-to-tsukimi/
 order: 9
 icon: ri:wordpress-line
 badge:
@@ -13,25 +13,25 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# WordPress 迁移到 Mizuki 指南
+# WordPress 迁移到 Tsukimi 指南
 
-本指南将帮助您将 WordPress 博客文章迁移到 Mizuki 主题。
+本指南将帮助您将 WordPress 博客文章迁移到 Tsukimi 主题。
 
-## 什么是 Mizuki？
+## 什么是 Tsukimi？
 
-Mizuki 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
+Tsukimi 是一个基于 Astro 开发的现代化博客主题，具有以下特点：
 - 快速的静态站点生成
 - 现代化的设计风格
 - 优秀的 SEO 支持
 - 响应式布局
 - 支持多种内容格式
 
-## WordPress 与 Mizuki 文章格式差异
+## WordPress 与 Tsukimi 文章格式差异
 
 ### WordPress 导出格式
 WordPress 通常通过 XML 文件导出内容，包含文章标题、内容、分类、标签、发布日期等信息。
 
-### Mizuki 格式示例：
+### Tsukimi 格式示例：
 ```yaml
 ---
 title: Markdown Tutorial
@@ -52,7 +52,7 @@ draft: false
 ### 1. 准备工作
 
 1. 备份您的 WordPress 网站
-2. 确保已安装 Mizuki 主题
+2. 确保已安装 Tsukimi 主题
 3. 准备文章存放目录：`src/content/posts/`
 
 ### 2. 导出 WordPress 内容
@@ -84,7 +84,7 @@ draft: false
    - Pandoc 命令行工具
 
 #### 添加 Frontmatter
-为每篇文章添加 Mizuki 所需的 Frontmatter：
+为每篇文章添加 Tsukimi 所需的 Frontmatter：
 
 ```yaml
 ---
@@ -108,18 +108,18 @@ draft: false
    - 或使用 WordPress 媒体导出插件
 
 2. **整理图片文件**：
-   - 将图片复制到 Mizuki 的 `public/images/` 目录
+   - 将图片复制到 Tsukimi 的 `public/images/` 目录
    - 保持原有的目录结构或重新组织
 
 3. **更新图片路径**：
    - WordPress: `https://yoursite.com/wp-content/uploads/2024/01/image.jpg`
-   - Mizuki: `![图片](/images/2024/01/image.jpg)`
+   - Tsukimi: `![图片](/images/2024/01/image.jpg)`
 
 ### 5. 更新内部链接
 
 更新文章中的内部链接格式：
 - WordPress: `https://yoursite.com/2024/01/15/post-name/`
-- Mizuki: `[链接](/posts/post-name/)`
+- Tsukimi: `[链接](/posts/post-name/)`
 
 ### 6. 处理 WordPress 特有功能
 
@@ -147,21 +147,21 @@ WordPress 短代码需要手动转换为 Markdown 或 HTML：
 ## 常见问题
 
 ### Q: 如何处理 WordPress 的多级分类？
-A: Mizuki 只支持单一分类，建议选择最主要的分类作为 `category`，其他分类可以添加到 `tags` 中。
+A: Tsukimi 只支持单一分类，建议选择最主要的分类作为 `category`，其他分类可以添加到 `tags` 中。
 
 ### Q: WordPress 的评论如何迁移？
-A: Mizuki 目前只支持 Twikoo 评论系统，WordPress 的评论无法直接迁移，建议导出备份后使用新的评论系统。
+A: Tsukimi 目前只支持 Twikoo 评论系统，WordPress 的评论无法直接迁移，建议导出备份后使用新的评论系统。
 
 ### Q: 如何处理 WordPress 的自定义文章类型？
-A: 自定义文章类型需要根据内容性质决定是否迁移到 Mizuki 的文章系统，或者创建自定义页面。
+A: 自定义文章类型需要根据内容性质决定是否迁移到 Tsukimi 的文章系统，或者创建自定义页面。
 
 ### Q: WordPress 插件功能如何替代？
-A: 大部分 WordPress 插件功能需要寻找替代方案或手动实现，如 SEO 插件的功能可以通过 Mizuki 的内置 SEO 支持实现。
+A: 大部分 WordPress 插件功能需要寻找替代方案或手动实现，如 SEO 插件的功能可以通过 Tsukimi 的内置 SEO 支持实现。
 
 ## 高级功能迁移
 
 ### 评论系统
-Mizuki 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
+Tsukimi 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
 
 ### SEO 优化
 - 确保每篇文章都有 `description` 字段
@@ -170,11 +170,11 @@ Mizuki 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
 - 设置适当的 meta 标签
 
 ### RSS 订阅
-Mizuki 会自动生成 RSS 订阅，无需额外配置。
+Tsukimi 会自动生成 RSS 订阅，无需额外配置。
 
 ### 重定向设置
-为了保持 SEO 价值，建议设置从旧 WordPress URL 到新 Mizuki URL 的重定向。
+为了保持 SEO 价值，建议设置从旧 WordPress URL 到新 Tsukimi URL 的重定向。
 
 ## 总结
 
-从 WordPress 迁移到 Mizuki 是一个相对复杂的过程，主要挑战在于格式转换和功能替代。建议分批次进行迁移，先迁移核心文章内容，再逐步处理图片、链接和高级功能。迁移过程中要注意备份原始数据，并在迁移完成后进行全面测试。
+从 WordPress 迁移到 Tsukimi 是一个相对复杂的过程，主要挑战在于格式转换和功能替代。建议分批次进行迁移，先迁移核心文章内容，再逐步处理图片、链接和高级功能。迁移过程中要注意备份原始数据，并在迁移完成后进行全面测试。

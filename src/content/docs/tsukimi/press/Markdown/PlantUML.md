@@ -15,7 +15,7 @@ copyright:
 
 # PlantUML 图表配置
 
-Mizuki 支持在 Markdown 文章中使用 PlantUML 语法绘制 UML 图表。PlantUML 代码块在构建时会被编码并发送到 PlantUML 服务器渲染为 SVG 图片，页面端根据亮暗主题自动切换图源，并支持缩放、拖拽和全屏交互。
+Tsukimi 支持在 Markdown 文章中使用 PlantUML 语法绘制 UML 图表。PlantUML 代码块在构建时会被编码并发送到 PlantUML 服务器渲染为 SVG 图片，页面端根据亮暗主题自动切换图源，并支持缩放、拖拽和全屏交互。
 
 ## 基本配置
 
