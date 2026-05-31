@@ -56,11 +56,17 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			class: "onload-animation",
 			animationDelay: 250,
 		},
+		{
+			type: "toc",
+			position: "sticky",
+			class: "onload-animation",
+			animationDelay: 300,
+		},
 	],
 
 	components: {
-		left: ["profile", "announcement", "tags"],
-		right: ["site-stats", "calendar", "categories", "music-sidebar"],
+		left: ["profile", "announcement", "tags", "categories"],
+		right: ["site-stats", "calendar", "toc"],
 		drawer: ["profile", "announcement", "music-sidebar", "categories", "tags"],
 	},
 

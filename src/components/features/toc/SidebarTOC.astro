@@ -2,9 +2,14 @@
 /**
  * SidebarTOC - 侧边栏目录组件
  * 基于 Web Component 实现，支持 IntersectionObserver 滚动监听
+ * 使用 WidgetLayout 包裹，提供卡片样式和标题栏
  */
 
 import type { MarkdownHeading } from "astro";
+
+import I18nKey from "../../../i18n/i18nKey";
+import { i18n } from "../../../i18n/translation";
+import WidgetLayout from "../../widgets/common/WidgetLayout.astro";
 
 interface Props {
 	class?: string;
@@ -14,8 +19,19 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<table-of-contents class:list={[className, "group"]} id="toc">
-</table-of-contents>
+<WidgetLayout
+	name={i18n(I18nKey.tableOfContents)}
+	id="sidebar-toc"
+	class={className}
+>
+	<div class="toc-scroll-container custom-scrollbar">
+		<table-of-contents class="group" id="sidebar-toc-content">
+		</table-of-contents>
+	</div>
+	<div id="sidebar-toc-empty" class="hidden text-sm text-30 text-center py-4">
+		{i18n(I18nKey.tocEmpty)}
+	</div>
+</WidgetLayout>
 
 <script>
 	import { JAPANESE_KATAKANA } from "./utils/japanese-katakana";
@@ -143,7 +159,6 @@ const { class: className } = Astro.props;
 			);
 			top = Math.max(0, Math.min(top, maxTop));
 
-			// 小于一个行高级别的位移不触发滚动，减少active更新时的抖动感
 			if (Math.abs((scrollContainer.scrollTop || 0) - top) < 24) return;
 
 			scrollContainer.scrollTo({ top, left: 0, behavior: "smooth" });
@@ -195,6 +210,29 @@ const { class: className } = Astro.props;
 				document.querySelector(".custom-md") ||
 				document.querySelector(".prose") ||
 				document.querySelector(".markdown-content");
+
+			const isContentPage =
+				window.location.pathname.includes("/posts/") ||
+				window.location.pathname.includes("/docs/") ||
+				element !== null;
+
+			// 非文章页面隐藏整个 widget-layout
+			if (!isContentPage) {
+				this.innerHTML = "";
+				delete this.dataset.loaded;
+				const widgetLayout = this.closest("widget-layout") as HTMLElement | null;
+				if (widgetLayout) {
+					widgetLayout.style.display = "none";
+				}
+				return;
+			}
+
+			// 文章页面：确保 widget-layout 可见
+			const widgetLayout = this.closest("widget-layout") as HTMLElement | null;
+			if (widgetLayout) {
+				widgetLayout.style.display = "";
+			}
+
 			let initialized = false;
 
 			const tryInit = () => {
@@ -219,7 +257,7 @@ const { class: className } = Astro.props;
 			this.regenerateTOC();
 			this.tocEl = this;
 			this.scrollContainer =
-				(this.closest("#toc-inner-wrapper") as HTMLElement | null) ||
+				(this.closest(".toc-scroll-container") as HTMLElement | null) ||
 				this.tocEl;
 
 			this.tocEl.addEventListener("click", this.handleAnchorClick, {
@@ -270,7 +308,17 @@ const { class: className } = Astro.props;
 			if (!isContentPage) {
 				this.innerHTML = "";
 				delete this.dataset.loaded;
+				const widgetLayout = this.closest("widget-layout") as HTMLElement | null;
+				if (widgetLayout) {
+					widgetLayout.style.display = "none";
+				}
 				return;
+			}
+
+			// 文章页面：确保 widget-layout 可见
+			const widgetLayout = this.closest("widget-layout") as HTMLElement | null;
+			if (widgetLayout) {
+				widgetLayout.style.display = "";
 			}
 
 			const headings = extractHeadings();
@@ -282,8 +330,19 @@ const { class: className } = Astro.props;
 			if (headings.length === 0) {
 				this.innerHTML = "";
 				delete this.dataset.loaded;
+				// 显示空状态提示，隐藏滚动容器
+				const emptyEl = document.getElementById("sidebar-toc-empty");
+				const scrollContainer = this.closest(".toc-scroll-container") as HTMLElement | null;
+				if (emptyEl) emptyEl.classList.remove("hidden");
+				if (scrollContainer) scrollContainer.style.display = "none";
 				return;
 			}
+
+			// 有目录内容时，隐藏空状态，显示滚动容器
+			const emptyEl = document.getElementById("sidebar-toc-empty");
+			const scrollContainer = this.closest(".toc-scroll-container") as HTMLElement | null;
+			if (emptyEl) emptyEl.classList.add("hidden");
+			if (scrollContainer) scrollContainer.style.display = "";
 
 			const config = getTOCConfig();
 			const tocItems = generateTOCItems(headings, config);
@@ -314,7 +373,7 @@ const { class: className } = Astro.props;
 							'<div class="transition w-1.5 h-1.5 rounded-sm bg-black/5 dark:bg-white/10"></div>';
 					}
 
-					return `<a href="#${item.id}" class="px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl hover:bg-[var(--toc-btn-hover)] active:bg-[var(--toc-btn-active)] py-2">
+					return `<a href="#${item.id}" class="toc-item px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl hover:bg-[var(--toc-btn-hover)] active:bg-[var(--toc-btn-active)] py-2">
 					<div class="transition w-5 h-5 shrink-0 rounded-lg text-xs flex items-center justify-center font-bold ${depthClass} ${item.depth === 0 ? "bg-[var(--toc-badge-bg)] text-[var(--btn-content)]" : ""}">
 						${badgeContent}
 					</div>
@@ -344,15 +403,31 @@ const { class: className } = Astro.props;
 </script>
 
 <style>
-	table-of-contents#toc {
-		max-height: 100%;
-		overflow: auto;
-		position: relative;
+	.toc-scroll-container {
+		overflow-y: auto;
+		overflow-x: hidden;
+		-webkit-overflow-scrolling: touch;
 		scroll-behavior: smooth;
-		display: block;
+		max-height: calc(100vh - 20rem);
+		padding-right: 0.125rem;
 	}
 
-	table-of-contents#toc::-webkit-scrollbar {
-		display: none;
+	.toc-scroll-container::-webkit-scrollbar {
+		width: 3px;
+	}
+
+	.toc-scroll-container::-webkit-scrollbar-thumb {
+		background: var(--line-color);
+		border-radius: 999px;
+	}
+
+	table-of-contents {
+		display: flex;
+		flex-direction: column;
+		gap: 0.28rem;
+		position: relative;
+		overflow: visible;
+		width: 100%;
+		padding: 0.125rem 0;
 	}
 </style>

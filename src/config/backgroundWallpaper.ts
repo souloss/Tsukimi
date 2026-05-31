@@ -3,6 +3,14 @@ import type { BackgroundWallpaperConfig } from "../types/config";
 
 // 背景壁纸配置（图片资源 + 模式控制）
 export const backgroundWallpaperConfig: BackgroundWallpaperConfig = {
+	// 通用配置（各模式可覆盖）
+	common: {
+		navbar: {
+			transparentMode: "none", // 默认不透明
+			enableBlur: true,
+			blur: 10,
+		},
+	},
 	// 壁纸模式控制
 	mode: {
 		defaultMode: WALLPAPER_BANNER,
@@ -17,19 +25,19 @@ export const backgroundWallpaperConfig: BackgroundWallpaperConfig = {
 	banner: {
 		src: {
 			desktop: [
-				"/assets/desktop-banner/1.webp",
-				"/assets/desktop-banner/2.webp",
-				"/assets/desktop-banner/3.webp",
-				"/assets/desktop-banner/4.webp",
+				"/assets/desktop-banner/1.png",
+				"/assets/desktop-banner/2.png",
+				"/assets/desktop-banner/3.png",
+				"/assets/desktop-banner/4.png",
 			],
 			mobile: [
-				"/assets/mobile-banner/1.webp",
-				"/assets/mobile-banner/2.webp",
-				"/assets/mobile-banner/3.webp",
-				"/assets/mobile-banner/4.webp",
+				"/assets/mobile-banner/1.png",
+				"/assets/mobile-banner/2.png",
+				"/assets/mobile-banner/3.png",
+				"/assets/mobile-banner/4.png",
 			],
 		},
-		position: "center",
+		position: "center top",
 		imageApi: {
 			enable: false,
 			url: "http://domain.com/api2_v2.php?format=text&count=4",
@@ -39,19 +47,19 @@ export const backgroundWallpaperConfig: BackgroundWallpaperConfig = {
 	fullscreen: {
 		src: {
 			desktop: [
-				"/assets/desktop-banner/1.webp",
-				"/assets/desktop-banner/2.webp",
-				"/assets/desktop-banner/3.webp",
-				"/assets/desktop-banner/4.webp",
+				"/assets/desktop-banner/1.png",
+				"/assets/desktop-banner/2.png",
+				"/assets/desktop-banner/3.png",
+				"/assets/desktop-banner/4.png",
 			],
 			mobile: [
-				"/assets/mobile-banner/1.webp",
-				"/assets/mobile-banner/2.webp",
-				"/assets/mobile-banner/3.webp",
-				"/assets/mobile-banner/4.webp",
+				"/assets/mobile-banner/1.png",
+				"/assets/mobile-banner/2.png",
+				"/assets/mobile-banner/3.png",
+				"/assets/mobile-banner/4.png",
 			],
 		},
-		position: "center",
+		position: "center top",
 		imageApi: {
 			enable: false,
 			url: "http://domain.com/api2_v2.php?format=text&count=4",
@@ -78,7 +86,7 @@ export const backgroundWallpaperConfig: BackgroundWallpaperConfig = {
 	},
 	// 叠加层壁纸模式配置（小图角落显示）
 	overlay: {
-		src: "/assets/desktop-banner/1.webp",
+		src: "/assets/desktop-banner/1.png",
 		position: "bottom-right", // top-left | top-right | bottom-left | bottom-right
 		size: {
 			width: 300,

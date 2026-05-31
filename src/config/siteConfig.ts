@@ -7,7 +7,7 @@ export { SITE_LANG };
 export const siteConfig: SiteConfig = {
 	title: "souloss",
 	subtitle: "个人技术博客",
-	siteURL: "https://tsukimi-bt7.pages.dev/",
+	siteURL: "https://tsukimi.souloss.cn/",
 	siteStartDate: "2020-01-01",
 
 	lang: SITE_LANG,
@@ -147,7 +147,7 @@ export const siteConfig: SiteConfig = {
 		},
 
 		navbar: {
-			transparentMode: "semifull",
+			transparentMode: "none",
 			enableBlur: true,
 			blur: 10,
 		},

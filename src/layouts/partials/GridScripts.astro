@@ -14,8 +14,8 @@ interface Props {
 }
 
 const {
-	navbarTransparentMode = "semi",
-	fullscreenNavbarTransparentMode = "semifull",
+	navbarTransparentMode = "none",
+	fullscreenNavbarTransparentMode = "none",
 	defaultWallpaperMode = "banner",
 	defaultPostListLayout = "list",
 	BANNER_HEIGHT = 35,
@@ -75,14 +75,11 @@ const {
 			);
 			if (mainContent) {
 				if (wallpaperMode === "banner") {
-					// 让主内容区域从banner顶部开始，这样波浪线会自然覆盖内容上部
 					mainContent.style.top = `${BANNER_HEIGHT}vh`;
 				} else if (wallpaperMode === "fullscreen") {
-					// fullscreen: content below full-viewport wallpaper on home page
 					const isHome = document.body.classList.contains("lg:is-home");
 					mainContent.style.top = isHome ? "100vh" : "5.5rem";
 				} else {
-					// none 模式
 					mainContent.style.top = "5.5rem";
 				}
 			}
@@ -153,7 +150,6 @@ const {
 		const mainContent = document.querySelector(
 			".absolute.w-full.z-30.pointer-events-none",
 		);
-		const tocWrapper = document.getElementById("toc-wrapper");
 
 		// 强制重排以确保样式正确应用
 		const forceReflow = function () {
@@ -173,15 +169,6 @@ const {
 				if (fullscreenWallpaper) {
 					fullscreenWallpaper.style.display = "none";
 				}
-				// 恢复 TOC 在 banner 模式下的隐藏状态，让滚动逻辑接管
-				if (tocWrapper) {
-					const scrollTop = document.documentElement.scrollTop;
-					const bannerHeight =
-						window.innerHeight * (BANNER_HEIGHT / 100);
-					if (scrollTop <= bannerHeight) {
-						tocWrapper.classList.add("toc-hide");
-					}
-				}
 				if (mainContent) {
 					mainContent.style.removeProperty("top");
 				}
@@ -190,12 +177,10 @@ const {
 				// navbar 恢复原始透明模式（从 config 读取）
 				if (navbar) {
 					navbar.removeAttribute("data-dynamic-transparent");
-					// 恢复 config 中设置的 data-transparent-mode
 					navbar.setAttribute(
 						"data-transparent-mode",
 						navbarTransparentMode,
 					);
-					// 如果是 semifull 模式，重新初始化滚动检测
 					if (
 						navbarTransparentMode === "semifull" &&
 						window.initSemifullScrollDetection
@@ -203,40 +188,34 @@ const {
 						window.initSemifullScrollDetection();
 					}
 				}
-				// 强制重排以确保CSS变量正确更新
 				forceReflow();
 				break;
 
 			case "fullscreen":
-					// 全屏横幅模式：显示 banner wrapper（100vh），隐藏全屏壁纸组件
-					if (bannerWrapper) {
-						bannerWrapper.style.display = "block";
+				// 全屏横幅模式：显示 banner wrapper（100vh），隐藏全屏壁纸组件
+				if (bannerWrapper) {
+					bannerWrapper.style.display = "block";
+				}
+				if (fullscreenWallpaper) {
+					fullscreenWallpaper.style.display = "none";
+				}
+				if (mainContent) {
+					const isHome = document.body.classList.contains("lg:is-home");
+					mainContent.style.top = isHome ? "100vh" : "5.5rem";
+				}
+				body.classList.add("enable-banner");
+				body.classList.add("fullscreen-banner");
+				// navbar 透明模式：使用全屏专用配置
+				if (navbar) {
+					navbar.removeAttribute("data-dynamic-transparent");
+					navbar.setAttribute("data-transparent-mode", fullscreenNavbarTransparentMode);
+					if (fullscreenNavbarTransparentMode === "semifull" && window.initSemifullScrollDetection) {
+						window.initSemifullScrollDetection();
 					}
-					if (fullscreenWallpaper) {
-						fullscreenWallpaper.style.display = "none";
-					}
-					// 在全屏模式下始终显示 TOC
-					if (tocWrapper) {
-						tocWrapper.classList.remove("toc-hide");
-					}
-					if (mainContent) {
-						const isHome = document.body.classList.contains("lg:is-home");
-						mainContent.style.top = isHome ? "100vh" : "5.5rem";
-					}
-					body.classList.add("enable-banner");
-					body.classList.add("fullscreen-banner");
-					// navbar 透明模式：使用全屏专用配置
-					if (navbar) {
-						navbar.removeAttribute("data-dynamic-transparent");
-						navbar.setAttribute("data-transparent-mode", fullscreenNavbarTransparentMode);
-						// 如果是 semifull 模式，初始化滚动检测
-						if (fullscreenNavbarTransparentMode === "semifull" && window.initSemifullScrollDetection) {
-							window.initSemifullScrollDetection();
-						}
-					}
-					document.documentElement.setAttribute("data-wallpaper-mode", "fullscreen");
-					forceReflow();
-					break;
+				}
+				document.documentElement.setAttribute("data-wallpaper-mode", "fullscreen");
+				forceReflow();
+				break;
 
 			case "overlay":
 				// 隐藏 banner wrapper（叠加模式使用 setting-utils.ts 的角落卡片）
@@ -246,10 +225,6 @@ const {
 				// 显示全屏壁纸作为全页背景
 				if (fullscreenWallpaper) {
 					fullscreenWallpaper.style.display = "block";
-				}
-				// 叠加模式下始终显示 TOC
-				if (tocWrapper) {
-					tocWrapper.classList.remove("toc-hide");
 				}
 				if (mainContent) {
 					mainContent.style.removeProperty("top");
@@ -273,10 +248,6 @@ const {
 				if (fullscreenWallpaper) {
 					fullscreenWallpaper.style.display = "none";
 				}
-				// 在无壁纸模式下也始终显示 TOC
-				if (tocWrapper) {
-					tocWrapper.classList.remove("toc-hide");
-				}
 				if (mainContent) {
 					mainContent.style.removeProperty("top");
 				}
@@ -285,10 +256,8 @@ const {
 				// navbar 强制设置为不透明（忽略 config 配置）
 				if (navbar) {
 					navbar.setAttribute("data-dynamic-transparent", "none");
-					// 强制移除 config 中的 data-transparent-mode 影响
 					navbar.removeAttribute("data-transparent-mode");
 				}
-				// 强制重排以确保CSS变量正确更新
 				forceReflow();
 				break;
 		}

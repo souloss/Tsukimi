@@ -1,7 +1,11 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import { navBarConfig, siteConfig } from "../../../config";
+import {
+	backgroundWallpaperConfig,
+	navBarConfig,
+	siteConfig,
+} from "../../../config";
 import { LinkPresets } from "../../../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../../../types/config";
 import { url } from "../../../utils/url-utils";
@@ -13,9 +17,11 @@ import SearchModal from "./SearchModal.svelte";
 
 const className = Astro.props.class;
 
-// 获取导航栏透明模式配置
+// 获取导航栏透明模式配置（优先级: banner.navbar > common.navbar > 默认 "none"）
 const navbarTransparentMode =
-	siteConfig.banner?.navbar?.transparentMode || "semi";
+	siteConfig.banner?.navbar?.transparentMode ||
+	backgroundWallpaperConfig.common?.navbar?.transparentMode ||
+	"none";
 
 // 检查是否为首页
 const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";

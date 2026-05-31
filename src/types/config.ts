@@ -208,7 +208,7 @@ export type SiteConfig = {
 			url?: string;
 		};
 		navbar?: {
-			transparentMode?: "semi" | "full" | "semifull"; // 导航栏透明模式，使用常量 NAVBAR_TRANSPARENT_SEMI / NAVBAR_TRANSPARENT_FULL / NAVBAR_TRANSPARENT_SEMIFULL，使用常量 NAVBAR_TRANSPARENT_SEMI / NAVBAR_TRANSPARENT_FULL / NAVBAR_TRANSPARENT_SEMIFULL
+			transparentMode?: "none" | "semi" | "full" | "semifull"; // 导航栏透明模式，"none"=不透明
 			enableBlur?: boolean; // 是否开启毛玻璃模糊效果
 			blur?: number; // 毛玻璃模糊度
 		};
@@ -738,6 +738,15 @@ export interface SpineModelConfig {
 }
 
 export interface BackgroundWallpaperConfig {
+	// 通用配置（各模式可覆盖）
+	common?: {
+		navbar?: {
+			transparentMode?: "none" | "semi" | "full" | "semifull"; // 导航栏透明模式，"none"=不透明
+			enableBlur?: boolean;
+			blur?: number;
+		};
+	};
+
 	// 壁纸模式控制
 	mode?: {
 		defaultMode: WALLPAPER_MODE; // 默认壁纸模式，使用常量值如 WALLPAPER_BANNER 等
@@ -757,7 +766,7 @@ export interface BackgroundWallpaperConfig {
 					desktop?: string | string[];
 					mobile?: string | string[];
 			  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
-		position?: "top" | "center" | "bottom"; // 图片定位
+		position?: string; // 图片定位，支持CSS object-position值，如 "center"、"top"、"center top"
 		imageApi?: {
 			enable: boolean; // 是否启用图片API
 			url: string; // API地址，返回每行一个图片链接的文本

@@ -17,7 +17,6 @@ import { ScrollHandler } from "./scroll-handler";
  */
 export class BackToTopHandler {
 	private backToTopBtn: HTMLElement | null = null;
-	private toc: HTMLElement | null = null;
 	private navbar: HTMLElement | null = null;
 	private bannerEnabled: boolean;
 	private scrollHandler: () => void;
@@ -45,7 +44,6 @@ export class BackToTopHandler {
 		this.backToTopBtn = document.getElementById(
 			SWUP_SELECTORS.backToTopBtn.slice(1),
 		);
-		this.toc = document.getElementById(SWUP_SELECTORS.tocWrapper.slice(1));
 		this.navbar = document.getElementById(
 			SWUP_SELECTORS.navbarWrapper.slice(1),
 		);
@@ -77,7 +75,6 @@ export class BackToTopHandler {
 		// 批量处理 DOM 操作
 		requestAnimationFrame(() => {
 			this.updateBackToTopButton(scrollTop, showBackToTopThreshold);
-			this.updateTOCVisibility(scrollTop, bannerHeight);
 			this.updateNavbarVisibility(scrollTop);
 			this.updatePageOverlayScroll(scrollTop);
 		});
@@ -118,27 +115,6 @@ export class BackToTopHandler {
 		}
 	}
 
-	/**
-	 * 更新 TOC 可见性
-	 */
-	private updateTOCVisibility(scrollTop: number, bannerHeight: number): void {
-		if (!this.bannerEnabled || !this.toc) {
-			return;
-		}
-
-		const isBannerMode = document.body.classList.contains("enable-banner");
-
-		if (isBannerMode) {
-			if (scrollTop > bannerHeight) {
-				this.toc.classList.remove("toc-hide");
-			} else {
-				this.toc.classList.add("toc-hide");
-			}
-		} else {
-			// Fullscreen 或 None 模式下始终显示 TOC
-			this.toc.classList.remove("toc-hide");
-		}
-	}
 
 	/**
 	 * 更新 Navbar 可见性
@@ -215,7 +191,6 @@ export class BackToTopHandler {
 		window.removeEventListener("scroll", this.scrollHandler);
 		window.removeEventListener("resize", this.handleResize.bind(this));
 		this.backToTopBtn = null;
-		this.toc = null;
 		this.navbar = null;
 	}
 

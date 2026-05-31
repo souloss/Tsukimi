@@ -221,22 +221,26 @@ export class SwupHooksManager {
 	 * 处理 TOC 重新初始化
 	 */
 	private handleTOCReinit(): void {
-		const tocWrapper = this.getCachedElement(SWUP_SELECTORS.tocWrapper);
-		const isArticlePage = tocWrapper !== null;
+		const tocElement = this.getCachedElement(SWUP_SELECTORS.tableOfContents);
+		const isArticlePage = tocElement !== null;
 
 		if (isArticlePage) {
 			const tocElement = this.getCachedElement(
 				SWUP_SELECTORS.tableOfContents,
 			);
 			const hasDesktopTOC =
-				tocElement && typeof (tocElement as any).init === "function";
+				tocElement && (typeof (tocElement as any).reinit === "function" || typeof (tocElement as any).init === "function");
 			const hasMobileTOC =
 				typeof (window as any).mobileTOCInit === "function";
 
 			if (hasDesktopTOC || hasMobileTOC) {
 				setTimeout(() => {
 					if (hasDesktopTOC) {
-						(tocElement as any).init();
+						if (typeof (tocElement as any).reinit === "function") {
+							(tocElement as any).reinit();
+						} else {
+							(tocElement as any).init();
+						}
 					}
 					if (hasMobileTOC) {
 						(window as any).mobileTOCInit();
@@ -464,7 +468,7 @@ export class SwupHooksManager {
 	 * 隐藏 TOC
 	 */
 	private hideTOC(): void {
-		const toc = this.getCachedElement(SWUP_SELECTORS.tocWrapper);
+		const toc = this.getCachedElement(SWUP_SELECTORS.tableOfContents);
 		if (toc) {
 			toc.classList.add("toc-not-ready");
 		}
@@ -474,7 +478,7 @@ export class SwupHooksManager {
 	 * 显示 TOC
 	 */
 	private showTOC(): void {
-		const toc = this.getCachedElement(SWUP_SELECTORS.tocWrapper);
+		const toc = this.getCachedElement(SWUP_SELECTORS.tableOfContents);
 		if (toc) {
 			toc.classList.remove("toc-not-ready");
 		}

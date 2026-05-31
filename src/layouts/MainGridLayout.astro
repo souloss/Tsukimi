@@ -1,7 +1,6 @@
 ---
 import FloatingControls from "@components/control/FloatingControls.astro";
 import DisplaySettings from "@components/features/settings/DisplaySettings.svelte";
-import { SidebarTOC } from "@components/features/toc";
 import Banner from "@components/layout/Banner.astro";
 import RightSideBar from "@components/layout/RightSideBar.astro";
 import FullscreenWallpaper from "@components/misc/FullscreenWallpaper.astro";
@@ -116,9 +115,9 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 >
 	<GridScripts
 		navbarTransparentMode={siteConfig.banner?.navbar?.transparentMode ||
-			"semi"}
+			backgroundWallpaperConfig.common?.navbar?.transparentMode || "none"}
 		fullscreenNavbarTransparentMode={backgroundWallpaperConfig.fullscreen?.navbar?.transparentMode ||
-			siteConfig.banner?.navbar?.transparentMode || "semifull"}
+			backgroundWallpaperConfig.common?.navbar?.transparentMode || "none"}
 		defaultWallpaperMode={backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER}
 		defaultPostListLayout={siteConfig.postListLayout?.defaultMode || "list"}
 		BANNER_HEIGHT={BANNER_HEIGHT}
@@ -285,46 +284,6 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 		}
 	</style>
 
-	<!-- 侧边栏TOC模式 -->
-	{
-		siteConfig.toc.enable && siteConfig.toc.desktopSidebar && (
-			<div class="absolute w-full z-0 hidden 2xl:block">
-				<div class="relative max-w-(--page-width) mx-auto">
-					<div
-						id="toc-wrapper"
-						class:list={[
-							"hidden lg:block transition absolute top-0 w-(--toc-width) items-center",
-							"-right-(--toc-width)",
-							{
-								"toc-hide":
-									backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER ===
-									"banner",
-							},
-						]}
-					>
-						<div
-							id="toc-inner-wrapper"
-							class="fixed top-14 w-(--toc-width) h-[calc(100vh-6rem)] max-h-[calc(100vh-6rem)] overflow-x-hidden overflow-y-auto"
-						>
-							<div
-								id="toc-container"
-								class="w-full h-full transition-swup-fade"
-							>
-								<SidebarTOC headings={headings} />
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		)
-	}
-
-	<!-- 保留此元素以确保Swup正常工作 -->
-	{
-		(!siteConfig.toc.enable || !siteConfig.toc.desktopSidebar) && (
-			<div id="toc-container" class="hidden" />
-		)
-	}
 
 	<!-- Sticky Navbar 初始化脚本 -->
 	<script is:inline data-swup-ignore-script define:vars={{stickyNavbar}}>

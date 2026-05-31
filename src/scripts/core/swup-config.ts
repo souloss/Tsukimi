@@ -34,7 +34,6 @@ export const SWUP_SELECTORS = {
 	navbarWrapper: "#navbar-wrapper",
 
 	// TOC 相关
-	tocWrapper: "#toc-wrapper",
 	tableOfContents: "table-of-contents",
 
 	// 其他
@@ -73,7 +72,7 @@ export const ANIMATION_CONFIG = {
 	heightExtendDelay: 150,
 
 	// TOC 就绪延迟 (ms)
-	tocReadyDelay: 80,
+	tocReadyDelay: 300,
 
 	// 评论系统初始化延迟 (ms)
 	commentInitDelay: 250,

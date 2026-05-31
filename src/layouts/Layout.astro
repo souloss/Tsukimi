@@ -61,9 +61,11 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 
-// 获取导航栏透明模式配置
+// 获取导航栏透明模式配置（优先级: banner.navbar > common.navbar > 默认 "none"）
 const navbarTransparentMode =
-	siteConfig.banner?.navbar?.transparentMode || "semi";
+	siteConfig.banner?.navbar?.transparentMode ||
+	backgroundWallpaperConfig.common?.navbar?.transparentMode ||
+	"none";
 
 // 判断是否应该显示顶部高光效果（只在full和semifull模式下显示）
 const shouldShowTopHighlight =
@@ -137,15 +139,17 @@ if (!lang) {
 }
 const siteLang = lang.replace("_", "-");
 
-const bannerOffsetByPosition = {
+const bannerOffsetByPosition: Record<string, string> = {
 	top: `${BANNER_HEIGHT_EXTEND}vh`,
 	center: `${BANNER_HEIGHT_EXTEND / 2}vh`,
 	bottom: "0",
+	"center top": `${BANNER_HEIGHT_EXTEND}vh`,
+	"center bottom": "0",
 };
+const bannerPosition =
+	backgroundWallpaperConfig.banner?.position || "center top";
 const bannerOffset =
-	bannerOffsetByPosition[
-		backgroundWallpaperConfig.banner?.position || "center"
-	];
+	bannerOffsetByPosition[bannerPosition] || `${BANNER_HEIGHT_EXTEND / 2}vh`;
 
 // 构建字体配置的 CSS 变量
 // 从 fontConfig 的默认字体选项构建 body font-family
