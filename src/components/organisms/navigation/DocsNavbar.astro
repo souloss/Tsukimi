@@ -80,7 +80,7 @@ const iconWebpSrc = hasIconPngFallback
             </div>
         </a>
         <div class="flex items-center gap-2">
-            {docSlug && <SearchModal pagefindGlobal="pagefindMizuki" pagefindLoader="loadPagefindMizuki" variant="pill" filters={{ docSlug }} client:load />}
+            {docSlug && <SearchModal pagefindGlobal="pagefindTsukimi" pagefindLoader="loadPagefindTsukimi" variant="pill" filters={{ docSlug }} client:load />}
             <a href={url('/docs/')} class="btn-plain scale-animation rounded-lg h-11 px-4 text-sm font-medium active:scale-90">
                 {siteConfig.lang === 'zh_CN' || siteConfig.lang === 'zh_TW' ? '文档' : 'Docs'}
             </a>

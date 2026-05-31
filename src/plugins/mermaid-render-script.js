@@ -581,7 +581,7 @@
 			retryCount = 0;
 			setupLazyRenderObserver();
 		});
-		document.addEventListener("mizuki:page:loaded", () => {
+		document.addEventListener("tsukimi:page:loaded", () => {
 			retryCount = 0;
 			setupLazyRenderObserver();
 		});

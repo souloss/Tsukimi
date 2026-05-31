@@ -195,7 +195,7 @@
 		"swup:pageView",
 		"astro:page-load",
 		"astro:after-swap",
-		"mizuki:page:loaded",
+		"tsukimi:page:loaded",
 	];
 
 	for (let i = 0; i < events.length; i++) {

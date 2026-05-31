@@ -99,7 +99,7 @@ When a alias is set:
 graph LR
     A[User Password] --> B[Direct AES Decryption]
     B --> C{Check Prefix?}
-    C -- "MIZUKI-VERIFY:" found --> D[Success: Render Content]
+    C -- "TSUKIMI-VERIFY:" found --> D[Success: Render Content]
     C -- Random/Garbage --> E[Fail: Wrong Password]
 ```
 

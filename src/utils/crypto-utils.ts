@@ -7,7 +7,7 @@ export const CRYPTO_CONSTANTS = {
 	IV_LENGTH: 12,
 	AUTH_TAG_LENGTH: 16,
 	KEY_LENGTH: 32,
-	VERIFY_PREFIX: "MIZUKI-VERIFY:", // 验证前缀：正确解密后内容以此开头
+	VERIFY_PREFIX: "TSUKIMI-VERIFY:", // 验证前缀：正确解密后内容以此开头
 } as const;
 
 /**
@@ -24,7 +24,7 @@ function deriveBytes(key: string, context: string, length: number): Buffer {
  * 无需等待完整 AES-GCM 解密失败。
  *
  * 输出格式：base64(salt[16] + iv[12] + authTag[16] + ciphertext)
- * 其中 ciphertext = AES-256-GCM-encrypt("MIZUKI-VERIFY:" + html)
+ * 其中 ciphertext = AES-256-GCM-encrypt("TSUKIMI-VERIFY:" + html)
  */
 export function encryptContent(
 	html: string,

@@ -60,7 +60,7 @@ declare global {
 		};
 
 		loadPagefind?: () => Promise<void>;
-		pagefindMizuki?: {
+		pagefindTsukimi?: {
 			search: (query: string) => Promise<{
 				results: {
 					data: () => Promise<SearchResult>;
@@ -68,7 +68,7 @@ declare global {
 			}>;
 			options: (opts?: Record<string, unknown>) => Promise<void>;
 		};
-		loadPagefindMizuki?: () => Promise<void>;
+		loadPagefindTsukimi?: () => Promise<void>;
 		_walineModule?: any;
 		toggleFloatingTOC?: () => void;
 		mobileTOCInit?: () => void;
@@ -98,12 +98,12 @@ declare global {
 		renderMermaidDiagrams?: () => void;
 
 		// Sidebar manager window properties
-		__mizukiSidebarResizeHandler?: () => void;
-		__mizukiSidebarSwupHooked?: boolean;
-		__mizukiSidebarManagerInitialized?: boolean;
-		__mizukiRightSidebarResizeHandler?: () => void;
-		__mizukiRightSidebarSwupHooked?: boolean;
-		__mizukiRightSidebarManagerInitialized?: boolean;
+		__tsukimiSidebarResizeHandler?: () => void;
+		__tsukimiSidebarSwupHooked?: boolean;
+		__tsukimiSidebarManagerInitialized?: boolean;
+		__tsukimiRightSidebarResizeHandler?: () => void;
+		__tsukimiRightSidebarSwupHooked?: boolean;
+		__tsukimiRightSidebarManagerInitialized?: boolean;
 	}
 
 	interface Fancybox {

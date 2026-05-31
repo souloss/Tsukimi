@@ -54,11 +54,11 @@ try {
 	process.exit(1);
 }
 
-// Mizuki docs index: only docs/mizuki HTML
+// Mizuki docs index: only docs/tsukimi HTML
 console.log("2. Building Mizuki docs index...");
 try {
 	execSync(
-		`npx pagefind --site ${site} --glob "docs/mizuki/**/*.html" --output-subdir pagefind/mizuki --silent`,
+		`npx pagefind --site ${site} --glob "docs/tsukimi/**/*.html" --output-subdir pagefind/tsukimi --silent`,
 		{ stdio: "inherit" },
 	);
 	console.log("   Mizuki docs index built.\n");

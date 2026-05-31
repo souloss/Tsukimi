@@ -301,8 +301,8 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
 	{import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: '/pagefind/mizuki/pagefind.js'}}>
-	window.loadPagefindMizuki = async function() {
-		if (window.pagefindMizuki) {return;}
+	window.loadPagefindTsukimi = async function() {
+		if (window.pagefindTsukimi) {return;}
 		try {
 			const response = await fetch(scriptUrl, { method: 'HEAD' });
 			if (!response.ok) {
@@ -315,20 +315,20 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 				excerptLength: 20
 			});
 
-			window.pagefindMizuki = pagefind;
+			window.pagefindTsukimi = pagefind;
 
-			document.dispatchEvent(new CustomEvent('pagefindmizukiready'));
+			document.dispatchEvent(new CustomEvent('pagefindtsukimiready'));
 			console.log('Mizuki Pagefind loaded and initialized successfully.');
 		} catch (error) {
 			console.error('Failed to load Mizuki Pagefind:', error);
-			window.pagefindMizuki = {
+			window.pagefindTsukimi = {
 				search: () => Promise.resolve({ results: [] }),
 				options: () => Promise.resolve(),
 			};
-			document.dispatchEvent(new CustomEvent('pagefindmizukiloaderror'));
+			document.dispatchEvent(new CustomEvent('pagefindtsukimiloaderror'));
 		}
 	};
-	window.loadPagefindMizuki();
+	window.loadPagefindTsukimi();
 	</script>}
 	</body>
 </html>

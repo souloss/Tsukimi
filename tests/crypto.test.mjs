@@ -12,7 +12,7 @@ const CRYPTO_CONSTANTS = {
 	IV_LENGTH: 12,
 	AUTH_TAG_LENGTH: 16,
 	KEY_LENGTH: 32,
-	VERIFY_PREFIX: "MIZUKI-VERIFY:",
+	VERIFY_PREFIX: "TSUKIMI-VERIFY:",
 };
 
 // === 服务端加密（复刻 crypto-utils.ts） ===
@@ -21,35 +21,72 @@ function deriveBytes(key, context, length) {
 }
 
 function encryptContent(html, password, slug) {
-	const { PBKDF2_ITERATIONS, SALT_LENGTH, IV_LENGTH, KEY_LENGTH, VERIFY_PREFIX } = CRYPTO_CONSTANTS;
+	const {
+		PBKDF2_ITERATIONS,
+		SALT_LENGTH,
+		IV_LENGTH,
+		KEY_LENGTH,
+		VERIFY_PREFIX,
+	} = CRYPTO_CONSTANTS;
 	const plaintext = VERIFY_PREFIX + html;
 	const salt = deriveBytes(password, `salt:${slug}`, SALT_LENGTH);
 	const iv = deriveBytes(password, `iv:${slug}`, IV_LENGTH);
-	const key = pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, KEY_LENGTH, "sha256");
+	const key = pbkdf2Sync(
+		password,
+		salt,
+		PBKDF2_ITERATIONS,
+		KEY_LENGTH,
+		"sha256",
+	);
 	const cipher = createCipheriv("aes-256-gcm", key, iv);
-	const encrypted = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
+	const encrypted = Buffer.concat([
+		cipher.update(plaintext, "utf8"),
+		cipher.final(),
+	]);
 	const authTag = cipher.getAuthTag();
 	return Buffer.concat([salt, iv, authTag, encrypted]).toString("base64");
 }
 
 // === 客户端解密（复刻 PasswordProtection.astro inline script） ===
 async function clientDecrypt(encData, password) {
-	const { PBKDF2_ITERATIONS, SALT_LENGTH, IV_LENGTH, AUTH_TAG_LENGTH, VERIFY_PREFIX } = CRYPTO_CONSTANTS;
+	const {
+		PBKDF2_ITERATIONS,
+		SALT_LENGTH,
+		IV_LENGTH,
+		AUTH_TAG_LENGTH,
+		VERIFY_PREFIX,
+	} = CRYPTO_CONSTANTS;
 	const raw = Buffer.from(encData, "base64");
 	const salt = raw.subarray(0, SALT_LENGTH);
 	const iv = raw.subarray(SALT_LENGTH, SALT_LENGTH + IV_LENGTH);
-	const authTag = raw.subarray(SALT_LENGTH + IV_LENGTH, SALT_LENGTH + IV_LENGTH + AUTH_TAG_LENGTH);
+	const authTag = raw.subarray(
+		SALT_LENGTH + IV_LENGTH,
+		SALT_LENGTH + IV_LENGTH + AUTH_TAG_LENGTH,
+	);
 	const ciphertext = raw.subarray(SALT_LENGTH + IV_LENGTH + AUTH_TAG_LENGTH);
 
 	const combined = Buffer.concat([ciphertext, authTag]);
 
 	const enc = new TextEncoder();
-	const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
+	const keyMaterial = await crypto.subtle.importKey(
+		"raw",
+		enc.encode(password),
+		"PBKDF2",
+		false,
+		["deriveKey"],
+	);
 	const aesKey = await crypto.subtle.deriveKey(
 		{ name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
-		keyMaterial, { name: "AES-GCM", length: 256 }, false, ["decrypt"],
+		keyMaterial,
+		{ name: "AES-GCM", length: 256 },
+		false,
+		["decrypt"],
 	);
-	const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, aesKey, combined);
+	const decrypted = await crypto.subtle.decrypt(
+		{ name: "AES-GCM", iv },
+		aesKey,
+		combined,
+	);
 	const decoded = new TextDecoder().decode(decrypted);
 
 	if (!decoded.startsWith(VERIFY_PREFIX)) {
@@ -88,7 +125,10 @@ await test("encrypt and decrypt with correct password", async () => {
 	const encrypted = encryptContent(testHtml, testPassword, testSlug);
 	assert(encrypted.length > 0, "ciphertext should not be empty");
 	const decrypted = await clientDecrypt(encrypted, testPassword);
-	assert(decrypted === testHtml, `decrypted content mismatch: got "${decrypted.slice(0, 30)}..."`);
+	assert(
+		decrypted === testHtml,
+		`decrypted content mismatch: got "${decrypted.slice(0, 30)}..."`,
+	);
 });
 
 await test("deterministic ciphertext for same inputs", () => {
@@ -140,7 +180,7 @@ await test("CRYPTO_CONSTANTS have required fields", () => {
 	assert(CRYPTO_CONSTANTS.IV_LENGTH === 12, "IV_LENGTH");
 	assert(CRYPTO_CONSTANTS.AUTH_TAG_LENGTH === 16, "AUTH_TAG_LENGTH");
 	assert(CRYPTO_CONSTANTS.KEY_LENGTH === 32, "KEY_LENGTH");
-	assert(CRYPTO_CONSTANTS.VERIFY_PREFIX === "MIZUKI-VERIFY:", "VERIFY_PREFIX");
+	assert(CRYPTO_CONSTANTS.VERIFY_PREFIX === "TSUKIMI-VERIFY:", "VERIFY_PREFIX");
 });
 
 console.log(`\nResults: ${passed} passed, ${failed} failed`);
