@@ -12,25 +12,29 @@ copyright:
 
 # 个人信息配置
 
-Tsukimi 侧边栏支持展示个人信息卡片，包含头像、名称、描述和社交链接。配置位于 `src/config.ts` 中的 `profileConfig` 对象。
+Tsukimi 侧边栏支持展示个人信息卡片，包含头像、名称、描述和社交链接。配置位于 `src/config/profileConfig.ts` 中的 `profileConfig` 对象。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/profileConfig.ts"
+import type { ProfileConfig } from "../types/config";
+
 export const profileConfig: ProfileConfig = {
-  avatar: "assets/images/avatar.webp", // 头像图片路径
-  name: "Tsukimi",                       // 显示名称
-  bio: "A blog based on Astro",         // 个人简介
+  avatar: "assets/images/avatar.png", // 头像图片路径
+  name: "Your Name",                   // 显示名称
+  bio: "Your bio here",               // 个人简介
   typewriter: {
-    enable: true,                        // 启用个人简介打字机效果
-    speed: 80,                           // 打字速度（毫秒）
+    enable: true,                      // 启用打字机效果
+    speed: 80,                         // 打字速度（毫秒）
+    deleteSpeed: 50,                   // 删除速度（毫秒）
+    pauseTime: 2000,                   // 完整显示后暂停时间（毫秒）
   },
   links: [
     {
       name: "GitHub",
-      url: "https://github.com/souloss",
+      url: "https://github.com/your-username",
       icon: "fa7-brands:github",
-      showName: true,                    // 是否显示链接名称
+      showName: true,                  // 是否显示链接名称
     },
     {
       name: "Bilibili",
@@ -57,6 +61,8 @@ export const profileConfig: ProfileConfig = {
 |------|------|------|------|
 | `enable` | `boolean` | 是 | 是否启用打字机效果 |
 | `speed` | `number` | 否 | 打字速度（毫秒），默认 80 |
+| `deleteSpeed` | `number` | 否 | 删除速度（毫秒），默认 50 |
+| `pauseTime` | `number` | 否 | 完整显示后暂停时间（毫秒），默认 2000 |
 
 启用后，个人简介文字会以逐字打出的方式显示，增加动态感。
 

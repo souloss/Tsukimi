@@ -10,9 +10,6 @@ copyright:
     url: https://github.com/souloss
 ---
 
-
-![](/image.png)
-
 **欢迎使用Tsukimi主题👏!**  
 
  ==Astro-theme-Tsukimi== 是一个基于`Astro`的现代化静态博客模板，具有丰富的功能和美观的设计，无论您是想写 **生活类博客**、**技术类博客**、 或者是 **知识库、系列文档** 等，主题都可以满足您的需求。  

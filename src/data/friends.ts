@@ -27,17 +27,6 @@ export const friendsData: FriendItem[] = [
 	},
 	{
 		id: 2,
-		title: "Tsukimi Docs",
-		imgurl:
-			"https://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
-		desc: "Tsukimi User Manual",
-		siteurl: "/docs/tsukimi/",
-		tags: ["Docs"],
-		weight: 20,
-		enabled: true,
-	},
-	{
-		id: 3,
 		title: "Vercel",
 		imgurl: "https://avatars.githubusercontent.com/u/14985020?v=4&s=640",
 		desc: "Develop. Preview. Ship.",
@@ -47,7 +36,7 @@ export const friendsData: FriendItem[] = [
 		enabled: true,
 	},
 	{
-		id: 4,
+		id: 3,
 		title: "Tailwind CSS",
 		imgurl: "https://avatars.githubusercontent.com/u/67109815?v=4&s=640",
 		desc: "A utility-first CSS framework for rapidly building custom designs",
@@ -56,7 +45,7 @@ export const friendsData: FriendItem[] = [
 		enabled: true,
 	},
 	{
-		id: 5,
+		id: 4,
 		title: "TypeScript",
 		imgurl: "https://avatars.githubusercontent.com/u/6154722?v=4&s=640",
 		desc: "TypeScript is JavaScript with syntax for types",
@@ -65,7 +54,7 @@ export const friendsData: FriendItem[] = [
 		enabled: true,
 	},
 	{
-		id: 6,
+		id: 5,
 		title: "React",
 		imgurl: "https://avatars.githubusercontent.com/u/6412038?v=4&s=640",
 		desc: "A JavaScript library for building user interfaces",
@@ -74,7 +63,7 @@ export const friendsData: FriendItem[] = [
 		enabled: true,
 	},
 	{
-		id: 7,
+		id: 6,
 		title: "GitHub",
 		imgurl: "https://avatars.githubusercontent.com/u/9919?v=4&s=640",
 		desc: "Where the world builds software",
@@ -83,7 +72,7 @@ export const friendsData: FriendItem[] = [
 		enabled: true,
 	},
 	{
-		id: 8,
+		id: 7,
 		title: "MDN Web Docs",
 		imgurl: "https://avatars.githubusercontent.com/u/7565578?v=4&s=640",
 		desc: "The web's most comprehensive resource for web developers",
@@ -92,7 +81,7 @@ export const friendsData: FriendItem[] = [
 		enabled: true,
 	},
 	{
-		id: 9,
+		id: 8,
 		title: "aiHot",
 		imgurl: "https://www.google.com/s2/favicons?domain=aihot.virxact.com&sz=64",
 		desc: "AI 热点资讯聚合",

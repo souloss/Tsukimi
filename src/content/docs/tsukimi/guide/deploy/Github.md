@@ -47,7 +47,7 @@ export default defineConfig({
 你需要在`src/config.ts`中配置`site`为你的自定义域名。
 
 ```ts title="src/config.ts"
-siteURL: "https://blog.souloss.cn/", 
+siteURL: "https://tsukimi.souloss.cn/", 
 ```
 
 **Site**

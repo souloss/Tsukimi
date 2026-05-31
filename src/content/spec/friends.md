@@ -50,9 +50,9 @@ permalink: /spec/friends/
   <div class="flex items-center justify-between gap-2 rounded-lg bg-black/5 dark:bg-white/5 px-3 py-2">
     <div class="min-w-0">
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">站点链接</p>
-      <p class="text-xs font-medium truncate">https://blog.souloss.cn/</p>
+      <p class="text-xs font-medium truncate">https://tsukimi.souloss.cn/</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="https://blog.souloss.cn/">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="https://tsukimi.souloss.cn/">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>

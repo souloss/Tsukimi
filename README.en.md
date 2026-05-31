@@ -10,7 +10,7 @@
 
 🌏 **Language:** [**English**](./README.en.md) / [**中文**](./README.md)
 
-[**🖥️ Live Demo**](https://blog.souloss.cn/) | [**📝 Documentation**](https://tsukimi.souloss.cn/docs/tsukimi/) | [**📦 Content Repo**](https://github.com/souloss/Tsukimi-Content)
+[**🖥️ Live Demo**](https://tsukimi.souloss.cn/) | [**📝 Documentation**](https://tsukimi.souloss.cn/docs/tsukimi/) | [**📦 Content Repo**](https://github.com/souloss/Tsukimi-Content)
 
 ## ✨ Features
 
@@ -61,7 +61,7 @@ pnpm install
 
 ### Configuration
 
-Edit `src/config.ts` to customize your blog settings, including site info, theme colors, banner images, and social links.
+Edit configuration files in `src/config/` to customize your blog settings, including site info, theme colors, banner images, and social links.
 
 ### Start Development Server
 
@@ -73,7 +73,7 @@ Your blog will be available at `http://localhost:4321`.
 
 ### Deployment
 
-Supports Vercel, Netlify, GitHub Pages, Cloudflare Pages, and more. Update `siteURL` in `src/config.ts` before deploying.
+Supports Vercel, Netlify, GitHub Pages, Cloudflare Pages, and more. Update `siteURL` in `src/config/siteConfig.ts` before deploying.
 
 For environment variables, refer to `.env.example`. Do not commit `.env` to Git.
 
@@ -106,32 +106,264 @@ tags: [tag1, tag2]
 category: Category
 draft: false
 pinned: false
+priority: 0
 comment: true
-lang: en      # Only set when article language differs from site default
+lang: en
+updated: 2024-06-01
+slug: custom-slug
+permalink: /custom/path/
+alias: /old-path/
+series: Series Name
+seriesOrder: 1
+encrypted: false
+password: ""
+passwordHint: ""
+hideHomeContent: false
+author: ""
+licenseName: ""
+licenseUrl: ""
+sourceLink: ""
+redirect: ""
 ---
 ```
 
-| Field | Description |
-|:------|:------------|
-| `title` | Post title (required) |
-| `published` | Publication date (required) |
-| `description` | Post description for SEO and previews |
-| `image` | Cover image path (relative to post file) |
-| `tags` | Array of tags |
-| `category` | Post category |
-| `draft` | Set to `true` to hide in production |
-| `pinned` | Set to `true` to pin to top |
-| `comment` | Set to `true` to enable comments |
-| `lang` | Post language (only when different from site default) |
+### Basic Fields
+
+| Field | Type | Default | Description |
+|:------|:-----|:--------|:------------|
+| `title` | `string` | — | Post title (required) |
+| `published` | `Date` | — | Publication date (required) |
+| `description` | `string` | `""` | Post description for SEO, previews, and RSS |
+| `image` | `string` | `""` | Cover image path (relative to post file) |
+| `tags` | `string[]` | `[]` | Array of tags |
+| `category` | `string` | `""` | Post category |
+| `draft` | `boolean` | `false` | Set to `true` to hide in production |
+| `lang` | `string` | `""` | Post language (only when different from site default) |
+| `updated` | `Date` | — | Update date, shown in post meta |
+
+### Sorting & Navigation
+
+| Field | Type | Default | Description |
+|:------|:-----|:--------|:------------|
+| `pinned` | `boolean` | `false` | Set to `true` to pin to top |
+| `priority` | `number` | — | Sort priority among pinned posts (lower = higher) |
+| `slug` | `string` | — | Custom URL slug (replaces filename part only) |
+| `permalink` | `string` | — | Custom permalink (highest priority, overrides slug and global config) |
+| `alias` | `string` | — | Alias path, lower priority than permalink |
+
+### Series
+
+| Field | Type | Default | Description |
+|:------|:-----|:--------|:------------|
+| `series` | `string` | — | Series name; posts in the same series show navigation |
+| `seriesOrder` | `number` | `0` | Sort order within the series (lower = earlier) |
+
+### Comments & Copyright
+
+| Field | Type | Default | Description |
+|:------|:-----|:--------|:------------|
+| `comment` | `boolean` | `true` | Enable / disable comment section |
+| `author` | `string` | `""` | Override author name (defaults to profileConfig) |
+| `licenseName` | `string` | `""` | Override license name |
+| `licenseUrl` | `string` | `""` | Override license URL |
+| `sourceLink` | `string` | `""` | Override source link for the post |
+
+### Encryption & Access Control
+
+| Field | Type | Default | Description |
+|:------|:-----|:--------|:------------|
+| `encrypted` | `boolean` | `false` | Enable post encryption |
+| `password` | `string` | `""` | Encryption password (requires encrypted: true) |
+| `passwordHint` | `string` | `""` | Password hint text |
+| `hideHomeContent` | `boolean` | `false` | Hide post excerpt on homepage |
+| `redirect` | `string` | — | External redirect URL |
+
+### Repost
+
+```yaml
+repost:
+  originalAuthor: Original Author
+  originalUrl: https://example.com/original
+  originalTitle: Original Title
+  originalSite: Original Site
+```
+
+`copyright` supported values: `CC BY` / `CC BY-SA` / `CC BY-ND` / `CC BY-NC` / `CC BY-NC-SA` / `CC BY-NC-ND` / `CC0` / `ARR`
 
 ## 🧩 Markdown Extensions
 
-- **Callouts:** `> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`, etc.
-- **Math formulas:** `$inline$` and `$$block$$` syntax, KaTeX rendering
-- **Code highlighting:** Powered by [Expressive Code](https://expressive-code.com/) with line numbers and copy button
-- **GitHub cards:** `::github{repo="user/repo"}`
-- **Image gallery:** PhotoSwipe integration
-- **Collapsible sections:** `:::collapse` directive
+### 📝 Text Markup
+
+| Syntax | Effect | Example |
+|:-------|:-------|:--------|
+| `==text==` | Highlighted mark | `==important==` |
+| `:mark[text]{color=red}` | Colored mark | `:mark[label]{color=blue}` |
+| `:kbd[Ctrl+C]` | Keyboard key | Ctrl+C style |
+| `:blur[hidden]` | Blur overlay (click to reveal) | For spoiler content |
+| `:psw[password]` | Password mask (click to reveal) | — |
+| `:u[underlined]` | Underline | `:u[text]{color=red}` |
+| `:emp[emphasized]` | Colored emphasis | `:emp[text]{color=blue}` |
+| `:wavy[wavy]` | Wavy underline | `:wavy[text]{color=pink}` |
+| `:del[deleted]` | Strikethrough | — |
+| `:sup[superscript]` | Superscript | `:sup[n]{color=red}` |
+| `:sub[subscript]` | Subscript | `:sub[n]{color=blue}` |
+| `:color[text]{color=red}` | Custom colored text | Supports red/orange/yellow/green/blue/purple/pink/cyan/accent or hex |
+| `:hashtag[tag]{href=...}` | Hash tag (auto-cycling colors) | `:hashtag[frontend]{href=/tags/frontend}` |
+| `:checkbox[option]{checked=true}` | Custom checkbox | `color=` `symbol=` `inline=` |
+| `:radio[option]{checked=true}` | Custom radio button | `color=` `inline=` |
+| `:emoji[smile]{source=qq}` | External emoji image | source: qq/aru/tieba/blobcat/twemoji |
+| `:step-brackets[1]{title=Step}` | Step marker | — |
+
+### 📦 Container Directives
+
+#### Callouts
+
+13 types: `note` · `info` · `tip` · `warning` · `caution` · `important` · `question` · `quote` · `bug` · `example` · `success` · `failure` · `danger`
+
+```markdown
+:::tip[Title]{color=blue}
+Content
+:::
+```
+
+Also supports GitHub-style: `> [!NOTE]` / `> [!TIP]` / `> [!WARNING]` etc.
+
+#### Collapsible Sections
+
+```markdown
+:::folding[Title]{open=true color=blue}
+Content
+:::
+```
+
+#### Tabs
+
+```markdown
+:::tabs{align=center}
+tab:Tab One{color=red}
+Content one
+tab:Tab Two{color=blue}
+Content two
+:::
+```
+
+#### Timeline
+
+```markdown
+:::timeline
+- 2024-01 | Event Title | Event description
+- 2024-02 | Event Title | Event description
+:::
+```
+
+#### Grid Layout
+
+```markdown
+:::grid{cols=3 gap=16 minw=240px bg=card}
+Cell one
+---
+Cell two
+---
+Cell three
+:::
+```
+
+#### Other Containers
+
+| Directive | Description | Attributes |
+|:----------|:-----------|:-----------|
+| `:::poetry{title=... author=...}` | Poetry layout | `title` `author` `date` `footer` |
+| `:::copy{label=Copy this}` | One-click copy | `label` |
+| `:::blockquote{icon=user}` | Decorated blockquote | `icon` |
+| `:::quot` | Compact quote card | — |
+| `:::reel{title=... author=...}` | Card container | `title` `author` `date` `footer` |
+| `:::paper{title=... style=...}` | Document/letter layout | `title` `author` `date` `footer` `style` |
+| `:::gallery{cols=3 gap=8}` | Image gallery (click to zoom) | `cols` `gap` |
+| `:::folders` | Nested collapsible sections | `folder:Name` separator |
+| `:::colors{values=#ff0000,#00ff00}` | Color swatches | `values` |
+| `:::asciinema{src=url}` | Terminal recording player | `src` `cols` `rows` |
+
+### 🃏 Card Directives
+
+```markdown
+:::link-card{href=... title=... desc=... image=... icon=...}
+:::
+
+:::card{title=... icon=... href=... color=blue}
+Card content
+:::
+
+:::panel
+<!-- label: Left | Right -->
+Code content...
+:::
+```
+
+### 🎬 Media Directives
+
+```markdown
+:::video{src=video.mp4 poster=cover.jpg ratio=16/9}
+:::
+
+<!-- Bilibili -->
+:::video{bilibili=BVxxxxxx}
+
+<!-- YouTube -->
+:::video{youtube=VIDEO_ID}
+```
+
+### 📊 Diagrams
+
+| Language | Description |
+|:---------|:------------|
+| ````mermaid` | Mermaid flowcharts/sequence/gantt etc., light/dark theme support |
+| ````markmap` | Markmap mind maps, collapsible/zoomable |
+| ````plantuml` | PlantUML diagrams, dual light/dark theme rendering |
+
+### 🔢 Math Formulas
+
+```markdown
+Inline: $E = mc^2$
+
+Block:
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+```
+
+### 💻 Enhanced Code Blocks
+
+Powered by [Expressive Code](https://expressive-code.com/):
+
+```markdown
+```js {1,3-5} title="example.js" ins={2} del={4} mark={6}
+// Line highlight, insert, delete, mark
+```
+```
+
+- Line numbers, collapsible sections
+- Language badge, custom copy button
+- `frame="terminal"` / `frame="code"` frame modes
+
+### 🔗 GitHub Card
+
+```markdown
+::github{repo="owner/repo"}
+```
+
+### 🖼️ Image Enhancements
+
+- **Width control**: `![Image w-50%](image.png)` — set image width percentage
+- **Lazy loading**: All images lazy-loaded with blur transition
+- **Gallery**: PhotoSwipe integration, click to view fullscreen
+
+### 📋 Other
+
+- **Table wrapping**: Wide tables auto-scroll horizontally
+- **External links**: Auto `target="_blank"` and `rel="nofollow noopener noreferrer"`
+- **Relative link resolution**: `./other-post.md` resolves to correct URLs
+- **Reading time**: Auto-calculated, CJK-optimized (400 chars/min)
+- **Excerpt split**: `<!-- more -->` for manual excerpt control
 
 ## 🧞 Commands
 

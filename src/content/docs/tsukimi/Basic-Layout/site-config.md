@@ -23,7 +23,7 @@ const SITE_LANG = "zh_CN"; // 语言代码
 export const siteConfig: SiteConfig = {
 	title: "Souloss",
 	subtitle: "写代码，读源码，跟 AI 较劲",
-	siteURL: "https://blog.souloss.cn/", // 站点URL，以斜杠结尾
+	siteURL: "https://tsukimi.souloss.cn/", // 站点URL，以斜杠结尾
 	siteStartDate: "2020-01-01", // 站点开始运行日期，用于站点统计组件计算运行天数
 	lang: SITE_LANG,
 	themeColor: {
