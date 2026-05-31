@@ -137,6 +137,42 @@ for (const mapping of contentMappings) {
 	}
 }
 
+// ── Override files: content/overrides/ → src/overrides/ (copy, not symlink) ──
+const overridesSrc = path.join(CONTENT_DIR, "overrides");
+const overridesDest = path.join(rootDir, "src/overrides");
+if (fs.existsSync(overridesSrc)) {
+	if (fs.existsSync(overridesDest)) {
+		fs.rmSync(overridesDest, { recursive: true, force: true });
+	}
+	copyRecursive(overridesSrc, overridesDest);
+	console.log("已同步配置覆盖文件");
+}
+
+// ── Personal assets: content/assets/ → src/assets/private/ ──
+const assetsSrc = path.join(CONTENT_DIR, "assets");
+const assetsDest = path.join(rootDir, "src/assets/private");
+if (fs.existsSync(assetsSrc)) {
+	if (fs.existsSync(assetsDest)) {
+		fs.rmSync(assetsDest, { recursive: true, force: true });
+	}
+	copyRecursive(assetsSrc, assetsDest);
+	console.log("已同步私人资源文件");
+
+	// ── Favicon: content/assets/favicon.ico → public/favicon.ico ──
+	const faviconSrc = path.join(CONTENT_DIR, "assets/favicon.ico");
+	if (fs.existsSync(faviconSrc)) {
+		fs.copyFileSync(faviconSrc, path.join(rootDir, "public/favicon.ico"));
+		console.log("已同步 favicon");
+	}
+}
+
+// ── wrangler.toml: content/wrangler.toml → project root ──
+const wranglerSrc = path.join(CONTENT_DIR, "wrangler.toml");
+if (fs.existsSync(wranglerSrc)) {
+	fs.copyFileSync(wranglerSrc, path.join(rootDir, "wrangler.toml"));
+	console.log("已同步 wrangler.toml");
+}
+
 console.log("\n内容同步完成\n");
 try {
 	// 1. 获取 content 分支名
