@@ -4,22 +4,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Tsukimi is a feature-rich static blog built with **Astro 6** (static output mode), **Svelte 5**, **Tailwind CSS 4**, and **TypeScript**. It is based on the Fuwari template and extended with anime tracking, diary, music player, Live2D mascot, and more. The site uses Swup for page transitions and Pagefind for search.
+Tsukimi is a feature-rich static blog built with **Astro 6** (static output mode), **Svelte 5** (runes mode), **Tailwind CSS 4**, and **TypeScript**. Based on the Fuwari template, extended with anime tracking, diary, music player, Live2D mascot, and more. Uses Swup for page transitions and Pagefind for search.
 
 ## Commands
 
-- `pnpm dev` — Start dev server (auto-syncs content first via predev hook)
-- `pnpm build` — Production build (updates anime data, builds Astro, runs Pagefind, compresses fonts)
+- `pnpm dev` — Start dev server (auto-syncs content via predev hook; uses `--max-old-space-size=6144`)
+- `pnpm dev:mem` — Dev server with 16GB memory (for large content repos)
+- `pnpm build` — Production build: `update-feeds` → `update-anime` → `astro build` (with increased memory) → `pagefind` → `compress-fonts`
 - `pnpm preview` — Preview production build locally
 - `pnpm check` — Astro type/error checking
 - `pnpm type-check` — TypeScript check via `tsc --noEmit`
-- `pnpm lint` — ESLint with auto-fix (`eslint ./src --fix`)
-- `pnpm format` — Prettier formatting (`prettier --write ./src`)
+- `pnpm lint` — Biome check with auto-fix (`biome check --write ./src`)
+- `pnpm format` — Biome format (`biome format --write ./src`)
 - `pnpm new-post <filename>` — Scaffold a new blog post in `src/content/posts/`
 - `pnpm sync-content` — Sync content from external repo (if `ENABLE_CONTENT_SYNC=true`)
-- `pnpm update-anime` / `pnpm update-bangumi` / `pnpm update-bilibili` — Fetch anime/bangumi/bilibili data
+- `pnpm update-anime` / `pnpm update-bangumi` / `pnpm update-bilibili` / `pnpm update-feeds` — Fetch external data
+- `pnpm compress-fonts` — Compress font files
+- `pnpm submit` — Submit URLs to Indexnow for SEO
 
 Package manager is **pnpm** only (enforced via preinstall hook). Node >= 22 required.
+
+**Git hooks**: pre-commit runs `lint-staged` (Biome), pre-push runs `astro check`.
 
 ## Architecture
 
@@ -37,12 +42,12 @@ Astro file-based routing. Key pages:
 ### Content Collections (`src/content/`)
 
 Two Astro content collections defined in `src/content.config.ts`:
-- **posts** — Blog posts from `src/content/posts/` (md/mdx). Schema includes: title, published, draft, tags, category, image, pinned, comment, encrypted, password, permalink, alias, etc.
+- **posts** — Blog posts from `src/content/posts/` (md/mdx). Schema: title, published, draft, tags, category, image, pinned, comment, encrypted, password, permalink, alias, etc.
 - **spec** — Special pages from `src/content/spec/` (about.md, friends.md) with empty schema.
 
-### Configuration (`src/config.ts`)
+### Configuration (`src/config/`)
 
-Central configuration file exporting all config objects:
+Modular configuration imported from `src/config/index.ts`. Key exports:
 - `siteConfig` — Site metadata, language, theme, banner, feature page toggles, post layout, wallpaper mode, TOC, fonts, etc.
 - `navBarConfig` — Navigation links with nested dropdown support
 - `profileConfig` — Author profile for sidebar
@@ -52,16 +57,16 @@ Central configuration file exporting all config objects:
 ### Component Organization (`src/components/`)
 
 Atomic design hierarchy:
-- **atoms/** — Primitive UI elements
+- **atoms/** — Primitive UI elements (Badge, Button, Chip, Icon, Image, Link, Loader, tag-chip)
 - **features/** — Feature-specific components (posts, toc, pio, settings, timeline, stats, skills, projects)
 - **organisms/** — Composed sections (navigation/Navbar, footer/Footer)
 - **widgets/** — Sidebar widgets (profile, announcement, categories, tags, card-toc, calendar, site-stats, music-sidebar, music-player, sidebar, feed)
 - **layout/** — Banner, RightSideBar
 - **control/** — ThemeSwitch, FloatingControls, PageProgressBar
-- **misc/** — Markdown renderer, ConfigCarrier, FullscreenWallpaper, IconifyLoader
+- **misc/** — Markdown renderer, ConfigCarrier, FullscreenWallpaper, IconifyLoader, ListContainer, ListDivider, CardBase
 - **common/** — Shared utilities
 
-Components use both `.astro` and `.svelte` files. Svelte 5 is used for interactive/client-side components (music player, theme switch, search, etc.).
+Astro `.astro` files for static/server-rendered components; Svelte 5 `.svelte` files for interactive/client-side components (music player, theme switch, search, etc.). Svelte uses **runes mode** (`compilerOptions: { runes: true }`).
 
 ### Layouts (`src/layouts/`)
 
@@ -77,12 +82,18 @@ Components use both `.astro` and `.svelte` files. Svelte 5 is used for interacti
 ### Markdown Plugins (`src/plugins/`)
 
 Custom remark/rehype plugins registered in `astro.config.mjs`:
-- `remark-content.mjs` — Content processing
+- `remark-content.mjs`, `remark-content-directives.mjs` — Content processing
 - `remark-fix-github-admonitions.js` — Normalize GitHub-style admonitions
-- `remark-mermaid.js` / `rehype-mermaid.mjs` — Mermaid diagram support
+- `remark-mermaid.js` / `rehype-mermaid.mjs` — Mermaid diagrams
+- `remark-markmap.js` / `rehype-markmap.mjs` — Markmap mind maps
+- `remark-plantuml.js` / `rehype-plantuml.mjs` — PlantUML diagrams
+- `remark-mark.js` — Text highlighting (==marked text==)
+- `remark-plume-compat.js` — Plume compatibility
+- `remark-code-lang-aliases.js` — Code language aliases
+- `remark-relative-links.mjs` — Relative link resolution
 - `rehype-component-admonition.mjs` — Callout/admonition blocks (note, tip, warning, caution, important)
 - `rehype-component-github-card.mjs` — `::github{repo="..."}` embeds
-- `rehype-image-width.mjs`, `rehype-wrap-table.mjs` — Image/table enhancements
+- `rehype-image-width.mjs`, `rehype-lazy-image.mjs`, `rehype-wrap-table.mjs` — Image/table enhancements
 - `expressive-code/` — Custom copy button and language badge plugins
 
 ### Static Data (`src/data/`)
@@ -99,18 +110,21 @@ CSS/Stylus files. Main entry: `main.css`. Notable: `variables.styl`, `banner.css
 
 ### Scripts (`scripts/`)
 
-Node.js scripts for build pipeline and content management: `new-post.js`, `sync-content.js`, `update-anime.mjs`, `update-bangumi.mjs`, `update-bilibili.mjs`, `compress-fonts.js`, `indexnow-submit.js`
+Node.js scripts for build pipeline and content management: `new-post.js`, `sync-content.js`, `update-anime.mjs`, `update-bangumi.mjs`, `update-bilibili.mjs`, `update-feeds.mjs`, `compress-fonts/`, `build-pagefind.mjs`, `run-with-mem.js`, `indexnow-submit.js`
 
 ## Key Patterns
 
 - **Path aliases**: `@components/*`, `@assets/*`, `@constants/*`, `@utils/*`, `@i18n/*`, `@layouts/*`, `@/*` (maps to `src/*`)
 - **Trailing slashes**: Site uses `trailingSlash: "always"` in Astro config
 - **Content sync**: `predev`/`prebuild` hooks auto-run `sync-content.js` before dev/build
-- **Build pipeline**: Build runs `update-anime.mjs` → `astro build` → `pagefind` → `compress-fonts.js`
+- **Build pipeline**: Build runs `update-feeds` → `update-anime` → `astro build` (via `run-with-mem.js`) → `pagefind` → `compress-fonts`
 - **Feature page toggles**: `siteConfig.featurePages` controls which pages are enabled; disabled pages should also be removed from `navBarConfig`
 - **Sidebar configuration**: Widget ordering and placement (left/right/drawer) is controlled by `sidebarLayoutConfig.components`
 - **Encrypted posts**: Posts support client-side encryption via `encrypted`/`password` frontmatter fields using CryptoJS
-- **ESLint**: Many Astro template files are ignored in ESLint config due to parsing issues; import sorting is enforced via `eslint-plugin-simple-import-sort`
+- **Linting**: Biome replaces ESLint/Prettier. Import sorting enforced via Biome config
+- **Svelte patch**: `svelte@5.55.5` has a custom patch in `patches/` for hydration fix (eager init_operations)
+- **Experimental**: `queuedRendering` enabled in Astro config with `poolSize: 100`
+- **Vite warmup**: Key components pre-warmed for faster dev (Layout, index, MusicPlayer, Search, ThemeSwitch, DisplaySettings, swup-manager)
 
 ## Development Rules (from `docs/rule/`)
 
@@ -118,7 +132,7 @@ Node.js scripts for build pipeline and content management: `new-post.js`, `sync-
 
 Components follow a strict layered hierarchy: **atoms → molecules → organisms → pages**
 
-- **atoms/** — Minimal, indivisible UI elements. No business logic, no component dependencies. Examples: Badge, Button, Chip, Icon, Image, Link, Loader
+- **atoms/** — Minimal, indivisible UI elements. No business logic, no component dependencies.
 - **features/** — Feature-specific composites (posts, toc, pio, settings, timeline, stats, skills, projects)
 - **organisms/** — Complex business components combining multiple atoms/molecules (Navbar, Footer, MusicPlayer, Calendar, TOC)
 - **widgets/** — Sidebar modules using the shared `WidgetLayout.astro` container
@@ -176,7 +190,7 @@ The most common mistake is registering in SideBar.astro but forgetting RightSide
 ### Import Conventions
 
 - Use path aliases (`@components/*`, `@utils/*`, etc.) instead of relative paths
-- Import order enforced by ESLint: external libs → internal libs → components → utils → types → constants
+- Import order enforced by Biome: external libs → internal libs → components → utils → types → constants
 - Avoid circular dependencies; extract shared state to stores or shared modules
 
 ### Naming Conventions
@@ -186,3 +200,7 @@ The most common mistake is registering in SideBar.astro but forgetting RightSide
 - Utility files: `[feature]-utils.ts` (`content-utils.ts`, `date-utils.ts`)
 - Feature module components: `[Feature]Module.astro`
 - Container components: `[Feature]Container.astro`
+
+### SSR Safety for Svelte Components
+
+Svelte components that access `window` or browser-only APIs must use `client:only="svelte"` in Astro, not `client:idle` or `client:load`, to prevent SSR `window is not defined` errors.

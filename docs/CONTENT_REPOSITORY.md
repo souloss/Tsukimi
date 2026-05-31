@@ -246,7 +246,7 @@ USE_SUBMODULE=true
 
 ## 📚 参考资源
 
-- [Tsukimi 文档](https://tsukimi.souloss.cn/docs/mizuki/tsukimi)
+- [Tsukimi 文档](https://tsukimi.souloss.cn/docs/tsukimi/)
 - [Git Submodule 文档](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)
 - [Astro Content Collections](https://docs.astro.build/zh-cn/guides/content-collections/)
 
