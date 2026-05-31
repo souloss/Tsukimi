@@ -1,4 +1,4 @@
-import type { RecursivePartial } from "@/types/utils";
+import type { RecursivePartial } from "../types/utils";
 
 export function isPlainObject(val: unknown): val is Record<string, unknown> {
 	return typeof val === "object" && val !== null && !Array.isArray(val);

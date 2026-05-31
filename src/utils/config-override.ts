@@ -1,5 +1,5 @@
-import type { RecursivePartial } from "@/types/utils";
-import { deepMerge } from "@/utils/deep-merge";
+import type { RecursivePartial } from "../types/utils";
+import { deepMerge } from "./deep-merge";
 
 /**
  * Merge config defaults with an override file from src/overrides/.

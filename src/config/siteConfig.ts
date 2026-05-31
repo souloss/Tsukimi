@@ -1,10 +1,11 @@
 import type { SiteConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
 
 const SITE_LANG = "zh_CN";
 
 export { SITE_LANG };
 
-export const siteConfig: SiteConfig = {
+const defaults: SiteConfig = {
 	title: "souloss",
 	subtitle: "个人技术博客",
 	siteURL: "https://tsukimi.souloss.cn/",
@@ -204,3 +205,5 @@ export const siteConfig: SiteConfig = {
 		followTheme: false,
 	},
 };
+
+export const siteConfig = withOverride("siteConfig", defaults);
