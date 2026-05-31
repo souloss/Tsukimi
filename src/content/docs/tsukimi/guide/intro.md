@@ -25,9 +25,6 @@ copyright:
 </CardGrid>
 
 
-<!-- TODO: Update community links for Tsukimi -->
-QQ群1007524064 (主题交流群)
-Discord频道(面向全世界的Tsukimi用户): [https://discord.gg/MqW6TcQtVM](https://discord.gg/MqW6TcQtVM)
 
 ::: collapse
 - 不了解Astro?
