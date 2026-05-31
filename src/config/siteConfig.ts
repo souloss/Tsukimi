@@ -8,7 +8,7 @@ export { SITE_LANG };
 const defaults: SiteConfig = {
 	title: "souloss",
 	subtitle: "个人技术博客",
-	siteURL: "https://tsukimi.souloss.cn/",
+	siteURL: "https://tsukimi.example.com/",
 	siteStartDate: "2020-01-01",
 
 	lang: SITE_LANG,
@@ -183,9 +183,9 @@ const defaults: SiteConfig = {
 	analytics: {
 		umamiAnalytics: {
 			// Umami Website ID，在 Umami 后台获取
-			websiteId: "cdbf170a-fddb-4963-92e7-aab575aa26eb",
+			websiteId: "",
 			// Umami JS 地址，自建的话填自己的地址
-			scriptUrl: "https://umami.souloss.cn/script.js",
+			scriptUrl: "",
 			// 是否追踪出站链接点击事件，默认 true
 			trackOutboundLinks: true,
 			// 是否自动收集访客浏览器核心网页指标，默认 false
