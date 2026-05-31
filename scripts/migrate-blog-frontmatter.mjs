@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Migrate blog frontmatter from astro-blog format to Mizuki format.
+ * Migrate blog frontmatter from astro-blog format to Tsukimi format.
  *
  * Transformations:
  *   pubDatetime → published (date only: YYYY-MM-DD)
@@ -8,9 +8,9 @@
  *   series.name → series (flat string)
  *   series.order → seriesOrder (flat number)
  *   .text files → .md files
- *   Old-style fields (categories, date, comments, katex, subtitle, archives) → Mizuki equivalents
+ *   Old-style fields (categories, date, comments, katex, subtitle, archives) → Tsukimi equivalents
  *   category with "/" → take first segment only
- *   Remove fields not in Mizuki schema (subtitle, archives, katex, comments)
+ *   Remove fields not in Tsukimi schema (subtitle, archives, katex, comments)
  *   categories (plural) → category (first item)
  *   date → published
  */
@@ -146,7 +146,7 @@ function formatDate(isoStr) {
   return m ? m[1] : null;
 }
 
-function buildMizukiFrontmatter(parsed, srcRelPath) {
+function buildTsukimiFrontmatter(parsed, srcRelPath) {
   const fm = {};
 
   // published (required)
@@ -289,7 +289,7 @@ function formatYamlValue(val, key) {
 }
 
 function buildFrontmatterString(fm) {
-  // Define field order to match Mizuki conventions
+  // Define field order to match Tsukimi conventions
   const fieldOrder = [
     "title", "published", "updated", "draft", "description", "image",
     "tags", "category", "lang", "pinned", "comment", "priority",
@@ -302,7 +302,7 @@ function buildFrontmatterString(fm) {
   const lines = [];
   for (const key of fieldOrder) {
     if (fm[key] === undefined || fm[key] === null) continue;
-    // Skip defaults that match Mizuki defaults
+    // Skip defaults that match Tsukimi defaults
     if (key === "draft" && fm[key] === false) continue;
     if (key === "pinned" && fm[key] === false) continue;
     if (key === "comment" && fm[key] === true) continue;
@@ -326,7 +326,7 @@ function migrateFile(srcPath) {
   const content = readFileSync(srcPath, "utf-8");
   const { frontmatter, body } = parseFrontmatter(content);
   const parsed = parseYamlSimple(frontmatter);
-  const fm = buildMizukiFrontmatter(parsed, srcPath);
+  const fm = buildTsukimiFrontmatter(parsed, srcPath);
 
   const newFm = buildFrontmatterString(fm);
   const newContent = `---\n${newFm}\n---${body}`;

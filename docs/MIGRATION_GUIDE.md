@@ -53,24 +53,24 @@ EOF
 
 ```bash
 # 设置路径变量
-MIZUKI_PATH="/path/to/your/Tsukimi"
+TSUKIMI_PATH="/path/to/your/Tsukimi"
 CONTENT_PATH="/path/to/Tsukimi-Content"
 
 # 复制文章
-cp -r "$MIZUKI_PATH/src/content/posts/"* "$CONTENT_PATH/posts/"
+cp -r "$TSUKIMI_PATH/src/content/posts/"* "$CONTENT_PATH/posts/"
 
 # 复制特殊页面
-cp -r "$MIZUKI_PATH/src/content/spec/"* "$CONTENT_PATH/spec/"
+cp -r "$TSUKIMI_PATH/src/content/spec/"* "$CONTENT_PATH/spec/"
 
 # 复制数据文件
-cp "$MIZUKI_PATH/src/data/anime.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "anime.ts not found"
-cp "$MIZUKI_PATH/src/data/projects.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "projects.ts not found"
-cp "$MIZUKI_PATH/src/data/skills.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "skills.ts not found"
-cp "$MIZUKI_PATH/src/data/timeline.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "timeline.ts not found"
+cp "$TSUKIMI_PATH/src/data/anime.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "anime.ts not found"
+cp "$TSUKIMI_PATH/src/data/projects.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "projects.ts not found"
+cp "$TSUKIMI_PATH/src/data/skills.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "skills.ts not found"
+cp "$TSUKIMI_PATH/src/data/timeline.ts" "$CONTENT_PATH/data/" 2>/dev/null || echo "timeline.ts not found"
 
 # 复制图片
-cp -r "$MIZUKI_PATH/public/images/albums/"* "$CONTENT_PATH/images/albums/" 2>/dev/null || echo "albums not found"
-cp -r "$MIZUKI_PATH/public/images/diary/"* "$CONTENT_PATH/images/diary/" 2>/dev/null || echo "diary not found"
+cp -r "$TSUKIMI_PATH/public/images/albums/"* "$CONTENT_PATH/images/albums/" 2>/dev/null || echo "albums not found"
+cp -r "$TSUKIMI_PATH/public/images/diary/"* "$CONTENT_PATH/images/diary/" 2>/dev/null || echo "diary not found"
 
 echo "✅ 内容复制完成!"
 ```
@@ -99,7 +99,7 @@ echo "✅ 内容仓库已推送!"
 ### 步骤 4: 配置 Tsukimi 代码仓库
 
 ```bash
-cd "$MIZUKI_PATH"
+cd "$TSUKIMI_PATH"
 
 # 创建 .env 文件
 cp .env.example .env
@@ -130,7 +130,7 @@ git push
 ⚠️ **警告**: 只有在确认内容已成功迁移后才执行此步骤!
 
 ```bash
-cd "$MIZUKI_PATH"
+cd "$TSUKIMI_PATH"
 
 # 备份原内容 (以防万一)
 mkdir -p ../tsukimi-content-backup
@@ -162,7 +162,7 @@ git push
 ### 本地测试
 
 ```bash
-cd "$MIZUKI_PATH"
+cd "$TSUKIMI_PATH"
 
 # 同步内容
 pnpm run sync-content
@@ -202,14 +202,14 @@ git commit -m "Update content"
 git push
 
 # 2. 在代码仓库中同步
-cd "$MIZUKI_PATH"
+cd "$TSUKIMI_PATH"
 pnpm run sync-content
 ```
 
 ### 使用 Submodule 时
 
 ```bash
-cd "$MIZUKI_PATH"
+cd "$TSUKIMI_PATH"
 
 # 更新 submodule 到最新版本
 git submodule update --remote --merge

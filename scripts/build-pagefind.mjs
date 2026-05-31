@@ -54,16 +54,16 @@ try {
 	process.exit(1);
 }
 
-// Mizuki docs index: only docs/tsukimi HTML
-console.log("2. Building Mizuki docs index...");
+// Tsukimi docs index: only docs/tsukimi HTML
+console.log("2. Building Tsukimi docs index...");
 try {
 	execSync(
 		`npx pagefind --site ${site} --glob "docs/tsukimi/**/*.html" --output-subdir pagefind/tsukimi --silent`,
 		{ stdio: "inherit" },
 	);
-	console.log("   Mizuki docs index built.\n");
+	console.log("   Tsukimi docs index built.\n");
 } catch (error) {
-	console.error("   Failed to build Mizuki docs index:", error);
+	console.error("   Failed to build Tsukimi docs index:", error);
 	process.exit(1);
 }
 
