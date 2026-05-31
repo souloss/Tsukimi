@@ -300,13 +300,13 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 		<IconifyLoader />
 
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
-	{import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: '/pagefind/mizuki/pagefind.js'}}>
+	{import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: '/pagefind/tsukimi/pagefind.js'}}>
 	window.loadPagefindTsukimi = async function() {
 		if (window.pagefindTsukimi) {return;}
 		try {
 			const response = await fetch(scriptUrl, { method: 'HEAD' });
 			if (!response.ok) {
-				throw new Error(`Mizuki Pagefind script not found: ${response.status}`);
+				throw new Error(`Tsukimi Pagefind script not found: ${response.status}`);
 			}
 
 			const pagefind = await import(scriptUrl);
@@ -318,9 +318,9 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 			window.pagefindTsukimi = pagefind;
 
 			document.dispatchEvent(new CustomEvent('pagefindtsukimiready'));
-			console.log('Mizuki Pagefind loaded and initialized successfully.');
+			console.log('Tsukimi Pagefind loaded and initialized successfully.');
 		} catch (error) {
-			console.error('Failed to load Mizuki Pagefind:', error);
+			console.error('Failed to load Tsukimi Pagefind:', error);
 			window.pagefindTsukimi = {
 				search: () => Promise.resolve({ results: [] }),
 				options: () => Promise.resolve(),

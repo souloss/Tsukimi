@@ -269,4 +269,4 @@ export const featuredPosts: FriendsCirclePost[] = [
 
 ## 相关配置
 
-- [友链配置](/docs/mizuki/special/friends/) - 友链列表的详细配置
+- [友链配置](/docs/tsukimi/special/friends/) - 友链列表的详细配置

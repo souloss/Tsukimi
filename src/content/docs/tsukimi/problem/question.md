@@ -17,7 +17,7 @@ copyright:
 ### 1.1 优先查阅官方文档
 - 所有基础使用问题（安装部署、配置项含义、功能启用/禁用、常见报错处理等），均已在官方文档中详细说明。
 - 提问前必须完整查阅相关模块文档，确认问题无对应解决方案后，再在群内提问。
-- 文档地址：[https://docs.mizuki.mysqil.com/](https://docs.mizuki.mysqil.com/)
+- 文档地址：[https://docs.tsukimi.mysqil.com/](https://docs.tsukimi.mysqil.com/)
 
 ### 1.2 自行排查常见问题
 - 对照文档逐步复现操作步骤，验证是否因自身配置遗漏、路径错误、环境不兼容导致问题。
@@ -83,6 +83,6 @@ copyright:
 - 重复违反规范（如多次重复提问、不遵守礼仪）：将被暂时禁言，情节严重者移出群聊。
 
 ## 附：核心资源速查
-- 官方文档：[https://docs.mizuki.mysqil.com/](https://docs.mizuki.mysqil.com/)
-- 项目仓库：GitHub（[souloss/Mizuki](https://github.com/souloss/Mizuki)）
+- 官方文档：[https://docs.tsukimi.mysqil.com/](https://docs.tsukimi.mysqil.com/)
+- 项目仓库：GitHub（[souloss/Tsukimi](https://github.com/souloss/Tsukimi)）
 - 常见问题：文档“FAQ”模块、群聊置顶消息、仓库 Issues 区（搜索关键词）

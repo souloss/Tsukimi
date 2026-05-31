@@ -157,9 +157,9 @@ export const docsMizukiHome = {
 | URL | 说明 |
 |-----|-----|
 | `/docs/` | 文档项目列表页 |
-| `/docs/mizuki/` | Mizuki 文档首页 |
-| `/docs/mizuki/guide/get-started/` | 具体文档页面 |
-| `/docs/mizuki/<permalink>/` | 使用自定义 permalink 的页面 |
+| `/docs/tsukimi/` | Mizuki 文档首页 |
+| `/docs/tsukimi/guide/get-started/` | 具体文档页面 |
+| `/docs/tsukimi/<permalink>/` | 使用自定义 permalink 的页面 |
 
 ### 文档搜索
 
@@ -201,7 +201,7 @@ export const docsMizukiHome = {
 
 添加新文档的步骤：
 
-1. 在 `src/content/docs/mizuki/<目录>/` 下创建 Markdown 文件
+1. 在 `src/content/docs/tsukimi/<目录>/` 下创建 Markdown 文件
 2. 添加 Frontmatter
 3. 在 `src/data/docs-mizuki.ts` 中添加侧边栏配置
 4. （可选）添加其他语言版本

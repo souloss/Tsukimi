@@ -120,7 +120,7 @@ export const navBarConfig: NavBarConfig = {
 			children: [
 				{
 					name: "GitHub",
-					url: "https://github.com/souloss/Mizuki",
+					url: "https://github.com/souloss/Tsukimi",
 					external: true,
 					icon: "fa7-brands:github",
 				},

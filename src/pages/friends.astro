@@ -51,12 +51,12 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 
 // 本站信息
 const mySiteInfo = {
-	name: siteConfig.title || "Mizuki Blog",
-	url: siteConfig.siteURL || "https://mizuki.mysqil.com/",
+	name: siteConfig.title || "Tsukimi Blog",
+	url: siteConfig.siteURL || "https://tsukimi.mysqil.com/",
 	avatar: (profileConfig.avatar || "/favicon.png").startsWith("/")
 		? profileConfig.avatar || "/favicon.png"
 		: `/${profileConfig.avatar || "favicon.png"}`,
-	desc: profileConfig.bio || "一个使用 Mizuki 主题的 Astro 博客",
+	desc: profileConfig.bio || "一个使用 Tsukimi 主题的 Astro 博客",
 };
 
 // 注意事项

@@ -2,9 +2,9 @@
 title: Markdown Extended Features
 published: 2024-05-01
 updated: 2024-11-29
-description: 'Read more about Markdown features in Mizuki'
+description: 'Read more about Markdown features in Tsukimi'
 image: ''
-tags: [Demo, Example, Markdown, Mizuki]
+tags: [Demo, Example, Markdown, Tsukimi]
 category: 'Examples'
 draft: false 
 ---
@@ -12,12 +12,12 @@ draft: false
 ## GitHub Repository Cards
 You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API. 
 
-::github{repo="souloss/Mizuki"}
+::github{repo="souloss/Tsukimi"}
 
-Create a GitHub repository card with the code `::github{repo="souloss/Mizuki"}`.
+Create a GitHub repository card with the code `::github{repo="souloss/Tsukimi"}`.
 
 ```markdown
-::github{repo="souloss/Mizuki"}
+::github{repo="souloss/Tsukimi"}
 ```
 
 ## Admonitions

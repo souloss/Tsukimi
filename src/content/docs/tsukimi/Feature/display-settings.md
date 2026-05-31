@@ -68,7 +68,7 @@ themeMode: 'light' | 'dark' | 'system'; // 主题模式
 wallpaperMode: 'banner' | 'fullscreen' | 'overlay' | 'none';
 ```
 
-用户可以实时切换四种壁纸模式，切换立即生效并保存。详细模式说明请参考 [背景壁纸配置](/docs/mizuki/basic-layout/background-wallpaper/) 文档。
+用户可以实时切换四种壁纸模式，切换立即生效并保存。详细模式说明请参考 [背景壁纸配置](/docs/tsukimi/basic-layout/background-wallpaper/) 文档。
 
 ---
 
@@ -114,7 +114,7 @@ enableBannerGradient: boolean; // 是否启用渐变遮罩
 enableSakura: boolean; // 是否启用樱花飘落特效
 ```
 
-**樱花特效**: 启用后页面会有樱花花瓣飘落的动画效果。详细配置请参考 [特效配置](/docs/mizuki/feature/effects-config/) 文档。
+**樱花特效**: 启用后页面会有樱花花瓣飘落的动画效果。详细配置请参考 [特效配置](/docs/tsukimi/feature/effects-config/) 文档。
 
 ---
 
@@ -143,7 +143,7 @@ fontPreset: 'system' | 'literata' | 'lxgw' | '2d';
 | `lxgw` | LXGW 霞鹜文楷 | 中文内容、艺术感 |
 | `2d` | 二次元风格字体 | ACG 相关网站 |
 
-详细字体配置请参考 [字体配置](/docs/mizuki/basic-layout/font-config/) 文档。
+详细字体配置请参考 [字体配置](/docs/tsukimi/basic-layout/font-config/) 文档。
 
 ---
 

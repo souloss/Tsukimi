@@ -200,4 +200,4 @@ export const siteConfig = {
 
 ## 相关文档
 
-- [赞助页面](/docs/mizuki/special/sponsor/) - 赞助页面的详细配置
+- [赞助页面](/docs/tsukimi/special/sponsor/) - 赞助页面的详细配置

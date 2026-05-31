@@ -46,7 +46,7 @@ sudo systemctl enable docker
 将 Mizuki 项目克隆到本地：
 
 ```bash title="克隆项目"
-git clone https://github.com/souloss/Mizuki.git
+git clone https://github.com/souloss/Tsukimi.git
 cd Mizuki
 ```
 

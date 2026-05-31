@@ -191,7 +191,7 @@ sakuraConfig.enable = false;
 
 ## 用户端控制
 
-用户可以在 [显示设置面板](/docs/mizuki/feature/display-settings/) 中实时开关樱花特效：
+用户可以在 [显示设置面板](/docs/tsukimi/feature/display-settings/) 中实时开关樱花特效：
 
 - 用户设置保存在 `localStorage` 中
 - 用户设置优先级高于 `effectsConfig.sakura.enable`

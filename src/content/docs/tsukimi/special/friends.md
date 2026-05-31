@@ -205,7 +205,7 @@ export const friendsData: FriendItem[] = [
         id: 2,
         name: "Mizuki Docs",
         avatar: "http://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
-        url: "https://docs.mizuki.mysqil.com",
+        url: "https://docs.tsukimi.mysqil.com",
         description: "Mizuki User Manual",
         tags: ["Docs"],
         weight: 5,
@@ -282,7 +282,7 @@ export function getShuffledFriendsList(): FriendItem[] {
 *   在 `src/data/friends-circle.ts` 中配置朋友圈功能
 *   朋友圈区域会自动显示在友链列表下方
 
-详细配置请参考 [朋友圈功能文档](/docs/mizuki/special/friends-circle/)。
+详细配置请参考 [朋友圈功能文档](/docs/tsukimi/special/friends-circle/)。
 
 ---
 

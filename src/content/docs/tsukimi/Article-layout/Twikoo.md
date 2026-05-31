@@ -107,10 +107,10 @@ export const commentConfig: CommentConfig = {
 
 如需使用其他评论系统，请参考对应文档：
 
-- [Waline 评论配置](/docs/mizuki/article-layout/waline/)
-- [Giscus 评论配置](/docs/mizuki/article-layout/giscus/)
-- [Disqus 评论配置](/docs/mizuki/article-layout/disqus/)
-- [Artalk 评论配置](/docs/mizuki/article-layout/artalk/)
+- [Waline 评论配置](/docs/tsukimi/article-layout/waline/)
+- [Giscus 评论配置](/docs/tsukimi/article-layout/giscus/)
+- [Disqus 评论配置](/docs/tsukimi/article-layout/disqus/)
+- [Artalk 评论配置](/docs/tsukimi/article-layout/artalk/)
 
 ## 注意事项
 

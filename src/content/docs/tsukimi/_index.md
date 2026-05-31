@@ -7,10 +7,10 @@ isHomepage: true
 actions:
   - theme: brand
     text: 快速开始 →
-    link: /docs/mizuki/guide/intro/
+    link: /docs/tsukimi/guide/intro/
   - theme: alt
     text: 在Github上查看 →
-    link: https://github.com/souloss/Mizuki
+    link: https://github.com/souloss/Tsukimi
 features:
   - title: 响应式布局
     icon: 💻

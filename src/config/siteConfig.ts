@@ -7,7 +7,7 @@ export { SITE_LANG };
 export const siteConfig: SiteConfig = {
 	title: "souloss",
 	subtitle: "个人技术博客",
-	siteURL: "https://mizuki-bt7.pages.dev/",
+	siteURL: "https://tsukimi-bt7.pages.dev/",
 	siteStartDate: "2020-01-01",
 
 	lang: SITE_LANG,

@@ -110,10 +110,10 @@ export const commentConfig: CommentConfig = {
 
 ## 其他评论系统
 
-- [Twikoo 评论配置](/docs/mizuki/article-layout/twikoo/)
-- [Waline 评论配置](/docs/mizuki/article-layout/waline/)
-- [Disqus 评论配置](/docs/mizuki/article-layout/disqus/)
-- [Artalk 评论配置](/docs/mizuki/article-layout/artalk/)
+- [Twikoo 评论配置](/docs/tsukimi/article-layout/twikoo/)
+- [Waline 评论配置](/docs/tsukimi/article-layout/waline/)
+- [Disqus 评论配置](/docs/tsukimi/article-layout/disqus/)
+- [Artalk 评论配置](/docs/tsukimi/article-layout/artalk/)
 
 ## 注意事项
 
