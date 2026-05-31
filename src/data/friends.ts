@@ -31,7 +31,7 @@ export const friendsData: FriendItem[] = [
 		imgurl:
 			"https://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
 		desc: "Tsukimi User Manual",
-		siteurl: "https://docs.tsukimi.mysqil.com",
+		siteurl: "/docs/tsukimi/",
 		tags: ["Docs"],
 		weight: 20,
 		enabled: true,

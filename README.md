@@ -9,14 +9,14 @@ A modern, feature-rich static blog template built with [Astro](https://astro.bui
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
-[**🖥️ Live Demo**](https://blog.souloss.cn/) | [**📝 Documentation**](https://docs.tsukimi.mysqil.com/)
+[**🖥️ Live Demo**](https://blog.souloss.cn/) | [**📝 Documentation**](/docs/tsukimi//)
 
 🌏 **README Languages:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**繁體中文**](./README.tw.md) /
 
 Get started quickly with our comprehensive documentation. Whether you're customizing your theme, configuring features, or deploying to production, the documentation covers everything you need to launch your blog successfully.
 
-[📚 Read Full Documentation](https://docs.tsukimi.mysqil.com/) →
+[📚 Read Full Documentation](/docs/tsukimi//) →
 
 ![Tsukimi Preview](./README.webp)
 
@@ -109,7 +109,7 @@ Get started quickly with our comprehensive documentation. Whether you're customi
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/souloss/Tsukimi.git
+   git clone https://github.com/souloss/Mizuki.git
    cd Tsukimi
    ```
 
@@ -359,15 +359,15 @@ which is based on [Fuwari](https://github.com/saicaca/fuwari) by saicaca.
 
 ## 🍀 Contributors
 
-Thanks to all contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/souloss/Tsukimi/issues) or [Pull Request](https://github.com/souloss/Tsukimi/pulls).
+Thanks to all contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/souloss/Mizuki/issues) or [Pull Request](https://github.com/souloss/Mizuki/pulls).
 
-<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
+<a href="https://github.com/souloss/Mizuki/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
 ---
 
 ⭐ If you find this project helpful, please consider giving it a star!

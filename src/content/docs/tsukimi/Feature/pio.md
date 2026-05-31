@@ -31,7 +31,7 @@ export const pioConfig: PioConfig = {
     home: "Click here to go back to homepage!",
     skin: ["Want to see my new outfit?", "The new outfit looks great~"],
     close: "QWQ See you next time~",
-    link: "https://github.com/souloss/Tsukimi",
+    link: "https://github.com/souloss/Mizuki",
   },
 };
 ```

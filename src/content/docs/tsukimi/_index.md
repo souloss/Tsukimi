@@ -10,7 +10,7 @@ actions:
     link: /docs/tsukimi/guide/intro/
   - theme: alt
     text: 在Github上查看 →
-    link: https://github.com/souloss/Tsukimi
+    link: https://github.com/souloss/Mizuki
 features:
   - title: 响应式布局
     icon: 💻

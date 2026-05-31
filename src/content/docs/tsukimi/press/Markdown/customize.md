@@ -18,13 +18,13 @@ copyright:
 支持添加动态 GitHub 仓库卡片，页面加载时会通过 GitHub API 拉取仓库实时信息（如星标数、分支数等）。
 
 ### 使用示例
-::github{repo="souloss/Tsukimi"}
+::github{repo="souloss/Mizuki"}
 
 ### 语法格式
 ```markdown
 ::github{repo="用户名/仓库名"}
 ```
-- `repo` 参数：必填，格式为「GitHub 用户名/仓库名称」（如 `souloss/Tsukimi`）
+- `repo` 参数：必填，格式为「GitHub 用户名/仓库名称」（如 `souloss/Mizuki`）
 
 ## 二、提示框（Admonitions）
 支持 5 种预设类型的提示框，用于突出显示不同重要程度的信息，适配多种使用场景。

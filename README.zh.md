@@ -9,14 +9,14 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
-[**🖥️ 在线演示**](https://blog.souloss.cn/) | [**📝 用户文档**](https://docs.tsukimi.mysqil.com/)
+[**🖥️ 在线演示**](https://blog.souloss.cn/) | [**📝 用户文档**](/docs/tsukimi//)
 
 🌏 **README 语言:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**繁體中文**](./README.tw.md) /
 
 通过我们的综合文档快速开始。无论是自定义主题、配置功能，还是部署到生产环境，文档涵盖了您成功启动博客所需的所有内容。
 
-[📚 阅读完整文档](https://docs.tsukimi.mysqil.com/) →
+[📚 阅读完整文档](/docs/tsukimi//) →
 
 ![Tsukimi Preview](./README.webp)
 
@@ -110,7 +110,7 @@
 
 1. **克隆仓库：**
    ```bash
-   git clone https://github.com/souloss/Tsukimi.git
+   git clone https://github.com/souloss/Mizuki.git
    cd Tsukimi
    ```
 
@@ -360,15 +360,15 @@ Tsukimi 基于 [Mizuki](https://github.com/LyraVoid/Mizuki)（作者 LyraVoid）
 
 ## 🍀 贡献者
 
-感谢以下贡献者对本项目做出的贡献，如有问题或建议，请提交 [Issue](https://github.com/souloss/Tsukimi/issues) 或 [Pull Request](https://github.com/souloss/Tsukimi/pulls)。
+感谢以下贡献者对本项目做出的贡献，如有问题或建议，请提交 [Issue](https://github.com/souloss/Mizuki/issues) 或 [Pull Request](https://github.com/souloss/Mizuki/pulls)。
 
-<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
+<a href="https://github.com/souloss/Mizuki/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
 ---
 
 ⭐ 如果您觉得这个项目有帮助，请考虑给它一个星标!

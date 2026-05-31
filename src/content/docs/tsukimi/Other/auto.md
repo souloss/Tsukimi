@@ -52,7 +52,7 @@ Settings → Secrets and variables → Actions → New repository secret
 repository: your-username/Tsukimi  # 改为你的
 ```
 
-例如: `souloss/Tsukimi`
+例如: `souloss/Mizuki`
 
 ### Step 4: 更新代码仓库工作流
 
@@ -105,7 +105,7 @@ git push
 **解决**:
 - 确认格式: `owner/repo` (用斜杠分隔)
 - 确认拼写正确
-- 示例: `souloss/Tsukimi`
+- 示例: `souloss/Mizuki`
 
 ### 代码仓库未触发
 

@@ -9,14 +9,14 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
-[**🖥️ ライブデモ**](https://blog.souloss.cn/) | [**📝 ドキュメント**](https://docs.tsukimi.mysqil.com/)
+[**🖥️ ライブデモ**](https://blog.souloss.cn/) | [**📝 ドキュメント**](/docs/tsukimi//)
 
 🌏 **README の言語:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**繁體中文**](./README.tw.md) /
 
 包括的なドキュメントですぐに始めましょう。テーマのカスタマイズや機能の設定、本番環境へのデプロイなどブログを完成させるために必要なすべての情報がドキュメントに網羅されています。
 
-[📚 完全なドキュメントを読む](https://docs.tsukimi.mysqil.com/) →
+[📚 完全なドキュメントを読む](/docs/tsukimi//) →
 
 ![Tsukimi Preview](./README.webp)
 
@@ -108,7 +108,7 @@
 
 1. **リポジトリをクローン：**
    ```bash
-   git clone https://github.com/souloss/Tsukimi.git
+   git clone https://github.com/souloss/Mizuki.git
    cd Tsukimi
    ```
 
@@ -358,15 +358,15 @@ Mizukiはsaicacaによる[Fuwari](https://github.com/saicaca/fuwari)を基にし
 
 ## 🍀 コントリビューター
 
-このプロジェクトに貢献してくださったすべてのコントリビューターに感謝します。質問や提案がある場合は、[Issue](https://github.com/souloss/Tsukimi/issues)または[Pull Request](https://github.com/souloss/Tsukimi/pulls)を提出してください。
+このプロジェクトに貢献してくださったすべてのコントリビューターに感謝します。質問や提案がある場合は、[Issue](https://github.com/souloss/Mizuki/issues)または[Pull Request](https://github.com/souloss/Mizuki/pulls)を提出してください。
 
-<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
+<a href="https://github.com/souloss/Mizuki/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
 ---
 
 ⭐ このプロジェクトが役立つと思ったら、スターを付けることを検討してください！

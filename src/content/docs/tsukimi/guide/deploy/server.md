@@ -68,7 +68,7 @@ if [ -f /usr/bin/curl ];then curl -sSO https://download.bt.cn/install/install_pa
 1. 在宝塔面板的"终端"中进入网站根目录
 2. 克隆你的项目：
    ```bash
-   git clone https://github.com/souloss/Tsukimi.git
+   git clone https://github.com/souloss/Mizuki.git
    ```
 
 ### 第五步：构建项目
@@ -174,7 +174,7 @@ cd /var/www/tsukimi
 ### 第四步：克隆项目
 
 ```bash
-git clone https://github.com/souloss/Tsukimi.git
+git clone https://github.com/souloss/Mizuki.git
 ```
 
 ### 第五步：构建项目
