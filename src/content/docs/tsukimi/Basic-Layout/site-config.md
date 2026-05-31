@@ -218,8 +218,8 @@ export const siteConfig: SiteConfig = {
 ```typescript
 	banner: {
 		src: {
-			desktop: ["/assets/desktop-banner/1.webp", ...],
-			mobile: ["/assets/mobile-banner/1.webp", ...],
+			desktop: ["/assets/desktop-banner/1.png", ...],
+			mobile: ["/assets/mobile-banner/1.png", ...],
 		}, // 支持单个图片、图片数组或分别设置桌面端和移动端图片
 		position: "center", // 壁纸位置："top", "center", "bottom"
 		carousel: {

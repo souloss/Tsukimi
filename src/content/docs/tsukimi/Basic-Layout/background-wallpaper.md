@@ -61,8 +61,8 @@ Banner 模式是默认模式，在页面顶部显示横幅区域。
 ```typescript
 banner: {
     src: {
-        desktop: ["/assets/desktop-banner/1.webp", "/assets/desktop-banner/2.webp"],
-        mobile: ["/assets/mobile-banner/1.webp"],
+        desktop: ["/assets/desktop-banner/1.png", "/assets/desktop-banner/2.png"],
+        mobile: ["/assets/mobile-banner/1.png"],
     },
     position: "center",
     carousel: { enable: true, switchable: true, interval: 3 },
@@ -95,8 +95,8 @@ Fullscreen 模式将背景图片铺满整个浏览器窗口。
 ```typescript
 fullscreen: {
     src: {
-        desktop: ["/assets/desktop-banner/1.webp"],
-        mobile: ["/assets/mobile-banner/1.webp"],
+        desktop: ["/assets/desktop-banner/1.png"],
+        mobile: ["/assets/mobile-banner/1.png"],
     },
     position: "center",
     carousel: { enable: true, interval: 5 },
@@ -128,7 +128,7 @@ Overlay 模式在页面角落显示一张装饰性图片。
 
 ```typescript
 overlay: {
-    src: "/assets/desktop-banner/1.webp",
+    src: "/assets/desktop-banner/1.png",
     position: "bottom-right",  // "top-left" | "top-right" | "bottom-left" | "bottom-right"
     size: { width: 300, height: 400 },
     opacity: 0.9,
