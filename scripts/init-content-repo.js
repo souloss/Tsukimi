@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Mizuki 内容仓库初始化脚本
+ * Tsukimi 内容仓库初始化脚本
  * 帮助用户快速设置代码内容分离
  */
 
@@ -38,7 +38,7 @@ function exec(command, options = {}) {
 }
 
 async function main() {
-	console.log("Mizuki 内容仓库初始化\n");
+	console.log("Tsukimi 内容仓库初始化\n");
 
 	console.log("将使用独立仓库模式管理内容\n");
 
@@ -68,7 +68,7 @@ async function main() {
 
 	// 创建 .env 文件
 	const envPath = path.join(rootDir, ".env");
-	const envContent = `# Mizuki 内容仓库配置
+	const envContent = `# Tsukimi 内容仓库配置
 # 由初始化脚本自动生成
 
 CONTENT_REPO_URL=${repoUrl.trim()}

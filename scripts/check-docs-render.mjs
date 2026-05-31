@@ -44,7 +44,7 @@ function findChromeBin() {
 
 async function ensurePreview() {
 	try {
-		const response = await fetch(`${baseUrl}/docs/mizuki/`);
+		const response = await fetch(`${baseUrl}/docs/tsukimi/`);
 		assertCheck("preview server responds", response.ok, `${response.status} ${response.statusText}`);
 		if (!response.ok) process.exitCode = 1;
 	} catch (error) {
@@ -59,7 +59,7 @@ async function ensurePreview() {
 }
 
 async function launchChrome() {
-	const userDataDir = await mkdtemp(path.join(tmpdir(), "mizuki-docs-chrome-"));
+	const userDataDir = await mkdtemp(path.join(tmpdir(), "tsukimi-docs-chrome-"));
 	const args = [
 		"--headless=new",
 		"--disable-gpu",
@@ -257,9 +257,9 @@ class CdpClient {
 }
 
 const routes = {
-	home: `${baseUrl}/docs/mizuki/`,
-	intro: `${baseUrl}/docs/mizuki/guide/intro/`,
-	docker: `${baseUrl}/docs/mizuki/guide/deploy/docker/`,
+	home: `${baseUrl}/docs/tsukimi/`,
+	intro: `${baseUrl}/docs/tsukimi/guide/intro/`,
+	docker: `${baseUrl}/docs/tsukimi/guide/deploy/docker/`,
 	article: `${baseUrl}/posts/markdown-tutorial/`,
 };
 
@@ -406,7 +406,7 @@ async function checkSearch(client) {
 		const directSearch = await client.evaluate(
 			page.sessionId,
 			`(async () => {
-				const response = await window.pagefind.search("Docker", { filters: { docSlug: "mizuki" } });
+				const response = await window.pagefind.search("Docker", { filters: { docSlug: "tsukimi" } });
 				const entries = await Promise.all(response.results.slice(0, 5).map((item) => item.data()));
 				return {
 					count: response.results.length,
@@ -414,7 +414,7 @@ async function checkSearch(client) {
 				};
 			})()`,
 		);
-		assertCheck("pagefind docSlug filter returns docs results", directSearch.count > 0 && directSearch.urls.every((url) => url.startsWith("/docs/mizuki/")), JSON.stringify(directSearch));
+		assertCheck("pagefind docSlug filter returns docs results", directSearch.count > 0 && directSearch.urls.every((url) => url.startsWith("/docs/tsukimi/")), JSON.stringify(directSearch));
 
 		await client.evaluate(
 			page.sessionId,
@@ -432,7 +432,7 @@ async function checkSearch(client) {
 			(value) => Array.isArray(value) && value.length > 0,
 			10000,
 		);
-		assertCheck("docs search UI renders filtered results", uiSearch.every((url) => url.startsWith("/docs/mizuki/")), JSON.stringify(uiSearch));
+		assertCheck("docs search UI renders filtered results", uiSearch.every((url) => url.startsWith("/docs/tsukimi/")), JSON.stringify(uiSearch));
 	} finally {
 		await client.closePage(page.targetId);
 	}

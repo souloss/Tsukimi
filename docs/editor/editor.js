@@ -1,11 +1,11 @@
-/* ========== Mizuki Editor - JavaScript ========== */
+/* ========== Tsukimi Editor - JavaScript ========== */
 (function() {
 'use strict';
 
 // ========== i18n System ==========
 const I18N = {
   'zh-CN': {
-    pageTitle: 'Mizuki 可视化编辑器',
+    pageTitle: 'Tsukimi 可视化编辑器',
     themeColor: '主题颜色', themeMode: '主题模式',
     themeDark: '默认深色', themeLight: '亮色主题', themeDeepBlue: '深蓝主题', themeHighContrast: '高对比度',
     colorRed: '红色', colorOrange: '橙色', colorYellow: '黄色', colorGreen: '绿色',
@@ -51,7 +51,7 @@ const I18N = {
     modStdArticle: '标准文章', modEncArticle: '加密文章', modPinArticle: '置顶公告', modTutorial: '技术教程'
   },
   'zh-TW': {
-    pageTitle: 'Mizuki 視覺化編輯器',
+    pageTitle: 'Tsukimi 視覺化編輯器',
     themeColor: '主題顏色', themeMode: '主題模式',
     themeDark: '預設深色', themeLight: '亮色主題', themeDeepBlue: '深藍主題', themeHighContrast: '高對比度',
     colorRed: '紅色', colorOrange: '橙色', colorYellow: '黃色', colorGreen: '綠色',
@@ -96,7 +96,7 @@ const I18N = {
     modStdArticle: '標準文章', modEncArticle: '加密文章', modPinArticle: '置頂公告', modTutorial: '技術教學'
   },
   en: {
-    pageTitle: 'Mizuki Visual Editor',
+    pageTitle: 'Tsukimi Visual Editor',
     themeColor: 'Theme Color', themeMode: 'Theme Mode',
     themeDark: 'Default Dark', themeLight: 'Light Theme', themeDeepBlue: 'Deep Blue', themeHighContrast: 'High Contrast',
     colorRed: 'Red', colorOrange: 'Orange', colorYellow: 'Yellow', colorGreen: 'Green',
@@ -141,7 +141,7 @@ const I18N = {
     modStdArticle: 'Standard Article', modEncArticle: 'Encrypted Article', modPinArticle: 'Pinned Announcement', modTutorial: 'Tech Tutorial'
   },
   ja: {
-    pageTitle: 'Mizuki ビジュアルエディタ',
+    pageTitle: 'Tsukimi ビジュアルエディタ',
     themeColor: 'テーマカラー', themeMode: 'テーマモード',
     themeDark: 'デフォルトダーク', themeLight: 'ライト', themeDeepBlue: 'ディープブルー', themeHighContrast: 'ハイコントラスト',
     colorRed: '赤', colorOrange: 'オレンジ', colorYellow: '黄', colorGreen: '緑',
@@ -444,7 +444,7 @@ const previewSection = $('#previewSection');
 function setHue(h) {
   document.documentElement.style.setProperty('--hue', h);
   $('#huePreview').style.background = `hsl(${h} 70% 55%)`;
-  localStorage.setItem('mizuki-editor-hue', h);
+  localStorage.setItem('tsukimi-editor-hue', h);
 }
 
 $('#themePickerBtn').onclick = () => $('#themePickerPanel').classList.toggle('hidden');
@@ -456,7 +456,7 @@ $$('.preset').forEach(p => p.onclick = () => {
 });
 
 // Restore saved hue
-const savedHue = localStorage.getItem('mizuki-editor-hue');
+const savedHue = localStorage.getItem('tsukimi-editor-hue');
 if (savedHue) { $('#hueSlider').value = savedHue; setHue(savedHue); }
 else { setHue(60); }
 
@@ -485,7 +485,7 @@ function setTheme(theme) {
   $$('.theme-opt').forEach(opt => {
     opt.classList.toggle('active', opt.dataset.theme === theme);
   });
-  localStorage.setItem('mizuki-editor-theme', theme);
+  localStorage.setItem('tsukimi-editor-theme', theme);
   updatePreview();
 }
 
@@ -493,7 +493,7 @@ $$('.theme-opt').forEach(opt => {
   opt.onclick = () => setTheme(opt.dataset.theme);
 });
 
-const savedTheme = localStorage.getItem('mizuki-editor-theme');
+const savedTheme = localStorage.getItem('tsukimi-editor-theme');
 if (savedTheme && savedTheme !== 'dark') {
   setTheme(savedTheme);
 }
@@ -506,7 +506,7 @@ function setLanguage(lang) {
   $$('.lang-opt').forEach(opt => {
     opt.classList.toggle('active', opt.dataset.lang === lang);
   });
-  localStorage.setItem('mizuki-editor-lang', lang);
+  localStorage.setItem('tsukimi-editor-lang', lang);
   applyI18n();
 }
 
@@ -518,7 +518,7 @@ $$('.lang-opt').forEach(opt => {
 });
 
 // Restore saved language
-const savedLang = localStorage.getItem('mizuki-editor-lang');
+const savedLang = localStorage.getItem('tsukimi-editor-lang');
 if (savedLang && I18N[savedLang]) {
   setLanguage(savedLang);
 } else {
@@ -636,7 +636,7 @@ editor.addEventListener('input', () => {
   // Auto-save content
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    localStorage.setItem('mizuki-editor-content', editor.value);
+    localStorage.setItem('tsukimi-editor-content', editor.value);
   }, 500);
 });
 
@@ -821,7 +821,7 @@ $$('.export-btn').forEach(btn => {
 
 // ========== Init ==========
 // Restore saved content
-const savedContent = localStorage.getItem('mizuki-editor-content');
+const savedContent = localStorage.getItem('tsukimi-editor-content');
 if (savedContent) {
   editor.value = savedContent;
   updatePreview();
@@ -832,7 +832,7 @@ $('#fm-published').value = new Date().toISOString().split('T')[0];
 // Save on page unload as safety net
 window.addEventListener('beforeunload', () => {
   if (editor.value.trim()) {
-    localStorage.setItem('mizuki-editor-content', editor.value);
+    localStorage.setItem('tsukimi-editor-content', editor.value);
   }
 });
 

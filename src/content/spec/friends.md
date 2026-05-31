@@ -14,15 +14,15 @@ permalink: /spec/friends/
 <div class="flex items-center gap-4 mb-5">
   <div class="relative shrink-0">
     <div class="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-[var(--primary)]/20">
-      <img src="/favicon.png" alt="Mizuki" class="w-full h-full object-cover" />
+      <img src="/favicon.png" alt="Tsukimi" class="w-full h-full object-cover" />
     </div>
     <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[var(--primary)] flex items-center justify-center shadow">
       <iconify-icon icon="material-symbols:check" class="text-xs text-white"></iconify-icon>
     </div>
   </div>
   <div>
-    <h3 class="text-lg font-bold">Mizuki Blog</h3>
-    <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">一个使用 Mizuki 主题的 Astro 博客</p>
+    <h3 class="text-lg font-bold">Tsukimi Blog</h3>
+    <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">一个使用 Tsukimi 主题的 Astro 博客</p>
   </div>
 </div>
 
@@ -30,9 +30,9 @@ permalink: /spec/friends/
   <div class="flex items-center justify-between gap-2 rounded-lg bg-black/5 dark:bg-white/5 px-3 py-2">
     <div class="min-w-0">
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">站点名称</p>
-      <p class="text-xs font-medium truncate">Mizuki Blog</p>
+      <p class="text-xs font-medium truncate">Tsukimi Blog</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="Mizuki Blog">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="Tsukimi Blog">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>
@@ -40,9 +40,9 @@ permalink: /spec/friends/
   <div class="flex items-center justify-between gap-2 rounded-lg bg-black/5 dark:bg-white/5 px-3 py-2">
     <div class="min-w-0">
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">站点描述</p>
-      <p class="text-xs font-medium truncate">一个使用 Mizuki 主题的 Astro 博客</p>
+      <p class="text-xs font-medium truncate">一个使用 Tsukimi 主题的 Astro 博客</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="一个使用 Mizuki 主题的 Astro 博客">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="一个使用 Tsukimi 主题的 Astro 博客">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>

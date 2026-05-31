@@ -3,7 +3,7 @@ title: Simple Guides for Tsukimi
 published: 2024-04-01
 description: "How to use this blog template."
 image: "./cover.webp"
-tags: ["Mizuki", "Blogging", "Customization"]
+tags: ["Tsukimi", "Blogging", "Customization"]
 category: Guides
 draft: false
 ---

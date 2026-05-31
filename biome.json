@@ -14,7 +14,8 @@
 			"!**/.astro/**/*",
 			"!**/public/**/*",
 			"!**/demo/**/*",
-			"!**/scripts/**/*"
+			"!**/scripts/**/*",
+			"!**/docs/**/*"
 		]
 	},
 	"formatter": {

@@ -1,4 +1,4 @@
-/* ========== Mizuki Editor - Theme System ========== */
+/* ========== Tsukimi Editor - Theme System ========== */
 :root {
   --hue: 60;
   --bg-base: hsl(var(--hue) 10% 8%);

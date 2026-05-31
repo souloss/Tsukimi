@@ -987,7 +987,7 @@ export interface GalleryConfig {
 	columnWidth?: number; // 瀑布流最小列宽(px)，默认 240，浏览器根据容器宽度自动计算列数
 }
 
-// Pio 看板娘配置 (保留 Mizuki)
+// Pio 看板娘配置 (保留 Tsukimi)
 export interface PioConfig {
 	enable: boolean; // 是否启用看板娘
 	models?: string[]; // 模型文件路径数组（支持 .model.json 和 .model3.json）

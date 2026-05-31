@@ -1,5 +1,5 @@
 /**
- * Remark content directives — combined Vergil + Mizuki implementation.
+ * Remark content directives — combined Vergil + Tsukimi implementation.
  *
  * Handles all custom markdown directives (:::callout, :::tabs, :mark[], etc.)
  * using hardcoded Lucide SVG icons (no dynamic imports from @iconify-json).

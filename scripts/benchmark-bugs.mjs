@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Mizuki Bug Benchmark
+ * Tsukimi Bug Benchmark
  *
- * Static analysis benchmark that scans the Mizuki Astro blog source code
+ * Static analysis benchmark that scans the Tsukimi Astro blog source code
  * for known bug categories. Outputs a JSON score as the last line of stdout.
  *
  * Bug categories:
@@ -514,7 +514,7 @@ function main() {
     i18n_coverage: i18nCoverage.map(b => `${b.lang}: ${b.key}`),
   };
 
-  console.error("=== Mizuki Bug Benchmark Report ===");
+  console.error("=== Tsukimi Bug Benchmark Report ===");
   console.error(JSON.stringify(report, null, 2));
   console.error("");
 
