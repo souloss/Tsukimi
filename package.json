@@ -1,11 +1,9 @@
 {
-	"name": "mizuki",
+	"name": "tsukimi",
 	"type": "module",
 	"version": "10.0.0",
 	"scripts": {
 		"sync-content": "node scripts/sync-content.js",
-		"sync-docs-mizuki": "node scripts/sync-docs-mizuki.mjs",
-		"check-docs-mizuki": "node scripts/check-docs-mizuki.mjs",
 		"check-docs-render": "node scripts/check-docs-render.mjs",
 		"init-content": "node scripts/init-content-repo.js",
 		"predev": "node scripts/sync-content.js || true",
