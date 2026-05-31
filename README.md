@@ -1,5 +1,5 @@
-# 🌸 Mizuki 
-<img align='right' src='logo.png' width='200px' alt="Mizuki logo">
+# 🌸 Tsukimi
+<img align='right' src='logo.png' width='200px' alt="Tsukimi logo">
 
 A modern, feature-rich static blog template built with [Astro](https://astro.build), featuring advanced functionality and beautiful design.
 
@@ -9,16 +9,16 @@ A modern, feature-rich static blog template built with [Astro](https://astro.bui
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
-[**🖥️ Live Demo**](https://blog.souloss.cn/) | [**📝 Documentation**](https://docs.mizuki.mysqil.com/)
+[**🖥️ Live Demo**](https://blog.souloss.cn/) | [**📝 Documentation**](https://docs.tsukimi.mysqil.com/)
 
 🌏 **README Languages:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**繁體中文**](./README.tw.md) /
 
 Get started quickly with our comprehensive documentation. Whether you're customizing your theme, configuring features, or deploying to production, the documentation covers everything you need to launch your blog successfully.
 
-[📚 Read Full Documentation](https://docs.mizuki.mysqil.com/) →
+[📚 Read Full Documentation](https://docs.tsukimi.mysqil.com/) →
 
-![Mizuki Preview](./README.webp)
+![Tsukimi Preview](./README.webp)
 
 <table>
   <tr>
@@ -109,8 +109,8 @@ Get started quickly with our comprehensive documentation. Whether you're customi
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/souloss/Mizuki.git
-   cd Mizuki
+   git clone https://github.com/souloss/Tsukimi.git
+   cd Tsukimi
    ```
 
 2. **Install dependencies:**
@@ -213,7 +213,7 @@ This feature requires the comment system to be enabled in `src/config.ts` first.
 
 ## 🧩 Markdown Extensions
 
-Mizuki supports enhanced features beyond standard GitHub Flavored Markdown:
+Tsukimi supports enhanced features beyond standard GitHub Flavored Markdown:
 
 ### 📝 Enhanced Writing
 - **Callouts:** Create beautiful annotation boxes using `> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`, etc.
@@ -282,7 +282,7 @@ export const siteConfig: SiteConfig = {
 
 ### 📦 Code-Content Separation (Optional)
 
-Mizuki supports separating code and content into two independent repositories, suitable for team collaboration and large projects.
+Tsukimi supports separating code and content into two independent repositories, suitable for team collaboration and large projects.
 
 **Quick Selection**:
 
@@ -337,9 +337,13 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 This project is based on [Fuwari](https://github.com/saicaca/fuwari), which is licensed under the MIT License. The original copyright notice and permission notice are included in the LICENSE.MIT file in accordance with the MIT License requirements.
 
+## Attribution
+
+Tsukimi is based on [Mizuki](https://github.com/LyraVoid/Mizuki) by LyraVoid,
+which is based on [Fuwari](https://github.com/saicaca/fuwari) by saicaca.
+
 ## 🙏 Acknowledgements
 
-- Based on [Mizuki](https://github.com/LyraVoid/Mizuki) by LyraVoid, which extends the original [Fuwari](https://github.com/saicaca/fuwari) template
 - Inspired by [Yukina](https://github.com/WhitePaper233/yukina) - a beautiful and elegant blog template
 - Some designs are inspired by [Firefly](https://github.com/CuteLeaf/Firefly) & [Twilight](https://github.com/spr-aachen/Twilight) templates
 - Uses [Pio](https://github.com/Dreamer-Paul/Pio) to implement the adorable Live2D mascot plugin
@@ -350,20 +354,20 @@ This project is based on [Fuwari](https://github.com/saicaca/fuwari), which is l
 
 - **[Fuwari](https://github.com/saicaca/fuwari)** by saicaca - The original template that this project is based on. Thank you for creating such a beautiful and functional template.
 - **[Yukina](https://github.com/WhitePaper233/yukina)** - Thanks for providing design inspiration and creativity that helped shape this project. Yukina is an elegant blog template that demonstrates excellent design principles and user experience.
-- **[Firefly](https://github.com/CuteLeaf/Firefly)** - Thanks for providing excellent layout design ideas. The dual sidebar layout, article dual-column grid layout, and some widget designs and implementations have enriched Mizuki's interface.
-- **[Twilight](https://github.com/spr-aachen/Twilight)** - Thanks for providing inspiration and technical support. Twilight's dynamic wallpaper modes switching system, responsive design and transition effects have greatly enhanced the user experience of Mizuki.
+- **[Firefly](https://github.com/CuteLeaf/Firefly)** - Thanks for providing excellent layout design ideas. The dual sidebar layout, article dual-column grid layout, and some widget designs and implementations have enriched Tsukimi's interface.
+- **[Twilight](https://github.com/spr-aachen/Twilight)** - Thanks for providing inspiration and technical support. Twilight's dynamic wallpaper modes switching system, responsive design and transition effects have greatly enhanced the user experience of Tsukimi.
 
 ## 🍀 Contributors
 
-Thanks to all contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/souloss/Mizuki/issues) or [Pull Request](https://github.com/souloss/Mizuki/pulls).
+Thanks to all contributors for their contributions to this project. If you have any questions or suggestions, please submit an [Issue](https://github.com/souloss/Tsukimi/issues) or [Pull Request](https://github.com/souloss/Tsukimi/pulls).
 
-<a href="https://github.com/souloss/Mizuki/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
+<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
 ---
 
 ⭐ If you find this project helpful, please consider giving it a star!

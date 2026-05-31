@@ -1,5 +1,5 @@
-# 🌸 Mizuki
-<img align='right' src='logo.png' width='200px' alt="Mizuki logo">
+# 🌸 Tsukimi
+<img align='right' src='logo.png' width='200px' alt="Tsukimi logo">
 
 一個現代化、功能豐富的靜態部落格模板，基於 [Astro](https://astro.build) 構建，具有先進的功能和精美的設計。
 
@@ -9,16 +9,16 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
-[**🖥️ 線上演示**](https://blog.souloss.cn/) | [**📝 使用者文檔**](https://docs.mizuki.mysqil.com/)
+[**🖥️ 線上演示**](https://blog.souloss.cn/) | [**📝 使用者文檔**](https://docs.tsukimi.mysqil.com/)
 
 🌏 **README 語言:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**繁體中文**](./README.tw.md) /
 
 透過我們的綜合文檔快速開始。無論是自訂主題、配置功能，還是部署到生產環境，文檔涵蓋了您成功啟動部落格所需的所有內容。
 
-[📚 閱讀完整文檔](https://docs.mizuki.mysqil.com/) →
+[📚 閱讀完整文檔](https://docs.tsukimi.mysqil.com/) →
 
-![Mizuki Preview](./README.webp)
+![Tsukimi Preview](./README.webp)
 
 <table>
   <tr>
@@ -111,8 +111,8 @@
 
 1. **克隆儲存庫：**
    ```bash
-   git clone https://github.com/souloss/Mizuki.git
-   cd Mizuki
+   git clone https://github.com/souloss/Tsukimi.git
+   cd Tsukimi
    ```
 
 2. **安裝依賴：**
@@ -215,7 +215,7 @@ comment: false # 禁用評論
 
 ## 🧩 Markdown 擴展語法
 
-Mizuki 支援超越標準 GitHub Flavored Markdown 的增強功能：
+Tsukimi 支援超越標準 GitHub Flavored Markdown 的增強功能：
 
 ### 📝 增強寫作
 - **提示框：** 使用 `> [!NOTE]`、`> [!TIP]`、`> [!WARNING]` 等創建精美的標註框
@@ -284,7 +284,7 @@ export const siteConfig: SiteConfig = {
 
 ### 📦 代碼內容分離 (可選)
 
-Mizuki 支援將代碼和內容分成兩個獨立的倉庫管理，適合團隊協作和大型專案。
+Tsukimi 支援將代碼和內容分成兩個獨立的倉庫管理，適合團隊協作和大型專案。
 
 **快速選擇**:
 
@@ -339,9 +339,13 @@ pnpm run sync-content
 
 本專案基於 [Fuwari](https://github.com/saicaca/fuwari) 開發，該專案使用 MIT 許可證。根據 MIT 許可證要求，原始版權聲明和許可聲明已包含在 LICENSE.MIT 檔案中。
 
+## 致謝
+
+Tsukimi 基於 [Mizuki](https://github.com/LyraVoid/Mizuki)（作者 LyraVoid）開發，
+而 Mizuki 基於 [Fuwari](https://github.com/saicaca/fuwari)（作者 saicaca）開發。
+
 ## 🙏 致謝
 
-- 基於 [Mizuki](https://github.com/LyraVoid/Mizuki) by LyraVoid，該專案擴展自原始 [Fuwari](https://github.com/saicaca/fuwari) 模板
 - 靈感來源於 [Yukina](https://github.com/WhitePaper233/yukina) - 一個美麗優雅的部落格模板
 - 部分設計靈感來源於 [Firefly](https://github.com/CuteLeaf/Firefly) 和 [Twilight](https://github.com/spr-aachen/Twilight) 模板
 - 使用 [Pio](https://github.com/Dreamer-Paul/Pio) 實現可愛的 Live2D 看板娘外掛程式
@@ -352,19 +356,19 @@ pnpm run sync-content
 
 - **[Fuwari](https://github.com/saicaca/fuwari)** by saicaca - 本專案所基於的原始模板。感謝您創建了如此漂亮且功能強大的模板。
 - **[Yukina](https://github.com/WhitePaper233/yukina)** - 感謝提供設計靈感和創意，幫助塑造了這個專案。Yukina 是一個優雅的部落格模板，展現了出色的設計原則和使用者體驗。
-- **[Firefly](https://github.com/CuteLeaf/Firefly)** - 感謝提供優秀的佈局設計思路，雙側邊欄佈局、文章雙列網格等佈局，及部分小元件的設計與實現，讓 Mizuki 的界面更加豐富。
-- **[Twilight](https://github.com/spr-aachen/Twilight)** - 感謝提供靈感和技術支持。Twilight 的動態桌布模式切換系統、響應式設計和過渡效果顯著提升了 Mizuki 的使用體驗。
+- **[Firefly](https://github.com/CuteLeaf/Firefly)** - 感謝提供優秀的佈局設計思路，雙側邊欄佈局、文章雙列網格等佈局，及部分小元件的設計與實現，讓 Tsukimi 的界面更加豐富。
+- **[Twilight](https://github.com/spr-aachen/Twilight)** - 感謝提供靈感和技術支持。Twilight 的動態桌布模式切換系統、響應式設計和過渡效果顯著提升了 Tsukimi 的使用體驗。
 
 ## 🍀 貢獻者
 
-感謝以下貢獻者對本專案做出的貢獻，如有問題或建議，請提交 [Issue](https://github.com/souloss/Mizuki/issues) 或 [Pull Request](https://github.com/souloss/Mizuki/pulls)。
+感謝以下貢獻者對本專案做出的貢獻，如有問題或建議，請提交 [Issue](https://github.com/souloss/Tsukimi/issues) 或 [Pull Request](https://github.com/souloss/Tsukimi/pulls)。
 
-<a href="https://github.com/souloss/Mizuki/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
+<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
 
 ⭐ 如果您覺得這個專案有幫助，請考慮給它一個星標！

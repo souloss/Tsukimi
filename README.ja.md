@@ -1,5 +1,5 @@
-# 🌸 Mizuki
-<img align='right' src='logo.png' width='200px' alt="Mizuki logo">
+# 🌸 Tsukimi
+<img align='right' src='logo.png' width='200px' alt="Tsukimi logo">
 
 [Astro](https://astro.build) で構築された高度な機能と美しいデザインを備えた、モダンで機能が豊富な静的ブログテンプレート。
 
@@ -9,16 +9,16 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
-[**🖥️ ライブデモ**](https://blog.souloss.cn/) | [**📝 ドキュメント**](https://docs.mizuki.mysqil.com/)
+[**🖥️ ライブデモ**](https://blog.souloss.cn/) | [**📝 ドキュメント**](https://docs.tsukimi.mysqil.com/)
 
 🌏 **README の言語:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**繁體中文**](./README.tw.md) /
 
 包括的なドキュメントですぐに始めましょう。テーマのカスタマイズや機能の設定、本番環境へのデプロイなどブログを完成させるために必要なすべての情報がドキュメントに網羅されています。
 
-[📚 完全なドキュメントを読む](https://docs.mizuki.mysqil.com/) →
+[📚 完全なドキュメントを読む](https://docs.tsukimi.mysqil.com/) →
 
-![Mizuki Preview](./README.webp)
+![Tsukimi Preview](./README.webp)
 
 <table>
   <tr>
@@ -108,8 +108,8 @@
 
 1. **リポジトリをクローン：**
    ```bash
-   git clone https://github.com/souloss/Mizuki.git
-   cd Mizuki
+   git clone https://github.com/souloss/Tsukimi.git
+   cd Tsukimi
    ```
 
 2. **依存関係をインストール：**
@@ -212,7 +212,7 @@ comment: false # コメントを無効にする
 
 ## 🧩 Markdown拡張機能
 
-Mizukiは標準のGitHub Flavored Markdownを超える拡張機能をサポートしています：
+Tsukimiは標準のGitHub Flavored Markdownを超える拡張機能をサポートしています：
 
 ### 📝 拡張ライティング
 - **コールアウト：** `> [!NOTE]`、`> [!TIP]`、`> [!WARNING]`などを使用して美しい注釈ボックスを作成
@@ -281,7 +281,7 @@ export const siteConfig: SiteConfig = {
 
 ### 📦 コードとコンテンツの分離（オプション）
 
-Mizukiは、コードとコンテンツを2つの独立したリポジトリに分けて管理することをサポートしており、チーム协作や大規模プロジェクトに適しています。
+Tsukimiは、コードとコンテンツを2つの独立したリポジトリに分けて管理することをサポートしており、チーム协作や大規模プロジェクトに適しています。
 
 **簡単選択**:
 
@@ -336,9 +336,13 @@ pnpm run sync-content
 
 このプロジェクトは[Fuwari](https://github.com/saicaca/fuwari)に基づいて開発され、元のプロジェクトはMITライセンスを使用しています。MITライセンスの要件に従い、元の著作権表示と許可通知はLICENSE.MITファイルに含まれています。
 
+## 謝辞
+
+TsukimiはLyraVoidによる[Mizuki](https://github.com/LyraVoid/Mizuki)を基にしており、
+Mizukiはsaicacaによる[Fuwari](https://github.com/saicaca/fuwari)を基にしています。
+
 ## 🙏 謝辞
 
-- [Mizuki](https://github.com/LyraVoid/Mizuki) by LyraVoidをベースにし、オリジナルの[Fuwari](https://github.com/saicaca/fuwari)テンプレートから派生しています
 - [Yukina](https://github.com/WhitePaper233/yukina) - 美しくエレガントなブログテンプレートにインスパイアされました
 - 一部のデザインは [Firefly](https://github.com/CuteLeaf/Firefly) と [Twilight](https://github.com/spr-aachen/Twilight) テンプレートからインスピレーションを得ています
 - [Pio](https://github.com/Dreamer-Paul/Pio)を使用してかわいいLive2D看板娘プラグインを実装
@@ -349,20 +353,20 @@ pnpm run sync-content
 
 - **[Fuwari](https://github.com/saicaca/fuwari)** by saicaca - このプロジェクトのベースとなるオリジナルテンプレート。このような美しく機能的なテンプレートを作成していただきありがとうございます。
 - **[Yukina](https://github.com/WhitePaper233/yukina)** - このプロジェクトの形成に役立ったデザインのインスピレーションと創造性を提供してくれたことに感謝します。Yukinaは優れたデザイン原則とユーザーエクスペリエンスを示す、エレガントなブログテンプレートです。
-- **[Firefly](https://github.com/CuteLeaf/Firefly)** - 優れたレイアウトデザインのアイデアを提供していただきありがとうございます。デュアルサイドバーレイアウト、記事の2カラムグリッドレイアウト、およびいくつかのウィジェットのデザインと実装により、Mizukiのインターフェースがより豊かになりました。
-- **[Twilight](https://github.com/spr-aachen/Twilight)** - インスピレーションと技術的なサポートを提供していただきありがとうございます。Twilight の動的壁紙モード切り替えシステム、レスポンシブデザイン、およびトランジション効果は、Mizuki のユーザーエクスペリエンスを大幅に向上させました。
+- **[Firefly](https://github.com/CuteLeaf/Firefly)** - 優れたレイアウトデザインのアイデアを提供していただきありがとうございます。デュアルサイドバーレイアウト、記事の2カラムグリッドレイアウト、およびいくつかのウィジェットのデザインと実装により、Tsukimiのインターフェースがより豊かになりました。
+- **[Twilight](https://github.com/spr-aachen/Twilight)** - インスピレーションと技術的なサポートを提供していただきありがとうございます。Twilight の動的壁紙モード切り替えシステム、レスポンシブデザイン、およびトランジション効果は、Tsukimi のユーザーエクスペリエンスを大幅に向上させました。
 
 ## 🍀 コントリビューター
 
-このプロジェクトに貢献してくださったすべてのコントリビューターに感謝します。質問や提案がある場合は、[Issue](https://github.com/souloss/Mizuki/issues)または[Pull Request](https://github.com/souloss/Mizuki/pulls)を提出してください。
+このプロジェクトに貢献してくださったすべてのコントリビューターに感謝します。質問や提案がある場合は、[Issue](https://github.com/souloss/Tsukimi/issues)または[Pull Request](https://github.com/souloss/Tsukimi/pulls)を提出してください。
 
-<a href="https://github.com/souloss/Mizuki/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Mizuki" />
+<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
 </a>
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Mizuki&type=Date)](https://star-history.com/#souloss/Mizuki&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
 ---
 
 ⭐ このプロジェクトが役立つと思ったら、スターを付けることを検討してください！
