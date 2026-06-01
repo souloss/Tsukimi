@@ -6,12 +6,7 @@ import { PageHeader } from "@components/features/page-header";
 import Markdown from "@components/misc/Markdown.astro";
 import { Icon } from "astro-icon/components";
 
-import {
-	commentConfig,
-	friendsConfig,
-	profileConfig,
-	siteConfig,
-} from "@/config";
+import { commentConfig, friendsConfig, siteConfig } from "@/config";
 import { getFriendsListByConfig } from "@/data/friends";
 import {
 	getFriendsCircleLastUpdated,
@@ -48,39 +43,6 @@ const friendsCircleLastUpdated =
 
 // 收集所有标签
 const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
-
-// 本站信息
-const mySiteInfo = {
-	name: siteConfig.title || "Tsukimi Blog",
-	url: siteConfig.siteURL || "https://tsukimi.souloss.cn",
-	avatar: (profileConfig.avatar || "/favicon.png").startsWith("/")
-		? profileConfig.avatar || "/favicon.png"
-		: `/${profileConfig.avatar || "favicon.png"}`,
-	desc: profileConfig.bio || "一个使用 Tsukimi 主题的 Astro 博客",
-};
-
-// 注意事项
-const notes = [
-	{
-		title: "互换原则",
-		content: "请先将本站添加到您的友链页面，确认后会添加您的友链",
-	},
-	{ title: "链接维护", content: "友链网站长期无法访问或内容违规，将会被移除" },
-	{ title: "内容要求", content: "内容积极向上，不含有任何违法违规内容" },
-	{
-		title: "站点要求",
-		content: "支持 HTTPS，以原创内容为主，能够正常访问且有持续更新",
-	},
-	{ title: "RSS 订阅", content: "提供 RSS 地址可让你的最新文章出现在朋友圈中" },
-];
-
-// 站点信息字段（可复制）
-const siteInfoFields = [
-	{ label: "站点名称", value: mySiteInfo.name },
-	{ label: "站点描述", value: mySiteInfo.desc },
-	{ label: "站点链接", value: mySiteInfo.url },
-	{ label: "头像链接", value: mySiteInfo.avatar },
-];
 ---
 
 <MainGridLayout title={title} description={description}>

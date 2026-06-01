@@ -39,6 +39,13 @@ const config = {
       let twikooLoaded = false;
       let timeoutId = null;
       let initialized = false;
+      let initializedPath = null;
+
+      // Guard against concurrent init calls
+      let initInProgress = false;
+
+      // Store Swup hook reference for proper cleanup
+      let swupContentReplaceHandler = null;
 
       function hideLoading() {
         const loading = document.getElementById('twikoo-loading');
@@ -96,27 +103,12 @@ const config = {
         });
       }
 
-      async function forceStyleReflow() {
-        // Twikoo uses Vue/Element UI internally — after init(), the DOM may
-        // not be fully stable yet (sub-components render asynchronously).
-        // Waiting two animation frames ensures the browser has painted at
-        // least once, so all CSS rules (including our @apply overrides in
-        // twikoo.css) are matched against the final DOM structure.
-        await new Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); });
-
-        const container = document.getElementById(TWIKOO_CONTAINER_ID);
-        if (container) {
-          // Force a synchronous layout reflow so computed styles are up-to-date
-          void container.offsetHeight;
-          // Briefly hide then show to eliminate any paint with stale styles
-          container.style.opacity = "0.99";
-          requestAnimationFrame(function () {
-            container.style.opacity = "";
-          });
-        }
-      }
-
       async function initTwikoo() {
+        // Prevent concurrent init calls
+        if (initInProgress) {
+          return;
+        }
+
         const commentEl = document.getElementById("tcomment");
         if (!commentEl) {
           return;
@@ -126,6 +118,15 @@ const config = {
           showError('评论系统未配置 envId');
           return;
         }
+
+        // Skip re-init if already initialized for the current path
+        const currentPath = getCurrentPath();
+        if (initialized && initializedPath === currentPath) {
+          hideLoading();
+          return;
+        }
+
+        initInProgress = true;
 
         // Set timeout to force hide loading
         timeoutId = setTimeout(function () {
@@ -140,7 +141,7 @@ const config = {
             return;
           }
 
-          // Clear previous contents only if re-initializing
+          // Clear previous contents only when path changed (genuine re-init)
           if (initialized) {
             commentEl.innerHTML = "";
           }
@@ -148,14 +149,18 @@ const config = {
           const dynamicConfig = createTwikooConfig();
           await twikoo.init(dynamicConfig);
           initialized = true;
+          initializedPath = currentPath;
 
           // Wait for Twikoo's internal Vue components to finish rendering,
-          // then force a style reflow so our CSS overrides take full effect.
-          await forceStyleReflow();
+          // then force a synchronous layout reflow so our CSS overrides take effect.
+          await new Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); });
+          void commentEl.offsetHeight;
 
           hideLoading();
         } catch (error) {
           showError('评论加载失败，请刷新重试');
+        } finally {
+          initInProgress = false;
         }
       }
 
@@ -164,10 +169,17 @@ const config = {
           observer.disconnect();
           observer = null;
         }
-        if (window.swup && window.swup.hooks) {
-          window.swup.hooks.off("content:replace", initTwikoo);
+        // Properly remove the Swup hook using the stored reference
+        if (window.swup && window.swup.hooks && swupContentReplaceHandler) {
+          try {
+            window.swup.hooks.off("content:replace", swupContentReplaceHandler);
+          } catch (_e) {
+            // ignore
+          }
+          swupContentReplaceHandler = null;
         }
         initialized = false;
+        initializedPath = null;
       }
 
       function setupLazyLoad() {
@@ -176,11 +188,25 @@ const config = {
           return;
         }
 
+        // Don't create a new observer if one already exists
+        if (observer) {
+          return;
+        }
+
+        // Skip if already initialized for current path
+        const currentPath = getCurrentPath();
+        if (initialized && initializedPath === currentPath) {
+          hideLoading();
+          return;
+        }
+
         observer = new IntersectionObserver(
           function (entries) {
             if (entries[0].isIntersecting) {
-              observer.disconnect();
-              observer = null;
+              if (observer) {
+                observer.disconnect();
+                observer = null;
+              }
               initTwikoo();
             }
           },
@@ -191,31 +217,61 @@ const config = {
       }
 
       function setupSwupHooks() {
+        if (swupContentReplaceHandler) {
+          return; // Already registered
+        }
+
+        var registerHook = function () {
+          if (!window.swup || !window.swup.hooks) return;
+          // Store the handler reference for proper cleanup later
+          swupContentReplaceHandler = function () {
+            // Reset state for new page
+            initialized = false;
+            initializedPath = null;
+            if (observer) {
+              observer.disconnect();
+              observer = null;
+            }
+            // Use the config-driven delay from tsukimi:page:loaded instead
+            // of a hardcoded 200ms, so we don't double-init
+          };
+          window.swup.hooks.on("content:replace", swupContentReplaceHandler);
+        };
+
         if (window.swup && window.swup.hooks) {
-          window.swup.hooks.on("content:replace", function () {
-            setTimeout(setupLazyLoad, 200);
-          });
+          registerHook();
         } else {
           document.addEventListener("swup:enable", function () {
-            if (window.swup && window.swup.hooks) {
-              window.swup.hooks.on("content:replace", function () {
-                setTimeout(setupLazyLoad, 200);
-              });
-            }
+            registerHook();
           }, { once: true });
         }
       }
 
+      // Use a single init entry point after page transitions
+      // to prevent multiple concurrent triggers
+      var pendingInitTimer = null;
+      function scheduleInit() {
+        if (pendingInitTimer) {
+          clearTimeout(pendingInitTimer);
+        }
+        pendingInitTimer = setTimeout(function () {
+          pendingInitTimer = null;
+          setupLazyLoad();
+        }, 100);
+      }
+
       // Astro page lifecycle events
       document.addEventListener("astro:page-load", function () {
-        setupLazyLoad();
         setupSwupHooks();
+        scheduleInit();
       });
 
       document.addEventListener("astro:before-swap", cleanup);
 
       document.addEventListener("tsukimi:page:loaded", function () {
-        setupLazyLoad();
+        // This event fires after the config-driven delay (250ms),
+        // which is the right time to init comments
+        scheduleInit();
       });
 
       window.addEventListener("beforeunload", cleanup);

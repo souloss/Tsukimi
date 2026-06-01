@@ -30,7 +30,14 @@ const walineConfig = {
     </div>
   </noscript>
 
-  <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" media="print" onload="this.media='all'" />
+  <script is:inline>
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://unpkg.com/@waline/client@v3/dist/waline.css";
+    link.media = "print";
+    link.onload = function() { this.media = "all"; };
+    document.head.appendChild(link);
+  </script>
   <noscript><link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" /></noscript>
 
   <script is:inline type="module" define:vars={{

@@ -83,9 +83,8 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
                             <img
                               src={url(method.qrCode)}
                               alt={`${method.name}`}
-                              class="w-full h-full object-contain"
+                              class="w-full h-full object-contain sponsor-qr-img"
                               loading="lazy"
-                              onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23f5f5f5%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2214%22>QR unavailable</text></svg>'"
                             />
                           </div>
                         )}
@@ -191,3 +190,11 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
     gap: 0.75rem;
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLImageElement>(".sponsor-qr-img").forEach((img) => {
+    img.addEventListener("error", () => {
+      img.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect fill='%23f5f5f5' width='200' height='200'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23999' font-size='14'>QR unavailable</text></svg>";
+    }, { once: true });
+  });
+</script>
