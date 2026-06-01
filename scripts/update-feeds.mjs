@@ -133,7 +133,7 @@ function parseRSS2(xmlText, friendInfo) {
 			date: normalizeDate(dateStr),
 			link: typeof link === "string" ? link : "",
 			content: stripHTML(content).substring(0, 300),
-			_weight: friendInfo.weight || 0,
+
 		};
 	});
 }
@@ -166,7 +166,7 @@ function parseAtom(xmlText, friendInfo) {
 			date: normalizeDate(dateStr),
 			link: link,
 			content: stripHTML(content).substring(0, 300),
-			_weight: friendInfo.weight || 0,
+
 		};
 	});
 }
@@ -319,17 +319,15 @@ async function main() {
 	console.log(`Success: ${successCount}, Failed: ${failCount}`);
 	console.log(`Total items before filtering: ${allItems.length}`);
 
-	// 按权重时间提升排序
+	// 按发布时间降序排序
 	allItems.sort((a, b) => {
-		const aDate = new Date(a.date).getTime() + (a._weight || 0) * 3600_000;
-		const bDate = new Date(b.date).getTime() + (b._weight || 0) * 3600_000;
-		return bDate - aDate;
+		return new Date(b.date).getTime() - new Date(a.date).getTime();
 	});
 
-	// 去除 _weight 字段，保留前 N 条
+	// 去除内部字段，保留前 N 条
 	const finalItems = allItems
 		.map((item) => {
-			const { _weight, ...rest } = item;
+			const { ...rest } = item;
 			return rest;
 		})
 		.slice(0, config.maxItems);

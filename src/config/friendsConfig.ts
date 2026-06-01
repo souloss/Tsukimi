@@ -14,9 +14,9 @@ const defaults: FriendsPageConfig = {
 	// 是否显示朋友圈动态
 	showFriendsCircle: true,
 	// 是否打乱排序，如果为 true，将忽略 weight，随机排序
-	randomizeSort: true,
+	randomizeSort: false,
 	// 朋友圈最多展示条目数
-	circleMaxItems: 20,
+	circleMaxItems: 50,
 	// 每个友链最多抓取条目数
 	circleMaxItemsPerFriend: 3,
 };
