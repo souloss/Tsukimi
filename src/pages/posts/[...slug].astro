@@ -21,11 +21,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getRelatedPosts, getSortedPosts } from "@utils/content-utils";
 import { hasCustomPermalink, initPostIdMap } from "@utils/permalink-utils";
 import { getPostPublicDescription } from "@utils/post-card-content";
-import {
-	getFileDirFromPath,
-	getPostUrl,
-	removeFileExtension,
-} from "@utils/url-utils";
+import { getFileDirFromPath, removeFileExtension } from "@utils/url-utils";
 import { Icon } from "astro-icon/components";
 import {
 	licenseConfig,

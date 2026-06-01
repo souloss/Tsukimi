@@ -563,6 +563,25 @@ onDestroy(() => {
 	:global(.search-modal-body) {
 		overflow-y: auto;
 		flex: 1;
+		scrollbar-width: thin;
+		scrollbar-color: var(--scrollbar-bg) transparent;
+	}
+
+	:global(.search-modal-body::-webkit-scrollbar) {
+		width: 6px;
+	}
+	:global(.search-modal-body::-webkit-scrollbar-track) {
+		background: transparent;
+	}
+	:global(.search-modal-body::-webkit-scrollbar-thumb) {
+		background: var(--scrollbar-bg);
+		border-radius: 3px;
+	}
+	:global(.search-modal-body::-webkit-scrollbar-thumb:hover) {
+		background: var(--primary);
+	}
+	:global(.search-modal-body::-webkit-scrollbar-thumb:active) {
+		background: var(--scrollbar-bg-active);
 	}
 
 	/* ---------- Loading spinner ---------- */

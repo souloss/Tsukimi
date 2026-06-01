@@ -1,23 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import { navBarConfig, siteConfig } from "../../../config";
-import { LinkPresets } from "../../../constants/link-presets";
-import { LinkPreset, type NavBarLink } from "../../../types/config";
+import { siteConfig } from "../../../config";
 import { url } from "../../../utils/url-utils";
 import ThemeSwitch from "../../control/ThemeSwitch.svelte";
 import SearchModal from "./SearchModal.svelte";
 
 const { docSlug, class: className } = Astro.props;
-
-const links: NavBarLink[] = navBarConfig.links.map(
-	(item: NavBarLink | LinkPreset): NavBarLink => {
-		if (typeof item === "number") {
-			return LinkPresets[item];
-		}
-		return item;
-	},
-);
 
 const rawLogo = siteConfig.navbarTitle?.logo;
 const logoSrc = rawLogo?.match(/^(http|https|\/\/)/)

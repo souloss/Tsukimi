@@ -52,7 +52,7 @@ const postsCollection = defineCollection({
 		repost: z
 			.object({
 				originalAuthor: z.string(),
-				originalUrl: z.string().url(),
+				originalUrl: z.string(),
 				originalTitle: z.string().optional(),
 				originalSite: z.string().optional(),
 				redirect: z.string().optional(),

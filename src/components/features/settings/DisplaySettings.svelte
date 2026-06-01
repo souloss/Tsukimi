@@ -1121,7 +1121,7 @@ $effect(() => {
 		background-image: linear-gradient(
 			90deg,
 			var(--primary) 0 var(--range-progress, 50%),
-			hsla(var(--hue), 22%, 28%, 0.18) var(--range-progress, 50%) 100%
+			color-mix(in srgb, var(--primary) 18%, transparent) var(--range-progress, 50%) 100%
 		);
 		transition: background-image 0.15s ease-in-out;
 	}

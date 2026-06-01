@@ -240,7 +240,7 @@ export default defineConfig({
 			warmup: {
 				clientFiles: [
 					"src/layouts/Layout.astro",
-					"src/pages/index.astro",
+					"src/pages/[...page].astro",
 					"src/components/widgets/music-player/MusicPlayer.svelte",
 					"src/components/organisms/navigation/Search.svelte",
 					"src/components/control/ThemeSwitch.svelte",

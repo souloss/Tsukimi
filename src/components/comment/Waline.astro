@@ -208,7 +208,7 @@ const walineConfig = {
         }
         waitForStylesheet('waline.css').then(loadWaline);
       })
-      .catch(function(err) {
+      .catch(function() {
         showError('评论组件加载失败，请检查网络');
       });
 

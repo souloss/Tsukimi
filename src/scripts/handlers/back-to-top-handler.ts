@@ -67,7 +67,7 @@ export class BackToTopHandler {
 	 */
 	private handleScroll(): void {
 		const scrollTop = document.documentElement.scrollTop;
-		const bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100);
+		// Banner height ratio for scroll calculations
 
 		// 计算返回顶部按钮显示阈值
 		const showBackToTopThreshold = this.calculateShowThreshold(scrollTop);

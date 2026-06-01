@@ -148,15 +148,11 @@ if (fs.existsSync(overridesSrc)) {
 	console.log("已同步配置覆盖文件");
 }
 
-// ── Personal assets: content/assets/ → src/assets/private/ ──
+// ── Personal assets: content/assets/ → src/assets/ (merge into existing tree) ──
 const assetsSrc = path.join(CONTENT_DIR, "assets");
-const assetsDest = path.join(rootDir, "src/assets/private");
 if (fs.existsSync(assetsSrc)) {
-	if (fs.existsSync(assetsDest)) {
-		fs.rmSync(assetsDest, { recursive: true, force: true });
-	}
-	copyRecursive(assetsSrc, assetsDest);
-	console.log("已同步私人资源文件");
+	copyMergeRecursive(assetsSrc, path.join(rootDir, "src/assets"));
+	console.log("已同步私人资源文件到 src/assets/");
 
 	// ── Favicon: content/assets/favicon.ico → public/favicon.ico ──
 	const faviconSrc = path.join(CONTENT_DIR, "assets/favicon.ico");
@@ -173,36 +169,9 @@ if (fs.existsSync(wranglerSrc)) {
 	console.log("已同步 wrangler.toml");
 }
 
-console.log("\n内容同步完成\n");
-try {
-	// 1. 获取 content 分支名
-	const branch = execSync("git rev-parse --abbrev-ref HEAD", {
-		cwd: CONTENT_DIR,
-	})
-		.toString()
-		.trim();
+console.log("\n内容同步完成 ✓");
 
-	// 2. 获取 content commit hash（短）
-	const hash = execSync("git rev-parse --short HEAD", {
-		cwd: CONTENT_DIR,
-	})
-		.toString()
-		.trim();
-
-	// 3. 提交主仓库
-	execSync("git add .", { cwd: rootDir });
-
-	execSync(
-		`git commit -m "chore(content): sync ${branch}@${hash}"`,
-		{ cwd: rootDir },
-	);
-
-	console.log(`已提交内容更新（${branch}@${hash}）`);
-} catch {
-	console.log("没有变化，跳过提交");
-}
-
-// 递归复制函数
+// 递归复制函数（整体替换目标目录）
 function copyRecursive(src, dest) {
 	if (fs.statSync(src).isDirectory()) {
 		if (!fs.existsSync(dest)) {
@@ -211,6 +180,21 @@ function copyRecursive(src, dest) {
 		const files = fs.readdirSync(src);
 		for (const file of files) {
 			copyRecursive(path.join(src, file), path.join(dest, file));
+		}
+	} else {
+		fs.copyFileSync(src, dest);
+	}
+}
+
+// 递归合并函数（保留目标已有文件，只覆盖同名文件）
+function copyMergeRecursive(src, dest) {
+	if (fs.statSync(src).isDirectory()) {
+		if (!fs.existsSync(dest)) {
+			fs.mkdirSync(dest, { recursive: true });
+		}
+		const files = fs.readdirSync(src);
+		for (const file of files) {
+			copyMergeRecursive(path.join(src, file), path.join(dest, file));
 		}
 	} else {
 		fs.copyFileSync(src, dest);
