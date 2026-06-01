@@ -291,13 +291,8 @@ export function setupSystemThemeListener() {
 	// Call immediately to set initial state
 	handleSystemThemeChange(mediaQuery);
 
-	// Listen to system theme changes (modern browsers)
-	if (mediaQuery.addEventListener) {
-		mediaQuery.addEventListener("change", handleSystemThemeChange);
-	} else {
-		// Compatible with older browsers
-		mediaQuery.addListener(handleSystemThemeChange);
-	}
+	// Listen to system theme changes
+	mediaQuery.addEventListener("change", handleSystemThemeChange);
 
 	systemThemeListener = handleSystemThemeChange;
 }
@@ -310,12 +305,7 @@ function cleanupSystemThemeListener() {
 
 	const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-	if (mediaQuery.removeEventListener) {
-		mediaQuery.removeEventListener("change", systemThemeListener);
-	} else {
-		// Compatible with older browsers
-		mediaQuery.removeListener(systemThemeListener);
-	}
+	mediaQuery.removeEventListener("change", systemThemeListener);
 
 	systemThemeListener = null;
 }

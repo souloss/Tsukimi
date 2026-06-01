@@ -6,8 +6,6 @@
 
 	let currentTheme = null;
 	let renderIdCounter = 0;
-	let isRendering = false;
-	let pendingTheme = null;
 	let retryCount = 0;
 	const MAX_RETRIES = 3;
 	const RETRY_DELAY = 1000;
@@ -15,37 +13,8 @@
 	let panZoomObserver = null;
 	const renderedElements = new WeakSet();
 
-	// Dual cache: element -> { light: svgHtml|null, dark: svgHtml|null }
-	const cacheStore = new WeakMap();
-
-	function getCache(element) {
-		if (!cacheStore.has(element)) {
-			cacheStore.set(element, { light: null, dark: null });
-		}
-		return cacheStore.get(element);
-	}
-
-	function injectSkeletons() {
-		document
-			.querySelectorAll(".mermaid-diagram-container")
-			.forEach((container) => {
-				if (container.querySelector(".mermaid-skeleton")) {
-					return;
-				}
-				const skeleton = document.createElement("div");
-				skeleton.className = "mermaid-skeleton";
-				skeleton.innerHTML =
-					'<div class="skeleton-icon"></div><div class="skeleton-lines"><span></span><span></span><span></span></div>';
-				container.insertBefore(skeleton, container.firstChild);
-			});
-	}
-
-	function removeSkeleton(container) {
-		const skeleton = container.querySelector(".mermaid-skeleton");
-		if (skeleton) {
-			skeleton.remove();
-		}
-	}
+	// Abort controller for cancelling in-flight theme re-renders
+	let themeChangeAbort = null;
 
 	function waitForMermaid(timeout = 10000) {
 		return new Promise((resolve, reject) => {
@@ -86,6 +55,28 @@
 			errorLevel: "warn",
 			logLevel: "error",
 		};
+	}
+
+	function injectSkeletons() {
+		document
+			.querySelectorAll(".mermaid-diagram-container")
+			.forEach((container) => {
+				if (container.querySelector(".mermaid-skeleton")) {
+					return;
+				}
+				const skeleton = document.createElement("div");
+				skeleton.className = "mermaid-skeleton";
+				skeleton.innerHTML =
+					'<div class="skeleton-icon"></div><div class="skeleton-lines"><span></span><span></span><span></span></div>';
+				container.insertBefore(skeleton, container.firstChild);
+			});
+	}
+
+	function removeSkeleton(container) {
+		const skeleton = container.querySelector(".mermaid-skeleton");
+		if (skeleton) {
+			skeleton.remove();
+		}
 	}
 
 	function setupLazyRenderObserver() {
@@ -129,14 +120,18 @@
 		setupPanZoomObserver(container);
 	}
 
-	async function renderSingleDiagram(element, theme) {
-		// Yield before heavy work so browser can paint skeleton / respond to input
+	async function renderSingleDiagram(element, theme, signal) {
 		await yieldToMain();
 
 		let attempts = 0;
 		const maxAttempts = 3;
 
 		while (attempts < maxAttempts) {
+			// Check if this render has been cancelled
+			if (signal?.aborted) {
+				return;
+			}
+
 			try {
 				const code = element.getAttribute("data-mermaid-code");
 				if (!code) {
@@ -146,9 +141,9 @@
 				const id = `mermaid-${renderIdCounter++}`;
 				const { svg } = await window.mermaid.render(id, code);
 
-				// Only cache verified-successful SVG
-				const cache = getCache(element);
-				cache[theme === "dark" ? "dark" : "light"] = svg;
+				if (signal?.aborted) {
+					return;
+				}
 
 				element.innerHTML = svg;
 				const svgElement = element.querySelector("svg");
@@ -173,7 +168,6 @@
 						`Failed to render Mermaid diagram after ${maxAttempts} attempts:`,
 						error,
 					);
-					// Remove from WeakSet so re-attempt is possible on theme switch
 					renderedElements.delete(element);
 					element.innerHTML = `
 						<div class="mermaid-error">
@@ -194,95 +188,101 @@
 		}
 	}
 
-	// Swap cached SVG into element, return true if cache hit
-	function swapFromCache(element, theme) {
-		const cache = getCache(element);
-		const key = theme === "dark" ? "dark" : "light";
-		const cached = cache[key];
-		if (cached === null) {
-			return false;
-		}
-		element.innerHTML = cached;
-		const svgElement = element.querySelector("svg");
-		if (svgElement) {
-			svgElement.setAttribute("width", "100%");
-			svgElement.removeAttribute("height");
-			svgElement.style.maxWidth = "100%";
-			svgElement.style.height = "auto";
-			if (theme === "dark") {
-				svgElement.style.filter = "brightness(0.9) contrast(1.1)";
-			} else {
-				svgElement.style.filter = "none";
-			}
-		}
-		element.setAttribute("data-mermaid-rendered", "true");
-		return true;
-	}
-
-	// Theme change handler: swap cache or render missing
+	// Theme change handler: re-render all diagrams with new theme
 	async function onThemeChange(newTheme) {
-		if (isRendering) {
-			// Queue the theme change instead of dropping it
-			pendingTheme = newTheme;
-			return;
+		// Abort any in-flight theme re-render
+		if (themeChangeAbort) {
+			themeChangeAbort.abort();
 		}
+		themeChangeAbort = new AbortController();
+		const signal = themeChangeAbort.signal;
 
 		currentTheme = newTheme;
-		isRendering = true;
 		document.dispatchEvent(new CustomEvent("mermaid:render:start"));
 
 		destroyAllPanZoom();
 
 		try {
-			// Initialize mermaid with new theme ONCE
+			// Initialize mermaid with new theme
 			window.mermaid.initialize(getThemeConfig(newTheme));
 
 			const mermaidElements = document.querySelectorAll(
 				".mermaid[data-mermaid-code]",
 			);
 			if (mermaidElements.length === 0) {
-				isRendering = false;
 				document.dispatchEvent(new CustomEvent("mermaid:render:done"));
 				return;
 			}
 
-			// Phase 1: Swap all cached diagrams instantly
-			const uncached = [];
-			mermaidElements.forEach((element) => {
-				if (swapFromCache(element, newTheme)) {
-					renderedElements.add(element);
-				} else if (
-					element.getAttribute("data-mermaid-rendered") === "true" ||
-					renderedElements.has(element)
-				) {
-					// Was rendered before but missing cache for new theme
-					uncached.push(element);
-				}
-			});
+			// Batch DOM writes: collect all rendered SVGs, then apply in one paint
+			const results = [];
+			for (let i = 0; i < mermaidElements.length; i++) {
+				if (signal.aborted) return;
 
-			// Phase 2: Render uncached diagrams sequentially with yield between each
-			if (uncached.length > 0) {
-				for (const element of uncached) {
-					await renderSingleDiagram(element, newTheme);
-					await yieldToMain();
+				const element = mermaidElements[i];
+				const code = element.getAttribute("data-mermaid-code");
+				if (!code) continue;
+
+				// Only re-render elements that were previously rendered
+				if (
+					element.getAttribute("data-mermaid-rendered") !== "true" &&
+					!renderedElements.has(element)
+				) {
+					continue;
 				}
+
+				try {
+					const id = `mermaid-${renderIdCounter++}`;
+					const { svg } = await window.mermaid.render(id, code);
+					if (signal.aborted) return;
+					results.push({ element, svg });
+				} catch (error) {
+					console.warn("Mermaid theme re-render failed for element:", error);
+				}
+
+				// Yield to main thread every diagram to keep UI responsive
+				await yieldToMain();
+			}
+
+			// Apply all SVG updates in a single batch
+			if (signal.aborted) return;
+			for (const { element, svg } of results) {
+				element.innerHTML = svg;
+				const svgElement = element.querySelector("svg");
+				if (svgElement) {
+					svgElement.setAttribute("width", "100%");
+					svgElement.removeAttribute("height");
+					svgElement.style.maxWidth = "100%";
+					svgElement.style.height = "auto";
+					if (newTheme === "dark") {
+						svgElement.style.filter = "brightness(0.9) contrast(1.1)";
+					} else {
+						svgElement.style.filter = "none";
+					}
+				}
+				element.setAttribute("data-mermaid-rendered", "true");
+				renderedElements.add(element);
 			}
 
 			retryCount = 0;
 		} catch (error) {
 			console.error("Error in mermaid theme change:", error);
 		} finally {
-			isRendering = false;
+			// Only clear abort if we're the latest theme change
+			if (themeChangeAbort && themeChangeAbort.signal === signal) {
+				themeChangeAbort = null;
+			}
 			document.dispatchEvent(new CustomEvent("mermaid:render:done"));
 
-			// Check if a pending theme change was queued
-			if (pendingTheme !== null && pendingTheme !== currentTheme) {
-				const next = pendingTheme;
-				pendingTheme = null;
-				onThemeChange(next);
-			} else {
-				pendingTheme = null;
-			}
+			// Re-initialize pan-zoom controls for all visible containers
+			document
+				.querySelectorAll(".mermaid-diagram-container")
+				.forEach((container) => {
+					const svgEl = container.querySelector(".mermaid svg");
+					if (svgEl?.getAttribute("viewBox")) {
+						initPanZoomForContainer(container);
+					}
+				});
 		}
 	}
 

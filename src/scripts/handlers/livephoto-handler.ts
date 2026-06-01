@@ -4,7 +4,6 @@
  * Supports both data attribute and class-based detection
  */
 export class LivePhotoHandler {
-	private initialized = false;
 	private instances: any[] = [];
 
 	/**
@@ -52,7 +51,6 @@ export class LivePhotoHandler {
 			}
 		});
 
-		this.initialized = true;
 	}
 
 	/**
@@ -79,7 +77,6 @@ export class LivePhotoHandler {
 	 */
 	destroy(): void {
 		this.instances = [];
-		this.initialized = false;
 	}
 
 	/**

@@ -176,10 +176,10 @@ html.dark {
   @apply hover:rounded-lg mt-1 hover:bg-(--btn-plain-bg-hover);
 }
 
-/* by @SirTamago 
+/* by @SirTamago
 Make the emoji component display correctly when there are too many emoji packs
 */
-.card-base {
+.twikoo-container .card-base {
   overflow: visible;
 }
 
