@@ -342,11 +342,24 @@
 			return;
 		}
 
-		const rect = svgElement.getBoundingClientRect();
-		svgElement.setAttribute("width", `${rect.width}px`);
-		svgElement.setAttribute("height", `${rect.height}px`);
-		svgElement.style.maxWidth = "none";
-		svgElement.style.height = "";
+		// Measure the container's available width for the SVG to fit into
+		const wrapperEl = container.querySelector(".mermaid-wrapper");
+		const availableWidth = wrapperEl
+			? wrapperEl.clientWidth
+			: container.clientWidth;
+
+		// Get the SVG's intrinsic dimensions from viewBox
+		const viewBox = svgElement.getAttribute("viewBox");
+		const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
+		const aspectRatio = vbHeight / vbWidth;
+
+		// Set SVG to fit the container width, height derived from aspect ratio
+		const displayWidth = availableWidth;
+		const displayHeight = displayWidth * aspectRatio;
+		svgElement.setAttribute("width", `${displayWidth}px`);
+		svgElement.setAttribute("height", `${displayHeight}px`);
+		svgElement.style.maxWidth = "100%";
+		svgElement.style.height = "auto";
 
 		try {
 			const panZoomInstance = window.svgPanZoom(svgElement, {
