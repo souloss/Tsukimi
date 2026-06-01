@@ -32,9 +32,8 @@ export default defineConfig({
 如果使用内容分离功能，需要配置：
 - `ENABLE_CONTENT_SYNC=true`
 - `CONTENT_REPO_URL=你的内容仓库地址`
-- `USE_SUBMODULE=true`
 
-详见 [内容分离完整指南](./CONTENT_SEPARATION.md)
+详见 [内容分离完整指南](./CONTENT_REPOSITORY.md)
 
 ---
 
@@ -61,7 +60,7 @@ export default defineConfig({
 
 1. **添加仓库 Secrets**:
    - Settings → Secrets and variables → Actions → New repository secret
-   - 添加 `CONTENT_REPO_URL`: `https://github.com/your-username/Tsukimi-Content.git`
+   - 添加 `CONTENT_REPO_URL`: `https://github.com/souloss/Tsukimi-Content.git`
 
 2. **修改 `.github/workflows/deploy.yml`**:
 
@@ -72,14 +71,14 @@ export default defineConfig({
   env:
     ENABLE_CONTENT_SYNC: true
     CONTENT_REPO_URL: ${{ secrets.CONTENT_REPO_URL }}
-    USE_SUBMODULE: true
 ```
 
 3. **私有内容仓库配置**:
 
 **同账号私有仓库** (推荐):
-- 无需额外配置
-- 自动使用 `GITHUB_TOKEN` 访问
+- 使用 PAT Token 方式访问
+- 在 Secrets 中添加 `PAT_TOKEN` (需要 `repo` 权限)
+- URL 格式: `https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/souloss/Tsukimi-Content.git`
 
 **跨账号私有仓库 (SSH)**:
 ```yaml
@@ -88,11 +87,6 @@ export default defineConfig({
   uses: webfactory/ssh-agent@v0.8.0
   with:
     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-- name: Checkout
-  uses: actions/checkout@v4
-  with:
-    submodules: true
 ```
 
 在 Secrets 中添加:
@@ -101,18 +95,11 @@ export default defineConfig({
 
 **跨账号私有仓库 (Token)**:
 ```yaml
-- name: Checkout
-  uses: actions/checkout@v4
-  with:
-    submodules: true
-    token: ${{ secrets.PAT_TOKEN }}
-
 - name: Build site
   run: pnpm run build
   env:
     ENABLE_CONTENT_SYNC: true
-    CONTENT_REPO_URL: https://${{ secrets.PAT_TOKEN }}@github.com/other-user/repo.git
-    USE_SUBMODULE: true
+    CONTENT_REPO_URL: https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/other-user/repo.git
 ```
 
 在 Secrets 中添加:
@@ -160,10 +147,9 @@ export default defineConfig({
 | 变量名 | 值 |
 |-------|---|
 | `ENABLE_CONTENT_SYNC` | `true` |
-| `CONTENT_REPO_URL` | `https://github.com/your-username/Tsukimi-Content.git` |
-| `USE_SUBMODULE` | `false` 或 `true` (推荐 `false`) |
+| `CONTENT_REPO_URL` | `https://github.com/souloss/Tsukimi-Content.git` |
 
-> ⚠️ **重要提示**: 如果使用 `USE_SUBMODULE=true`,请确保 `.gitignore` 中的 `content/` 行已被注释掉,否则会导致部署失败。推荐在 Vercel 上使用 `USE_SUBMODULE=false` (独立仓库模式)。
+> ⚠️ **重要提示**: 使用独立仓库模式 (默认)，通过 `sync-content.js` 在构建时同步内容。
 
 #### 内容分离模式 - 私有仓库
 
@@ -175,10 +161,10 @@ export default defineConfig({
 添加环境变量:
 ```
 ENABLE_CONTENT_SYNC=true
-GITHUB_TOKEN=ghp_your_personal_access_token
-CONTENT_REPO_URL=https://${GITHUB_TOKEN}@github.com/your-username/Tsukimi-Content-Private.git
-USE_SUBMODULE=true
+CONTENT_REPO_URL=https://x-access-token:${PAT_TOKEN}@github.com/souloss/Tsukimi-Content.git
 ```
+
+在 Vercel 环境变量中添加 `PAT_TOKEN` (GitHub Personal Access Token)。
 
 ### 配置文件
 
@@ -209,8 +195,7 @@ USE_SUBMODULE=true
 在 Site settings → Environment variables 中添加:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-USE_SUBMODULE=true
+CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
 ```
 
 4. **私有仓库配置**:
@@ -231,15 +216,178 @@ USE_SUBMODULE=true
   PNPM_VERSION = "9"
   # 如果使用内容分离
   ENABLE_CONTENT_SYNC = "true"
-  CONTENT_REPO_URL = "https://github.com/your-username/Tsukimi-Content.git"
-  USE_SUBMODULE = "true"
+  CONTENT_REPO_URL = "https://github.com/souloss/Tsukimi-Content.git"
 ```
 
 ---
 
 ## ☁️ Cloudflare Pages 部署
 
-### 部署步骤
+### 双站点部署架构 (推荐)
+
+Tsukimi 支持同时部署两个站点：
+- **Demo 站点**: 展示模板功能，使用默认内容
+- **个人站点**: 私有内容，从独立内容仓库同步
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        GitHub 仓库架构                           │
+├─────────────────────────────────────────────────────────────────┤
+│  souloss/Tsukimi (公开)          souloss/Tsukimi-Content (私有) │
+│  ├── master 分支 (Demo)          └── main 分支 (内容)           │
+│  │   ENABLE_CONTENT_SYNC=false                                  │
+│  │   → CF Pages: tsukimi 项目                                   │
+│  │   → tsukimi.souloss.com                                      │
+│  │                                                              │
+│  └── blog 分支 (构建产物)                                        │
+│      由 GitHub Actions 生成                                      │
+│      → CF Pages: astro-blog 项目                                │
+│      → blog.souloss.com                                         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Demo 站点部署 (master 分支)
+
+1. **连接仓库**:
+   - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
+   - Workers & Pages → Create application → Pages → Connect to Git
+   - 选择 `souloss/Tsukimi` 仓库
+
+2. **配置构建**:
+   - Project name: `tsukimi` (或其他名称)
+   - Production branch: `master`
+   - Framework preset: Astro
+   - Build command: `pnpm build`
+   - Build output directory: `dist`
+
+3. **环境变量**:
+   ```
+   ENABLE_CONTENT_SYNC=false
+   INDEXNOW_HOST=tsukimi.souloss.com
+   ```
+
+4. **自定义域名**:
+   - Settings → Custom domains → Add domain
+   - 添加 `tsukimi.souloss.com`
+
+### 个人站点部署 (blog 分支 + GitHub Actions)
+
+个人站点使用 GitHub Actions 构建，推送到 `blog` 分支，CF Pages 从该分支部署。
+
+#### Step 1: 配置 GitHub Secrets
+
+在 `souloss/Tsukimi` 仓库:
+1. Settings → Secrets and variables → Actions → New repository secret
+2. 添加:
+   - Name: `PAT_TOKEN`
+   - Value: GitHub Personal Access Token (需要 `repo` 权限，用于克隆私有内容仓库)
+
+在 `souloss/Tsukimi-Content` 仓库:
+1. Settings → Secrets and variables → Actions → New repository secret
+2. 添加:
+   - Name: `PAT_TOKEN`
+   - Value: 同一个 PAT Token (用于触发 repository_dispatch)
+
+#### Step 2: 工作流文件
+
+**代码仓库** `.github/workflows/deploy-blog.yml`:
+```yaml
+name: Deploy Blog (Personal Site)
+
+on:
+  repository_dispatch:
+    types: [content-updated]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with content sync
+        run: pnpm build
+        env:
+          ENABLE_CONTENT_SYNC: "true"
+          CONTENT_REPO_URL: "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/souloss/Tsukimi-Content.git"
+
+      - name: Deploy dist to blog branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: blog
+          commit_message: "deploy: ${{ github.sha }}"
+          force_orphan: true
+```
+
+**内容仓库** `.github/workflows/trigger-build.yml`:
+```yaml
+name: Trigger Blog Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Tsukimi build
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PAT_TOKEN }}
+          script: |
+            await github.rest.repos.createRepositoryDispatchEvent({
+              owner: 'souloss',
+              repo: 'Tsukimi',
+              event_type: 'content-updated',
+            });
+```
+
+#### Step 3: CF Pages 配置个人站点
+
+1. 创建新的 Pages 项目:
+   - Workers & Pages → Create application → Pages → Connect to Git
+   - 选择 `souloss/Tsukimi` 仓库
+
+2. **重要**: 配置为直接部署 `blog` 分支 (不构建):
+   - Project name: `astro-blog`
+   - Production branch: `blog`
+   - Framework preset: None
+   - Build command: (留空)
+   - Build output directory: `/` 或 `.`
+
+3. 自定义域名: `blog.souloss.com`
+
+#### 触发流程
+
+```
+内容仓库推送 → trigger-build.yml → repository_dispatch → deploy-blog.yml → 构建 → 推送到 blog 分支 → CF Pages 部署
+```
+
+### 单站点部署 (传统模式)
+
+如果只需要一个站点，使用以下配置：
 
 1. **连接仓库**:
    - 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
@@ -256,14 +404,13 @@ USE_SUBMODULE=true
 添加以下变量:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-USE_SUBMODULE=false  # ⚠️ Cloudflare Pages 默认不支持 submodule
+CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
 ```
 
 ### 注意事项
 
 ⚠️ Cloudflare Pages 默认不支持 Git Submodule，建议:
-- 使用独立仓库模式: `USE_SUBMODULE=false`
+- 使用独立仓库模式 (默认，通过 `sync-content.js` 同步)
 - 或在构建命令中手动初始化: `git submodule update --init && pnpm build`
 
 ---
@@ -342,15 +489,14 @@ fatal: Failed to add submodule 'content'
 
 **解决方案 B: 使用独立仓库模式**
 
-如果不想修改 `.gitignore`,可以使用独立仓库模式:
+如果不想修改 `.gitignore`,可以使用独立仓库模式 (默认):
 
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-USE_SUBMODULE=false  # 改为 false
+CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
 ```
 
-**解决方案 C: 自动降级 (v1.1+)**
+**解决方案 C: 自动降级**
 
 `sync-content.js` 会自动检测此冲突并降级到独立仓库模式,无需手动干预。
 
@@ -359,7 +505,7 @@ USE_SUBMODULE=false  # 改为 false
 **检查**:
 1. 确认部署平台支持 Git Submodule
 2. 检查 SSH 密钥或 Token 配置
-3. 尝试使用独立仓库模式: `USE_SUBMODULE=false`
+3. 使用独立仓库模式 (默认，通过 `sync-content.js` 同步)
 
 ### 问题 5: 构建成功但内容未更新
 
@@ -387,8 +533,8 @@ fatal: could not read Username for 'https://github.com'
 
 **解决**:
 1. 在 Vercel 项目设置中添加 GitHub 集成权限
-2. 或使用 Token: `https://${GITHUB_TOKEN}@github.com/user/repo.git`
-3. 或切换到独立仓库模式: `USE_SUBMODULE=false`
+2. 或使用 Token: `https://x-access-token:${PAT_TOKEN}@github.com/souloss/Tsukimi-Content.git`
+3. 或使用独立仓库模式 (默认，通过 `sync-content.js` 同步)
 
 **检查**:
 1. 查看构建日志,确认同步步骤执行
@@ -404,7 +550,6 @@ fatal: could not read Username for 'https://github.com'
 |-------|------|--------|------|
 | `ENABLE_CONTENT_SYNC` | ❌ | `false` | 是否启用内容分离功能 |
 | `CONTENT_REPO_URL` | ⚠️ | - | 内容仓库地址 (启用内容分离时必需) |
-| `USE_SUBMODULE` | ❌ | `false` | 是否使用 Git Submodule 模式 |
 | `CONTENT_DIR` | ❌ | `./content` | 内容目录路径 |
 | `INDEXNOW_KEY` | ❌ | - | IndexNow API 密钥，用于向搜索引擎提交 URL 更新 |
 | `INDEXNOW_HOST` | ❌ | - | 网站主机地址 |
@@ -417,27 +562,26 @@ fatal: could not read Username for 'https://github.com'
 ## 💡 推荐配置
 
 ### 个人博客
-- **平台**: Vercel 或 GitHub Pages
+- **平台**: Cloudflare Pages
 - **模式**: 本地模式（最简单）
 - **配置**: 无需环境变量
+
+### 双站点部署 (推荐)
+- **平台**: Cloudflare Pages
+- **模式**: Demo 站 (master 分支) + 个人站 (blog 分支 + GitHub Actions)
+- **配置**: 见上方 [双站点部署架构](#-双站点部署架构-推荐)
 
 ### 团队协作
 - **平台**: 任意
 - **模式**: 内容分离 - 私有仓库
-- **配置**: 启用内容分离 + SSH 认证
-
-### 多站点部署
-- **平台**: 多个平台同时部署
-- **模式**: 内容分离 - 公开仓库
-- **配置**: 统一的环境变量配置
+- **配置**: 启用内容分离 + PAT Token 认证
 
 ---
 
 ## 📚 相关文档
 
-- [内容分离完整指南](./CONTENT_SEPARATION.md) - 详细的内容分离配置
-- [内容迁移指南](./MIGRATION_GUIDE.md) - 从单仓库迁移到分离模式
 - [内容仓库结构](./CONTENT_REPOSITORY.md) - 内容仓库的组织方式
+- [自动构建触发](./AUTO_BUILD_TRIGGER.md) - 内容仓库更新触发构建的配置
 
 ---
 

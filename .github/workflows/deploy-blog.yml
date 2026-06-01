@@ -1,0 +1,50 @@
+name: Deploy Blog (Personal Site)
+
+on:
+  # Triggered when Content repo (Tsukimi-Content) is updated
+  repository_dispatch:
+    types: [content-updated]
+  # Also allow manual trigger
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with content sync
+        run: pnpm build
+        env:
+          ENABLE_CONTENT_SYNC: "true"
+          CONTENT_REPO_URL: "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/souloss/Tsukimi-Content.git"
+
+      - name: Deploy dist to blog branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: blog
+          commit_message: "deploy: ${{ github.sha }}"
+          force_orphan: true
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
