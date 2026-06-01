@@ -231,18 +231,15 @@ Tsukimi 支持同时部署两个站点：
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        GitHub 仓库架构                           │
+│                        双站点部署架构                            │
 ├─────────────────────────────────────────────────────────────────┤
 │  souloss/Tsukimi (公开)          souloss/Tsukimi-Content (私有) │
-│  ├── master 分支 (Demo)          └── main 分支 (内容)           │
-│  │   ENABLE_CONTENT_SYNC=false                                  │
-│  │   → CF Pages: tsukimi 项目                                   │
-│  │   → tsukimi.souloss.com                                      │
-│  │                                                              │
-│  └── blog 分支 (构建产物)                                        │
-│      由 GitHub Actions 生成                                      │
-│      → CF Pages: astro-blog 项目                                │
-│      → blog.souloss.com                                         │
+│  └── master 分支                 └── main 分支 (内容)           │
+│      ↓ 推送时自动触发                                          │
+│      CF Pages tsukimi 项目       内容推送 → curl Deploy Hook    │
+│      ENABLE_CONTENT_SYNC=false   → CF Pages astro-blog 项目    │
+│      → tsukimi.souloss.com       → blog.souloss.com            │
+│                                  (ENABLE_CONTENT_SYNC=true)    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -254,7 +251,7 @@ Tsukimi 支持同时部署两个站点：
    - 选择 `souloss/Tsukimi` 仓库
 
 2. **配置构建**:
-   - Project name: `tsukimi` (或其他名称)
+   - Project name: `tsukimi`
    - Production branch: `master`
    - Framework preset: Astro
    - Build command: `pnpm build`
@@ -270,79 +267,54 @@ Tsukimi 支持同时部署两个站点：
    - Settings → Custom domains → Add domain
    - 添加 `tsukimi.souloss.com`
 
-### 个人站点部署 (blog 分支 + GitHub Actions)
+### 个人站点部署 (同分支 + 环境变量区分)
 
-个人站点使用 GitHub Actions 构建，推送到 `blog` 分支，CF Pages 从该分支部署。
+个人站点同样连接 `souloss/Tsukimi` 的 `master` 分支，通过环境变量启用内容同步。
 
-#### Step 1: 配置 GitHub Secrets
+#### Step 1: 创建 CF Pages 项目
 
-在 `souloss/Tsukimi` 仓库:
-1. Settings → Secrets and variables → Actions → New repository secret
-2. 添加:
-   - Name: `PAT_TOKEN`
-   - Value: GitHub Personal Access Token (需要 `repo` 权限，用于克隆私有内容仓库)
+1. Workers & Pages → Create application → Pages → Connect to Git
+2. 选择 `souloss/Tsukimi` 仓库
+3. **配置构建**:
+   - Project name: `astro-blog`
+   - Production branch: `master`
+   - Framework preset: Astro
+   - Build command: `pnpm build`
+   - Build output directory: `dist`
+4. **环境变量**:
+   ```
+   ENABLE_CONTENT_SYNC=true
+   CONTENT_REPO_URL=https://x-access-token:<PAT_TOKEN>@github.com/souloss/Tsukimi-Content.git
+   INDEXNOW_HOST=blog.souloss.com
+   ```
+   > 注意: `CONTENT_REPO_URL` 中需要嵌入 PAT Token，因为构建时需要克隆私有内容仓库
 
-在 `souloss/Tsukimi-Content` 仓库:
-1. Settings → Secrets and variables → Actions → New repository secret
-2. 添加:
-   - Name: `PAT_TOKEN`
-   - Value: 同一个 PAT Token (用于触发 repository_dispatch)
+5. **自定义域名**: `blog.souloss.com`
 
-#### Step 2: 工作流文件
+#### Step 2: 配置内容更新自动触发
 
-**代码仓库** `.github/workflows/deploy-blog.yml`:
+内容仓库推送时，通过 CF Pages Deploy Hook 触发私人站重新构建。
+
+**2.1 获取 Deploy Hook URL**
+
+1. 打开 `astro-blog` 项目 → Settings → Builds & deployments → Deploy hooks
+2. 创建 Hook:
+   - Hook name: `Content Update`
+   - Branch: `master`
+3. 复制生成的 URL
+
+**2.2 配置内容仓库 Secret**
+
+1. 打开 https://github.com/souloss/Tsukimi-Content/settings/secrets/actions
+2. 添加 Secret:
+   - Name: `CF_DEPLOY_HOOK`
+   - Value: 粘贴 Deploy Hook URL
+
+**2.3 内容仓库工作流**
+
+内容仓库 `.github/workflows/trigger-build.yml`:
 ```yaml
-name: Deploy Blog (Personal Site)
-
-on:
-  repository_dispatch:
-    types: [content-updated]
-  workflow_dispatch:
-
-env:
-  NODE_VERSION: "22"
-
-jobs:
-  build-deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build with content sync
-        run: pnpm build
-        env:
-          ENABLE_CONTENT_SYNC: "true"
-          CONTENT_REPO_URL: "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/souloss/Tsukimi-Content.git"
-
-      - name: Deploy dist to blog branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: blog
-          commit_message: "deploy: ${{ github.sha }}"
-          force_orphan: true
-```
-
-**内容仓库** `.github/workflows/trigger-build.yml`:
-```yaml
-name: Trigger Blog Build
+name: Trigger Blog Rebuild
 
 on:
   push:
@@ -352,38 +324,22 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Tsukimi build
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.PAT_TOKEN }}
-          script: |
-            await github.rest.repos.createRepositoryDispatchEvent({
-              owner: 'souloss',
-              repo: 'Tsukimi',
-              event_type: 'content-updated',
-            });
+      - name: Trigger Cloudflare Pages rebuild
+        run: curl -X POST "${{ secrets.CF_DEPLOY_HOOK }}"
 ```
-
-#### Step 3: CF Pages 配置个人站点
-
-1. 创建新的 Pages 项目:
-   - Workers & Pages → Create application → Pages → Connect to Git
-   - 选择 `souloss/Tsukimi` 仓库
-
-2. **重要**: 配置为直接部署 `blog` 分支 (不构建):
-   - Project name: `astro-blog`
-   - Production branch: `blog`
-   - Framework preset: None
-   - Build command: (留空)
-   - Build output directory: `/` 或 `.`
-
-3. 自定义域名: `blog.souloss.com`
 
 #### 触发流程
 
 ```
-内容仓库推送 → trigger-build.yml → repository_dispatch → deploy-blog.yml → 构建 → 推送到 blog 分支 → CF Pages 部署
+代码仓库 master 推送 → CF Pages 自动构建两个项目（各自环境变量不同）
+内容仓库推送 → trigger-build.yml → curl Deploy Hook → 只触发 astro-blog 重新构建
 ```
+
+**优势：**
+- 构建产物不进入 Git 仓库，私人内容不暴露
+- 不需要额外的 GitHub Actions 构建步骤
+- 不需要 `CF_API_TOKEN` / `CF_ACCOUNT_ID`，只需一个 Deploy Hook URL
+- Demo 站只在代码变更时构建，内容变更不触发
 
 ### 单站点部署 (传统模式)
 
