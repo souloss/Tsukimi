@@ -75,37 +75,11 @@ git push -u origin main
 
 ## 🔗 连接到 Tsukimi 代码仓库
 
-### 方式一: Git Submodule (推荐)
-
-在 Tsukimi 代码仓库中:
-
-```bash
-cd /path/to/Tsukimi
-
-# 添加内容仓库作为 submodule
-git submodule add https://github.com/your-username/Tsukimi-Content.git content
-
-# 提交 submodule 配置
-git add .gitmodules content
-git commit -m "Add content repository as submodule"
-git push
-```
-
 配置环境变量 `.env`:
 
 ```bash
+ENABLE_CONTENT_SYNC=true
 CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-USE_SUBMODULE=true
-```
-
-### 方式二: 独立仓库模式
-
-配置环境变量 `.env`:
-
-```bash
-CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-CONTENT_DIR=./content
-USE_SUBMODULE=false
 ```
 
 然后运行同步:
@@ -161,17 +135,6 @@ posts/
    pnpm run sync-content
    ```
 
-### 使用 Submodule 时
-
-```bash
-# 更新 submodule
-cd /path/to/Tsukimi
-git submodule update --remote --merge
-
-# 或者使用同步脚本
-pnpm run sync-content
-```
-
 ### 部署时自动同步
 
 在 CI/CD 配置中添加:
@@ -181,7 +144,6 @@ pnpm run sync-content
   run: pnpm run sync-content
   env:
     CONTENT_REPO_URL: ${{ secrets.CONTENT_REPO_URL }}
-    USE_SUBMODULE: true
 ```
 
 ## 📦 数据文件说明
@@ -237,7 +199,6 @@ pnpm run sync-content
 **本地开发**: 推荐使用 SSH 密钥
 ```bash
 CONTENT_REPO_URL=git@github.com:your-username/Tsukimi-Content-Private.git
-USE_SUBMODULE=true
 ```
 
 **CI/CD 部署**: 根据平台选择
@@ -247,7 +208,6 @@ USE_SUBMODULE=true
 ## 📚 参考资源
 
 - [Tsukimi 文档](https://tsukimi.souloss.cn/docs/tsukimi/)
-- [Git Submodule 文档](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)
 - [Astro Content Collections](https://docs.astro.build/zh-cn/guides/content-collections/)
 
 ---

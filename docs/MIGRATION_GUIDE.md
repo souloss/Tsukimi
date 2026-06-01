@@ -10,7 +10,6 @@
 
 - [ ] **备份整个项目** (重要!)
 - [ ] 确保所有更改已提交到 Git
-- [ ] 了解你要使用的模式 (推荐 Submodule)
 - [ ] 在 GitHub/GitLab 创建新的内容仓库
 
 ## 🚀 迁移步骤
@@ -43,7 +42,7 @@ cat > README.md << 'EOF'
 
 ## 使用方法
 
-此仓库作为 Tsukimi 代码仓库的内容源,通过 Git Submodule 或独立模式关联。
+此仓库作为 Tsukimi 代码仓库的内容源,通过内容同步脚本关联。
 
 详细说明请查看: https://github.com/souloss/Tsukimi
 EOF
@@ -111,7 +110,6 @@ ENABLE_CONTENT_SYNC=true
 
 # 内容仓库配置
 CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-USE_SUBMODULE=true
 EOF
 
 # 运行同步脚本
@@ -206,23 +204,6 @@ cd "$TSUKIMI_PATH"
 pnpm run sync-content
 ```
 
-### 使用 Submodule 时
-
-```bash
-cd "$TSUKIMI_PATH"
-
-# 更新 submodule 到最新版本
-git submodule update --remote --merge
-
-# 或者使用同步脚本 (推荐)
-pnpm run sync-content
-
-# 提交 submodule 更新
-git add content
-git commit -m "Update content submodule"
-git push
-```
-
 ## 🚀 部署配置
 
 迁移完成后,需要在部署平台配置环境变量:
@@ -230,7 +211,6 @@ git push
 ```bash
 ENABLE_CONTENT_SYNC=true
 CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
-USE_SUBMODULE=true
 ```
 
 详细的部署配置(包括私有仓库、GitHub Actions、Vercel 等)请参考 [内容分离完整指南 - CI/CD 部署](./CONTENT_SEPARATION.md#-cicd-部署)
@@ -264,7 +244,6 @@ A: 参考 [内容分离完整指南 - 私有仓库配置](./CONTENT_SEPARATION.m
 
 - [内容分离完整指南](./CONTENT_SEPARATION.md) - 详细配置说明
 - [内容仓库结构说明](./CONTENT_REPOSITORY.md) - 推荐的仓库结构
-- [Git Submodule 文档](https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)
 
 ---
 

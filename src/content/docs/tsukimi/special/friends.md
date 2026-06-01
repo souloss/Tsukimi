@@ -159,11 +159,11 @@ export const friendsData: FriendItem[] = [
     *   在 `friendsData` 数组中，复制一个现有的友情链接对象作为模板。
     *   修改模板中的属性：
         *   **`id`**: 给一个新的、唯一的数字（例如，在最后一个友情链接的`id`基础上加1）。
-        *   **`name`**: 输入网站或博客的名称。
-        *   **`avatar`**: 设置头像图片的URL。
-        *   **`url`**: 设置网站的URL地址，确保包含协议。
-        *   **`description`**: (可选) 输入网站的简短描述，建议控制在50个字符以内。
-        *   **`tags`**: (可选) 添加适当的标签。
+        *   **`title`**: 输入网站或博客的名称。
+        *   **`imgurl`**: 设置头像图片的URL。
+        *   **`siteurl`**: 设置网站的URL地址，确保包含协议。
+        *   **`desc`**: 输入网站的简短描述，建议控制在50个字符以内。
+        *   **`tags`**: 添加适当的标签。
         *   **`rss`**: (可选) 添加网站的 RSS 订阅地址，用于朋友圈功能。
         *   **`weight`**: (可选) 设置权重，数字越大排序越靠前。
         *   **`enabled`**: (可选) 设置是否启用，默认为 true。
@@ -185,10 +185,10 @@ export const friendsData: FriendItem[] = [
     export const friendsData: FriendItem[] = [
       {
         id: 1,
-        name: "Astro",
-        avatar: "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
-        url: "https://github.com/withastro/astro",
-        description: "The web framework for content-driven websites",
+        title: "Astro",
+        imgurl: "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
+        siteurl: "https://github.com/withastro/astro",
+        desc: "The web framework for content-driven websites",
         tags: ["Framework"],
         rss: "https://github.com/withastro/astro/releases.atom",
         weight: 10,
@@ -198,10 +198,10 @@ export const friendsData: FriendItem[] = [
       // --- 这是我们新添加的友情链接 ---
       {
         id: 9, // 新的ID
-        name: "Vue.js", // 名称
-        avatar: "https://avatars.githubusercontent.com/u/6128107?v=4&s=640", // 头像URL
-        url: "https://vuejs.org", // 网站URL
-        description: "渐进式JavaScript框架", // 描述
+        title: "Vue.js", // 名称
+        imgurl: "https://avatars.githubusercontent.com/u/6128107?v=4&s=640", // 头像URL
+        siteurl: "https://vuejs.org", // 网站URL
+        desc: "渐进式JavaScript框架", // 描述
         tags: ["Framework", "JavaScript"], // 标签
         rss: "https://vuejs.org/feed.xml", // RSS地址
         weight: 8, // 权重
@@ -214,7 +214,7 @@ export const friendsData: FriendItem[] = [
 
 #### **5. 修改或删除友情链接**
 
-*   **修改友情链接**: 直接在 `friendsData` 数组中找到对应的友情链接对象，修改其 `name`, `avatar`, `url`, `description`, `tags`, `rss`, `weight` 或 `enabled` 属性即可。
+*   **修改友情链接**: 直接在 `friendsData` 数组中找到对应的友情链接对象，修改其 `title`, `imgurl`, `siteurl`, `desc`, `tags`, `rss`, `weight` 或 `enabled` 属性即可。
 *   **临时隐藏友情链接**: 不需要删除，只需将 `enabled` 设置为 `false` 即可临时隐藏。
 *   **删除友情链接**: 找到对应的友情链接对象，将其从数组中完全移除。注意不要留下多余的逗号，以免造成语法错误。
 

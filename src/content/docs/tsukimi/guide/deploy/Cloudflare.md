@@ -12,207 +12,158 @@ copyright:
 
 # Cloudflare Pages 部署指南
 
-Cloudflare Pages 是一个优秀的静态网站托管平台，具有全球 CDN、自动部署和免费 SSL 证书等特性。本指南将详细介绍如何将 Tsukimi (Astro项目) 部署到 Cloudflare Pages。
+Cloudflare Pages 是一个优秀的静态网站托管平台，具有全球 CDN、自动部署和免费 SSL 证书等特性。本指南将介绍如何将 Tsukimi 部署到 Cloudflare Pages，包括**单站点部署**和**双站点部署**两种模式。
 
 ## 准备工作
 
-1. **Git 仓库**：确保您的 Tsukimi 项目已上传到 GitHub、GitLab 或其他支持的 Git 平台
+1. **Git 仓库**：确保您的 Tsukimi 项目已上传到 GitHub
 2. **Cloudflare 账号**：注册一个免费的 Cloudflare 账号
 
-## 部署步骤
+## 单站点部署
 
-### 1. 登录 Cloudflare Pages
+最简单的部署方式，适合只需要一个站点的用户。
 
-访问 [Cloudflare Dashboard](https://dash.cloudflare.com/)，使用您的账号登录，然后选择 "Pages" 服务。
+### 1. 创建项目
 
-### 2. 创建新项目
+1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Workers & Pages → Create application → Pages → Connect to Git
+3. 选择您的 Tsukimi 仓库
 
-1. 点击 "Create a project" 或 "Connect to Git" 按钮
-2. 选择您的 Git 提供商（GitHub、GitLab 等）并授权
-3. 从列表中选择您的 Tsukimi 项目仓库
+### 2. 配置构建
 
-### 3. 配置构建设置
+| 设置项 | 值 |
+|--------|-----|
+| Project name | `tsukimi` 或自定义 |
+| Production branch | `master` |
+| Framework preset | Astro |
+| Build command | `pnpm build` |
+| Build output directory | `dist` |
 
-在项目设置页面中，配置以下构建设置：
-
-#### 基本设置
-
-- **Project name**: 输入您的项目名称（如 `tsukimi-blog`）
-- **Production branch**: 设置主分支（通常为 `main` 或 `master`）
-
-#### 构建配置
-
-```yaml title="Cloudflare Pages 构建设置"
-# 构建设置
-Build command: pnpm i && pnpm build
-Build output directory: dist
-Root directory: / 
-```
-
-#### 环境变量（可选）
-
-如果您的项目需要环境变量，可以在 "Environment variables" 部分添加：
+### 3. 环境变量
 
 | 变量名 | 值 | 说明 |
 |--------|-----|------|
-| NODE_VERSION | 18 | 指定 Node.js 版本 |
-| PNPM_VERSION | 8 | 指定 pnpm 版本 |
+| `ENABLE_CONTENT_SYNC` | `false` | 禁用内容分离（使用本地内容） |
+| `NODE_VERSION` | `22` | Node.js 版本 |
 
-### 4. 部署项目
+如果启用内容分离，额外添加：
 
-配置完成后，点击 "Save and Deploy" 开始首次部署：
+| 变量名 | 值 | 说明 |
+|--------|-----|------|
+| `ENABLE_CONTENT_SYNC` | `true` | 启用内容分离 |
+| `CONTENT_REPO_URL` | 内容仓库 URL | 支持 HTTPS/SSH/PAT Token |
 
-1. Cloudflare Pages 会克隆您的仓库
-2. 安装依赖（`pnpm i`）
-3. 构建项目（`pnpm build`）
-4. 将 `dist` 目录部署到全球 CDN
+### 4. 自定义域名
 
-首次部署可能需要几分钟时间。
+Settings → Custom domains → 添加域名，Cloudflare 自动配置 SSL。
 
-### 5. 获取部署信息
+---
 
-部署完成后，您将获得：
+## 双站点部署
 
-- **站点 URL**：如 `https://tsukimi-blog.pages.dev`
-- **自动生成的 SSL 证书**
-- **全球 CDN 分发**
+同时部署两个站点：**Demo 站**展示模板功能，**个人站**使用私有内容。
 
-## 高级配置
+两个站点都连接同一个仓库的同一个分支，通过不同的环境变量区分构建行为。
 
-### 自定义域名
+```
+souloss/Tsukimi (master 分支)
+  ↓ 推送时自动触发
+  ├→ CF Pages tsukimi 项目 (ENABLE_CONTENT_SYNC=false) → tsukimi.souloss.com
+  ├→ CF Pages astro-blog 项目 (ENABLE_CONTENT_SYNC=true) → blog.souloss.com
+  ↓ 内容仓库推送时
+  └→ Deploy Hook 只触发 astro-blog 重新构建
+```
 
-1. 在项目设置中，选择 "Custom domains"
-2. 添加您的域名（如 `blog.yourdomain.com`）
-3. 按照提示配置 DNS 记录
-4. Cloudflare 会自动配置 SSL 证书
+### Demo 站点配置
 
-### 部署钩子
+与单站点部署相同，环境变量设为 `ENABLE_CONTENT_SYNC=false`。
 
-如果需要触发部署，可以使用部署钩子：
+### 个人站点配置
 
-1. 在项目设置中找到 "Deploy hooks"
-2. 创建新的部署钩子
-3. 保存生成的 URL，用于触发重新部署
+1. **创建第二个 CF Pages 项目**，同样连接 `souloss/Tsukimi` 仓库的 `master` 分支
 
-### 预览部署
+2. **构建配置相同**，但**环境变量不同**：
 
-每个推送的 PR 都会自动创建预览部署：
+| 变量名 | 值 | 说明 |
+|--------|-----|------|
+| `ENABLE_CONTENT_SYNC` | `true` | 启用内容分离 |
+| `CONTENT_REPO_URL` | `https://x-access-token:<PAT_TOKEN>@github.com/souloss/Tsukimi-Content.git` | 带 Token 的私有仓库 URL |
+| `NODE_VERSION` | `22` | Node.js 版本 |
 
-- URL 格式：`https://<branch-name>-<project-name>.pages.dev`
-- 可以用于预览更改，不影响生产环境
+> `CONTENT_REPO_URL` 中需要嵌入 PAT Token，因为构建时需要克隆私有内容仓库
+
+3. **自定义域名**: `blog.souloss.com`
+
+### 内容更新自动触发
+
+内容仓库推送时，通过 Deploy Hook 自动触发个人站点重新构建（Demo 站不受影响）：
+
+**1. 获取 Deploy Hook URL**
+
+个人站点项目 → Settings → Builds & deployments → Deploy hooks → 创建 Hook（Branch: `master`）
+
+**2. 配置内容仓库 Secret**
+
+内容仓库 → Settings → Secrets → Actions → 添加 `CF_DEPLOY_HOOK`
+
+**3. 内容仓库工作流**
+
+```yaml
+# .github/workflows/trigger-build.yml
+name: Trigger Blog Rebuild
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages rebuild
+        run: curl -X POST "${{ secrets.CF_DEPLOY_HOOK }}"
+```
+
+---
 
 ## 常见问题
 
-### Q: 构建失败怎么办？
+### 构建失败？
 
-A: 检查以下几点：
+1. 检查 Node.js 版本（需要 >= 22）
+2. 查看构建日志中的错误信息
+3. 确认环境变量配置正确（`CONTENT_REPO_URL` 无换行符）
 
-1. 确保 `package.json` 中包含 `pnpm` 的构建脚本
-2. 检查 Node.js 版本是否兼容
-3. 查看构建日志中的错误信息
-4. 确保所有依赖已正确安装
+### 内容仓库克隆失败？
 
-### Q: 如何使用自定义镜像源？
+检查 `CONTENT_REPO_URL`：
+- 私有仓库需要带 PAT Token: `https://x-access-token:<TOKEN>@github.com/user/repo.git`
+- 确保 Token 有 `repo` 权限
+- URL 必须是一行完整的字符串，不能有换行
 
-A: 在根目录创建 `.npmrc` 文件：
+### 如何使用自定义镜像源？
 
-```ini title=".npmrc"
+创建 `.npmrc` 文件：
+```ini
 registry=https://registry.npmmirror.com
 ```
 
-### Q: 如何优化构建速度？
+---
 
-A: 可以尝试以下方法：
+## 本地预览
 
-1. 启用构建缓存
-2. 优化依赖安装，使用 `.npmrc` 配置
-3. 减少不必要的依赖
-
-## 本地预览部署
-
-在部署前，您可以在本地预览构建结果：
-
-```bash title="本地构建命令"
-# 安装依赖
-pnpm i
-
-# 构建项目
-pnpm build
-
-# 本地预览
-pnpm preview
+```bash
+pnpm build   # 构建
+pnpm preview # 本地预览 http://localhost:4321
 ```
 
-访问 `http://localhost:4321` 查看构建后的网站。
-
-## CI/CD 集成
-
-Cloudflare Pages 支持自动部署，当您推送代码到指定分支时：
-
-1. 自动触发构建流程
-2. 构建成功后自动更新网站
-3. 失败时发送通知
-
-您可以在项目设置中配置：
-
-- 部署分支
-- 部署条件
-- 失败时的操作
-
-## 性能优化
-
-### 图片优化
-
-Cloudflare Pages 自动提供图片优化服务：
-
-- 自动转换格式（如 WebP）
-- 根据设备调整尺寸
-- 自动压缩
-
-### 缓存策略
-
-默认缓存配置：
-
-- HTML 文件：不缓存
-- 静态资源（CSS、JS、图片）：长期缓存
-
-您可以在 `_headers` 文件中自定义缓存策略：
-
-```ini title="public/_headers"
-/cache-control/*
-  Cache-Control: public, max-age=31536000, immutable
-```
-
-## 监控与分析
-
-Cloudflare 提供内置的分析工具：
-
-1. **页面访问量**：查看访问统计
-2. **性能指标**：监控加载速度
-3. **安全分析**：查看威胁检测
-
-访问 "Analytics" 部分查看详细数据。
+---
 
 ## 成本
 
-Cloudflare Pages 的免费计划包括：
-
+Cloudflare Pages 免费计划：
 - 每月 500 次构建
 - 无限静态请求
-- 20,000 次服务器请求
-- 全球 CDN 分发
-- 免费 SSL 证书
+- 全球 CDN + 免费 SSL
 
-对于个人博客和小型网站，免费计划通常足够使用。
-
-## 总结
-
-Cloudflare Pages 是部署 Tsukimi (Astro项目) 的优秀选择，具有以下优势：
-
-- 🚀 部署简单，配置直观
-- 🌍 全球 CDN，访问速度快
-- 🔒 免费 SSL 证书
-- 🔄 自动部署
-- 📊 内置分析工具
-
-按照本指南操作，您应该能够成功将 Tsukimi 博客部署到 Cloudflare Pages，享受快速、稳定的访问体验。
+对于个人博客，免费计划足够。
