@@ -16,9 +16,19 @@ interface FriendsCircleData {
 	items: FriendsCircleItem[];
 }
 
-import friendsCircleJson from "./friends-circle.json";
+const defaultData: FriendsCircleData = { lastUpdated: "", items: [] };
 
-const data: FriendsCircleData = friendsCircleJson as FriendsCircleData;
+function loadData(): FriendsCircleData {
+	try {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		const json = require("./friends-circle.json");
+		return json ?? defaultData;
+	} catch {
+		return defaultData;
+	}
+}
+
+const data = loadData();
 
 // 获取朋友圈数据
 export function getFriendsCircleList(): FriendsCircleItem[] {
