@@ -73,8 +73,8 @@ pnpm dev
 在项目根目录的 `.env` 文件中:
 
 ```bash
-# 禁用内容分离 (使用本地内容)
-ENABLE_CONTENT_SYNC=false
+# 禁用内容分离 (使用本地内容,默认)
+# ENABLE_CONTENT_SYNC=false
 
 # 或启用内容分离 (从远程仓库同步)
 ENABLE_CONTENT_SYNC=true
@@ -168,9 +168,9 @@ git push
 # ============================================
 
 # 是否启用内容分离功能
-# false = 使用本地内容 (推荐新手)
+# false 或未设置 = 使用本地内容 (默认)
 # true = 从远程仓库同步内容
-ENABLE_CONTENT_SYNC=false
+ENABLE_CONTENT_SYNC=true
 
 # ============================================
 # 内容仓库配置 (仅当 ENABLE_CONTENT_SYNC=true 时需要)
@@ -369,7 +369,6 @@ CONTENT_REPO_URL=https://YOUR_TOKEN@github.com/your-username/Tsukimi-Content-Pri
 |------|------|
 | `pnpm run init-content` | 运行交互式初始化向导 |
 | `pnpm run sync-content` | 手动同步内容仓库 |
-| `pnpm run check-env` | 检查环境变量配置 |
 | `pnpm dev` | 启动开发服务器 (自动同步) |
 | `pnpm build` | 构建项目 (自动同步) |
 
@@ -456,9 +455,9 @@ ssh -T git@github.com
    chmod 644 .env  # Linux/Mac
    ```
 
-4. 运行检查命令
+4. 运行同步命令验证
    ```bash
-   pnpm run check-env
+   pnpm run sync-content
    ```
 
 ### 问题 5: 内容同步失败
@@ -513,6 +512,6 @@ git clone https://github.com/your-username/Tsukimi-Content.git content
 ## 🤝 需要帮助?
 
 - 查看 [GitHub Issues](https://github.com/souloss/Tsukimi/issues)
-- 运行 `pnpm run check-env` 检查配置
+- 运行 `pnpm run sync-content` 验证配置
 
 祝你使用愉快! 🎉

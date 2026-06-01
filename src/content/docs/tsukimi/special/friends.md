@@ -100,24 +100,24 @@ export const friendsConfig: FriendsPageConfig = {
 ```typescript title="src/data/friends.ts"
 export interface FriendItem {
 	id: number;
-	name: string; // 网站名称（原 title）
-	avatar: string; // 头像URL（原 imgurl）
-	url: string; // 网站地址（原 siteurl）
-	description?: string; // 网站描述（原 desc，可选）
-	tags?: string[]; // 标签数组（可选）
-	rss?: string; // RSS 订阅地址（新增，可选）
-	weight?: number; // 权重（新增，可选，数字越大排序越靠前）
-	enabled?: boolean; // 是否启用（新增，可选，默认 true）
+	title: string; // 网站名称
+	imgurl: string; // 头像URL
+	siteurl: string; // 网站地址
+	desc: string; // 网站描述
+	tags: string[]; // 标签数组
+	weight?: number; // 权重（可选，数字越大排序越靠前）
+	enabled?: boolean; // 是否启用（可选，默认 true）
+	rss?: string; // RSS 订阅地址（可选）
 }
 
 // 友情链接数据
 export const friendsData: FriendItem[] = [
 	{
 		id: 1,
-		name: "Astro",
-		avatar: "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
-		url: "https://github.com/withastro/astro",
-		description: "The web framework for content-driven websites",
+		title: "Astro",
+		imgurl: "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
+		siteurl: "https://github.com/withastro/astro",
+		desc: "The web framework for content-driven websites",
 		tags: ["Framework"],
 		rss: "https://github.com/withastro/astro/releases.atom",
 		weight: 10,
@@ -130,11 +130,11 @@ export const friendsData: FriendItem[] = [
 
 *   **`interface FriendItem`**: 这是一个TypeScript接口，它定义了每一个友情链接必须包含的字段和它们的类型。
     *   `id: number`: (必填) 友情链接的唯一标识符。**必须是数字，且不能重复**。通常按添加顺序递增。
-    *   `name: string`: (必填) 网站或博客的名称。（原 `title`）
-    *   `avatar: string`: (必填) 网站头像或Logo的URL地址。建议使用正方形图片，尺寸为640x640像素。（原 `imgurl`）
-    *   `url: string`: (必填) 网站的URL地址，需要包含协议（http://或https://）。（原 `siteurl`）
-    *   `description?: string`: (可选) 网站的简短描述。（原 `desc`）
-    *   `tags?: string[]`: (可选) 标签数组，用于分类。
+    *   `title: string`: (必填) 网站或博客的名称。
+    *   `imgurl: string`: (必填) 网站头像或Logo的URL地址。建议使用正方形图片，尺寸为640x640像素。
+    *   `siteurl: string`: (必填) 网站的URL地址，需要包含协议（http://或https://）。
+    *   `desc: string`: (必填) 网站的简短描述。
+    *   `tags: string[]`: (必填) 标签数组，用于分类。
     *   `rss?: string`: (可选) 网站的 RSS/Atom 订阅地址，用于朋友圈功能抓取文章。
     *   `weight?: number`: (可选) 权重值，数字越大排序越靠前。默认值为 0。
     *   `enabled?: boolean`: (可选) 是否启用此友链，设为 `false` 时不显示。默认值为 `true`。
@@ -142,13 +142,6 @@ export const friendsData: FriendItem[] = [
 *   **`export const friendsData: FriendItem[] = [...]`**: 这是实际的友情链接数据数组。
     *   数组中的每一个对象都遵循上面 `FriendItem` 接口的定义。
     *   友情链接在页面上的显示顺序**通常是按照权重（weight）排序，权重相同时按数组顺序**，也可以使用随机排序函数使其随机展示。
-
-**字段名变更说明**:
-- `title` → `name`
-- `imgurl` → `avatar`
-- `siteurl` → `url`
-- `desc` → `description`
-- 新增: `rss`, `weight`, `enabled`
 
 ---
 

@@ -12,7 +12,7 @@ loadEnv();
 console.log("已加载 .env 配置文件\n");
 
 // 从环境变量读取配置
-const ENABLE_CONTENT_SYNC = process.env.ENABLE_CONTENT_SYNC !== "false"; // 默认启用
+const ENABLE_CONTENT_SYNC = process.env.ENABLE_CONTENT_SYNC === "true"; // 默认禁用
 const CONTENT_REPO_URL = process.env.CONTENT_REPO_URL || "";
 const CONTENT_DIR = process.env.CONTENT_DIR || path.join(rootDir, "content");
 
@@ -20,7 +20,7 @@ console.log("开始同步内容...\n");
 
 // 检查是否启用内容分离
 if (!ENABLE_CONTENT_SYNC) {
-	console.log("内容分离功能已关闭（ENABLE_CONTENT_SYNC=false）");
+	console.log("内容分离功能未启用");
 	console.log("提示：将使用本地内容，不会从远程仓库同步");
 	console.log("      若要启用内容分离，请在 .env 中设置：");
 	console.log("      ENABLE_CONTENT_SYNC=true");
