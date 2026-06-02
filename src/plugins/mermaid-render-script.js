@@ -360,6 +360,7 @@
 		svgElement.setAttribute("height", `${displayHeight}px`);
 		svgElement.style.maxWidth = "100%";
 		svgElement.style.height = "auto";
+		svgElement.setAttribute("overflow", "visible");
 
 		try {
 			const panZoomInstance = window.svgPanZoom(svgElement, {
@@ -438,6 +439,7 @@
 		clonedSvg.style.maxHeight = "none";
 		clonedSvg.style.width = "";
 		clonedSvg.style.height = "";
+		clonedSvg.setAttribute("overflow", "visible");
 		content.appendChild(clonedSvg);
 
 		const fsControls = document.createElement("div");
