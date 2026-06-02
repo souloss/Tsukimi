@@ -434,9 +434,10 @@
 		content.className = "mermaid-fs-content";
 		const clonedSvg = svgElement.cloneNode(true);
 		clonedSvg.style.filter = "";
-		clonedSvg.setAttribute("width", "100%");
-		clonedSvg.setAttribute("height", "100%");
 		clonedSvg.style.maxWidth = "none";
+		clonedSvg.style.maxHeight = "none";
+		clonedSvg.style.width = "";
+		clonedSvg.style.height = "";
 		content.appendChild(clonedSvg);
 
 		const fsControls = document.createElement("div");
