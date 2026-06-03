@@ -6,10 +6,10 @@ const SITE_LANG = "zh_CN";
 export { SITE_LANG };
 
 const defaults: SiteConfig = {
-	title: "souloss",
-	subtitle: "个人技术博客",
-	siteURL: "https://tsukimi.example.com/",
-	siteStartDate: "2020-01-01",
+	title: "tsukimi",
+	subtitle: "tsukimi 示例博客",
+	siteURL: "https://tsukimi.souloss.cn/",
+	siteStartDate: "2026-06-01",
 
 	lang: SITE_LANG,
 
@@ -35,7 +35,7 @@ const defaults: SiteConfig = {
 
 	navbarTitle: {
 		mode: "text-icon",
-		text: "souloss",
+		text: "tsukimi",
 		icon: "assets/home/home.webp",
 		logo: "assets/home/default-logo.webp",
 	},
@@ -107,12 +107,12 @@ const defaults: SiteConfig = {
 		bannerHomeText: {
 			enable: true,
 			switchable: true,
-			title: "Souloss 的技术博客",
+			title: "tsukimi 示例博客",
 
 			subtitle: [
-				"向下深挖一英里，向上构建一厘米",
-				"Stay Hungry, Stay Foolish",
-				"Digging deeper, building simpler",
+				"放学后茶话会...永远永远是...放学后!",
+				"放学后的下午茶时间，比任何和弦都美妙~",
+				"一直很担心会什么都没有做就这样长大",
 			],
 			typewriter: {
 				enable: true,
@@ -126,12 +126,12 @@ const defaults: SiteConfig = {
 		wallpaperHomeText: {
 			enable: true,
 			switchable: true,
-			title: "Souloss 的技术博客",
+			title: "tsukimi 示例博客",
 
 			subtitle: [
-				"向下深挖一英里，向上构建一厘米",
-				"Stay Hungry, Stay Foolish",
-				"Digging deeper, building simpler",
+				"放学后茶话会...永远永远是...放学后!",
+				"放学后的下午茶时间，比任何和弦都美妙~",
+				"一直很担心会什么都没有做就这样长大",
 			],
 			typewriter: {
 				enable: true,

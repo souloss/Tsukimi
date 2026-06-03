@@ -11,7 +11,7 @@ const defaults: PioConfig = {
 	hiddenOnMobile: true,
 	hideAboutMenu: false,
 	dialog: {
-		welcome: "Welcome to souloss Blog!",
+		welcome: "Welcome to tsukimi Demo Blog!",
 		touch: [
 			"What are you doing?",
 			"Stop touching me!",
