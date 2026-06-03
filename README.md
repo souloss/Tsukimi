@@ -10,7 +10,7 @@
 
 🌏 **语言：** [**中文**](./README.md) / [**English**](./README.en.md)
 
-[**🖥️ 在线预览**](https://tsukimi.souloss.cn/) | [**📝 文档**](https://tsukimi.souloss.cn/docs/tsukimi/) | [**📦 内容仓库**](https://github.com/souloss/Tsukimi-Content)
+[**🖥️ 在线预览**](https://tsukimi.souloss.cn/) | [**📝 文档**](https://tsukimi.souloss.cn/docs/tsukimi/) | [**📦 内容仓库模板**](https://github.com/souloss/Tsukimi-Content-Template)
 
 ## ✨ 功能特性
 

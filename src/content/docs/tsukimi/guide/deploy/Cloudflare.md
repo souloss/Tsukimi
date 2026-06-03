@@ -87,7 +87,7 @@ souloss/Tsukimi (master 分支)
 | 变量名 | 值 | 说明 |
 |--------|-----|------|
 | `ENABLE_CONTENT_SYNC` | `true` | 启用内容分离 |
-| `CONTENT_REPO_URL` | `https://x-access-token:<PAT_TOKEN>@github.com/souloss/Tsukimi-Content.git` | 带 Token 的私有仓库 URL |
+| `CONTENT_REPO_URL` | `https://x-access-token:<PAT_TOKEN>@github.com/your-username/Tsukimi-Content.git` | 带 Token 的私有仓库 URL |
 | `NODE_VERSION` | `22` | Node.js 版本 |
 
 > `CONTENT_REPO_URL` 中需要嵌入 PAT Token，因为构建时需要克隆私有内容仓库

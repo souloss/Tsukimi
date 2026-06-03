@@ -242,8 +242,8 @@ body.docs-page #navbar-wrapper .card-base {
 	position: fixed;
 	top: var(--docs-navbar-height);
 	right: 0;
-	bottom: 0;
 	width: var(--docs-toc-width);
+	max-height: calc(100vh - var(--docs-navbar-height));
 	background: var(--docs-bg-toc);
 	border-left: 1px solid var(--docs-divider);
 	overflow-y: auto;

@@ -60,7 +60,7 @@ export default defineConfig({
 
 1. **添加仓库 Secrets**:
    - Settings → Secrets and variables → Actions → New repository secret
-   - 添加 `CONTENT_REPO_URL`: `https://github.com/souloss/Tsukimi-Content.git`
+   - 添加 `CONTENT_REPO_URL`: `https://github.com/your-username/Tsukimi-Content.git`
 
 2. **修改 `.github/workflows/deploy.yml`**:
 
@@ -78,7 +78,7 @@ export default defineConfig({
 **同账号私有仓库** (推荐):
 - 使用 PAT Token 方式访问
 - 在 Secrets 中添加 `PAT_TOKEN` (需要 `repo` 权限)
-- URL 格式: `https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/souloss/Tsukimi-Content.git`
+- URL 格式: `https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/your-username/Tsukimi-Content.git`
 
 **跨账号私有仓库 (SSH)**:
 ```yaml
@@ -147,7 +147,7 @@ export default defineConfig({
 | 变量名 | 值 |
 |-------|---|
 | `ENABLE_CONTENT_SYNC` | `true` |
-| `CONTENT_REPO_URL` | `https://github.com/souloss/Tsukimi-Content.git` |
+| `CONTENT_REPO_URL` | `https://github.com/your-username/Tsukimi-Content.git` |
 
 > ⚠️ **重要提示**: 使用独立仓库模式 (默认)，通过 `sync-content.js` 在构建时同步内容。
 
@@ -161,7 +161,7 @@ export default defineConfig({
 添加环境变量:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://x-access-token:${PAT_TOKEN}@github.com/souloss/Tsukimi-Content.git
+CONTENT_REPO_URL=https://x-access-token:${PAT_TOKEN}@github.com/your-username/Tsukimi-Content.git
 ```
 
 在 Vercel 环境变量中添加 `PAT_TOKEN` (GitHub Personal Access Token)。
@@ -195,7 +195,7 @@ CONTENT_REPO_URL=https://x-access-token:${PAT_TOKEN}@github.com/souloss/Tsukimi-
 在 Site settings → Environment variables 中添加:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 ```
 
 4. **私有仓库配置**:
@@ -216,7 +216,7 @@ CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
   PNPM_VERSION = "9"
   # 如果使用内容分离
   ENABLE_CONTENT_SYNC = "true"
-  CONTENT_REPO_URL = "https://github.com/souloss/Tsukimi-Content.git"
+  CONTENT_REPO_URL = "https://github.com/your-username/Tsukimi-Content.git"
 ```
 
 ---
@@ -233,7 +233,7 @@ Tsukimi 支持同时部署两个站点：
 ┌─────────────────────────────────────────────────────────────────┐
 │                        双站点部署架构                            │
 ├─────────────────────────────────────────────────────────────────┤
-│  souloss/Tsukimi (公开)          souloss/Tsukimi-Content (私有) │
+│  souloss/Tsukimi (公开)          your-username/Tsukimi-Content (私有) │
 │  └── master 分支                 └── main 分支 (内容)           │
 │      ↓ 推送时自动触发                                          │
 │      CF Pages tsukimi 项目       内容推送 → curl Deploy Hook    │
@@ -284,7 +284,7 @@ Tsukimi 支持同时部署两个站点：
 4. **环境变量**:
    ```
    ENABLE_CONTENT_SYNC=true
-   CONTENT_REPO_URL=https://x-access-token:<PAT_TOKEN>@github.com/souloss/Tsukimi-Content.git
+   CONTENT_REPO_URL=https://x-access-token:<PAT_TOKEN>@github.com/your-username/Tsukimi-Content.git
    INDEXNOW_HOST=blog.souloss.com
    ```
    > 注意: `CONTENT_REPO_URL` 中需要嵌入 PAT Token，因为构建时需要克隆私有内容仓库
@@ -305,7 +305,7 @@ Tsukimi 支持同时部署两个站点：
 
 **2.2 配置内容仓库 Secret**
 
-1. 打开 https://github.com/souloss/Tsukimi-Content/settings/secrets/actions
+1. 打开 https://github.com/your-username/Tsukimi-Content/settings/secrets/actions
 2. 添加 Secret:
    - Name: `CF_DEPLOY_HOOK`
    - Value: 粘贴 Deploy Hook URL
@@ -360,7 +360,7 @@ jobs:
 添加以下变量:
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 ```
 
 ### 注意事项
@@ -449,7 +449,7 @@ fatal: Failed to add submodule 'content'
 
 ```
 ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/souloss/Tsukimi-Content.git
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
 ```
 
 **解决方案 C: 自动降级**
@@ -489,7 +489,7 @@ fatal: could not read Username for 'https://github.com'
 
 **解决**:
 1. 在 Vercel 项目设置中添加 GitHub 集成权限
-2. 或使用 Token: `https://x-access-token:${PAT_TOKEN}@github.com/souloss/Tsukimi-Content.git`
+2. 或使用 Token: `https://x-access-token:${PAT_TOKEN}@github.com/your-username/Tsukimi-Content.git`
 3. 或使用独立仓库模式 (默认，通过 `sync-content.js` 同步)
 
 **检查**:
