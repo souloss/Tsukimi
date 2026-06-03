@@ -56,7 +56,6 @@ export class PanelHandler {
 				this.setupClickOutsideToClose(panel);
 			});
 
-			console.log("PanelHandler: 初始化完成");
 			return Promise.resolve();
 		} catch (error) {
 			console.error("PanelHandler: 初始化失败", error);

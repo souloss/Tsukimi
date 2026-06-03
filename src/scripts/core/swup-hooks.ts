@@ -541,10 +541,6 @@ export class SwupHooksManager {
 					},
 				});
 				document.dispatchEvent(pageLoadedEvent);
-				console.log(
-					"Layout: 触发 tsukimi:page:loaded 事件，路径:",
-					window.location.pathname,
-				);
 			}
 		}, ANIMATION_CONFIG.commentInitDelay);
 	}

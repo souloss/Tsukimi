@@ -28,7 +28,6 @@ export class AnimationManager {
 	init(): void {
 		this.setupSwupIntegration();
 		this.setupScrollAnimations();
-		console.log("🎨 Animation Manager initialized");
 	}
 
 	/**

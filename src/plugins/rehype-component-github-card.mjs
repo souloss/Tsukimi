@@ -70,7 +70,6 @@ export function GithubCardComponent(properties, children) {
         avatarEl.style.backgroundColor = 'transparent';
         document.getElementById('${cardUuid}-license').innerText = data.license?.spdx_id || "no-license";
         document.getElementById('${cardUuid}-card').classList.remove("fetch-waiting");
-        console.log("[GITHUB-CARD] Loaded card for ${repo} | ${cardUuid}.")
       }).catch(err => {
         const c = document.getElementById('${cardUuid}-card');
         c?.classList.add("fetch-error");

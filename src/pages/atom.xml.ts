@@ -114,7 +114,7 @@ export async function GET(context: APIContext) {
 					img.setAttribute("src", new URL(optimizedImg.src, context.site).href);
 				} else {
 					// Debug: log the failed import path
-					console.log(
+					console.warn(
 						`Failed to load image: ${importPath} for post: ${post.id}`,
 					);
 				}
