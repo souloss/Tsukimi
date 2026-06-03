@@ -308,9 +308,12 @@ a.card-github.fetch-error
   justify-content: center
   align-items: center
   min-height: 100px
+  max-height: 420px
   font-family: inherit
 
   svg
+    max-width: 100%
+    max-height: 420px
     border-radius: 0.5rem
 
 .mermaid-loading
@@ -434,10 +437,13 @@ a.card-github.fetch-error
   justify-content: center
   background: var(--card-bg)
   border-radius: var(--radius-large)
-  overflow: hidden
 
   &:active
     cursor: grabbing
+
+  svg
+    max-width: 100%
+    max-height: 100%
 
 :root.dark .mermaid-fs-content svg
   filter: brightness(0.9) contrast(1.1) !important

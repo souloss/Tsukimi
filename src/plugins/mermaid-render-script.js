@@ -127,7 +127,6 @@
 		const maxAttempts = 3;
 
 		while (attempts < maxAttempts) {
-			// Check if this render has been cancelled
 			if (signal?.aborted) {
 				return;
 			}
@@ -148,6 +147,7 @@
 				element.innerHTML = svg;
 				const svgElement = element.querySelector("svg");
 				if (svgElement) {
+					// Set responsive sizing — CSS max-width/max-height constrains the SVG
 					svgElement.setAttribute("width", "100%");
 					svgElement.removeAttribute("height");
 					svgElement.style.maxWidth = "100%";
@@ -188,9 +188,7 @@
 		}
 	}
 
-	// Theme change handler: re-render all diagrams with new theme
 	async function onThemeChange(newTheme) {
-		// Abort any in-flight theme re-render
 		if (themeChangeAbort) {
 			themeChangeAbort.abort();
 		}
@@ -203,7 +201,6 @@
 		destroyAllPanZoom();
 
 		try {
-			// Initialize mermaid with new theme
 			window.mermaid.initialize(getThemeConfig(newTheme));
 
 			const mermaidElements = document.querySelectorAll(
@@ -214,7 +211,6 @@
 				return;
 			}
 
-			// Batch DOM writes: collect all rendered SVGs, then apply in one paint
 			const results = [];
 			for (let i = 0; i < mermaidElements.length; i++) {
 				if (signal.aborted) return;
@@ -223,7 +219,6 @@
 				const code = element.getAttribute("data-mermaid-code");
 				if (!code) continue;
 
-				// Only re-render elements that were previously rendered
 				if (
 					element.getAttribute("data-mermaid-rendered") !== "true" &&
 					!renderedElements.has(element)
@@ -240,11 +235,9 @@
 					console.warn("Mermaid theme re-render failed for element:", error);
 				}
 
-				// Yield to main thread every diagram to keep UI responsive
 				await yieldToMain();
 			}
 
-			// Apply all SVG updates in a single batch
 			if (signal.aborted) return;
 			for (const { element, svg } of results) {
 				element.innerHTML = svg;
@@ -268,13 +261,11 @@
 		} catch (error) {
 			console.error("Error in mermaid theme change:", error);
 		} finally {
-			// Only clear abort if we're the latest theme change
 			if (themeChangeAbort && themeChangeAbort.signal === signal) {
 				themeChangeAbort = null;
 			}
 			document.dispatchEvent(new CustomEvent("mermaid:render:done"));
 
-			// Re-initialize pan-zoom controls for all visible containers
 			document
 				.querySelectorAll(".mermaid-diagram-container")
 				.forEach((container) => {
@@ -327,42 +318,6 @@
 		});
 	}
 
-	/**
-	 * Size an SVG element to fit within a container using its viewBox aspect ratio.
-	 * Returns { width, height } in pixels, or null if viewBox is missing.
-	 */
-	function sizeSvgToFitContainer(svgElement, containerWidth, containerHeight) {
-		const viewBox = svgElement.getAttribute("viewBox");
-		if (!viewBox) return null;
-
-		const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
-		if (!vbWidth || !vbHeight) return null;
-
-		const svgAspectRatio = vbWidth / vbHeight;
-		const containerAspectRatio = containerWidth / containerHeight;
-
-		let width;
-		let height;
-		if (svgAspectRatio > containerAspectRatio) {
-			// SVG is wider relative to container — fit by width
-			width = containerWidth;
-			height = containerWidth / svgAspectRatio;
-		} else {
-			// SVG is taller relative to container — fit by height
-			height = containerHeight;
-			width = containerHeight * svgAspectRatio;
-		}
-
-		svgElement.setAttribute("width", `${width}px`);
-		svgElement.setAttribute("height", `${height}px`);
-		svgElement.style.maxWidth = "none";
-		svgElement.style.maxHeight = "none";
-		svgElement.style.width = "";
-		svgElement.style.height = "";
-
-		return { width, height };
-	}
-
 	function initPanZoomForContainer(container) {
 		if (typeof window.svgPanZoom !== "function") {
 			return;
@@ -378,17 +333,13 @@
 			return;
 		}
 
-		// Measure the container's available space
-		const wrapperEl = container.querySelector(".mermaid-wrapper");
-		const availWidth = wrapperEl
-			? wrapperEl.clientWidth
-			: container.clientWidth;
-		const availHeight = wrapperEl
-			? wrapperEl.clientHeight
-			: container.clientHeight;
-
-		// Size SVG to fit within the container
-		sizeSvgToFitContainer(svgElement, availWidth, availHeight);
+		// Read the CSS-constrained rendered size (same as Firefly)
+		// width:100% + max-width:100% + max-height constrains SVG to fit container
+		const rect = svgElement.getBoundingClientRect();
+		svgElement.setAttribute("width", `${rect.width}px`);
+		svgElement.setAttribute("height", `${rect.height}px`);
+		svgElement.style.maxWidth = "none";
+		svgElement.style.height = "";
 
 		try {
 			const panZoomInstance = window.svgPanZoom(svgElement, {
@@ -461,8 +412,13 @@
 		overlay.className = "mermaid-fullscreen-overlay";
 		const content = document.createElement("div");
 		content.className = "mermaid-fs-content";
+		// Clone SVG with same approach as Firefly: width=100%, height=100%
+		// CSS max-width/max-height on .mermaid-fs-content svg constrains it
 		const clonedSvg = svgElement.cloneNode(true);
 		clonedSvg.style.filter = "";
+		clonedSvg.setAttribute("width", "100%");
+		clonedSvg.setAttribute("height", "100%");
+		clonedSvg.style.maxWidth = "none";
 		content.appendChild(clonedSvg);
 
 		const fsControls = document.createElement("div");
@@ -533,12 +489,9 @@
 		});
 		document.addEventListener("keydown", escHandler);
 
+		// Initialize pan-zoom after the SVG is laid out in fullscreen
+		// Same approach as Firefly: let CSS constrain first, then svgPanZoom takes over
 		requestAnimationFrame(() => {
-			// Size the cloned SVG to fill the fullscreen content area
-			const contentWidth = content.clientWidth;
-			const contentHeight = content.clientHeight;
-			sizeSvgToFitContainer(clonedSvg, contentWidth, contentHeight);
-
 			try {
 				fsInstance = window.svgPanZoom(clonedSvg, {
 					panEnabled: true,
@@ -636,13 +589,11 @@
 			injectSkeletons();
 			await Promise.all([loadMermaid(), loadSvgPanZoom()]);
 
-			// Subscribe to coordinator for theme changes
 			const coordinator = window.__diagramThemeCoordinator;
 			if (coordinator) {
 				currentTheme = coordinator.getTheme();
 				coordinator.subscribe(onThemeChange);
 			} else {
-				// Fallback: read theme directly
 				currentTheme = document.documentElement.classList.contains("dark")
 					? "dark"
 					: "default";
