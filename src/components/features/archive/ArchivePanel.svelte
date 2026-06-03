@@ -1,6 +1,7 @@
 <script lang="ts">
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
+import { onMount } from "svelte";
 
 const { sortedPosts = [] }: { sortedPosts?: Post[] } = $props();
 
@@ -23,9 +24,6 @@ interface Group {
 }
 
 let groups: Group[] = $state([]);
-// Use a plain object keyed by year for Svelte 5 reactivity
-// (Set<number> doesn't trigger {#if} reactivity with $state)
-let collapsedYears: Record<number, boolean> = $state({});
 
 function formatDate(date: Date) {
 	const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -35,31 +33,6 @@ function formatDate(date: Date) {
 
 function formatTag(tagList: string[]) {
 	return tagList.map((t) => `#${t}`).join(" ");
-}
-
-function isCollapsed(year: number): boolean {
-	return collapsedYears[year] === true;
-}
-
-function toggleYear(year: number) {
-	const willCollapse = !isCollapsed(year);
-	collapsedYears[year] = willCollapse;
-
-	// Web Animations API for arrow rotation — avoids Swup CSS transition interference
-	requestAnimationFrame(() => {
-		const arrow = document.querySelector(
-			`[data-year="${year}"] .archive-arrow`,
-		);
-		if (arrow) {
-			arrow.animate(
-				[
-					{ transform: willCollapse ? "rotate(0deg)" : "rotate(-90deg)" },
-					{ transform: willCollapse ? "rotate(-90deg)" : "rotate(0deg)" },
-				],
-				{ duration: 200, easing: "ease", fill: "forwards" },
-			);
-		}
-	});
 }
 
 function filterAndGroupPosts(
@@ -115,104 +88,51 @@ function filterAndGroupPosts(
 	return groupedPostsArray;
 }
 
-// Read URL filter params
-let filterTags: string[] = $state([]);
-let filterCategories: string[] = $state([]);
-let filterUncategorized: string | null = $state(null);
+onMount(() => {
+	// Read URL filter params
+	let fTags: string[] = [];
+	let fCats: string[] = [];
+	let fUncat: string | null = null;
 
-$effect(() => {
-	if (typeof window !== "undefined") {
-		const params = new URLSearchParams(window.location.search);
-		filterTags = params.has("tag") ? params.getAll("tag") : [];
-		filterCategories = params.has("category") ? params.getAll("category") : [];
-		filterUncategorized = params.get("uncategorized");
-	}
+	const params = new URLSearchParams(window.location.search);
+	fTags = params.has("tag") ? params.getAll("tag") : [];
+	fCats = params.has("category") ? params.getAll("category") : [];
+	fUncat = params.get("uncategorized");
 
-	if (
-		filterTags.length > 0 ||
-		filterCategories.length > 0 ||
-		filterUncategorized
-	) {
-		groups = filterAndGroupPosts(
-			sortedPosts,
-			filterTags,
-			filterCategories,
-			filterUncategorized,
-		);
+	if (fTags.length > 0 || fCats.length > 0 || fUncat) {
+		groups = filterAndGroupPosts(sortedPosts, fTags, fCats, fUncat);
 	} else {
 		groups = filterAndGroupPosts(sortedPosts, [], [], null);
 	}
 
-	// Default: only latest year expanded, others collapsed
-	if (groups.length > 1) {
-		const collapsed: Record<number, boolean> = {};
-		for (let i = 1; i < groups.length; i++) {
-			collapsed[groups[i].year] = true;
-		}
-		collapsedYears = collapsed;
-	}
-
-	// Update banner title when filtering by category or tag
-	if (typeof window !== "undefined") {
-		const bannerTitle = document.querySelector<HTMLElement>(
-			".banner-page-title-text",
-		);
-		if (bannerTitle) {
-			let newTitle = "";
-			if (filterCategories.length > 0) {
-				newTitle = filterCategories.join(" / ");
-			} else if (filterUncategorized) {
-				newTitle = i18n(I18nKey.uncategorized);
-			} else if (filterTags.length > 0) {
-				newTitle = filterTags.map((t) => `#${t}`).join(" / ");
+	// After Svelte renders, collapse all years except the latest via DOM
+	// Use requestAnimationFrame to ensure DOM is ready
+	requestAnimationFrame(() => {
+		const yearHeaders = document.querySelectorAll("[data-year]");
+		yearHeaders.forEach((el, i) => {
+			if (i > 0) {
+				// Not the latest year — collapse
+				el.classList.add("year-collapsed");
 			}
-			if (newTitle && bannerTitle.textContent !== newTitle) {
-				bannerTitle.style.opacity = "0";
-				setTimeout(() => {
-					bannerTitle.textContent = newTitle;
-					bannerTitle.style.opacity = "1";
-				}, 260);
-			}
-		}
-	}
+		});
+	});
 });
+
+function handleYearClick(e: MouseEvent) {
+	const button = (e.currentTarget as HTMLElement).closest("[data-year]");
+	if (!button) return;
+	button.classList.toggle("year-collapsed");
+
+	// Animate the arrow
+	const arrow = button.querySelector(".archive-arrow") as HTMLElement | null;
+	if (arrow) {
+		const isCollapsed = button.classList.contains("year-collapsed");
+		arrow.style.transform = isCollapsed ? "rotate(-90deg)" : "rotate(0deg)";
+	}
+}
 </script>
 
 <div class="card-base px-8 py-6">
-	<!-- Filter indicator -->
-	{#if filterTags.length > 0 || filterCategories.length > 0 || filterUncategorized}
-		<div class="mb-4 flex flex-wrap items-center gap-2 text-sm text-black/60 dark:text-white/60">
-			<span>{i18n(I18nKey.filtering)}:</span>
-			{#each filterTags as tag}
-				<a
-					href="/archive/?tag={encodeURIComponent(tag)}"
-					class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 transition-colors"
-				>
-					#{tag}
-				</a>
-			{/each}
-			{#each filterCategories as cat}
-				<a
-					href="/archive/?category={encodeURIComponent(cat)}"
-					class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 transition-colors"
-				>
-					{cat}
-				</a>
-			{/each}
-			{#if filterUncategorized}
-				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--primary)]/10 text-[var(--primary)]">
-					{i18n(I18nKey.uncategorized)}
-				</span>
-			{/if}
-			<a
-				href="/archive/"
-				class="ml-2 text-black/40 dark:text-white/40 hover:text-[var(--primary)] transition-colors"
-			>
-				{i18n(I18nKey.clearFilter)}
-			</a>
-		</div>
-	{/if}
-
 	{#if groups.length === 0}
 		<div class="text-center py-16 text-black/40 dark:text-white/40">
 			{i18n(I18nKey.noData)}
@@ -223,8 +143,7 @@ $effect(() => {
 				<button
 					class="flex flex-row w-full items-center h-[3.75rem] cursor-pointer rounded-lg
 					       hover:bg-[var(--btn-plain-bg-hover)] transition-colors group/yr"
-					onclick={() => toggleYear(group.year)}
-					aria-expanded={!isCollapsed(group.year)}
+					onclick={handleYearClick}
 				>
 					<div
 						class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75
@@ -248,7 +167,7 @@ $effect(() => {
 								? I18nKey.postCount
 								: I18nKey.postsCount,
 						)}
-						<span class="archive-arrow" style="transform: rotate({isCollapsed(group.year) ? '-90' : '0'}deg)">
+						<span class="archive-arrow">
 							<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
 								<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
 							</svg>
@@ -256,7 +175,7 @@ $effect(() => {
 					</div>
 				</button>
 
-				{#if !isCollapsed(group.year)}
+				<div class="archive-year-posts">
 					{#each group.posts as post}
 						<a
 							href={post.url || `/posts/${post.id}/`}
@@ -306,7 +225,7 @@ $effect(() => {
 							</div>
 						</a>
 					{/each}
-				{/if}
+				</div>
 			</div>
 		{/each}
 	{/if}
@@ -315,5 +234,15 @@ $effect(() => {
 <style>
 	.archive-arrow {
 		display: inline-flex;
+		transition: transform 0.2s ease;
+	}
+
+	/* DOM-based collapse: all posts always in DOM, hidden via CSS */
+	:global(.year-collapsed) .archive-arrow {
+		transform: rotate(-90deg);
+	}
+
+	:global(.year-collapsed) .archive-year-posts {
+		display: none;
 	}
 </style>
