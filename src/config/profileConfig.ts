@@ -2,7 +2,7 @@ import type { ProfileConfig } from "../types/config";
 import { withOverride } from "../utils/config-override";
 
 const defaults: ProfileConfig = {
-	avatar: "assets/images/avatar.png",
+	avatar: "assets/images/avatar.webp",
 	name: "Souloss",
 	bio: "向下深挖一英里，向上构建一厘米",
 	links: [
