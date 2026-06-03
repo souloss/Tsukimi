@@ -23,7 +23,9 @@ interface Group {
 }
 
 let groups: Group[] = $state([]);
-let collapsedYears: Set<number> = $state(new Set());
+// Use a plain object keyed by year for Svelte 5 reactivity
+// (Set<number> doesn't trigger {#if} reactivity with $state)
+let collapsedYears: Record<number, boolean> = $state({});
 
 function formatDate(date: Date) {
 	const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -35,15 +37,13 @@ function formatTag(tagList: string[]) {
 	return tagList.map((t) => `#${t}`).join(" ");
 }
 
+function isCollapsed(year: number): boolean {
+	return collapsedYears[year] === true;
+}
+
 function toggleYear(year: number) {
-	const willCollapse = !collapsedYears.has(year);
-	const next = new Set(collapsedYears);
-	if (willCollapse) {
-		next.add(year);
-	} else {
-		next.delete(year);
-	}
-	collapsedYears = next;
+	const willCollapse = !isCollapsed(year);
+	collapsedYears[year] = willCollapse;
 
 	// Web Animations API for arrow rotation — avoids Swup CSS transition interference
 	requestAnimationFrame(() => {
@@ -145,7 +145,11 @@ $effect(() => {
 
 	// Default: only latest year expanded, others collapsed
 	if (groups.length > 1) {
-		collapsedYears = new Set(groups.slice(1).map((g) => g.year));
+		const collapsed: Record<number, boolean> = {};
+		for (let i = 1; i < groups.length; i++) {
+			collapsed[groups[i].year] = true;
+		}
+		collapsedYears = collapsed;
 	}
 
 	// Update banner title when filtering by category or tag
@@ -220,7 +224,7 @@ $effect(() => {
 					class="flex flex-row w-full items-center h-[3.75rem] cursor-pointer rounded-lg
 					       hover:bg-[var(--btn-plain-bg-hover)] transition-colors group/yr"
 					onclick={() => toggleYear(group.year)}
-					aria-expanded={!collapsedYears.has(group.year)}
+					aria-expanded={!isCollapsed(group.year)}
 				>
 					<div
 						class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75
@@ -244,7 +248,7 @@ $effect(() => {
 								? I18nKey.postCount
 								: I18nKey.postsCount,
 						)}
-						<span class="archive-arrow" style="transform: rotate({collapsedYears.has(group.year) ? '-90' : '0'}deg)">
+						<span class="archive-arrow" style="transform: rotate({isCollapsed(group.year) ? '-90' : '0'}deg)">
 							<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
 								<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
 							</svg>
@@ -252,7 +256,7 @@ $effect(() => {
 					</div>
 				</button>
 
-				{#if !collapsedYears.has(group.year)}
+				{#if !isCollapsed(group.year)}
 					{#each group.posts as post}
 						<a
 							href={post.url || `/posts/${post.id}/`}

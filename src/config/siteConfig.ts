@@ -14,7 +14,7 @@ const defaults: SiteConfig = {
 	lang: SITE_LANG,
 
 	themeColor: {
-		hue: 250,
+		hue: 360,
 		fixed: false,
 	},
 
