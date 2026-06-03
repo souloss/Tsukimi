@@ -115,31 +115,30 @@
   background: color-mix(in oklab, var(--primary) 16%, var(--line-color));
 }
 
+/* Active state styling */
+.toc-item.visible .toc-label {
+  color: color-mix(in oklab, var(--content-meta) 58%, var(--primary));
+  opacity: 1;
+}
+
 .toc-item.visible .toc-badge-dot,
 .toc-item.visible .toc-badge-dot-sm {
   background: var(--primary);
 }
 
-/* 活动指示器基础样式 */
+/* Active indicator - floating overlay with smooth transitions */
 .toc-active-indicator {
   position: absolute;
   left: 0;
   right: 0;
-  background: var(--toc-btn-hover);
-  border-radius: 0.75rem;
-  border: 2px dashed var(--toc-btn-hover);
+  background: color-mix(in oklab, var(--toc-indicator-bg), transparent);
+  border-radius: 0.875rem;
   transition:
     top 0.18s ease,
     height 0.18s ease,
-    opacity 0.14s ease,
-    background 0.14s ease,
-    border-color 0.14s ease;
+    opacity 0.14s ease;
+  box-shadow: 0 6px 18px -14px color-mix(in oklab, var(--primary) 55%, transparent);
   z-index: -1;
-}
-
-.group:hover .toc-active-indicator {
-  background: transparent;
-  border-color: var(--toc-btn-active);
 }
 
 @media (max-width: 768px) {
