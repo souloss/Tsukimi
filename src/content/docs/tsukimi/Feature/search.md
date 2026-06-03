@@ -27,7 +27,7 @@ Tsukimi 使用 [Pagefind](https://pagefind.app/) 作为站内搜索引擎。Page
 
 搜索功能通过导航栏中的搜索图标触发，搜索方式配置在 `navBarConfig` 中：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 export const navBarConfig: NavBarConfig = {
   links: [...],
   search: {

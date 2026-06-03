@@ -12,7 +12,7 @@ copyright:
 
 # Twikoo 评论配置
 
-Tsukimi 支持多种评论系统，Twikoo 是其中之一。评论系统配置位于 `src/config.ts` 中的 `commentConfig` 对象。
+Tsukimi 支持多种评论系统，Twikoo 是其中之一。评论系统配置位于 `src/config/commentConfig.ts` 中的 `commentConfig` 对象。
 
 ## 评论系统选择
 
@@ -33,7 +33,7 @@ system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
 
 ## Twikoo 配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/commentConfig.ts"
 export const commentConfig: CommentConfig = {
   system: "twikoo",
   twikoo: {

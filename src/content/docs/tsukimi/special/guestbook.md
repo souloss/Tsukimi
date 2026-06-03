@@ -68,7 +68,7 @@ title: Guestbook
 
 留言板页面使用 Tsukimi 的评论系统。要启用留言功能，你需要：
 
-1.  确保在 `src/config.ts` 中启用了评论系统
+1.  确保在 `src/config/` 中启用了评论系统
 2.  配置好你选择的评论服务（Twikoo、Waline、Giscus、Artalk 等）
 
 留言板会自动使用你配置的评论系统。
@@ -77,7 +77,7 @@ title: Guestbook
 
 #### **4. 站点配置中的留言板开关**
 
-在 `src/config.ts` 的 `siteConfig.featurePages` 中，你可以控制留言板页面的开关：
+在 `src/config/` 的 `siteConfig.featurePages` 中，你可以控制留言板页面的开关：
 
 ```typescript
 featurePages: {
@@ -93,7 +93,7 @@ featurePages: {
 
 #### **5. 导航栏配置**
 
-要在导航栏中显示留言板链接，在 `src/config.ts` 的 `navBarConfig` 中配置：
+要在导航栏中显示留言板链接，在 `src/config/` 的 `navBarConfig` 中配置：
 
 ```typescript
 export const navBarConfig: NavBarConfig = {

@@ -21,7 +21,7 @@ copyright:
 
 归档页面通过 `siteConfig.featurePages` 控制：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 siteConfig: {
   featurePages: {
     archive: true,  // 设为 false 可禁用归档页面
@@ -45,7 +45,7 @@ siteConfig: {
 
 在 `navBarConfig` 中添加归档页面链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 navBarConfig: [
   // ...
   { text: "归档", link: "/archive/" },

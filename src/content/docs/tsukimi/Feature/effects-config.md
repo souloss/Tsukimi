@@ -179,7 +179,7 @@ zIndex: number;
 
 ## 与 sakuraConfig 的关系
 
-`effectsConfig.sakura.config` 的类型是 `Omit<SakuraConfig, "enable">`，即 `SakuraConfig` 去掉 `enable` 字段。`SakuraConfig` 是独立的樱花配置类型（位于 `src/config.ts` 中的 `sakuraConfig`），两者共享相同的配置结构，但 `enable` 字段在 `effectsConfig` 中位于上层。
+`effectsConfig.sakura.config` 的类型是 `Omit<SakuraConfig, "enable">`，即 `SakuraConfig` 去掉 `enable` 字段。`SakuraConfig` 是独立的樱花配置类型（位于 `src/config/` 中的 `sakuraConfig`），两者共享相同的配置结构，但 `enable` 字段在 `effectsConfig` 中位于上层。
 
 ```typescript
 // effectsConfig 中的 enable 在上层

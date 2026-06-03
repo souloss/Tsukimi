@@ -175,7 +175,7 @@ const talkingData: TalkingItem[] = [
 
 除了使用本地 `talking.ts` 数据文件，你还可以配置 Memos API 来动态获取说说数据：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 export const siteConfig: SiteConfig = {
 	// ... 其他配置
 	// 说说/动态页面 Memos API 地址，客户端 fetch 获取动态数据

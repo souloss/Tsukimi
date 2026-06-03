@@ -19,7 +19,7 @@ Open Graph（OG）图片是社交媒体分享时显示的预览图片。Tsukimi 
 
 ### 配置选项
 
-在 `src/config.ts` 中配置：
+在 `src/config/siteConfig.ts` 中配置：
 
 ```typescript
 export const siteConfig: SiteConfig = {

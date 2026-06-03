@@ -12,7 +12,7 @@ copyright:
 
 # Giscus 评论配置
 
-Giscus 是基于 GitHub Discussions 的评论系统，适合技术博客。配置位于 `src/config.ts` 中的 `commentConfig` 对象。
+Giscus 是基于 GitHub Discussions 的评论系统，适合技术博客。配置位于 `src/config/commentConfig.ts` 中的 `commentConfig` 对象。
 
 ## 评论系统选择
 
@@ -41,7 +41,7 @@ system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
 
 ## Giscus 配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/commentConfig.ts"
 export const commentConfig: CommentConfig = {
   system: "giscus",
   giscus: {

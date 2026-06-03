@@ -15,11 +15,11 @@ copyright:
 
 # 文章列表布局配置
 
-文章列表支持列表模式和网格模式两种布局，用户可在页面中切换。配置位于 `src/config.ts` 中 `siteConfig.postListLayout` 对象。
+文章列表支持列表模式和网格模式两种布局，用户可在页面中切换。配置位于 `src/config/siteConfig.ts` 中 `siteConfig.postListLayout` 对象。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 postListLayout: {
   defaultMode: "list",         // 默认布局模式："list" 列表 | "grid" 网格
   mobileDefaultMode: "list",   // 移动端默认布局模式（可选，不设置则跟随 defaultMode）

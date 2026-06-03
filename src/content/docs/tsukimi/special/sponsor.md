@@ -176,7 +176,7 @@ sponsors: [
 
 #### **5. 站点配置中的赞助页面开关**
 
-在 `src/config.ts` 的 `siteConfig.featurePages` 中，你可以控制赞助页面的开关：
+在 `src/config/` 的 `siteConfig.featurePages` 中，你可以控制赞助页面的开关：
 
 ```typescript
 featurePages: {
@@ -189,7 +189,7 @@ featurePages: {
 
 #### **6. 导航栏配置**
 
-要在导航栏中显示赞助页面链接，在 `src/config.ts` 的 `navBarConfig` 中配置：
+要在导航栏中显示赞助页面链接，在 `src/config/` 的 `navBarConfig` 中配置：
 
 ```typescript
 export const navBarConfig: NavBarConfig = {

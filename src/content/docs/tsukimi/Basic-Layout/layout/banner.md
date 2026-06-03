@@ -66,7 +66,7 @@ banner: {
 		// 项目地址:https://github.com/souloss/PicFlow-API
 		// 请自行搭建API
 
-		homeText: {
+		bannerHomeText: {
 			enable: true, // 在主页显示自定义文本
 			title: "美しいミズキ", // 主页横幅主标题
 
@@ -195,10 +195,10 @@ imageApi: {
         系统会解析出这三个图片 URL，并将它们作为横幅图片列表使用。
     *   **依赖项目**: 文档中提到了一个名为 **PicFlow-API** 的项目作为示例。你需要自行搭建或寻找一个符合这种文本返回格式的 API 服务。注意是构建的时候随机构建出图片,不是实现动态图片!
 
-#### **6. 主页文本内容 (`homeText`)**
+#### **6. 主页文本内容 (`bannerHomeText`)**
 
 ```typescript
-homeText: {
+bannerHomeText: {
     enable: true,        // 是否在主页横幅显示文本
     title: "美しいミズキ", // 主标题文本
     subtitle: [          // 副标题文本数组

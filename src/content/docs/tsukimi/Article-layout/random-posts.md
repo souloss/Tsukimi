@@ -19,9 +19,9 @@ Tsukimi 支持在文章底部展示随机推荐文章，帮助读者发现更多
 
 ## 基本配置
 
-随机文章配置是独立的顶层导出，位于 `src/config.ts`：
+随机文章配置是独立的顶层导出，位于 `src/config/`：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const randomPostsConfig: RandomPostsConfig = {
     enable: true,       // 是否启用随机文章推荐
     maxCount: 5,        // 推荐文章数量

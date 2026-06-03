@@ -12,11 +12,11 @@ copyright:
 
 # Live2D 看板娘配置
 
-Tsukimi 支持通过 Pio 组件集成 Live2D 看板娘。配置位于 `src/config.ts` 中的 `pioConfig` 对象。
+Tsukimi 支持通过 Pio 组件集成 Live2D 看板娘。配置位于 `src/config/pioConfig.ts` 中的 `pioConfig` 对象。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/pioConfig.ts"
 export const pioConfig: PioConfig = {
   enable: false, // 默认关闭以提升性能
   models: ["/pio/models/pio/model.json"], // 模型路径数组

@@ -28,7 +28,7 @@ Tsukimi 内置 RSS 和 Atom 两种订阅格式，读者可以通过订阅链接�
 
 ## 配置
 
-订阅源的基本信息从 `src/config.ts` 中的 `siteConfig` 读取：
+订阅源的基本信息从 `src/config/` 中的 `siteConfig` 读取：
 
 ```typescript
 siteConfig: {

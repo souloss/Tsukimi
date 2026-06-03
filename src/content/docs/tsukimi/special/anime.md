@@ -58,9 +58,9 @@ Tsukimi 主题内置了一个优雅的番剧（Anime）页面，支持两种数�
 
 #### **2. Bangumi 模式配置**
 
-Bangumi 模式的配置是通过 `src/config.ts` 文件进行的，而不是环境变量。在 `src/config.ts` 中添加以下配置：
+Bangumi 模式的配置是通过 `src/config/navBarConfig.ts` 文件进行的，而不是环境变量。在 `src/config/navBarConfig.ts` 中添加以下配置：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 // Bangumi 用户ID配置
 bangumi: {
   userId: "your-bangumi-id", // 在此处设置你的Bangumi用户ID，可以设置为 "sai" 测试
@@ -81,9 +81,9 @@ anime: {
 
 #### **3. Bilibili 模式配置**
 
-Bilibili 模式的配置同样通过 `src/config.ts` 文件进行。在 `src/config.ts` 中添加以下配置：
+Bilibili 模式的配置同样通过 `src/config/navBarConfig.ts` 文件进行。在 `src/config/navBarConfig.ts` 中添加以下配置：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 bilibili: {
 	vmid: "your-bilibili-vmid", // 在此处设置你的Bilibili用户ID (uid)，例如 "1129280784"
 	fetchOnDev: false, // 是否在开发环境下获取 Bilibili 数据（默认 false）
@@ -374,9 +374,9 @@ Bangumi 和 Bilibili 数据会自动从 API 获取，但你可以强制刷新：
 
 #### **9. 导航栏配置**
 
-要在导航栏中显示番剧链接，请确保在 `src/config.ts` 的 `navBarConfig` 中包含了番剧链接：
+要在导航栏中显示番剧链接，请确保在 `src/config/navBarConfig.ts` 的 `navBarConfig` 中包含了番剧链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
@@ -389,7 +389,7 @@ export const navBarConfig: NavBarConfig = {
 
 或者手动添加番剧链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,

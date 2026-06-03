@@ -18,7 +18,7 @@ copyright:
 
 ### 组件配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
 	type: "calendar",
 	position: "top",
@@ -29,7 +29,7 @@ copyright:
 
 ### 布局配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 components: {
 	left: ["profile", "announcement", "categories", "tags"],
 	right: ["site-stats", "calendar"],
@@ -85,7 +85,7 @@ components: {
 
 ### **如何使用和调整**
 
-1.  **找到配置**: 在 `src/config.ts` 文件中找到 `sidebarLayoutConfig` 对象。
+1.  **找到配置**: 在 `src/config/` 文件中找到 `sidebarLayoutConfig` 对象。
 
 2.  **添加组件配置**: 在 `properties` 数组中添加日历组件的配置：
     ```typescript
@@ -120,7 +120,7 @@ components: {
 
 #### 示例 1：基本日历配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
     type: "calendar",
     position: "top",
@@ -137,7 +137,7 @@ components: {
 
 #### 示例 2：设置在左侧栏显示
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
     type: "calendar",
     position: "sticky", // 使用粘性定位
@@ -154,7 +154,7 @@ components: {
 
 #### 示例 3：隐藏日历组件
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
     type: "calendar",
     position: "top",
@@ -192,7 +192,7 @@ tags: ["编程"]
 
 在 `siteConfig` 中设置时区，确保日期计算准确：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const siteConfig: SiteConfig = {
     // ...其他配置...
     timeZone: 8, // 设置时区，例如 +8 表示东八区（北京时间）

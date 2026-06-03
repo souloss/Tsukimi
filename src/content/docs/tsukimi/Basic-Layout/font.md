@@ -118,7 +118,7 @@ font: {
 在 `src/config.ts` 中添加字体配置：
 
 ```typescript title="src/config.ts"
-export default defineThemeConfig({
+export default 
   // 其他配置...
   font: {
     asciiFont: {
@@ -135,7 +135,7 @@ export default defineThemeConfig({
     },
   },
   // 其他配置...
-})
+
 ```
 
 ## 字体子集优化

@@ -15,11 +15,11 @@ copyright:
 
 # 侧边栏布局配置
 
-Tsukimi 的侧边栏布局配置位于 `src/config.ts` 中的 `sidebarLayoutConfig` 对象，控制侧边栏的组件排列、动画效果和响应式行为。
+Tsukimi 的侧边栏布局配置位于 `src/config/sidebarConfig.ts` 中的 `sidebarLayoutConfig` 对象，控制侧边栏的组件排列、动画效果和响应式行为。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/sidebarConfig.ts"
 export const sidebarLayoutConfig: SidebarLayoutConfig = {
   properties: [
     {
@@ -142,6 +142,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 | `music-sidebar` | 侧栏音乐 |
 | `pio` | 看板娘 |
 | `site-stats` | 站点统计 |
+| `umami-stats` | Umami 访问统计 |
 | `calendar` | 日历 |
 | `advertisement` | 广告 |
 | `custom` | 自定义组件 |
@@ -175,7 +176,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 添加新的侧边栏组件需要完成以下三个步骤（缺少任何一步会导致组件不渲染）：
 
 1. **声明类型**：在 `src/types/config.ts` 的 `WidgetComponentType` 中添加新类型
-2. **配置布局**：在 `src/config.ts` 的 `sidebarLayoutConfig` 中添加组件配置
+2. **配置布局**：在 `src/config/sidebarConfig.ts` 的 `sidebarLayoutConfig` 中添加组件配置
 3. **注册映射**：在 `SideBar.astro` 和 `RightSideBar.astro` 中注册组件映射
 
 ## 注意事项

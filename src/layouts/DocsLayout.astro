@@ -12,7 +12,7 @@ import BackToHome from "@components/control/BackToHome.astro";
 import BackToTop from "@components/control/BackToTop.astro";
 import { PageProgressBar } from "@components/control/PageProgressBar";
 import DocLangSwitcher from "@components/features/docs/DocLangSwitcher.astro";
-import { SidebarTOC } from "@components/features/toc";
+import DocsTOC from "@components/features/toc/DocsTOC.astro";
 import ConfigCarrier from "@components/misc/ConfigCarrier.astro";
 import IconifyLoader from "@components/misc/IconifyLoader.astro";
 import Footer from "@components/organisms/footer/Footer.astro";
@@ -277,7 +277,7 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 					{siteConfig.toc.enable && (
 						<div class:list={["docs-toc-container", { hidden: isHomePage || headings.length === 0 }]}>
 							<h4 class="docs-toc-title">{i18n(I18nKey.docsTableOfContents)}</h4>
-							<SidebarTOC headings={headings} />
+							<DocsTOC headings={headings} />
 						</div>
 					)}
 				</div>
@@ -428,7 +428,7 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 	// @ts-nocheck
 	// Reinitialize TOC after Swup page transitions within docs
 	function refreshDocsTOC() {
-		const tocEl = /** @type {HTMLElement & { regenerateTOC?: () => void }} */ (document.querySelector("table-of-contents"));
+		const tocEl = /** @type {HTMLElement & { regenerateTOC?: () => void }} */ (document.querySelector("docs-table-of-contents"));
 		if (tocEl && typeof tocEl.regenerateTOC === "function") {
 			tocEl.regenerateTOC();
 		}

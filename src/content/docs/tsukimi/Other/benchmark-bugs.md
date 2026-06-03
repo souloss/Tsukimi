@@ -67,7 +67,7 @@ node scripts/benchmark-bugs.mjs
 **排除项**: 外部链接品牌名称（GitHub, Bilibili, Gitee, Codeberg, Discord）不需要 i18n。
 
 **检测位置**:
-- `src/config.ts` - `navBarConfig`
+- `src/config/` - `navBarConfig`
 - `src/components/organisms/navigation/DropdownMenu.astro` - `navTitleMap`
 - `src/components/organisms/navigation/NavMenuPanel.astro` - `navTitleMap`
 

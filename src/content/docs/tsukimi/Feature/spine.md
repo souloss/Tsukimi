@@ -15,7 +15,11 @@ copyright:
 
 # Spine 看板娘配置
 
-Spine 看板娘是基于 Spine 骨骼动画的吉祥物系统，与 Live2D (Pio) 是独立的两种看板娘方案。Spine 支持更丰富的交互动画和待机效果。配置位于 `src/config.ts` 中的 `spineModelConfig` 对象。
+Spine 看板娘是基于 Spine 骨骼动画的吉祥物系统，与 Live2D (Pio) 是独立的两种看板娘方案。Spine 支持更丰富的交互动画和待机效果。
+
+:::caution 尚未实现
+`spineModelConfig` 尚未实现，以下配置结构为规划中的接口定义，实际使用时可能有所调整。
+:::
 
 ::: tip 提示
 Spine 看板娘和 Live2D (Pio) 看板娘可以同时启用，也可以只启用其中一种。
@@ -23,7 +27,7 @@ Spine 看板娘和 Live2D (Pio) 看板娘可以同时启用，也可以只启用
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const spineModelConfig: import("./types/config").SpineModelConfig = {
   enable: true,
   model: {

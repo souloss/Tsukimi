@@ -334,9 +334,9 @@ export function getShuffledFriendsList(): FriendItem[] {
 
 #### **12. 导航栏配置**
 
-要在导航栏中显示友情链接，请确保在 `src/config.ts` 的 `navBarConfig` 中包含了友情链接：
+要在导航栏中显示友情链接，请确保在 `src/config/` 的 `navBarConfig` 中包含了友情链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
@@ -349,7 +349,7 @@ export const navBarConfig: NavBarConfig = {
 
 或者手动添加友情链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,

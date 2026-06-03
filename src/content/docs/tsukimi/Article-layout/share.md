@@ -13,8 +13,8 @@ copyright:
     url: https://github.com/souloss
 ---
 
-分享组件配置位于 `src/config.ts` 文件中的 `share` 对象，控制博客文章内的分享组件显示设置。
-```typescript title="src/config.ts"
+分享组件配置位于 `src/config/shareConfig.ts` 文件中的 `share` 对象，控制博客文章内的分享组件显示设置。
+```typescript title="src/config/shareConfig.ts"
 export const shareConfig: ShareConfig = {
 	enable: true, // 启用分享功能
 };

@@ -694,13 +694,14 @@ body.docs-page .docs-toc-container {
 	--toc-btn-hover: var(--docs-bg-mute);
 	--toc-btn-active: var(--docs-brand-dim);
 	--btn-content: var(--docs-brand);
+	--toc-indicator-bg: var(--docs-brand-dim);
 }
 
-body.docs-page table-of-contents {
+body.docs-page docs-table-of-contents {
 	font-size: 0.8125rem;
 }
 
-body.docs-page table-of-contents a {
+body.docs-page docs-table-of-contents a {
 	font-size: 0.8125rem;
 	line-height: 1.5;
 	color: var(--docs-text-50);
@@ -708,17 +709,17 @@ body.docs-page table-of-contents a {
 	padding: 4px 8px;
 }
 
-body.docs-page table-of-contents a:hover {
+body.docs-page docs-table-of-contents a:hover {
 	color: var(--docs-text-75);
 	background: var(--docs-bg-mute);
 }
 
-body.docs-page table-of-contents a.visible {
+body.docs-page docs-table-of-contents a.visible {
 	color: var(--docs-brand);
 	font-weight: 500;
 }
 
-body.docs-page #active-indicator {
+body.docs-page #docs-toc-indicator {
 	border-color: var(--docs-brand-dim);
 	background: var(--docs-brand-dim);
 }

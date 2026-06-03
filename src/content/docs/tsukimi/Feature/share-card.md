@@ -186,7 +186,7 @@ export const sponsorConfig: SponsorConfig = {
 };
 ```
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const siteConfig = {
     // ...
     featurePages: {

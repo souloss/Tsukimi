@@ -15,11 +15,15 @@ copyright:
 
 # 广告组件配置
 
-Tsukimi 侧边栏支持广告组件，可以展示推广信息、友情推荐等内容。配置位于 `src/config.ts` 中的 `adConfig` 对象。
+Tsukimi 侧边栏支持广告组件，可以展示推广信息、友情推荐等内容。
+
+:::caution 尚未实现
+`adConfig` 尚未实现，以下配置结构为规划中的接口定义，实际使用时可能有所调整。
+:::
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const adConfig: AdConfig = {
   title: "推荐",
   content: "这是一条推广信息",

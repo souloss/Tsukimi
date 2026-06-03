@@ -16,9 +16,9 @@ Tsukimi 项目中的音乐播放器组件支持通过 Meting API 获取音乐数
 
 ## 配置
 
-在 `src/config.ts` 文件中，可以配置 Meting API 相关参数：
+在 `src/config/musicConfig.ts` 文件中，可以配置 Meting API 相关参数：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/musicConfig.ts"
 export const musicPlayerConfig: MusicPlayerConfig = {
   enable: true, // 启用音乐播放器功能
   mode: "meting", // 音乐播放器模式，可选 "local" 或 "meting"

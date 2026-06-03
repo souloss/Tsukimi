@@ -15,11 +15,11 @@ copyright:
 
 # 图片优化配置
 
-Tsukimi 内置图片优化功能，可在构建时自动转换图片格式、压缩质量，并解决防盗链图片加载问题。配置位于 `src/config.ts` 中 `siteConfig.imageOptimization` 对象。
+Tsukimi 内置图片优化功能，可在构建时自动转换图片格式、压缩质量，并解决防盗链图片加载问题。配置位于 `src/config/siteConfig.ts` 中 `siteConfig.imageOptimization` 对象。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 imageOptimization: {
   formats: "both",         // 输出格式："avif" | "webp" | "both"
   quality: 80,             // 压缩质量 (1-100)

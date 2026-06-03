@@ -18,7 +18,7 @@ copyright:
 
 ### 组件配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
 	type: "site-stats",
 	position: "top",
@@ -29,7 +29,7 @@ copyright:
 
 ### 布局配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 components: {
 	left: ["profile", "announcement", "categories", "tags"],
 	right: ["site-stats", "calendar"],
@@ -60,7 +60,7 @@ components: {
 
 #### 1. 站点开始运行日期配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const siteConfig: SiteConfig = {
     // ...其他配置...
     siteStartDate: "2023-01-01", // 站点开始运行日期，用于站点统计组件计算运行天数
@@ -88,7 +88,7 @@ export const siteConfig: SiteConfig = {
 ### 如何使用和调整
 
 1.  **找到配置**: 
-    *   在 `src/config.ts` 文件中找到 `sidebarLayoutConfig` 对象。
+    *   在 `src/config/` 文件中找到 `sidebarLayoutConfig` 对象。
     *   站点开始运行日期配置在 `siteConfig` 对象中。
 
 2.  **添加组件配置**: 在 `properties` 数组中添加站点统计组件的配置：
@@ -133,7 +133,7 @@ export const siteConfig: SiteConfig = {
 
 #### 示例 1：基本站点统计配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 // 位置配置
 {
     type: "site-stats",
@@ -159,7 +159,7 @@ export const siteConfig: SiteConfig = {
 
 #### 示例 2：设置在左侧栏显示
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
     type: "site-stats",
     position: "sticky", // 使用粘性定位
@@ -177,7 +177,7 @@ components: {
 
 #### 示例 3：禁用站点统计组件
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 {
     type: "site-stats",
     position: "top",

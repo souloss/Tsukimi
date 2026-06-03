@@ -16,9 +16,9 @@ Tsukimi 项目的番剧页面支持通过 Bangumi API 获取用户的动漫收�
 
 ## 配置
 
-在 `src/config.ts` 文件中，可以配置 Bangumi 相关参数：
+在 `src/config/siteConfig.ts` 文件中，可以配置 Bangumi 相关参数：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 export const siteConfig: SiteConfig = {
   // ...其他配置
   bangumi: {
@@ -287,7 +287,7 @@ export type AnimeItem = {
 
 ### 设置 Bangumi 用户ID
 
-在 `src/config.ts` 中设置您的 Bangumi 用户ID：
+在 `src/config/siteConfig.ts` 中设置您的 Bangumi 用户ID：
 
 ```typescript
 export const siteConfig: SiteConfig = {

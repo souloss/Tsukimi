@@ -23,7 +23,7 @@ Tsukimi 提供浮动控件组（FloatingControls）和页面阅读进度条（Pa
 
 ### 配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 siteConfig: {
   pageProgressBar: {
     enable: true,        // 是否启用页面进度条

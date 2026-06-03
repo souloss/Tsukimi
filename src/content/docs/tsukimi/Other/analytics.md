@@ -15,11 +15,11 @@ copyright:
 
 # 统计分析配置
 
-Tsukimi 支持多种统计分析服务，包括 Google Analytics、Microsoft Clarity、Umami 和 51la。所有配置位于 `src/config.ts` 中的 `siteConfig.analytics` 对象。
+Tsukimi 支持多种统计分析服务，包括 Google Analytics、Microsoft Clarity、Umami 和 51la。所有配置位于 `src/config/siteConfig.ts` 中的 `siteConfig.analytics` 对象。
 
 ## 综合分析配置 (analytics)
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 siteConfig: {
   analytics: {
     googleAnalyticsId: "G-XXXXXXXXXX",     // Google Analytics ID
@@ -97,7 +97,7 @@ siteConfig: {
 
 除了 `analytics` 综合配置外，还有独立的第三方统计配置，主要用于 Microsoft Clarity：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 thirdPartyAnalytics: {
   enable: false,        // 是否启用第三方统计，默认关闭
   clarityId: "",        // Clarity 项目 ID

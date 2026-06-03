@@ -245,9 +245,9 @@ export const timelineData: TimelineItem[] = [
 
 #### **8. 导航栏配置**
 
-要在导航栏中显示时间线链接，请确保在 `src/config.ts` 的 `navBarConfig` 中包含了时间线链接：
+要在导航栏中显示时间线链接，请确保在 `src/config/navBarConfig.ts` 的 `navBarConfig` 中包含了时间线链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
@@ -260,7 +260,7 @@ export const navBarConfig: NavBarConfig = {
 
 或者手动添加时间线链接：
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,

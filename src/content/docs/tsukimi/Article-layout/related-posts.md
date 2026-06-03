@@ -19,7 +19,7 @@ Tsukimi 支持在文章详情页显示相关文章推荐，帮助读者发现更
 
 ### 配置
 
-在 `src/config.ts` 中配置：
+在 `src/config/` 中配置：
 
 ```typescript
 export const relatedPostsConfig: RelatedPostsConfig = {
@@ -42,7 +42,7 @@ export const relatedPostsConfig: RelatedPostsConfig = {
 
 ### 配置
 
-在 `src/config.ts` 中配置：
+在 `src/config/` 中配置：
 
 ```typescript
 export const randomPostsConfig: RandomPostsConfig = {

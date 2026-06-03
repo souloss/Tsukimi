@@ -14,9 +14,9 @@ copyright:
 ---
 ## 顶栏导航配置说明
 
-顶栏导航配置位于 `src/config.ts` 文件中的 `navBarConfig` 对象，控制博客顶部导航栏的显示设置,手机端表现为抽屉菜单。
+顶栏导航配置位于 `src/config/navBarConfig.ts` 文件中的 `navBarConfig` 对象，控制博客顶部导航栏的显示设置,手机端表现为抽屉菜单。
 
-```typescript title="src/config.ts"
+```typescript title="src/config/navBarConfig.ts"
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
@@ -30,13 +30,13 @@ export const navBarConfig: NavBarConfig = {
 					name: "GitHub",
 					url: "https://github.com/souloss",
 					external: true,
-					icon: "fa6-brands:github",
+					icon: "fa7-brands:github",
 				},
 				{
 					name: "Bilibili",
 					url: "https://space.bilibili.com/123456",
 					external: true,
-					icon: "fa6-brands:bilibili",
+					icon: "fa7-brands:bilibili",
 				},
 			],
 		},
@@ -111,7 +111,7 @@ export const navBarConfig: NavBarConfig = {
 };
 ```
 
-我们来详细解析 `src/config.ts` 文件中的 `navBarConfig` 对象。
+我们来详细解析 `src/config/navBarConfig.ts` 文件中的 `navBarConfig` 对象。
 
 这个配置项用于完全自定义博客顶部导航栏的结构、链接和外观，是网站导航体验的核心。
 
@@ -140,7 +140,7 @@ export const navBarConfig: NavBarConfig = {
 *   **`url`**: (字符串，必填) 点击菜单项后跳转的目标地址。
     *   以 `/` 开头的路径（如 `/about/`）是**内部链接**，指向你博客中的某个页面。
     *   不以 `/` 开头或包含 `http` 的路径（如 `https://github.com/`）是**外部链接**。
-*   **`icon`**: (字符串，可选) 菜单项文本前显示的图标。图标名称格式为 `库名:图标名`，如 `material-symbols:person` 或 `fa6-brands:github`。
+*   **`icon`**: (字符串，可选) 菜单项文本前显示的图标。图标名称格式为 `库名:图标名`，如 `material-symbols:person` 或 `fa7-brands:github`。
 *   **`external`**: (布尔值，可选，默认 `false`)
     *   `true`: 强制将链接视为外部链接，点击时会在新标签页中打开。
     *   `false`: 视为内部链接，在当前标签页打开。
@@ -189,7 +189,7 @@ LinkPreset.Archive,
             name: "GitHub",
             url: "https://github.com/souloss/Tsukimi",
             external: true,
-            icon: "fa6-brands:github",
+            icon: "fa7-brands:github",
         },
         // ... 其他子链接
     ],

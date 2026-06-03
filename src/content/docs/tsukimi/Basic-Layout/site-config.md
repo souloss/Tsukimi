@@ -12,13 +12,13 @@ copyright:
 
 **站点配置说明**
 
-站点配置位于 `src/config.ts` 文件中的 `siteConfig` 对象，控制博客的基本信息和全局设置。
+站点配置位于 `src/config/` 文件中的 `siteConfig` 对象，控制博客的基本信息和全局设置。
 
 ## 配置项详解
 
 ### 基本信息
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 const SITE_LANG = "zh_CN"; // 语言代码
 export const siteConfig: SiteConfig = {
 	title: "Souloss",
@@ -463,7 +463,7 @@ export const siteConfig: SiteConfig = {
 
 ## 更多配置
 
-其他重要的配置模块（在 `src/config.ts` 中单独导出）包括：
+其他重要的配置模块（在 `src/config/` 中单独导出）包括：
 
 - **navBarConfig**：导航栏菜单配置，支持多级菜单和下拉分组
 - **profileConfig**：侧边栏个人信息配置
@@ -483,7 +483,7 @@ export const siteConfig: SiteConfig = {
 - **fullscreenWallpaperConfig**：全屏壁纸配置（旧版）
 - **pioConfig**：看板娘配置
 - **shareConfig**：分享功能配置
-- **rewardConfig**：赞赏功能配置
+- **sponsorConfig**：赞赏功能配置
 - **relatedPostsConfig**：相关文章配置
 - **randomPostsConfig**：随机文章配置
 

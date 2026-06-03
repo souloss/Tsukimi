@@ -12,7 +12,7 @@ copyright:
 
 # 公告栏配置
 
-Tsukimi 侧边栏支持公告栏组件，可以展示网站公告、通知等信息。配置位于 `src/config.ts` 中的 `announcementConfig` 对象。
+Tsukimi 侧边栏支持公告栏组件，可以展示网站公告、通知等信息。配置位于 `src/config/` 中的 `announcementConfig` 对象。
 
 ::: note
 公告栏的启用/禁用现在通过 `sidebarLayoutConfig` 统一控制，不再使用 `enable` 字段。如需隐藏公告栏，从侧边栏布局中移除 `announcement` 组件即可。
@@ -20,7 +20,7 @@ Tsukimi 侧边栏支持公告栏组件，可以展示网站公告、通知等信
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/"
 export const announcementConfig: AnnouncementConfig = {
   title: "",                                    // 公告栏标题，留空使用 i18n 默认文字
   content: "欢迎来到我的博客！这是一条示例公告", // 公告内容

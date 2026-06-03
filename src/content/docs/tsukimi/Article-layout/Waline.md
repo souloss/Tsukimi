@@ -15,7 +15,7 @@ copyright:
 
 # Waline 评论系统配置
 
-Waline 是一个简洁、安全的评论系统，支持 Markdown、邮件通知、访客统计等功能。配置位于 `src/config.ts` 中的 `commentConfig` 对象。
+Waline 是一个简洁、安全的评论系统，支持 Markdown、邮件通知、访客统计等功能。配置位于 `src/config/commentConfig.ts` 中的 `commentConfig` 对象。
 
 ## 评论系统选择
 
@@ -27,7 +27,7 @@ system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/commentConfig.ts"
 export const commentConfig: CommentConfig = {
   enable: true,
   system: "waline",

@@ -15,7 +15,7 @@ copyright:
 
 # Disqus 评论系统配置
 
-Disqus 是一个广泛使用的第三方评论系统，支持社交登录、垃圾评论过滤、分析等功能。配置位于 `src/config.ts` 中的 `commentConfig` 对象。
+Disqus 是一个广泛使用的第三方评论系统，支持社交登录、垃圾评论过滤、分析等功能。配置位于 `src/config/commentConfig.ts` 中的 `commentConfig` 对象。
 
 ## 评论系统选择
 
@@ -27,7 +27,7 @@ system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/commentConfig.ts"
 export const commentConfig: CommentConfig = {
   enable: true,
   system: "disqus",

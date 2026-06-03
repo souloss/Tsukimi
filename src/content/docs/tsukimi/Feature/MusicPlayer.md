@@ -12,11 +12,11 @@ copyright:
 
 # 音乐播放器配置
 
-Tsukimi 支持集成音乐播放器，可以播放来自网易云、QQ音乐等平台的在线音乐或本地音乐文件。配置位于 `src/config.ts` 中的 `musicPlayerConfig` 对象。
+Tsukimi 支持集成音乐播放器，可以播放来自网易云、QQ音乐等平台的在线音乐或本地音乐文件。配置位于 `src/config/musicConfig.ts` 中的 `musicPlayerConfig` 对象。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/musicConfig.ts"
 export const musicPlayerConfig: MusicPlayerConfig = {
   enable: true,               // 启用音乐播放器
   mode: "local",              // 模式："meting" 或 "local"

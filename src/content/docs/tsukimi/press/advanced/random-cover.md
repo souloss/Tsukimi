@@ -15,11 +15,11 @@ copyright:
 
 # 随机封面图配置
 
-当文章未设置封面图（`image` 字段）时，Tsukimi 可以自动从随机图 API 获取封面图。配置位于 `src/config.ts` 中 `siteConfig` 的 `coverImage` 相关配置。
+当文章未设置封面图（`image` 字段）时，Tsukimi 可以自动从随机图 API 获取封面图。配置位于 `src/config/siteConfig.ts` 中 `siteConfig` 的 `coverImage` 相关配置。
 
 ## 基本配置
 
-```typescript title="src/config.ts"
+```typescript title="src/config/siteConfig.ts"
 // 文章封面图配置
 coverImage: {
   enableInPost: true,  // 是否在文章详情页显示封面图
