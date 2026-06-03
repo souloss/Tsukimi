@@ -26,16 +26,16 @@ const defaults: BackgroundWallpaperConfig = {
 	banner: {
 		src: {
 			desktop: [
-				"/assets/desktop-banner/1.png",
-				"/assets/desktop-banner/2.png",
-				"/assets/desktop-banner/3.png",
-				"/assets/desktop-banner/4.png",
+				"/assets/desktop-banner/1.webp",
+				"/assets/desktop-banner/2.webp",
+				"/assets/desktop-banner/3.webp",
+				"/assets/desktop-banner/4.webp",
 			],
 			mobile: [
-				"/assets/mobile-banner/1.png",
-				"/assets/mobile-banner/2.png",
-				"/assets/mobile-banner/3.png",
-				"/assets/mobile-banner/4.png",
+				"/assets/mobile-banner/1.webp",
+				"/assets/mobile-banner/2.webp",
+				"/assets/mobile-banner/3.webp",
+				"/assets/mobile-banner/4.webp",
 			],
 		},
 		position: "center top",
@@ -48,16 +48,16 @@ const defaults: BackgroundWallpaperConfig = {
 	fullscreen: {
 		src: {
 			desktop: [
-				"/assets/desktop-banner/1.png",
-				"/assets/desktop-banner/2.png",
-				"/assets/desktop-banner/3.png",
-				"/assets/desktop-banner/4.png",
+				"/assets/desktop-banner/1.webp",
+				"/assets/desktop-banner/2.webp",
+				"/assets/desktop-banner/3.webp",
+				"/assets/desktop-banner/4.webp",
 			],
 			mobile: [
-				"/assets/mobile-banner/1.png",
-				"/assets/mobile-banner/2.png",
-				"/assets/mobile-banner/3.png",
-				"/assets/mobile-banner/4.png",
+				"/assets/mobile-banner/1.webp",
+				"/assets/mobile-banner/2.webp",
+				"/assets/mobile-banner/3.webp",
+				"/assets/mobile-banner/4.webp",
 			],
 		},
 		position: "center top",
@@ -87,7 +87,7 @@ const defaults: BackgroundWallpaperConfig = {
 	},
 	// 叠加层壁纸模式配置（小图角落显示）
 	overlay: {
-		src: "/assets/desktop-banner/1.png",
+		src: "/assets/desktop-banner/1.webp",
 		position: "bottom-right", // top-left | top-right | bottom-left | bottom-right
 		size: {
 			width: 300,
