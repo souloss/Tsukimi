@@ -327,6 +327,42 @@
 		});
 	}
 
+	/**
+	 * Size an SVG element to fit within a container using its viewBox aspect ratio.
+	 * Returns { width, height } in pixels, or null if viewBox is missing.
+	 */
+	function sizeSvgToFitContainer(svgElement, containerWidth, containerHeight) {
+		const viewBox = svgElement.getAttribute("viewBox");
+		if (!viewBox) return null;
+
+		const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
+		if (!vbWidth || !vbHeight) return null;
+
+		const svgAspectRatio = vbWidth / vbHeight;
+		const containerAspectRatio = containerWidth / containerHeight;
+
+		let width;
+		let height;
+		if (svgAspectRatio > containerAspectRatio) {
+			// SVG is wider relative to container — fit by width
+			width = containerWidth;
+			height = containerWidth / svgAspectRatio;
+		} else {
+			// SVG is taller relative to container — fit by height
+			height = containerHeight;
+			width = containerHeight * svgAspectRatio;
+		}
+
+		svgElement.setAttribute("width", `${width}px`);
+		svgElement.setAttribute("height", `${height}px`);
+		svgElement.style.maxWidth = "none";
+		svgElement.style.maxHeight = "none";
+		svgElement.style.width = "";
+		svgElement.style.height = "";
+
+		return { width, height };
+	}
+
 	function initPanZoomForContainer(container) {
 		if (typeof window.svgPanZoom !== "function") {
 			return;
@@ -342,25 +378,17 @@
 			return;
 		}
 
-		// Measure the container's available width for the SVG to fit into
+		// Measure the container's available space
 		const wrapperEl = container.querySelector(".mermaid-wrapper");
-		const availableWidth = wrapperEl
+		const availWidth = wrapperEl
 			? wrapperEl.clientWidth
 			: container.clientWidth;
+		const availHeight = wrapperEl
+			? wrapperEl.clientHeight
+			: container.clientHeight;
 
-		// Get the SVG's intrinsic dimensions from viewBox
-		const viewBox = svgElement.getAttribute("viewBox");
-		const [, , vbWidth, vbHeight] = viewBox.split(/\s+/).map(Number);
-		const aspectRatio = vbHeight / vbWidth;
-
-		// Set SVG to fit the container width, height derived from aspect ratio
-		const displayWidth = availableWidth;
-		const displayHeight = displayWidth * aspectRatio;
-		svgElement.setAttribute("width", `${displayWidth}px`);
-		svgElement.setAttribute("height", `${displayHeight}px`);
-		svgElement.style.maxWidth = "100%";
-		svgElement.style.height = "auto";
-		svgElement.setAttribute("overflow", "visible");
+		// Size SVG to fit within the container
+		sizeSvgToFitContainer(svgElement, availWidth, availHeight);
 
 		try {
 			const panZoomInstance = window.svgPanZoom(svgElement, {
@@ -435,11 +463,6 @@
 		content.className = "mermaid-fs-content";
 		const clonedSvg = svgElement.cloneNode(true);
 		clonedSvg.style.filter = "";
-		clonedSvg.style.maxWidth = "none";
-		clonedSvg.style.maxHeight = "none";
-		clonedSvg.style.width = "";
-		clonedSvg.style.height = "";
-		clonedSvg.setAttribute("overflow", "visible");
 		content.appendChild(clonedSvg);
 
 		const fsControls = document.createElement("div");
@@ -511,6 +534,11 @@
 		document.addEventListener("keydown", escHandler);
 
 		requestAnimationFrame(() => {
+			// Size the cloned SVG to fill the fullscreen content area
+			const contentWidth = content.clientWidth;
+			const contentHeight = content.clientHeight;
+			sizeSvgToFitContainer(clonedSvg, contentWidth, contentHeight);
+
 			try {
 				fsInstance = window.svgPanZoom(clonedSvg, {
 					panEnabled: true,
