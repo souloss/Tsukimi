@@ -22,6 +22,12 @@ const defaults: SidebarLayoutConfig = {
 			animationDelay: 100,
 		},
 		{
+			type: "umami-stats",
+			position: "top",
+			class: "onload-animation",
+			animationDelay: 175,
+		},
+		{
 			type: "categories",
 			position: "sticky",
 			class: "onload-animation",
@@ -66,7 +72,7 @@ const defaults: SidebarLayoutConfig = {
 	],
 
 	components: {
-		left: ["profile", "announcement", "tags", "categories"],
+		left: ["profile", "announcement", "umami-stats", "tags", "categories"],
 		right: ["site-stats", "calendar", "toc"],
 		drawer: ["profile", "announcement", "music-sidebar", "categories", "tags"],
 	},

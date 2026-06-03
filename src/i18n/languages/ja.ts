@@ -365,6 +365,12 @@ export const ja: Translation = {
 	[Key.pageViewsLoading]: "統計を読み込み中...",
 	[Key.pageViewsUnavailable]: "統計は利用できません",
 
+	// Umami アクセス統計
+	[Key.umamiStats]: "アクセス統計",
+	[Key.umamiStatsPageViews]: "ページビュー",
+	[Key.umamiStatsVisits]: "訪問回数",
+	[Key.umamiStatsVisitors]: "訪問者数",
+
 	// レイアウト切り替えボタン
 	[Key.switchToGridMode]: "グリッド表示に切り替え",
 	[Key.switchToListMode]: "リスト表示に切り替え",

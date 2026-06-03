@@ -362,6 +362,12 @@ export const en: Translation = {
 	[Key.pageViewsLoading]: "Loading stats...",
 	[Key.pageViewsUnavailable]: "Stats unavailable",
 
+	// Umami Analytics Stats
+	[Key.umamiStats]: "Analytics",
+	[Key.umamiStatsPageViews]: "Page Views",
+	[Key.umamiStatsVisits]: "Visits",
+	[Key.umamiStatsVisitors]: "Visitors",
+
 	// Layout Switch Button
 	[Key.switchToGridMode]: "Switch to Grid Mode",
 	[Key.switchToListMode]: "Switch to List Mode",

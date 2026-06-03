@@ -20,6 +20,7 @@ export const WIDGET_COMPONENT_MAP = {
 		"../components/widgets/music-sidebar/MusicSidebarWidget.astro",
 	pio: "../components/widget/Pio.astro",
 	"site-stats": "../components/widgets/site-stats/SiteStats.astro",
+	"umami-stats": "../components/widgets/umami-stats/UmamiStats.astro",
 	calendar: "../components/widgets/calendar/Calendar.astro",
 	advertisement: null,
 	custom: null,

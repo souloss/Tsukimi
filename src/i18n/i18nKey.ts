@@ -363,6 +363,12 @@ enum I18nKey {
 	pageViewsLoading = "pageViewsLoading",
 	pageViewsUnavailable = "pageViewsUnavailable",
 
+	// Umami 访问统计
+	umamiStats = "umamiStats",
+	umamiStatsPageViews = "umamiStatsPageViews",
+	umamiStatsVisits = "umamiStatsVisits",
+	umamiStatsVisitors = "umamiStatsVisitors",
+
 	// 布局切换按钮
 	switchToGridMode = "switchToGridMode",
 	switchToListMode = "switchToListMode",

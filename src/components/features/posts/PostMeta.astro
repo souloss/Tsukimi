@@ -115,39 +115,43 @@ const {
         return `${pageViewsText} ${pageViews} · ${visitsText} ${visits}`;
     }
 
-    async function fetchPageViews() {
-        const container = document.querySelector('.umami-page-views');
-        
+    function fetchPageViews() {
+        var containers = document.querySelectorAll('.umami-page-views');
+
         if (!window.oddmisc) {
-            container?.classList.add('hidden');
+            window.addEventListener('oddmisc-ready', function() {
+                fetchPageViews();
+            }, { once: true });
             return;
         }
 
-        const id = container?.dataset.id;
-        if (!id) {return;}
+        containers.forEach(function(container) {
+            var id = container.dataset.id;
+            if (!id) return;
 
-        try {
-            const stats = await window.oddmisc.getStats(`/posts/${id}/`);
-            const pageViews = stats.pageviews || 0;
-            const visits = stats.visits || 0;
+            window.oddmisc.getStats('/posts/' + id + '/').then(function(stats) {
+                var pageViews = stats.pageviews || 0;
+                var visits = stats.visits || 0;
 
-            if (pageViews === 0 && visits === 0) {
-                container?.classList.add('hidden');
-                return;
-            }
-
-            container?.classList.remove('hidden');
-            container.querySelector('.page-views-display').textContent = generateStatsText(pageViews, visits);
-        } catch (error) {
-            console.error('Error fetching page views:', error);
-            container?.classList.add('hidden');
-        }
+                container.classList.remove('hidden');
+                container.querySelector('.page-views-display').textContent = generateStatsText(pageViews, visits);
+            }).catch(function(error) {
+                console.error('Error fetching page views:', error);
+                container.classList.add('hidden');
+            });
+        });
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', fetchPageViews);
-    } else {
+    // Try immediately if oddmisc is already available, otherwise wait
+    if (window.oddmisc) {
         fetchPageViews();
+    } else {
+        window.addEventListener('oddmisc-ready', function() {
+            fetchPageViews();
+        }, { once: true });
     }
+
+    // Re-fetch on Swup page transitions
+    document.addEventListener('swup:contentReplaced', fetchPageViews);
 </script>
 )}

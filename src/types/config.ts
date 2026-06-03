@@ -616,6 +616,7 @@ export type WidgetComponentType =
 	| "music-sidebar"
 	| "pio" // 添加 pio 组件类型
 	| "site-stats" // 站点统计组件
+	| "umami-stats" // Umami 访问统计组件
 	| "calendar" // 日历组件
 	| "advertisement" // 广告组件
 	| "custom";

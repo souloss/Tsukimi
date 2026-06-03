@@ -347,6 +347,12 @@ export const zh_CN: Translation = {
 	[Key.pageViewsLoading]: "统计加载中...",
 	[Key.pageViewsUnavailable]: "统计不可用",
 
+	// Umami 访问统计
+	[Key.umamiStats]: "访问统计",
+	[Key.umamiStatsPageViews]: "浏览量",
+	[Key.umamiStatsVisits]: "访问次数",
+	[Key.umamiStatsVisitors]: "访客数",
+
 	// 布局切换按钮
 	[Key.switchToGridMode]: "切换到网格模式",
 	[Key.switchToListMode]: "切换到列表模式",

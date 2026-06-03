@@ -1,0 +1,163 @@
+---
+import I18nKey from "../../../i18n/i18nKey";
+import { i18n } from "../../../i18n/translation";
+import WidgetLayout from "../common/WidgetLayout.astro";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const { class: className, style } = Astro.props;
+---
+
+<WidgetLayout
+	name={i18n(I18nKey.umamiStats)}
+	id="umami-stats"
+	class={className}
+	style={style}
+>
+	<div class="umami-stats-content hidden">
+		<!-- Large pageview number -->
+		<div class="text-center py-3">
+			<div class="text-3xl font-bold text-[var(--primary)]" data-umami="pageviews">
+				-
+			</div>
+			<div class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+				{i18n(I18nKey.umamiStatsPageViews)}
+			</div>
+		</div>
+
+		<!-- Divider -->
+		<div class="border-t border-black/5 dark:border-white/5 my-2"></div>
+
+		<!-- Two-column grid for visits and visitors -->
+		<div class="grid grid-cols-2 gap-2 py-2">
+			<div class="text-center">
+				<div class="text-xl font-semibold text-neutral-800 dark:text-neutral-200" data-umami="visits">
+					-
+				</div>
+				<div class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+					{i18n(I18nKey.umamiStatsVisits)}
+				</div>
+			</div>
+			<div class="text-center">
+				<div class="text-xl font-semibold text-neutral-800 dark:text-neutral-200" data-umami="visitors">
+					-
+				</div>
+				<div class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+					{i18n(I18nKey.umamiStatsVisitors)}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading state -->
+	<div class="umami-stats-loading text-center py-4 text-neutral-400">
+		<svg class="w-5 h-5 mx-auto animate-spin" viewBox="0 0 24 24" fill="none">
+			<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.25"/>
+			<path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+		</svg>
+	</div>
+</WidgetLayout>
+
+<script is:inline>
+	(function() {
+		// Guard: only init once across multiple widget instances
+		if (window.__umamiStatsInitialized) return;
+		window.__umamiStatsInitialized = true;
+
+		function easeOutCubic(t) {
+			return 1 - Math.pow(1 - t, 3);
+		}
+
+		function animateNumber(element, target, duration) {
+			if (!element) return;
+			duration = duration || 1000;
+			var startTime = performance.now();
+
+			function update(currentTime) {
+				var elapsed = currentTime - startTime;
+				var progress = Math.min(elapsed / duration, 1);
+				var current = Math.floor(target * easeOutCubic(progress));
+				element.textContent = current.toLocaleString();
+				if (progress < 1) {
+					requestAnimationFrame(update);
+				}
+			}
+
+			requestAnimationFrame(update);
+		}
+
+		function fetchUmamiStats() {
+			if (!window.oddmisc) {
+				window.addEventListener('oddmisc-ready', function() {
+					fetchUmamiStats();
+				}, { once: true });
+				return;
+			}
+
+			window.oddmisc.getSiteStats().then(function(stats) {
+				var pageviews = stats.pageviews || 0;
+				var visits = stats.visits || 0;
+				var visitors = stats.visitors || 0;
+
+				if (pageviews === 0 && visits === 0 && visitors === 0) {
+					document.querySelectorAll('.umami-stats-loading').forEach(function(el) {
+						el.classList.add('hidden');
+					});
+					return;
+				}
+
+				// Update all widget instances (desktop, tablet, mobile)
+				document.querySelectorAll('.umami-stats-loading').forEach(function(el) {
+					el.classList.add('hidden');
+				});
+				document.querySelectorAll('.umami-stats-content').forEach(function(el) {
+					el.classList.remove('hidden');
+				});
+				document.querySelectorAll('[data-umami="pageviews"]').forEach(function(el) {
+					animateNumber(el, pageviews);
+				});
+				document.querySelectorAll('[data-umami="visits"]').forEach(function(el) {
+					animateNumber(el, visits);
+				});
+				document.querySelectorAll('[data-umami="visitors"]').forEach(function(el) {
+					animateNumber(el, visitors);
+				});
+			}).catch(function(error) {
+				console.error('Error fetching Umami stats:', error);
+				document.querySelectorAll('.umami-stats-loading').forEach(function(el) {
+					el.classList.add('hidden');
+				});
+			});
+		}
+
+		// Try immediately if oddmisc is already available, otherwise wait
+		if (window.oddmisc) {
+			fetchUmamiStats();
+		} else {
+			window.addEventListener('oddmisc-ready', function() {
+				fetchUmamiStats();
+			}, { once: true });
+		}
+
+		// Re-fetch on Swup page transitions
+		document.addEventListener('swup:contentReplaced', function() {
+			document.querySelectorAll('.umami-stats-content').forEach(function(el) {
+				el.classList.add('hidden');
+			});
+			document.querySelectorAll('.umami-stats-loading').forEach(function(el) {
+				el.classList.remove('hidden');
+			});
+			// Reset guard so fetch can run again
+			window.__umamiStatsInitialized = false;
+			// Re-init (will set guard again)
+			(function() {
+				if (window.__umamiStatsInitialized) return;
+				window.__umamiStatsInitialized = true;
+				fetchUmamiStats();
+			})();
+		});
+	})();
+</script>
