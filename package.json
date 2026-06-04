@@ -99,6 +99,7 @@
 		"fast-xml-parser": "^5.8.0",
 		"fontmin": "^1.1.1",
 		"glob": "^13.0.6",
+		"https-proxy-agent": "^9.0.0",
 		"lint-staged": "^17.0.5",
 		"postcss-import": "^16.1.1",
 		"postcss-nesting": "^14.0.0",

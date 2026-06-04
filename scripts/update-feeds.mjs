@@ -5,15 +5,21 @@ import { XMLParser } from "fast-xml-parser";
 import axios from "axios";
 import http from "http";
 import https from "https";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FRIENDS_DATA_PATH = path.join(__dirname, "../src/data/friends.ts");
 const FRIENDS_CONFIG_PATH = path.join(__dirname, "../src/config/friendsConfig.ts");
 const OUTPUT_PATH = path.join(__dirname, "../src/data/friends-circle.json");
 
-// 强制不走代理的 httpAgent
-const httpAgent = new http.Agent();
-const httpsAgent = new https.Agent();
+// 代理配置：检测环境变量中的代理设置
+const proxyUrl = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
+const httpAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : new http.Agent();
+const httpsAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : new https.Agent();
+
+if (proxyUrl) {
+	console.log(`Using proxy: ${proxyUrl}`);
+}
 
 // ========== 配置读取 ==========
 async function getCircleConfig() {
@@ -188,14 +194,7 @@ function parseFeed(xmlText, friendInfo) {
 	}
 }
 
-// ========== 全局：清除代理环境变量，避免代理缓存导致 304 ==========
-const proxyKeys = ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "no_proxy", "NO_PROXY"];
-proxyKeys.forEach((k) => {
-	if (process.env[k]) {
-		console.log(`Clearing proxy env: ${k}=${process.env[k]}`);
-		delete process.env[k];
-	}
-});
+// 代理配置已移至文件顶部，不再清除代理环境变量
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -217,7 +216,7 @@ async function fetchFeed(url) {
 			headers,
 			httpAgent,
 			httpsAgent,
-			proxy: false,
+			proxy: proxyUrl ? undefined : false,
 		});
 
 		if (response.status === 200 && response.data && typeof response.data === "string" && response.data.trim().length > 0) {
@@ -232,7 +231,7 @@ async function fetchFeed(url) {
 				headers,
 				httpAgent,
 				httpsAgent,
-				proxy: false,
+				proxy: proxyUrl ? undefined : false,
 			});
 			if (retryResponse.status === 200 && retryResponse.data && typeof retryResponse.data === "string" && retryResponse.data.trim().length > 0) {
 				data = retryResponse.data;
