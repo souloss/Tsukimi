@@ -70,6 +70,8 @@
 @import "./relative-colors.css";
 /* 导入 Markdown 指令样式 */
 @import "./directives.css";
+/* 导入文件树样式 */
+@import "./file-tree.css";
 /* 导入 Twikoo 评论样式 */
 @import "./twikoo.css";
 /* 加密内容样式已移除，现在直接使用非加密文章的样式 */

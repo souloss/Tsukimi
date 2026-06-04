@@ -32,21 +32,23 @@ Tsukimi 内置了一个完整的文档系统，用于编写和展示项目文档
 
 文档文件位于 `src/content/docs/` 目录下：
 
-```
-src/content/docs/
-├── tsukimi/
-│   ├── index.md
-│   ├── guide/
-│   │   ├── intro.md
-│   │   ├── get-started.md
-│   │   └── ...
-│   ├── Basic-Layout/
-│   │   ├── site-config.md
-│   │   └── ...
-│   └── ...
-└── <其他项目文档>/
-    └── ...
-```
+::: file-tree
+
+- src/content/docs/
+  - tsukimi/
+    - index.md
+    - guide/
+      - intro.md
+      - get-started.md
+      - ...
+    - Basic-Layout/
+      - site-config.md
+      - ...
+    - ...
+  - <其他项目文档>/
+    - ...
+
+:::
 
 每个文档项目是一个独立的子目录。
 
@@ -116,15 +118,17 @@ export const docsTsukimiSidebar: DocsTsukimiSidebarItem[] = [
 
 为文档添加多语言版本：
 
-```
-src/content/docs/
-└── tsukimi/
-    ├── guide/
-    │   ├── intro.md              # 默认语言
-    │   ├── intro.zh_CN.md        # 简体中文
-    │   ├── intro.ja.md           # 日语
-    │   └── ...
-```
+::: file-tree
+
+- src/content/docs/
+  - tsukimi/
+    - guide/
+      - intro.md              # 默认语言
+      - intro.zh_CN.md        # 简体中文
+      - intro.ja.md           # 日语
+      - ...
+
+:::
 
 语言文件命名格式：`<文件名>.<语言标识>.md`
 

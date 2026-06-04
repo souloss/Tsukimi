@@ -27,6 +27,7 @@ import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-cop
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
+import { rehypeFileTree } from "./src/plugins/rehype-file-tree.mjs";
 import { rehypeImageWidth } from "./src/plugins/rehype-image-width.mjs";
 import { rehypeLazyImage } from "./src/plugins/rehype-lazy-image.mjs";
 import { rehypeMarkmap } from "./src/plugins/rehype-markmap.mjs";
@@ -166,6 +167,7 @@ export default defineConfig({
 			],
 			rehypeSlug,
 			rehypeWrapTable,
+			rehypeFileTree,
 			rehypeMermaid,
 			rehypePlantuml,
 			rehypeMarkmap,

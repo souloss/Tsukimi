@@ -1,0 +1,203 @@
+/*
+ * File-tree directive CSS — Tsukimi
+ * Renders collapsible file trees with diff indicators and file icons.
+ * Uses vp-file-tree prefix (VitePress-compatible naming).
+ */
+
+/* ── Container ──────────────────────────────────────────────────── */
+
+.vp-file-tree {
+  position: relative;
+  margin: 1rem 0;
+  border: 1px solid var(--line-divider);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0;
+  background: var(--card-bg);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+/* ── Node ───────────────────────────────────────────────────────── */
+
+.vp-file-tree-node {
+  position: relative;
+}
+
+/* ── Info row ───────────────────────────────────────────────────── */
+
+.vp-file-tree-info {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.15em calc(0.5em + var(--file-tree-level, 0) * 1.2em);
+  margin: 0;
+  min-height: 1.8em;
+  transition: background-color 0.15s ease;
+}
+
+/* ── Icon ───────────────────────────────────────────────────────── */
+
+.vp-file-tree-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 1em;
+}
+
+.vp-file-tree-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.vp-file-tree-icon.folder-icon {
+  color: #c09553;
+}
+
+.vp-file-tree-icon.file-icon {
+  color: var(--text-secondary);
+}
+
+/* ── Name ───────────────────────────────────────────────────────── */
+
+.vp-file-tree-info .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vp-file-tree-info .name.folder {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.vp-file-tree-info .name.file {
+  color: var(--text-primary);
+}
+
+.vp-file-tree-info .name.ellipsis {
+  color: var(--text-secondary);
+  font-style: italic;
+  letter-spacing: 0.1em;
+}
+
+/* ── Comment ────────────────────────────────────────────────────── */
+
+.vp-file-tree-info .comment {
+  margin-left: 0.5em;
+  color: var(--text-secondary);
+  font-size: 0.85em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Diff indicators ────────────────────────────────────────────── */
+
+.vp-file-tree-info.diff-add {
+  border-left: 3px solid #2da44e;
+  background: color-mix(in srgb, #2da44e 8%, transparent);
+}
+
+.vp-file-tree-info.diff-add .name.file {
+  color: #2da44e;
+}
+
+.vp-file-tree-info.diff-remove {
+  border-left: 3px solid #cf222e;
+  background: color-mix(in srgb, #cf222e 8%, transparent);
+}
+
+.vp-file-tree-info.diff-remove .name.file {
+  color: #cf222e;
+  text-decoration: line-through;
+}
+
+/* ── Folder hover ───────────────────────────────────────────────── */
+
+.vp-file-tree-info.folder:hover {
+  background: var(--btn-plain-bg-hover);
+  cursor: pointer;
+}
+
+.vp-file-tree-info.folder.expanded:hover {
+  background: var(--btn-plain-bg-hover);
+  cursor: default;
+}
+
+/* ── Details / Summary ──────────────────────────────────────────── */
+
+.vp-file-tree-node details {
+  margin: 0;
+}
+
+.vp-file-tree-node summary {
+  display: block;
+  list-style: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.vp-file-tree-node summary::-webkit-details-marker {
+  display: none;
+}
+
+.vp-file-tree-node summary::marker {
+  display: none;
+  content: "";
+}
+
+.vp-file-tree-node details[open] > summary .vp-file-tree-icon.folder-icon svg {
+  /* Swap to open folder icon via CSS is not possible with inline SVG,
+     so the open icon is set in the remark plugin for root folders.
+     Nested folders keep the closed icon when collapsed. */
+}
+
+.vp-file-tree-node details .group {
+  padding: 0;
+  animation: vp-file-tree-expand 0.15s ease-out;
+}
+
+@keyframes vp-file-tree-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Dark mode overrides ────────────────────────────────────────── */
+
+.dark .vp-file-tree {
+  border-color: var(--line-divider);
+  background: var(--card-bg);
+}
+
+.dark .vp-file-tree-icon.folder-icon {
+  color: #d4a853;
+}
+
+.dark .vp-file-tree-info.diff-add {
+  border-left-color: #3fb950;
+  background: color-mix(in srgb, #3fb950 10%, transparent);
+}
+
+.dark .vp-file-tree-info.diff-add .name.file {
+  color: #3fb950;
+}
+
+.dark .vp-file-tree-info.diff-remove {
+  border-left-color: #f85149;
+  background: color-mix(in srgb, #f85149 10%, transparent);
+}
+
+.dark .vp-file-tree-info.diff-remove .name.file {
+  color: #f85149;
+}

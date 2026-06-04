@@ -23,32 +23,34 @@ Tsukimi 将配置拆分为多个独立模块，每个模块负责一个功能领
 
 配置文件位于 `src/config/` 目录下：
 
-```
-src/config/
-├── index.ts              # 统一导出
-├── announcementConfig.ts  # 公告栏
-├── backgroundWallpaper.ts # 背景壁纸
-├── commentConfig.ts       # 评论系统
-├── effectsConfig.ts       # 特效（樱花等）
-├── expressiveCodeConfig.ts # 代码块样式
-├── fontConfig.ts          # 字体
-├── footerConfig.ts        # 页脚
-├── friendsConfig.ts       # 友链页面
-├── licenseConfig.ts       # 版权
-├── markmapConfig.ts       # 思维导图
-├── musicConfig.ts         # 音乐播放器
-├── navBarConfig.ts        # 导航栏
-├── permalinkConfig.ts     # 永久链接
-├── pioConfig.ts           # 看板娘
-├── plantumlConfig.ts      # PlantUML
-├── profileConfig.ts       # 个人资料
-├── randomPostsConfig.ts   # 随机文章
-├── relatedPostsConfig.ts  # 相关文章
-├── shareConfig.ts         # 分享
-├── sidebarConfig.ts       # 侧边栏布局
-├── siteConfig.ts          # 站点核心配置
-└── sponsorConfig.ts       # 赞助
-```
+::: file-tree
+
+- src/config/
+  - index.ts              # 统一导出
+  - announcementConfig.ts  # 公告栏
+  - backgroundWallpaper.ts # 背景壁纸
+  - commentConfig.ts       # 评论系统
+  - effectsConfig.ts       # 特效（樱花等）
+  - expressiveCodeConfig.ts # 代码块样式
+  - fontConfig.ts          # 字体
+  - footerConfig.ts        # 页脚
+  - friendsConfig.ts       # 友链页面
+  - licenseConfig.ts       # 版权
+  - markmapConfig.ts       # 思维导图
+  - musicConfig.ts         # 音乐播放器
+  - navBarConfig.ts        # 导航栏
+  - permalinkConfig.ts     # 永久链接
+  - pioConfig.ts           # 看板娘
+  - plantumlConfig.ts      # PlantUML
+  - profileConfig.ts       # 个人资料
+  - randomPostsConfig.ts   # 随机文章
+  - relatedPostsConfig.ts  # 相关文章
+  - shareConfig.ts         # 分享
+  - sidebarConfig.ts       # 侧边栏布局
+  - siteConfig.ts          # 站点核心配置
+  - sponsorConfig.ts       # 赞助
+
+:::
 
 ---
 
