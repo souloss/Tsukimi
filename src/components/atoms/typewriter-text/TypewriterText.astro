@@ -143,25 +143,39 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 		public destroy() {
 			if (this.timeoutId) {
 				clearTimeout(this.timeoutId);
+				this.timeoutId = null;
 			}
 		}
 	}
 
-	// 初始化所有打字机效果
-	document.addEventListener("DOMContentLoaded", () => {
-		const typewriterElements = document.querySelectorAll(".typewriter");
-		typewriterElements.forEach((element) => {
-			new TypewriterEffect(element as HTMLElement);
-		});
-	});
+	// Track active instances per-element to prevent duplicates
+	const activeInstances = new Map<HTMLElement, TypewriterEffect>();
 
-	// 支持页面切换时重新初始化
-	document.addEventListener("swup:contentReplaced", () => {
+	function initTypewriters() {
 		const typewriterElements = document.querySelectorAll(".typewriter");
 		typewriterElements.forEach((element) => {
-			new TypewriterEffect(element as HTMLElement);
+			const el = element as HTMLElement;
+			// Destroy any existing instance on this element first
+			const existing = activeInstances.get(el);
+			if (existing) {
+				existing.destroy();
+				activeInstances.delete(el);
+			}
+			const instance = new TypewriterEffect(el);
+			activeInstances.set(el, instance);
 		});
-	});
+	}
+
+	// 初始化所有打字机效果
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initTypewriters);
+	} else {
+		initTypewriters();
+	}
+
+	// 支持页面切换时重新初始化（先销毁旧实例，避免重复定时器导致闪烁）
+	document.addEventListener("swup:contentReplaced", initTypewriters);
+	document.addEventListener("astro:page-load", initTypewriters);
 </script>
 
 <style>

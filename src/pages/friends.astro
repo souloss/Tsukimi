@@ -166,7 +166,8 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 
 <script>
   // @ts-nocheck
-  document.addEventListener("DOMContentLoaded", () => {
+  function initFriendsPage() {
+    // 标签筛选
     const tags = document.querySelectorAll(".friend-tag");
     const cards = document.querySelectorAll(".friend-card");
 
@@ -217,5 +218,16 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
         }
       });
     });
-  });
+  }
+
+  // 首次加载
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFriendsPage);
+  } else {
+    initFriendsPage();
+  }
+
+  // Swup 页面切换后重新绑定事件
+  document.addEventListener("swup:contentReplaced", initFriendsPage);
+  document.addEventListener("astro:page-load", initFriendsPage);
 </script>
