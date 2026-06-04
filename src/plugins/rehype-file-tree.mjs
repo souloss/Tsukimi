@@ -62,7 +62,7 @@ function txt(value) {
 	return { type: "text", value };
 }
 
-function svgIcon(iconName, size = "1em") {
+function svgIcon(iconName, size = "1.25em") {
 	const body = ICONS[iconName] || ICONS.file;
 	return el(
 		"svg",
@@ -175,25 +175,35 @@ function buildNodeHast(node, level) {
 	const indentStyle = `--file-tree-level: ${level};`;
 
 	if (isEllipsis) {
-		return el("div", { className: ["vp-file-tree-item"], dataLevel: level }, [
-			el(
-				"div",
-				{
-					className: ["vp-file-tree-row", "vp-file-tree-ellipsis"],
-					style: indentStyle,
-				},
-				[
-					el("span", { className: ["vp-file-tree-icon"] }, [
-						svgIcon("ellipsis"),
-					]),
-					el(
-						"span",
-						{ className: ["vp-file-tree-name", "vp-file-tree-ellipsis-text"] },
-						[txt("…")],
-					),
-				],
-			),
-		]);
+		return el(
+			"div",
+			{
+				className: ["vp-file-tree-item"],
+				dataLevel: level,
+				style: indentStyle,
+			},
+			[
+				el(
+					"div",
+					{
+						className: ["vp-file-tree-row", "vp-file-tree-ellipsis"],
+						style: indentStyle,
+					},
+					[
+						el("span", { className: ["vp-file-tree-icon"] }, [
+							svgIcon("ellipsis"),
+						]),
+						el(
+							"span",
+							{
+								className: ["vp-file-tree-name", "vp-file-tree-ellipsis-text"],
+							},
+							[txt("…")],
+						),
+					],
+				),
+			],
+		);
 	}
 
 	if (diffType)
@@ -223,9 +233,15 @@ function buildNodeHast(node, level) {
 		);
 
 		if (children.length === 0) {
-			return el("div", { className: ["vp-file-tree-item"], dataLevel: level }, [
-				infoEl,
-			]);
+			return el(
+				"div",
+				{
+					className: ["vp-file-tree-item"],
+					dataLevel: level,
+					style: indentStyle,
+				},
+				[infoEl],
+			);
 		}
 
 		const childNodes = children.map((c) => buildNodeHast(c, level + 1));
@@ -237,9 +253,15 @@ function buildNodeHast(node, level) {
 
 		const isOpen = level === 0;
 
-		return el("div", { className: ["vp-file-tree-item"], dataLevel: level }, [
-			el("details", { open: isOpen }, [el("summary", {}, [infoEl]), groupEl]),
-		]);
+		return el(
+			"div",
+			{
+				className: ["vp-file-tree-item"],
+				dataLevel: level,
+				style: indentStyle,
+			},
+			[el("details", { open: isOpen }, [el("summary", {}, [infoEl]), groupEl])],
+		);
 	}
 
 	const iconClass = getFileIconClass(name);
@@ -257,9 +279,11 @@ function buildNodeHast(node, level) {
 			el("span", { className: ["vp-file-tree-comment"] }, [txt(comment)]),
 		);
 
-	return el("div", { className: ["vp-file-tree-item"], dataLevel: level }, [
-		el("div", { className: infoClasses, style: indentStyle }, infoKids),
-	]);
+	return el(
+		"div",
+		{ className: ["vp-file-tree-item"], dataLevel: level, style: indentStyle },
+		[el("div", { className: infoClasses, style: indentStyle }, infoKids)],
+	);
 }
 
 function buildFileTreeHast(nodes) {
@@ -267,14 +291,16 @@ function buildFileTreeHast(nodes) {
 	return el("div", { className: ["vp-file-tree"] }, childNodes);
 }
 
-export function rehypeFileTree() {
+export function rehypeFileTreeV3() {
 	return (tree) => {
 		visit(tree, "element", (node, index, parent) => {
 			if (node.tagName !== "file-tree") return;
 			if (!parent || typeof index !== "number") return;
 
+			// Only look at element children (skip stray text nodes from other plugins)
 			const listEl = node.children?.find(
-				(c) => c.tagName === "ul" || c.tagName === "ol",
+				(c) =>
+					c.type === "element" && (c.tagName === "ul" || c.tagName === "ol"),
 			);
 
 			if (!listEl) {
