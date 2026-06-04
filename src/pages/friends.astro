@@ -164,7 +164,7 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
   }
 </style>
 
-<script>
+<script is:inline>
   // @ts-nocheck
   function initFriendsPage() {
     // 标签筛选
@@ -194,31 +194,31 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
         });
       });
     });
-
-    // 点击复制
-    const copyBtns = document.querySelectorAll(".friend-copy-btn");
-    copyBtns.forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const text = btn.getAttribute("data-copy");
-        if (text) {
-          try {
-            await navigator.clipboard.writeText(text);
-            btn.innerHTML = '<iconify-icon icon="material-symbols:check" class="text-sm text-green-500"></iconify-icon>';
-            setTimeout(() => {
-              btn.innerHTML = '<iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>';
-            }, 1500);
-          } catch {
-            const textarea = document.createElement("textarea");
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
-          }
-        }
-      });
-    });
   }
+
+  // 使用事件委托处理复制按钮，避免 Swup 页面切换后事件丢失
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".friend-copy-btn");
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const text = btn.getAttribute("data-copy");
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.innerHTML = '<iconify-icon icon="material-symbols:check" class="text-sm text-green-500"></iconify-icon>';
+      setTimeout(() => {
+        btn.innerHTML = '<iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>';
+      }, 1500);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+  });
 
   // 首次加载
   if (document.readyState === "loading") {
@@ -227,7 +227,7 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
     initFriendsPage();
   }
 
-  // Swup 页面切换后重新绑定事件
+  // Swup 页面切换后重新绑定标签筛选事件
   document.addEventListener("swup:contentReplaced", initFriendsPage);
   document.addEventListener("astro:page-load", initFriendsPage);
 </script>

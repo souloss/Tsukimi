@@ -1,41 +1,39 @@
-// 朋友圈数据配置
-// 用于管理朋友圈页面的RSS聚合数据
+import friendsCircleData from "./friends-circle.json";
 
-export interface FriendsCircleItem {
-	title: string;
-	author: string;
-	date: string;
-	link: string;
-	content: string;
-	avatar?: string;
-	siteUrl?: string;
-}
+export function getFriendsCircleList() {
+	const data = friendsCircleData as {
+		lastUpdated: string;
+		items: {
+			title: string;
+			author: string;
+			avatar: string;
+			siteUrl: string;
+			date: string;
+			link: string;
+			content: string;
+		}[];
+	};
 
-interface FriendsCircleData {
-	lastUpdated: string;
-	items: FriendsCircleItem[];
-}
-
-const defaultData: FriendsCircleData = { lastUpdated: "", items: [] };
-
-function loadData(): FriendsCircleData {
-	try {
-		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		const json = require("./friends-circle.json");
-		return json ?? defaultData;
-	} catch {
-		return defaultData;
+	if (!data?.items || data.items.length === 0) {
+		console.warn(
+			"No friends circle data found. Run `pnpm update-feeds` to fetch RSS feeds.",
+		);
+		return [];
 	}
+
+	return data.items.map((item) => ({
+		title: item.title,
+		link: item.link,
+		author: item.author,
+		published: item.date,
+		summary: item.content,
+		siteUrl: item.siteUrl,
+		siteName: item.author,
+		siteAvatar: item.avatar,
+	}));
 }
 
-const data = loadData();
-
-// 获取朋友圈数据
-export function getFriendsCircleList(): FriendsCircleItem[] {
-	return data.items ?? [];
-}
-
-// 获取朋友圈数据最后更新时间
 export function getFriendsCircleLastUpdated(): string {
-	return data.lastUpdated ?? "";
+	const data = friendsCircleData as { lastUpdated: string };
+	return data?.lastUpdated || "";
 }
