@@ -91,6 +91,9 @@ declare global {
 			onLoad: (callback: () => void) => void;
 			isLoaded: boolean;
 		};
+		// Friends page copy handler guard
+		__friendsCopyHandler?: boolean;
+
 		siteConfig: SiteConfigWindow;
 		hljs?: {
 			highlightElement: (block: HTMLElement) => void;

@@ -1,203 +1,242 @@
-/*
- * File-tree directive CSS — Tsukimi
- * Renders collapsible file trees with diff indicators and file icons.
- * Uses vp-file-tree prefix (VitePress-compatible naming).
- */
-
-/* ── Container ──────────────────────────────────────────────────── */
+/* ── File Tree (Vuepress-inspired) ──────────────────────────────── */
 
 .vp-file-tree {
-  position: relative;
-  margin: 1rem 0;
-  border: 1px solid var(--line-divider);
-  border-radius: 0.5rem;
-  padding: 0.75rem 0;
-  background: var(--card-bg);
-  font-size: 0.875rem;
-  line-height: 1.6;
-  overflow-x: auto;
+	--vp-ft-indent: 1.4em;
+	--vp-ft-line-color: color-mix(in srgb, var(--line-divider) 60%, transparent);
+	--vp-ft-bg: color-mix(in srgb, var(--primary) 3%, var(--card-bg));
+	--vp-ft-bg-hover: color-mix(in srgb, var(--primary) 6%, var(--card-bg));
+	--vp-ft-arrow-color: var(--text-tertiary);
+	--vp-ft-comment-color: var(--text-tertiary);
+	--vp-ft-comment-prefix: "— ";
+
+	font-size: 0.9em;
+	line-height: 1.8;
+	border-radius: var(--radius-large, 0.75rem);
+	padding: 1em 0.75em;
+	background: var(--vp-ft-bg);
+	border: 1px solid var(--line-divider);
+	overflow-x: auto;
 }
 
-/* ── Node ───────────────────────────────────────────────────────── */
+/* ── Row ───────────────────────────────────────────────────────── */
 
-.vp-file-tree-node {
-  position: relative;
+.vp-file-tree-row {
+	display: flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0.15em 0.5em;
+	border-radius: 0.375rem;
+	margin-left: calc(var(--file-tree-level, 0) * var(--vp-ft-indent));
+	transition: background 0.15s ease, box-shadow 0.15s ease;
+	position: relative;
+	cursor: default;
 }
 
-/* ── Info row ───────────────────────────────────────────────────── */
-
-.vp-file-tree-info {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.15em calc(0.5em + var(--file-tree-level, 0) * 1.2em);
-  margin: 0;
-  min-height: 1.8em;
-  transition: background-color 0.15s ease;
+.vp-file-tree-row:hover {
+	background: var(--vp-ft-bg-hover);
+	box-shadow: 0 1px 3px color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
-/* ── Icon ───────────────────────────────────────────────────────── */
+/* ── Vertical hierarchy lines ──────────────────────────────────── */
+
+.vp-file-tree-item[data-level] {
+	position: relative;
+}
+
+/* Draw vertical guide lines for each indentation level */
+.vp-file-tree-group .vp-file-tree-item::before {
+	content: "";
+	position: absolute;
+	left: calc((var(--file-tree-level, 0) - 1) * var(--vp-ft-indent) + 0.65em);
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: var(--vp-ft-line-color);
+}
+
+/* ── Expand/collapse arrow ─────────────────────────────────────── */
+
+.vp-file-tree-arrow {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.2em;
+	height: 1.2em;
+	flex-shrink: 0;
+	color: var(--vp-ft-arrow-color);
+	transition: transform 0.2s ease;
+}
+
+details:not([open]) > summary .vp-file-tree-arrow {
+	transform: rotate(-90deg);
+}
+
+details[open] > summary .vp-file-tree-arrow {
+	transform: rotate(0deg);
+}
+
+.vp-file-tree-arrow-spacer {
+	display: inline-block;
+	width: 1.2em;
+	flex-shrink: 0;
+}
+
+/* ── Summary reset ─────────────────────────────────────────────── */
+
+.vp-file-tree details > summary {
+	list-style: none;
+	cursor: pointer;
+}
+
+.vp-file-tree details > summary::-webkit-details-marker {
+	display: none;
+}
+
+.vp-file-tree details > summary::marker {
+	display: none;
+	content: "";
+}
+
+/* ── Icons ─────────────────────────────────────────────────────── */
 
 .vp-file-tree-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 1.2em;
-  height: 1.2em;
-  font-size: 1em;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
 }
 
-.vp-file-tree-icon svg {
-  width: 100%;
-  height: 100%;
+.vp-icon-folder svg path:first-child { fill: #d97706; }
+.vp-icon-folder svg path:nth-child(2) { fill: #f59e0b; }
+
+.vp-icon-code svg path:first-child { fill: #3b82f6; }
+.vp-icon-code svg path:nth-child(2) { fill: #dbeafe; }
+.vp-icon-code svg path:nth-child(3) { fill: #1d4ed8; }
+.vp-icon-code svg path:nth-child(4) { fill: #1d4ed8; }
+
+.vp-icon-doc svg path:first-child { fill: #8b5cf6; }
+.vp-icon-doc svg path:nth-child(2) { fill: #ede9fe; }
+
+.vp-icon-config svg path:first-child { fill: #f97316; }
+.vp-icon-config svg path:nth-child(2) { fill: #ffedd5; }
+
+.vp-icon-image svg path:first-child { fill: #22c55e; }
+.vp-icon-image svg path:nth-child(2) { fill: #dcfce7; }
+
+.vp-icon-lock svg path:first-child { fill: #ef4444; }
+.vp-icon-lock svg path:nth-child(2) { fill: #fee2e2; }
+
+.vp-icon-info svg circle { fill: #6366f1; }
+.vp-icon-info svg path { fill: #e0e7ff; }
+
+.vp-file-tree-ellipsis .vp-file-tree-icon svg circle { fill: #94a3b8; }
+
+/* ── Name ──────────────────────────────────────────────────────── */
+
+.vp-file-tree-name {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-.vp-file-tree-icon.folder-icon {
-  color: #c09553;
+.vp-file-tree-folder {
+	font-weight: 600;
 }
 
-.vp-file-tree-icon.file-icon {
-  color: var(--text-secondary);
+.vp-file-tree-file {
+	font-weight: 400;
 }
 
-/* ── Name ───────────────────────────────────────────────────────── */
-
-.vp-file-tree-info .name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.vp-file-tree-ellipsis-text {
+	color: var(--text-tertiary);
+	font-style: italic;
 }
 
-.vp-file-tree-info .name.folder {
-  font-weight: 600;
-  color: var(--text-primary);
+/* ── Comment / annotation ──────────────────────────────────────── */
+
+.vp-file-tree-comment {
+	margin-left: 0.75em;
+	color: var(--vp-ft-comment-color);
+	font-style: italic;
+	font-size: 0.88em;
+	white-space: nowrap;
 }
 
-.vp-file-tree-info .name.file {
-  color: var(--text-primary);
+.vp-file-tree-comment::before {
+	content: var(--vp-ft-comment-prefix);
+	color: color-mix(in srgb, var(--primary) 50%, var(--text-tertiary));
 }
 
-.vp-file-tree-info .name.ellipsis {
-  color: var(--text-secondary);
-  font-style: italic;
-  letter-spacing: 0.1em;
+/* ── Diff markers ──────────────────────────────────────────────── */
+
+.vp-file-tree-diff-add {
+	--vp-ft-bg-hover: color-mix(in srgb, #22c55e 8%, var(--vp-ft-bg));
+}
+.vp-file-tree-diff-add .vp-file-tree-name {
+	color: #16a34a;
+}
+.vp-file-tree-diff-add::before {
+	content: "+";
+	color: #22c55e;
+	font-weight: 700;
+	margin-right: 0.15em;
+	font-family: var(--font-mono, monospace);
 }
 
-/* ── Comment ────────────────────────────────────────────────────── */
-
-.vp-file-tree-info .comment {
-  margin-left: 0.5em;
-  color: var(--text-secondary);
-  font-size: 0.85em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.vp-file-tree-diff-remove {
+	--vp-ft-bg-hover: color-mix(in srgb, #ef4444 8%, var(--vp-ft-bg));
+}
+.vp-file-tree-diff-remove .vp-file-tree-name {
+	color: #dc2626;
+	text-decoration: line-through;
+	opacity: 0.65;
+}
+.vp-file-tree-diff-remove::before {
+	content: "−";
+	color: #ef4444;
+	font-weight: 700;
+	margin-right: 0.15em;
+	font-family: var(--font-mono, monospace);
 }
 
-/* ── Diff indicators ────────────────────────────────────────────── */
+/* ── Group (children container) ─────────────────────────────────── */
 
-.vp-file-tree-info.diff-add {
-  border-left: 3px solid #2da44e;
-  background: color-mix(in srgb, #2da44e 8%, transparent);
+.vp-file-tree-group {
+	/* slight left padding for children alignment */
 }
 
-.vp-file-tree-info.diff-add .name.file {
-  color: #2da44e;
+/* ── Dark mode adjustments ──────────────────────────────────────── */
+
+:is(.dark) .vp-file-tree {
+	--vp-ft-bg: color-mix(in srgb, var(--primary) 5%, var(--card-bg));
+	--vp-ft-bg-hover: color-mix(in srgb, var(--primary) 10%, var(--card-bg));
+	--vp-ft-line-color: color-mix(in srgb, var(--line-divider) 80%, transparent);
 }
 
-.vp-file-tree-info.diff-remove {
-  border-left: 3px solid #cf222e;
-  background: color-mix(in srgb, #cf222e 8%, transparent);
+:is(.dark) .vp-file-tree-row:hover {
+	box-shadow: 0 1px 4px color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
-.vp-file-tree-info.diff-remove .name.file {
-  color: #cf222e;
-  text-decoration: line-through;
-}
+:is(.dark) .vp-icon-folder svg path:first-child { fill: #b45309; }
+:is(.dark) .vp-icon-folder svg path:nth-child(2) { fill: #d97706; }
 
-/* ── Folder hover ───────────────────────────────────────────────── */
+:is(.dark) .vp-icon-code svg path:first-child { fill: #2563eb; }
+:is(.dark) .vp-icon-code svg path:nth-child(2) { fill: #1e3a5f; }
 
-.vp-file-tree-info.folder:hover {
-  background: var(--btn-plain-bg-hover);
-  cursor: pointer;
-}
+:is(.dark) .vp-icon-doc svg path:first-child { fill: #7c3aed; }
+:is(.dark) .vp-icon-doc svg path:nth-child(2) { fill: #3b1f6e; }
 
-.vp-file-tree-info.folder.expanded:hover {
-  background: var(--btn-plain-bg-hover);
-  cursor: default;
-}
+:is(.dark) .vp-icon-config svg path:first-child { fill: #ea580c; }
+:is(.dark) .vp-icon-config svg path:nth-child(2) { fill: #7c2d12; }
 
-/* ── Details / Summary ──────────────────────────────────────────── */
+:is(.dark) .vp-icon-image svg path:first-child { fill: #16a34a; }
+:is(.dark) .vp-icon-image svg path:nth-child(2) { fill: #14532d; }
 
-.vp-file-tree-node details {
-  margin: 0;
-}
+:is(.dark) .vp-icon-lock svg path:first-child { fill: #dc2626; }
+:is(.dark) .vp-icon-lock svg path:nth-child(2) { fill: #7f1d1d; }
 
-.vp-file-tree-node summary {
-  display: block;
-  list-style: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-}
+:is(.dark) .vp-file-tree-diff-add .vp-file-tree-name { color: #4ade80; }
+:is(.dark) .vp-file-tree-diff-add::before { color: #4ade80; }
 
-.vp-file-tree-node summary::-webkit-details-marker {
-  display: none;
-}
-
-.vp-file-tree-node summary::marker {
-  display: none;
-  content: "";
-}
-
-.vp-file-tree-node details[open] > summary .vp-file-tree-icon.folder-icon svg {
-  /* Swap to open folder icon via CSS is not possible with inline SVG,
-     so the open icon is set in the remark plugin for root folders.
-     Nested folders keep the closed icon when collapsed. */
-}
-
-.vp-file-tree-node details .group {
-  padding: 0;
-  animation: vp-file-tree-expand 0.15s ease-out;
-}
-
-@keyframes vp-file-tree-expand {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── Dark mode overrides ────────────────────────────────────────── */
-
-.dark .vp-file-tree {
-  border-color: var(--line-divider);
-  background: var(--card-bg);
-}
-
-.dark .vp-file-tree-icon.folder-icon {
-  color: #d4a853;
-}
-
-.dark .vp-file-tree-info.diff-add {
-  border-left-color: #3fb950;
-  background: color-mix(in srgb, #3fb950 10%, transparent);
-}
-
-.dark .vp-file-tree-info.diff-add .name.file {
-  color: #3fb950;
-}
-
-.dark .vp-file-tree-info.diff-remove {
-  border-left-color: #f85149;
-  background: color-mix(in srgb, #f85149 10%, transparent);
-}
-
-.dark .vp-file-tree-info.diff-remove .name.file {
-  color: #f85149;
-}
+:is(.dark) .vp-file-tree-diff-remove .vp-file-tree-name { color: #f87171; }
+:is(.dark) .vp-file-tree-diff-remove::before { color: #f87171; }
