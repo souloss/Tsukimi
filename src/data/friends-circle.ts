@@ -1,17 +1,19 @@
 import friendsCircleData from "./friends-circle.json";
 
-export function getFriendsCircleList() {
+export interface FriendsCircleItem {
+	title: string;
+	author: string;
+	avatar: string;
+	siteUrl: string;
+	date: string;
+	link: string;
+	content: string;
+}
+
+export function getFriendsCircleList(): FriendsCircleItem[] {
 	const data = friendsCircleData as {
 		lastUpdated: string;
-		items: {
-			title: string;
-			author: string;
-			avatar: string;
-			siteUrl: string;
-			date: string;
-			link: string;
-			content: string;
-		}[];
+		items: FriendsCircleItem[];
 	};
 
 	if (!data?.items || data.items.length === 0) {
@@ -21,16 +23,7 @@ export function getFriendsCircleList() {
 		return [];
 	}
 
-	return data.items.map((item) => ({
-		title: item.title,
-		link: item.link,
-		author: item.author,
-		published: item.date,
-		summary: item.content,
-		siteUrl: item.siteUrl,
-		siteName: item.author,
-		siteAvatar: item.avatar,
-	}));
+	return data.items;
 }
 
 export function getFriendsCircleLastUpdated(): string {
