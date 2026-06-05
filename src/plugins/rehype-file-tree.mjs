@@ -55,6 +55,7 @@ try {
 		},
 		fileMap: {},
 		folderMap: {},
+		folderOpenMap: {},
 		defaultFile: "default-file",
 		defaultFolder: "default-folder",
 		defaultFolderOpen: "default-folder-opened",
@@ -125,12 +126,18 @@ function resolveFileIcon(filename) {
 
 /**
  * Resolve the icon name for a folder by its name.
- * Checks: folder name match → default folder icon.
+ * Checks: folder name match → opened variant if expanded → default folder icon.
  */
 function resolveFolderIcon(folderName, isOpen) {
 	const lower = folderName.toLowerCase();
-	const mapped = iconData.folderMap?.[lower];
-	if (mapped && iconData.icons[mapped]) return mapped;
+	const closedName = iconData.folderMap?.[lower];
+	if (closedName && iconData.icons[closedName]) {
+		if (isOpen) {
+			const openName = iconData.folderOpenMap?.[closedName];
+			if (openName && iconData.icons[openName]) return openName;
+		}
+		return closedName;
+	}
 	return isOpen
 		? iconData.defaultFolderOpen || iconData.defaultFolder
 		: iconData.defaultFolder;
@@ -258,6 +265,23 @@ function buildNodeHast(node, level) {
 	}
 
 	const infoKids = [];
+
+	if (diffType) {
+		infoKids.push(
+			el(
+				"span",
+				{
+					className: [
+						"vp-file-tree-diff-indicator",
+						diffType === "add" ? "add" : "remove",
+					],
+				},
+				[txt(diffType === "add" ? "+" : "−")],
+			),
+		);
+	} else {
+		infoKids.push(el("span", { className: ["vp-file-tree-diff-indicator"] }));
+	}
 
 	if (isFolder) {
 		// Arrow (chevron)

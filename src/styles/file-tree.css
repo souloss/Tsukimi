@@ -196,7 +196,16 @@ details[open] > summary .vp-file-tree-arrow {
 	color: color-mix(in srgb, var(--primary) 40%, var(--text-tertiary));
 }
 
-/* ── Diff markers ──────────────────────────────────────────────── */
+/* ── Diff indicator ─────────────────────────────────────────────── */
+
+.vp-file-tree-diff-indicator {
+	display: inline-block;
+	width: 1em;
+	flex-shrink: 0;
+	font-family: var(--font-mono, monospace);
+	font-weight: 700;
+	text-align: center;
+}
 
 .vp-file-tree-info.diff.add {
 	--vp-ft-bg-hover: color-mix(in srgb, #22c55e 10%, var(--vp-ft-bg));
@@ -204,14 +213,8 @@ details[open] > summary .vp-file-tree-arrow {
 .vp-file-tree-info.diff.add .vp-file-tree-name {
 	color: #16a34a;
 }
-.vp-file-tree-info.diff.add::before {
-	content: "+";
+.vp-file-tree-info.diff.add .vp-file-tree-diff-indicator {
 	color: #22c55e;
-	font-weight: 700;
-	margin-right: 0.25em;
-	font-family: var(--font-mono, monospace);
-	position: relative;
-	z-index: 1;
 }
 
 .vp-file-tree-info.diff.remove {
@@ -222,14 +225,8 @@ details[open] > summary .vp-file-tree-arrow {
 	text-decoration: line-through;
 	opacity: 0.65;
 }
-.vp-file-tree-info.diff.remove::before {
-	content: "−";
+.vp-file-tree-info.diff.remove .vp-file-tree-diff-indicator {
 	color: #ef4444;
-	font-weight: 700;
-	margin-right: 0.25em;
-	font-family: var(--font-mono, monospace);
-	position: relative;
-	z-index: 1;
 }
 
 /* ── Dark mode adjustments ──────────────────────────────────────── */
@@ -241,7 +238,7 @@ details[open] > summary .vp-file-tree-arrow {
 }
 
 :is(.dark) .vp-file-tree-info.diff.add .vp-file-tree-name { color: #4ade80; }
-:is(.dark) .vp-file-tree-info.diff.add::before { color: #4ade80; }
+:is(.dark) .vp-file-tree-info.diff.add .vp-file-tree-diff-indicator { color: #4ade80; }
 
 :is(.dark) .vp-file-tree-info.diff.remove .vp-file-tree-name { color: #f87171; }
-:is(.dark) .vp-file-tree-info.diff.remove::before { color: #f87171; }
+:is(.dark) .vp-file-tree-info.diff.remove .vp-file-tree-diff-indicator { color: #f87171; }

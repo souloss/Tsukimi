@@ -177,36 +177,804 @@ const NAME_ICON_MAP = {
 // ── Folder icons (from vscode-icons) ──────────────────────────────
 
 const FOLDER_ICON_MAP = {
+	// src
 	src: "folder-type-src",
 	source: "folder-type-src",
+	sources: "folder-type-src",
+	__src__: "folder-type-src",
+
+	// api
+	api: "folder-type-api",
+	".api": "folder-type-api",
+	apis: "folder-type-api",
+	".apis": "folder-type-api",
+
+	// app
+	app: "folder-type-app",
+	apps: "folder-type-app",
+	".app": "folder-type-app",
+	application: "folder-type-app",
+	applications: "folder-type-app",
+
+	// asset
+	assets: "folder-type-asset",
+	".assets": "folder-type-asset",
+
+	// audio
+	audio: "folder-type-audio",
+	".audio": "folder-type-audio",
+	audios: "folder-type-audio",
+	".audios": "folder-type-audio",
+	sound: "folder-type-audio",
+	".sound": "folder-type-audio",
+	sounds: "folder-type-audio",
+	".sounds": "folder-type-audio",
+
+	// binary
+	bin: "folder-type-binary",
+	".bin": "folder-type-binary",
+
+	// cli
+	cli: "folder-type-cli",
+	cmd: "folder-type-cli",
+	command: "folder-type-cli",
+	commands: "folder-type-cli",
+	commandline: "folder-type-cli",
+	console: "folder-type-cli",
+
+	// client
+	client: "folder-type-client",
+	clients: "folder-type-client",
+
+	// common
+	common: "folder-type-common",
+
+	// component
+	component: "folder-type-component",
 	components: "folder-type-component",
-	pages: "folder-type-src",
-	routes: "folder-type-src",
-	views: "folder-type-src",
-	styles: "folder-type-sass",
-	tests: "folder-type-test",
-	test: "folder-type-test",
-	__tests__: "folder-type-test",
-	utils: "folder-type-helper",
-	lib: "folder-type-library",
-	assets: "folder-type-src",
-	public: "folder-type-src",
-	static: "folder-type-src",
+	".components": "folder-type-component",
+	gui: "folder-type-component",
+	"src-ui": "folder-type-component",
+	ui: "folder-type-component",
+	widgets: "folder-type-component",
+
+	// config
+	conf: "folder-type-config",
+	".conf": "folder-type-config",
 	config: "folder-type-config",
+	".config": "folder-type-config",
+	configs: "folder-type-config",
+	".configs": "folder-type-config",
+	configuration: "folder-type-config",
+	".configuration": "folder-type-config",
+	configurations: "folder-type-config",
+	".configurations": "folder-type-config",
+	setting: "folder-type-config",
+	".setting": "folder-type-config",
+	settings: "folder-type-config",
+	".settings": "folder-type-config",
+	ini: "folder-type-config",
+	".ini": "folder-type-config",
+	initializers: "folder-type-config",
+	".initializers": "folder-type-config",
+
+	// controller
+	controller: "folder-type-controller",
+	controllers: "folder-type-controller",
+	".controllers": "folder-type-controller",
+	__controller__: "folder-type-controller",
+	__controllers__: "folder-type-controller",
+	handler: "folder-type-controller",
+	handlers: "folder-type-controller",
+	".handler": "folder-type-controller",
+	".handlers": "folder-type-controller",
+	__handler__: "folder-type-controller",
+	__handlers__: "folder-type-controller",
+
+	// coverage
+	coverage: "folder-type-coverage",
+
+	// css
+	css: "folder-type-css",
+	_css: "folder-type-css",
+
+	// data / db
+	db: "folder-type-db",
+	database: "folder-type-db",
+	sql: "folder-type-db",
+	data: "folder-type-db",
+	repo: "folder-type-db",
+	repository: "folder-type-db",
+	repositories: "folder-type-db",
+	store: "folder-type-db",
+	stores: "folder-type-db",
+
+	// dist
+	dist: "folder-type-dist",
+	".dist": "folder-type-dist",
+	dists: "folder-type-dist",
+	out: "folder-type-dist",
+	outs: "folder-type-dist",
+	export: "folder-type-dist",
+	exports: "folder-type-dist",
+	build: "folder-type-dist",
+	".build": "folder-type-dist",
+	builds: "folder-type-dist",
+	release: "folder-type-dist",
+	releases: "folder-type-dist",
+	target: "folder-type-dist",
+	targets: "folder-type-dist",
+
+	// docker
+	docker: "folder-type-docker",
+	".docker": "folder-type-docker",
+
+	// docs
 	docs: "folder-type-docs",
-	scripts: "folder-type-script",
-	plugins: "folder-type-plugin",
-	modules: "folder-type-node",
-	store: "folder-type-node",
-	data: "folder-type-src",
-	i18n: "folder-type-locale",
+	doc: "folder-type-docs",
+	document: "folder-type-docs",
+	documents: "folder-type-docs",
+
+	// fonts
+	fonts: "folder-type-fonts",
+	font: "folder-type-fonts",
+	fnt: "folder-type-fonts",
+	webfonts: "folder-type-fonts",
+
+	// git
+	".git": "folder-type-git",
+	submodules: "folder-type-git",
+	".submodules": "folder-type-git",
+
+	// github
+	".github": "folder-type-github",
+
+	// gitlab
+	".gitlab": "folder-type-gitlab",
+
+	// graphql
+	graphql: "folder-type-graphql",
+
+	// helper
+	helper: "folder-type-helper",
+	".helper": "folder-type-helper",
+	helpers: "folder-type-helper",
+	".helpers": "folder-type-helper",
+
+	// hook
+	hook: "folder-type-hook",
+	".hook": "folder-type-hook",
+	hooks: "folder-type-hook",
+	".hooks": "folder-type-hook",
+
+	// husky
+	".husky": "folder-type-husky",
+
+	// images
+	images: "folder-type-images",
+	image: "folder-type-images",
+	".img": "folder-type-images",
+	img: "folder-type-images",
+	".imgs": "folder-type-images",
+	imgs: "folder-type-images",
+	icons: "folder-type-images",
+	icon: "folder-type-images",
+	ico: "folder-type-images",
+	screenshot: "folder-type-images",
+	screenshots: "folder-type-images",
+	svg: "folder-type-images",
+	texture: "folder-type-images",
+	textures: "folder-type-images",
+	".fig": "folder-type-images",
+	".figs": "folder-type-images",
+
+	// include
+	include: "folder-type-include",
+	includes: "folder-type-include",
+	incl: "folder-type-include",
+	inc: "folder-type-include",
+	".include": "folder-type-include",
+	".includes": "folder-type-include",
+	".incl": "folder-type-include",
+	".inc": "folder-type-include",
+	_include: "folder-type-include",
+	_includes: "folder-type-include",
+	_incl: "folder-type-include",
+	_inc: "folder-type-include",
+
+	// interfaces
+	interface: "folder-type-interfaces",
+	interfaces: "folder-type-interfaces",
+
+	// js
+	js: "folder-type-js",
+
+	// json
+	json: "folder-type-json",
+
+	// library
+	lib: "folder-type-library",
+	libs: "folder-type-library",
+	".lib": "folder-type-library",
+	".libs": "folder-type-library",
+	__lib__: "folder-type-library",
+	__libs__: "folder-type-library",
+	library: "folder-type-library",
+	libraries: "folder-type-library",
+
+	// locale / i18n
+	lang: "folder-type-locale",
+	language: "folder-type-locale",
+	languages: "folder-type-locale",
+	locale: "folder-type-locale",
 	locales: "folder-type-locale",
-	types: "folder-type-typescript",
-	middleware: "folder-type-src",
-	layout: "folder-type-src",
-	layouts: "folder-type-src",
-	shared: "folder-type-src",
-	common: "folder-type-src",
+	_locale: "folder-type-locale",
+	_locales: "folder-type-locale",
+	internationalization: "folder-type-locale",
+	globalization: "folder-type-locale",
+	localization: "folder-type-locale",
+	i18n: "folder-type-locale",
+	g11n: "folder-type-locale",
+	l10n: "folder-type-locale",
+
+	// log
+	log: "folder-type-log",
+	logs: "folder-type-log",
+
+	// middleware
+	middleware: "folder-type-middleware",
+	middlewares: "folder-type-middleware",
+
+	// mock
+	mocks: "folder-type-mock",
+	".mocks": "folder-type-mock",
+	__mocks__: "folder-type-mock",
+
+	// model
+	model: "folder-type-model",
+	".model": "folder-type-model",
+	models: "folder-type-model",
+	".models": "folder-type-model",
+	entities: "folder-type-model",
+	".entities": "folder-type-model",
+
+	// module
+	modules: "folder-type-module",
+
+	// node
+	node_modules: "folder-type-node",
+
+	// notification / event
+	notification: "folder-type-notification",
+	notifications: "folder-type-notification",
+	event: "folder-type-notification",
+	events: "folder-type-notification",
+
+	// package
+	package: "folder-type-package",
+	packages: "folder-type-package",
+	".package": "folder-type-package",
+	".packages": "folder-type-package",
+	pkg: "folder-type-package",
+
+	// plugin
+	plugin: "folder-type-plugin",
+	".plugin": "folder-type-plugin",
+	plugins: "folder-type-plugin",
+	".plugins": "folder-type-plugin",
+	extension: "folder-type-plugin",
+	".extension": "folder-type-plugin",
+	extensions: "folder-type-plugin",
+	".extensions": "folder-type-plugin",
+
+	// private
+	private: "folder-type-private",
+	".private": "folder-type-private",
+
+	// public
+	public: "folder-type-public",
+	".public": "folder-type-public",
+
+	// route
+	route: "folder-type-route",
+	routes: "folder-type-route",
+	_route: "folder-type-route",
+	_routes: "folder-type-route",
+	router: "folder-type-route",
+	routers: "folder-type-route",
+
+	// sass
+	sass: "folder-type-sass",
+	scss: "folder-type-sass",
+	_sass: "folder-type-sass",
+	_scss: "folder-type-sass",
+
+	// script
+	script: "folder-type-script",
+	scripts: "folder-type-script",
+
+	// server
+	server: "folder-type-server",
+
+	// services
+	service: "folder-type-services",
+	services: "folder-type-services",
+
+	// shared
+	share: "folder-type-shared",
+	shared: "folder-type-shared",
+	".share": "folder-type-shared",
+	".shared": "folder-type-shared",
+	__shared__: "folder-type-shared",
+	__share__: "folder-type-shared",
+
+	// style
+	style: "folder-type-style",
+	styles: "folder-type-style",
+
+	// test
+	tests: "folder-type-test",
+	".tests": "folder-type-test",
+	test: "folder-type-test",
+	".test": "folder-type-test",
+	__tests__: "folder-type-test",
+	__test__: "folder-type-test",
+	spec: "folder-type-test",
+	".spec": "folder-type-test",
+	specs: "folder-type-test",
+	".specs": "folder-type-test",
+	integration: "folder-type-test",
+
+	// temp
+	temp: "folder-type-temp",
+	".temp": "folder-type-temp",
+	tmp: "folder-type-temp",
+	".tmp": "folder-type-temp",
+
+	// template
+	template: "folder-type-template",
+	".template": "folder-type-template",
+	templates: "folder-type-template",
+	".templates": "folder-type-template",
+
+	// theme
+	theme: "folder-type-theme",
+	themes: "folder-type-theme",
+
+	// tools
+	tool: "folder-type-tools",
+	tools: "folder-type-tools",
+	".tools": "folder-type-tools",
+	util: "folder-type-tools",
+	utils: "folder-type-tools",
+	utilities: "folder-type-tools",
+	tooling: "folder-type-tools",
+
+	// typescript / types
+	typescript: "folder-type-typescript",
+	ts: "folder-type-typescript",
+	types: "folder-type-typings",
+	typings: "folder-type-typings",
+	"@types": "folder-type-typings",
+
+	// view / pages
+	view: "folder-type-view",
+	views: "folder-type-view",
+	pages: "folder-type-view",
+	page: "folder-type-view",
+	html: "folder-type-view",
+	layout: "folder-type-view",
+	layouts: "folder-type-view",
+	_view: "folder-type-view",
+	_views: "folder-type-view",
+	_layout: "folder-type-view",
+	_layouts: "folder-type-view",
+	_page: "folder-type-view",
+	_pages: "folder-type-view",
+
+	// wasm
+	wasm: "folder-type-wasm",
+	WASM: "folder-type-wasm",
+	webassembly: "folder-type-wasm",
+	WebAssembly: "folder-type-wasm",
+	wit: "folder-type-wasm",
+
+	// www
+	".web": "folder-type-www",
+	www: "folder-type-www",
+	wwwroot: "folder-type-www",
+	web: "folder-type-www",
+
+	// ── Framework / platform specific ──
+
+	// android
+	android: "folder-type-android",
+
+	// angular
+	".angular": "folder-type-angular",
+
+	// astro
+	".astro": "folder-type-astro",
+
+	// aws
+	aws: "folder-type-aws",
+	".aws": "folder-type-aws",
+
+	// azure
+	azure: "folder-type-azure",
+	".azure": "folder-type-azure",
+
+	// azurepipelines
+	"azure-pipelines": "folder-type-azurepipelines",
+	".azure-pipelines": "folder-type-azurepipelines",
+	".azuredevops": "folder-type-azurepipelines",
+	".vsts": "folder-type-azurepipelines",
+
+	// bloc
+	blocs: "folder-type-bloc",
+	bloc: "folder-type-bloc",
+
+	// changesets
+	".changeset": "folder-type-changesets",
+
+	// circleci
+	".circleci": "folder-type-circleci",
+
+	// claude
+	".claude": "folder-type-claude",
+
+	// cloudflare
+	".cloudflare": "folder-type-cloudflare",
+	cloudflare: "folder-type-cloudflare",
+
+	// cmake
+	".cmake": "folder-type-cmake",
+	cmake: "folder-type-cmake",
+
+	// cubit
+	cubits: "folder-type-cubit",
+	cubit: "folder-type-cubit",
+
+	// cursor
+	".cursor": "folder-type-cursor",
+
+	// cypress
+	cypress: "folder-type-cypress",
+
+	// dapr
+	".dapr": "folder-type-dapr",
+	dapr: "folder-type-dapr",
+
+	// dart
+	dart: "folder-type-dart",
+	".dart_tool": "folder-type-dart",
+
+	// datadog
+	datadog: "folder-type-datadog",
+	".datadog": "folder-type-datadog",
+
+	// dependabot
+	".dependabot": "folder-type-dependabot",
+
+	// devcontainer
+	".devcontainer": "folder-type-devcontainer",
+
+	// e2e
+	e2e: "folder-type-e2e",
+
+	// elasticbeanstalk
+	".elasticbeanstalk": "folder-type-elasticbeanstalk",
+	".ebextensions": "folder-type-elasticbeanstalk",
+
+	// electron
+	electron: "folder-type-electron",
+
+	// expo
+	".expo": "folder-type-expo",
+	".expo-shared": "folder-type-expo",
+
+	// favicon
+	favicon: "folder-type-favicon",
+	favicons: "folder-type-favicon",
+
+	// flow
+	flow: "folder-type-flow",
+	"flow-typed": "folder-type-flow",
+
+	// flutter
+	flutter: "folder-type-flutter",
+	Flutter: "folder-type-flutter",
+
+	// frontcommerce
+	".front-commerce": "folder-type-frontcommerce",
+
+	// gcp
+	gcp: "folder-type-gcp",
+	".gcp": "folder-type-gcp",
+
+	// gemini
+	".gemini": "folder-type-gemini",
+
+	// godot
+	godot: "folder-type-godot",
+	".godot": "folder-type-godot",
+
+	// gradle
+	gradle: "folder-type-gradle",
+	".gradle": "folder-type-gradle",
+
+	// grunt
+	grunt: "folder-type-grunt",
+
+	// gulp
+	gulp: "folder-type-gulp",
+
+	// haxelib
+	".haxelib": "folder-type-haxelib",
+	haxe_libraries: "folder-type-haxelib",
+
+	// histoire
+	".histoire": "folder-type-histoire",
+
+	// idea
+	".idea": "folder-type-idea",
+
+	// ios
+	ios: "folder-type-ios",
+
+	// junie
+	".junie": "folder-type-junie",
+
+	// kotlin
+	kotlin: "folder-type-kotlin",
+	Kotlin: "folder-type-kotlin",
+	".kotlin": "folder-type-kotlin",
+
+	// kubernetes
+	kubernetes: "folder-type-kubernetes",
+	k8s: "folder-type-kubernetes",
+	kube: "folder-type-kubernetes",
+	kuber: "folder-type-kubernetes",
+	".kubernetes": "folder-type-kubernetes",
+	".k8s": "folder-type-kubernetes",
+	".kube": "folder-type-kubernetes",
+	".kuber": "folder-type-kubernetes",
+
+	// less
+	less: "folder-type-less",
+	_less: "folder-type-less",
+
+	// linux
+	linux: "folder-type-linux",
+
+	// macos
+	macos: "folder-type-macos",
+	darwin: "folder-type-macos",
+
+	// mariadb
+	mariadb: "folder-type-mariadb",
+	maria: "folder-type-mariadb",
+
+	// maven
+	".mvn": "folder-type-maven",
+
+	// meteor
+	".meteor": "folder-type-meteor",
+
+	// minecraft
+	".minecraft": "folder-type-minecraft",
+
+	// minikube
+	minikube: "folder-type-minikube",
+	minik8s: "folder-type-minikube",
+	minikuber: "folder-type-minikube",
+
+	// mjml
+	mjml: "folder-type-mjml",
+	".mjml": "folder-type-mjml",
+
+	// mojo
+	mojo: "folder-type-mojo",
+
+	// mongodb
+	mongodb: "folder-type-mongodb",
+	mongo: "folder-type-mongodb",
+
+	// mypy
+	".mypy_cache": "folder-type-mypy",
+
+	// mysql
+	mysqldb: "folder-type-mysql",
+	mysql: "folder-type-mysql",
+
+	// netlify
+	netlify: "folder-type-netlify",
+
+	// next
+	".next": "folder-type-next",
+
+	// nginx
+	nginx: "folder-type-nginx",
+	"conf.d": "folder-type-nginx",
+
+	// nix
+	".niv": "folder-type-nix",
+	".nix": "folder-type-nix",
+	nix: "folder-type-nix",
+	niv: "folder-type-nix",
+
+	// nuxt
+	nuxt: "folder-type-nuxt",
+	".nuxt": "folder-type-nuxt",
+
+	// nuget
+	".nuget": "folder-type-nuget",
+
+	// php
+	php: "folder-type-php",
+
+	// platformio
+	".pio": "folder-type-platformio",
+	".pioenvs": "folder-type-platformio",
+
+	// prisma
+	prisma: "folder-type-prisma",
+
+	// pytest
+	".pytest_cache": "folder-type-pytest",
+
+	// python
+	".venv": "folder-type-python",
+	".virtualenv": "folder-type-python",
+	__pycache__: "folder-type-python",
+
+	// ravendb
+	ravendb: "folder-type-ravendb",
+
+	// redis
+	redis: "folder-type-redis",
+
+	// redux
+	redux: "folder-type-redux",
+
+	// seedkit
+	seedkit: "folder-type-seedkit",
+	".seedkit": "folder-type-seedkit",
+
+	// snaplet
+	".snaplet": "folder-type-snaplet",
+
+	// spin
+	".spin": "folder-type-spin",
+
+	// sso
+	sso: "folder-type-sso",
+
+	// story
+	story: "folder-type-story",
+	stories: "folder-type-story",
+	__stories__: "folder-type-story",
+	".storybook": "folder-type-story",
+
+	// supabase
+	supabase: "folder-type-supabase",
+
+	// svelte
+	svelte: "folder-type-svelte",
+	".svelte-kit": "folder-type-svelte",
+
+	// swagger
+	swagger: "folder-type-swagger",
+
+	// tauri
+	"src-tauri": "folder-type-tauri",
+
+	// travis
+	".travis": "folder-type-travis",
+
+	// trunk
+	".trunk": "folder-type-trunk",
+
+	// turbo
+	".turbo": "folder-type-turbo",
+
+	// vagrant
+	vagrant: "folder-type-vagrant",
+	".vagrant": "folder-type-vagrant",
+
+	// vercel
+	".vercel": "folder-type-vercel",
+
+	// video
+	video: "folder-type-video",
+	".video": "folder-type-video",
+	videos: "folder-type-video",
+	".videos": "folder-type-video",
+
+	// vitepress
+	".vitepress": "folder-type-vitepress",
+
+	// vscode
+	".vscode": "folder-type-vscode",
+	vscode: "folder-type-vscode",
+	".vscode-test": "folder-type-vscode-test",
+
+	// webpack
+	webpack: "folder-type-webpack",
+	".webpack": "folder-type-webpack",
+
+	// windows
+	windows: "folder-type-windows",
+	win32: "folder-type-windows",
+
+	// windsurf
+	".windsurf": "folder-type-windsurf",
+
+	// yarn
+	".yarn": "folder-type-yarn",
+
+	// zed
+	".zed": "folder-type-zed",
+
+	// ── Less common / niche ──
+
+	// apache
+	apache: "folder-type-apache",
+	apache2: "folder-type-apache",
+	httpd: "folder-type-apache",
+
+	// arangodb
+	arangodb: "folder-type-arangodb",
+	arango: "folder-type-arangodb",
+
+	// aurelia
+	aurelia_project: "folder-type-aurelia",
+
+	// bower
+	bower_components: "folder-type-bower",
+
+	// buildkite
+	".buildkite": "folder-type-buildkite",
+
+	// cake
+	cake: "folder-type-cake",
+	".cake": "folder-type-cake",
+
+	// cargo
+	cargo: "folder-type-cargo",
+	".cargo": "folder-type-cargo",
+	crates: "folder-type-cargo",
+
+	// certificate
+	certificates: "folder-type-certificate",
+	".certificates": "folder-type-certificate",
+	certs: "folder-type-certificate",
+
+	// chef
+	chef: "folder-type-chef",
+	".chef": "folder-type-chef",
+
+	// composer
+	composer: "folder-type-composer",
+	".composer": "folder-type-composer",
+
+	// debian
+	debian: "folder-type-debian",
+	deb: "folder-type-debian",
+
+	// memcached
+	memcached: "folder-type-memcached",
+	".memcached": "folder-type-memcached",
+
+	// mediawiki
+	mediawiki: "folder-type-mediawiki",
+
+	// notebooks
+	notebooks: "folder-type-notebooks",
+	notebook: "folder-type-notebooks",
+
+	// paket
+	".paket": "folder-type-paket",
 };
 
 // ── SVG Normalization ─────────────────────────────────────────────
@@ -237,6 +1005,8 @@ for (const icon of Object.values(NAME_ICON_MAP)) {
 }
 for (const icon of Object.values(FOLDER_ICON_MAP)) {
 	neededIcons.add(icon);
+	// Also collect opened variant
+	neededIcons.add(`${icon}-opened`);
 }
 
 // Add folder open/closed defaults
@@ -269,6 +1039,15 @@ for (const [name, iconName] of Object.entries(FOLDER_ICON_MAP)) {
 	folderMap[name] = iconName;
 }
 
+// Derive folderOpenMap: closed icon name → opened icon name
+const folderOpenMap = {};
+for (const iconName of new Set(Object.values(FOLDER_ICON_MAP))) {
+	const openedName = `${iconName}-opened`;
+	if (icons[openedName]) {
+		folderOpenMap[iconName] = openedName;
+	}
+}
+
 // Chevron arrow (custom, 16x16 viewBox)
 const chevronSvg = '<path fill="currentColor" d="m5.157 13.069l4.611-4.685a.546.546 0 0 0 0-.768L5.158 2.93a.55.55 0 0 1 0-.771a.53.53 0 0 1 .759 0l4.61 4.684a1.65 1.65 0 0 1 0 2.312l-4.61 4.684a.53.53 0 0 1-.76 0a.55.55 0 0 1 0-.771"/>';
 
@@ -291,6 +1070,7 @@ const output = {
 	icons,
 	fileMap,
 	folderMap,
+	folderOpenMap,
 	defaultFile: DEFAULT_ICON,
 	defaultFolder: DEFAULT_FOLDER,
 	defaultFolderOpen: DEFAULT_FOLDER_OPEN,
@@ -304,6 +1084,6 @@ mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, JSON.stringify(output, null, "\t") + "\n");
 
 console.log(
-	`Generated ${Object.keys(icons).length} icons, ${Object.keys(fileMap).length} file mappings, ${Object.keys(folderMap).length} folder mappings`,
+	`Generated ${Object.keys(icons).length} icons, ${Object.keys(fileMap).length} file mappings, ${Object.keys(folderMap).length} folder mappings, ${Object.keys(folderOpenMap).length} folder-open mappings`,
 );
 console.log(`Output: ${outPath}`);
