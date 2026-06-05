@@ -421,6 +421,35 @@ if (defaultFontItem) {
 	}
 </script>
 
+<!-- Friends page copy button — global delegation, survives Swup transitions -->
+<script is:inline>
+	if (!window.__friendsCopyHandler) {
+		window.__friendsCopyHandler = true;
+		document.addEventListener("click", async (e) => {
+			const btn = e.target.closest(".friend-copy-btn");
+			if (!btn) return;
+			e.preventDefault();
+			e.stopPropagation();
+			const text = btn.getAttribute("data-copy");
+			if (!text) return;
+			try {
+				await navigator.clipboard.writeText(text);
+				btn.innerHTML = '<iconify-icon icon="material-symbols:check" class="text-sm text-green-500"></iconify-icon>';
+				setTimeout(() => {
+					btn.innerHTML = '<iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>';
+				}, 1500);
+			} catch {
+				const textarea = document.createElement("textarea");
+				textarea.value = text;
+				document.body.appendChild(textarea);
+				textarea.select();
+				document.execCommand("copy");
+				document.body.removeChild(textarea);
+			}
+		});
+	}
+</script>
+
 <!-- 主题切换综合性能优化器 - 延迟到 idle 后加载 -->
 <script>
 	if ("requestIdleCallback" in window) {

@@ -167,6 +167,9 @@ importers:
       '@biomejs/biome':
         specifier: ^2.4.15
         version: 2.4.16
+      '@iconify-json/devicon':
+        specifier: ^1.2.62
+        version: 1.2.62
       '@iconify-json/fa7-brands':
         specifier: ^1.2.2
         version: 1.2.2
@@ -188,6 +191,12 @@ importers:
       '@iconify-json/simple-icons':
         specifier: ^1.2.81
         version: 1.2.84
+      '@iconify-json/vscode-icons':
+        specifier: ^1.2.54
+        version: 1.2.54
+      '@iconify/utils':
+        specifier: ^3.1.3
+        version: 3.1.3
       '@rollup/plugin-yaml':
         specifier: ^4.1.2
         version: 4.1.2(rollup@2.80.0)
@@ -1176,6 +1185,9 @@ packages:
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
 
+  '@iconify-json/devicon@1.2.62':
+    resolution: {integrity: sha512-X0o0+fOJL2t5JTbDCGLRzrmvf8Pv5q8dr86+fW+F/VJ9qvXTtny6lqGIwjE9AY4VTLm3i8f/N+VtRheSW6OkEg==}
+
   '@iconify-json/fa7-brands@1.2.2':
     resolution: {integrity: sha512-y6ZBdlLS4v1suB6fuMI5kqSO0B91Y19nlqTz7VfBYu9lI948tbRh+6lU2kNMOlo8I4qgSWX0SEdN7jkhOzI5gA==}
 
@@ -1197,6 +1209,9 @@ packages:
   '@iconify-json/simple-icons@1.2.84':
     resolution: {integrity: sha512-v4JVu6xIewGoETD4mm2k6UAdFAbTlY1duw5ZNSxYORfs2yFsHDhoU9Omn/BgrV0nR/ptWkF3ZIr/ZHoYXI/6Jw==}
 
+  '@iconify-json/vscode-icons@1.2.54':
+    resolution: {integrity: sha512-WxGA+FE5AP7mbKuy7lMClIKc/iY9hCKgafZsrCeQjyO2G3MvP/2cZev1W1QPn3tAbXDmVak5K3HB3rxvi+066g==}
+
   '@iconify/svelte@5.2.1':
     resolution: {integrity: sha512-zHmsIPmnIhGd5gc95bNN5FL+GifwMZv7M2rlZEpa7IXYGFJm/XGHdWf6PWQa6OBoC+R69WyiPO9NAj5wjfjbow==}
     peerDependencies:
@@ -1210,6 +1225,9 @@ packages:
 
   '@iconify/utils@2.3.0':
     resolution: {integrity: sha512-GmQ78prtwYW6EtzXRU1rY+KwOKfz32PD7iJh6Iyqw68GiKuoZ2A6pRtzWONz5VQJbp50mEjXh/7NkumtrAgRKA==}
+
+  '@iconify/utils@3.1.3':
+    resolution: {integrity: sha512-LPKOXPn/zV+zis1oOfGWogaXVpqUybF3ZS6SCZIsz8vg0ivVp9+fVqyYB7xq0aiST/VhUQYGO1qo6uoYSiEJqw==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -3368,6 +3386,9 @@ packages:
   import-from@3.0.0:
     resolution: {integrity: sha512-CiuXOFFSzkU5x/CR0+z7T91Iht4CXgfCxVOFRhh2Zyhg5wOpWvvDLQUsWl+gcN+QscYBjez8hDCt85O7RLDttQ==}
     engines: {node: '>=8'}
+
+  import-meta-resolve@4.2.0:
+    resolution: {integrity: sha512-Iqv2fzaTQN28s/FwZAoFq0ZSs/7hMAHJVX+w8PZl3cY19Pxk6jFFalxQoIfW2826i/fDLXv8IiEZRIT0lDuWcg==}
 
   imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
@@ -7285,6 +7306,10 @@ snapshots:
 
   '@gar/promisify@1.1.3': {}
 
+  '@iconify-json/devicon@1.2.62':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/fa7-brands@1.2.2':
     dependencies:
       '@iconify/types': 2.0.0
@@ -7310,6 +7335,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/simple-icons@1.2.84':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/vscode-icons@1.2.54':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -7346,6 +7375,12 @@ snapshots:
       mlly: 1.8.2
     transitivePeerDependencies:
       - supports-color
+
+  '@iconify/utils@3.1.3':
+    dependencies:
+      '@antfu/install-pkg': 1.1.0
+      '@iconify/types': 2.0.0
+      import-meta-resolve: 4.2.0
 
   '@img/colour@1.1.0': {}
 
@@ -9839,6 +9874,8 @@ snapshots:
   import-from@3.0.0:
     dependencies:
       resolve-from: 5.0.0
+
+  import-meta-resolve@4.2.0: {}
 
   imurmurhash@0.1.4: {}
 

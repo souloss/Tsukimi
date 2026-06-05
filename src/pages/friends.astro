@@ -164,70 +164,35 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
   }
 </style>
 
-<script is:inline>
-  // @ts-nocheck
-  // Copy button delegation — register once globally, survives Swup transitions
-  if (!window.__friendsCopyHandler) {
-    window.__friendsCopyHandler = true;
-    document.addEventListener("click", async (e) => {
-      const btn = e.target.closest(".friend-copy-btn");
-      if (!btn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const text = btn.getAttribute("data-copy");
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-        btn.innerHTML = '<iconify-icon icon="material-symbols:check" class="text-sm text-green-500"></iconify-icon>';
-        setTimeout(() => {
-          btn.innerHTML = '<iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>';
-        }, 1500);
-      } catch {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-      }
-    });
-  }
+<script>
+	function initFriendsPage() {
+		const tags = document.querySelectorAll(".friend-tag");
+		const cards = document.querySelectorAll(".friend-card");
 
-  // Tag filtering — re-init on each page load
-  function initFriendsPage() {
-    const tags = document.querySelectorAll(".friend-tag");
-    const cards = document.querySelectorAll(".friend-card");
+		tags.forEach((tag) => {
+			tag.addEventListener("click", () => {
+				tags.forEach((t) => {
+					t.classList.remove("active");
+					t.classList.remove("bg-[var(--primary)]", "text-white");
+					t.classList.add("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-400");
+				});
+				tag.classList.add("active");
+				tag.classList.add("bg-[var(--primary)]", "text-white");
+				tag.classList.remove("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-400");
 
-    tags.forEach((tag) => {
-      tag.addEventListener("click", () => {
-        tags.forEach((t) => {
-          t.classList.remove("active");
-          t.classList.remove("bg-[var(--primary)]", "text-white");
-          t.classList.add("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-400");
-        });
-        tag.classList.add("active");
-        tag.classList.add("bg-[var(--primary)]", "text-white");
-        tag.classList.remove("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-400");
+				const selectedTag = tag.getAttribute("data-tag");
 
-        const selectedTag = tag.getAttribute("data-tag");
+				cards.forEach((card) => {
+					if (selectedTag === "all") {
+						card.style.display = "";
+					} else {
+						const cardTags = card.getAttribute("data-tags") || "";
+						card.style.display = cardTags.includes(selectedTag) ? "" : "none";
+					}
+				});
+			});
+		});
+	}
 
-        cards.forEach((card) => {
-          if (selectedTag === "all") {
-            card.style.display = "";
-          } else {
-            const cardTags = card.getAttribute("data-tags") || "";
-            card.style.display = cardTags.includes(selectedTag) ? "" : "none";
-          }
-        });
-      });
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initFriendsPage);
-  } else {
-    initFriendsPage();
-  }
-  document.addEventListener("swup:contentReplaced", initFriendsPage);
-  document.addEventListener("astro:page-load", initFriendsPage);
+	document.addEventListener("astro:page-load", initFriendsPage);
 </script>

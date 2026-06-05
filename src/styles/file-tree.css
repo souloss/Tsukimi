@@ -1,84 +1,94 @@
-/* ── File Tree (Vuepress-inspired) ──────────────────────────────── */
+/* ── File Tree (Vuepress Plume-inspired) ─────────────────────────── */
 
 .vp-file-tree {
-	--vp-ft-indent: 1.5em;
+	--vp-ft-indent: 28px;
 	--vp-ft-line-color: color-mix(in srgb, var(--line-divider) 70%, transparent);
 	--vp-ft-bg: color-mix(in srgb, var(--primary) 4%, var(--card-bg));
 	--vp-ft-bg-hover: color-mix(in srgb, var(--primary) 8%, var(--card-bg));
 	--vp-ft-arrow-color: var(--text-tertiary);
 	--vp-ft-comment-color: var(--text-tertiary);
-	--vp-ft-icon-size: 1.25em;
+	--vp-ft-icon-size: 20px;
 
 	font-size: 0.875em;
 	line-height: 2;
 	border-radius: var(--radius-large, 0.75rem);
-	padding: 1.25em 1em;
+	padding: 1em 0;
 	background: var(--vp-ft-bg);
 	border: 1px solid var(--line-divider);
 	overflow-x: auto;
+	position: relative;
 }
 
-/* Hide any stray text nodes at the top level (e.g., directive labels) */
-.vp-file-tree > :not(.vp-file-tree-item) {
+/* Hide stray text nodes at the top level */
+.vp-file-tree > :not(.vp-file-tree-node) {
 	display: none;
 }
 
-/* ── Row ───────────────────────────────────────────────────────── */
+/* ── Node wrapper ──────────────────────────────────────────────── */
 
-.vp-file-tree-row {
-	display: flex;
-	align-items: center;
-	gap: 0.5em;
-	padding: 0.2em 0.6em;
-	border-radius: 0.5rem;
-	margin-left: calc(var(--file-tree-level, 0) * var(--vp-ft-indent));
-	transition: background 0.15s ease, box-shadow 0.15s ease;
+.vp-file-tree-node {
 	position: relative;
-	cursor: default;
 }
 
-.vp-file-tree-row:hover {
+/* ── Info row (the <p> element) ────────────────────────────────── */
+
+.vp-file-tree-info {
+	display: flex;
+	align-items: center;
+	gap: 0.375em;
+	margin: 0;
+	padding: 0.2em 1em 0.2em 1em;
+	position: relative;
+	cursor: default;
+	transition: background 0.15s ease;
+}
+
+/* Full-width hover highlight — spans from the row's left edge to the right.
+   The group's margin-left already positions nested rows, so the highlight
+   naturally covers from the indent point to the right. */
+.vp-file-tree-info::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: -4px;
+	z-index: 0;
+	background: transparent;
+	border-radius: 0.375rem;
+	transition: background 0.15s ease;
+	pointer-events: none;
+}
+
+.vp-file-tree-info:hover::after {
 	background: var(--vp-ft-bg-hover);
-	box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 15%, transparent);
+}
+
+/* Ensure row content above the hover highlight */
+.vp-file-tree-info > * {
+	position: relative;
+	z-index: 1;
 }
 
 /* ── Vertical hierarchy lines ──────────────────────────────────── */
 
-.vp-file-tree-item {
-	position: relative;
-}
-
-/* Draw vertical guide lines connecting children to parent */
 .vp-file-tree-group {
 	position: relative;
+	margin-left: var(--vp-ft-indent);
+	padding-left: 0;
 }
 
-.vp-file-tree-group > .vp-file-tree-item::before {
+/* Vertical guide line on each group — drawn from top to bottom,
+   aligned with the parent folder's arrow center.
+   Position: left edge of group minus 4px (center of the arrow column) */
+.vp-file-tree-group::before {
 	content: "";
 	position: absolute;
-	left: calc((var(--file-tree-level, 0) - 1) * var(--vp-ft-indent) + 0.75em);
 	top: 0;
+	left: -4px;
 	bottom: 0;
 	width: 1px;
-	background: var(--vp-ft-line-color);
-	opacity: 0.6;
-}
-
-/* Hide line for last child at bottom */
-.vp-file-tree-group > .vp-file-tree-item:last-child::before {
-	bottom: 50%;
-}
-
-/* Horizontal connector line from vertical line to item */
-.vp-file-tree-group > .vp-file-tree-item::after {
-	content: "";
-	position: absolute;
-	left: calc((var(--file-tree-level, 0) - 1) * var(--vp-ft-indent) + 0.75em);
-	top: 50%;
-	width: calc(var(--vp-ft-indent) - 0.5em);
-	height: 1px;
-	background: var(--vp-ft-line-color);
-	opacity: 0.6;
+	background: color-mix(in srgb, var(--vp-ft-line-color) 50%, transparent);
 }
 
 /* ── Expand/collapse arrow ─────────────────────────────────────── */
@@ -87,8 +97,8 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 1.4em;
-	height: 1.4em;
+	width: 1.2em;
+	height: 1.2em;
 	flex-shrink: 0;
 	color: var(--vp-ft-arrow-color);
 	transition: transform 0.2s ease;
@@ -96,8 +106,8 @@
 }
 
 .vp-file-tree-arrow svg {
-	width: 0.9em;
-	height: 0.9em;
+	width: 0.85em;
+	height: 0.85em;
 }
 
 details:not([open]) > summary .vp-file-tree-arrow {
@@ -110,7 +120,7 @@ details[open] > summary .vp-file-tree-arrow {
 
 .vp-file-tree-arrow-spacer {
 	display: inline-block;
-	width: 1.4em;
+	width: 1.2em;
 	flex-shrink: 0;
 }
 
@@ -146,39 +156,6 @@ details[open] > summary .vp-file-tree-arrow {
 	height: 100%;
 }
 
-/* Folder icons - amber/gold */
-.vp-icon-folder svg path:first-child { fill: #d97706; }
-.vp-icon-folder svg path:nth-child(2) { fill: #f59e0b; }
-
-/* Code file icons - blue */
-.vp-icon-code svg path:first-child { fill: #3b82f6; }
-.vp-icon-code svg path:nth-child(2) { fill: #dbeafe; }
-.vp-icon-code svg path:nth-child(3) { fill: #1d4ed8; }
-.vp-icon-code svg path:nth-child(4) { fill: #1d4ed8; }
-
-/* Doc/type file icons - purple */
-.vp-icon-doc svg path:first-child { fill: #8b5cf6; }
-.vp-icon-doc svg path:nth-child(2) { fill: #ede9fe; }
-
-/* Config file icons - orange */
-.vp-icon-config svg path:first-child { fill: #f97316; }
-.vp-icon-config svg path:nth-child(2) { fill: #ffedd5; }
-
-/* Image file icons - green */
-.vp-icon-image svg path:first-child { fill: #22c55e; }
-.vp-icon-image svg path:nth-child(2) { fill: #dcfce7; }
-
-/* Lock file icons - red */
-.vp-icon-lock svg path:first-child { fill: #ef4444; }
-.vp-icon-lock svg path:nth-child(2) { fill: #fee2e2; }
-
-/* Info/README icons - indigo */
-.vp-icon-info svg circle { fill: #6366f1; }
-.vp-icon-info svg path { fill: #e0e7ff; }
-
-/* Ellipsis dots */
-.vp-file-tree-ellipsis .vp-file-tree-icon svg circle { fill: #94a3b8; }
-
 /* ── Name ──────────────────────────────────────────────────────── */
 
 .vp-file-tree-name {
@@ -189,11 +166,11 @@ details[open] > summary .vp-file-tree-arrow {
 	min-width: 0;
 }
 
-.vp-file-tree-folder {
+.vp-file-tree-name.folder {
 	font-weight: 600;
 }
 
-.vp-file-tree-file {
+.vp-file-tree-name.file {
 	font-weight: 400;
 }
 
@@ -221,40 +198,38 @@ details[open] > summary .vp-file-tree-arrow {
 
 /* ── Diff markers ──────────────────────────────────────────────── */
 
-.vp-file-tree-diff-add {
+.vp-file-tree-info.diff.add {
 	--vp-ft-bg-hover: color-mix(in srgb, #22c55e 10%, var(--vp-ft-bg));
 }
-.vp-file-tree-diff-add .vp-file-tree-name {
+.vp-file-tree-info.diff.add .vp-file-tree-name {
 	color: #16a34a;
 }
-.vp-file-tree-diff-add::before {
+.vp-file-tree-info.diff.add::before {
 	content: "+";
 	color: #22c55e;
 	font-weight: 700;
 	margin-right: 0.25em;
 	font-family: var(--font-mono, monospace);
+	position: relative;
+	z-index: 1;
 }
 
-.vp-file-tree-diff-remove {
+.vp-file-tree-info.diff.remove {
 	--vp-ft-bg-hover: color-mix(in srgb, #ef4444 10%, var(--vp-ft-bg));
 }
-.vp-file-tree-diff-remove .vp-file-tree-name {
+.vp-file-tree-info.diff.remove .vp-file-tree-name {
 	color: #dc2626;
 	text-decoration: line-through;
 	opacity: 0.65;
 }
-.vp-file-tree-diff-remove::before {
+.vp-file-tree-info.diff.remove::before {
 	content: "−";
 	color: #ef4444;
 	font-weight: 700;
 	margin-right: 0.25em;
 	font-family: var(--font-mono, monospace);
-}
-
-/* ── Group (children container) ─────────────────────────────────── */
-
-.vp-file-tree-group {
-	padding-left: 0;
+	position: relative;
+	z-index: 1;
 }
 
 /* ── Dark mode adjustments ──────────────────────────────────────── */
@@ -265,30 +240,8 @@ details[open] > summary .vp-file-tree-arrow {
 	--vp-ft-line-color: color-mix(in srgb, var(--line-divider) 90%, transparent);
 }
 
-:is(.dark) .vp-file-tree-row:hover {
-	box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 20%, transparent);
-}
+:is(.dark) .vp-file-tree-info.diff.add .vp-file-tree-name { color: #4ade80; }
+:is(.dark) .vp-file-tree-info.diff.add::before { color: #4ade80; }
 
-:is(.dark) .vp-icon-folder svg path:first-child { fill: #b45309; }
-:is(.dark) .vp-icon-folder svg path:nth-child(2) { fill: #d97706; }
-
-:is(.dark) .vp-icon-code svg path:first-child { fill: #2563eb; }
-:is(.dark) .vp-icon-code svg path:nth-child(2) { fill: #1e3a5f; }
-
-:is(.dark) .vp-icon-doc svg path:first-child { fill: #7c3aed; }
-:is(.dark) .vp-icon-doc svg path:nth-child(2) { fill: #3b1f6e; }
-
-:is(.dark) .vp-icon-config svg path:first-child { fill: #ea580c; }
-:is(.dark) .vp-icon-config svg path:nth-child(2) { fill: #7c2d12; }
-
-:is(.dark) .vp-icon-image svg path:first-child { fill: #16a34a; }
-:is(.dark) .vp-icon-image svg path:nth-child(2) { fill: #14532d; }
-
-:is(.dark) .vp-icon-lock svg path:first-child { fill: #dc2626; }
-:is(.dark) .vp-icon-lock svg path:nth-child(2) { fill: #7f1d1d; }
-
-:is(.dark) .vp-file-tree-diff-add .vp-file-tree-name { color: #4ade80; }
-:is(.dark) .vp-file-tree-diff-add::before { color: #4ade80; }
-
-:is(.dark) .vp-file-tree-diff-remove .vp-file-tree-name { color: #f87171; }
-:is(.dark) .vp-file-tree-diff-remove::before { color: #f87171; }
+:is(.dark) .vp-file-tree-info.diff.remove .vp-file-tree-name { color: #f87171; }
+:is(.dark) .vp-file-tree-info.diff.remove::before { color: #f87171; }
