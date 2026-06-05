@@ -111,9 +111,14 @@ for (const mapping of contentMappings) {
 
 	// 如果目标已存在且不是符号链接,备份它
 	if (fs.existsSync(destPath) && !fs.lstatSync(destPath).isSymbolicLink()) {
-		const backupPath = `${destPath}.backup`;
+		const cacheDir = path.join(rootDir, "cache");
+		if (!fs.existsSync(cacheDir)) {
+			fs.mkdirSync(cacheDir, { recursive: true });
+		}
+		const backupName = mapping.dest.replace(/\//g, "_") + ".backup";
+		const backupPath = path.join(cacheDir, backupName);
 		console.log(
-			`正在备份已有内容：${mapping.dest} -> ${mapping.dest}.backup`,
+			`正在备份已有内容：${mapping.dest} -> cache/${backupName}`,
 		);
 		if (fs.existsSync(backupPath)) {
 			fs.rmSync(backupPath, { recursive: true, force: true });
