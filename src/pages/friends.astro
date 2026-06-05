@@ -167,7 +167,7 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 <script>
 	function initFriendsPage() {
 		const tags = document.querySelectorAll(".friend-tag");
-		const cards = document.querySelectorAll(".friend-card");
+		const cards = document.querySelectorAll<HTMLElement>('.friend-card');
 
 		tags.forEach((tag) => {
 			tag.addEventListener("click", () => {
@@ -186,8 +186,8 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 					if (selectedTag === "all") {
 						card.style.display = "";
 					} else {
-						const cardTags = card.getAttribute("data-tags") || "";
-						card.style.display = cardTags.includes(selectedTag) ? "" : "none";
+						const cardTags = card.getAttribute("data-tags") ?? "";
+						card.style.display = selectedTag != null && cardTags.includes(selectedTag) ? "" : "none";
 					}
 				});
 			});

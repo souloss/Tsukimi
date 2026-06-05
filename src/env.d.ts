@@ -11,3 +11,9 @@ declare module "*/loaders/glob-dev-trim.mjs" {
 		load: (context: unknown) => Promise<void>;
 	};
 }
+
+// Type declarations for generated JSON data files
+declare module "*/friends-circle.json" {
+	const data: { lastUpdated: string; items: unknown[] };
+	export default data;
+}
