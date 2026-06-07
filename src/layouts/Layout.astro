@@ -421,6 +421,19 @@ if (defaultFontItem) {
 	}
 </script>
 
+<!-- File-tree folder icon toggle - 延迟加载 -->
+<script>
+	if ("requestIdleCallback" in window) {
+		requestIdleCallback(() => {
+			import("../scripts/file-tree.js");
+		}, { timeout: 5000 });
+	} else {
+		setTimeout(() => {
+			import("../scripts/file-tree.js");
+		}, 2000);
+	}
+</script>
+
 <!-- Friends page copy button — global delegation, survives Swup transitions -->
 <script is:inline>
 	if (!window.__friendsCopyHandler) {

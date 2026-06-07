@@ -71,3 +71,6 @@ src/data/friends-circle.json
 # MCP
 .mcp.json
 src/plugins/file-icons.json
+
+# Codegraph index
+.codegraph/

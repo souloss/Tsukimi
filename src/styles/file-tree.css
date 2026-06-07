@@ -156,6 +156,8 @@ details[open] > summary .vp-file-tree-arrow {
 	height: 100%;
 }
 
+/* Folder open/closed icon toggle — handled by client-side JS */
+
 /* ── Name ──────────────────────────────────────────────────────── */
 
 .vp-file-tree-name {

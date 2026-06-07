@@ -260,6 +260,36 @@ function transformDirectiveBlocks(parent) {
 	}
 }
 
+/**
+ * Revert smartypants transformations inside :::file-tree blocks.
+ * remark-smartypants converts -- to — (em-dash), which breaks
+ * the -- diff marker syntax. Revert it back so the rehype plugin
+ * can correctly parse diff markers.
+ */
+function revertSmartypantsInFileTree(node) {
+	if (!node || !Array.isArray(node.children)) return;
+
+	for (const child of node.children) {
+		if (child.type === "containerDirective" && child.name === "file-tree") {
+			revertSmartypantsInTree(child);
+		} else {
+			revertSmartypantsInFileTree(child);
+		}
+	}
+}
+
+function revertSmartypantsInTree(node) {
+	if (!node) return;
+	if (node.type === "text" && typeof node.value === "string") {
+		node.value = node.value.replace(/— /g, "-- ");
+	}
+	if (Array.isArray(node.children)) {
+		for (const child of node.children) {
+			revertSmartypantsInTree(child);
+		}
+	}
+}
+
 export function remarkPlumeCompat() {
 	return (tree) => {
 		visit(tree, "html", (node) => {
@@ -271,5 +301,6 @@ export function remarkPlumeCompat() {
 		});
 
 		transformDirectiveBlocks(tree);
+		revertSmartypantsInFileTree(tree);
 	};
 }
