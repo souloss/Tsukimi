@@ -5,8 +5,8 @@
  * from folder-map.json + folder-open-icons.json, and swaps SVGs on
  * <details> toggle. The resolution logic mirrors the server-side plugin.
  */
-import folderMap from "../data/folder-map.json";
-import openIcons from "../data/folder-open-icons.json";
+import folderMap from "../plugins/folder-map.json";
+import openIcons from "../plugins/folder-open-icons.json";
 
 function resolveOpenIconName(folderName) {
 	const lower = folderName.toLowerCase();

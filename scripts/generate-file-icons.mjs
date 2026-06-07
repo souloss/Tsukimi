@@ -1083,7 +1083,44 @@ const outPath = join(__dirname, "..", "src", "plugins", "file-icons.json");
 mkdirSync(dirname(outPath), { recursive: true });
 writeFileSync(outPath, JSON.stringify(output, null, "\t") + "\n");
 
+// ── Client-side data files (placed in src/plugins/ alongside file-icons.json,
+// safe from content-sync symlinks that replace src/data/) ─────────────────
+
+const folderMapOutput = {
+	folderMap,
+	folderOpenMap,
+	defaultFolder: DEFAULT_FOLDER,
+	defaultFolderOpen: DEFAULT_FOLDER_OPEN,
+};
+
+const folderMapPath = join(__dirname, "..", "src", "plugins", "folder-map.json");
+writeFileSync(folderMapPath, JSON.stringify(folderMapOutput, null, "\t") + "\n");
+
+const folderOpenIconsOutput = {};
+for (const [, openedName] of Object.entries(folderOpenMap)) {
+	if (icons[openedName]) {
+		folderOpenIconsOutput[openedName] = icons[openedName];
+	}
+}
+// Include default opened folder icon
+if (icons[DEFAULT_FOLDER_OPEN]) {
+	folderOpenIconsOutput[DEFAULT_FOLDER_OPEN] = icons[DEFAULT_FOLDER_OPEN];
+}
+
+const folderOpenIconsPath = join(
+	__dirname,
+	"..",
+	"src",
+	"plugins",
+	"folder-open-icons.json",
+);
+writeFileSync(
+	folderOpenIconsPath,
+	JSON.stringify(folderOpenIconsOutput, null, "\t") + "\n",
+);
+
 console.log(
 	`Generated ${Object.keys(icons).length} icons, ${Object.keys(fileMap).length} file mappings, ${Object.keys(folderMap).length} folder mappings, ${Object.keys(folderOpenMap).length} folder-open mappings`,
 );
 console.log(`Output: ${outPath}`);
+console.log(`Client data: ${folderMapPath}, ${folderOpenIconsPath}`);
