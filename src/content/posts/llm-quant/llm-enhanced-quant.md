@@ -7,16 +7,19 @@ category: Technology
 pinned: false
 draft: false
 copyright: "ARR"
-series: "LLM Quant"
-seriesOrder: 1
 ogDescription: "Exploring how LLMs enhance quantitative trading: factor mining, signal generation, and portfolio construction with AI."
+repost:
+  originalAuthor: souloss
+  originalUrl: https://github.com/souloss/Tsukimi
+  originalTitle: "LLM Enhanced Quant"
+  originalSite: Tsukimi
+  redirect: /content/llm-quant/index.html
 ---
 
 This is an interactive article about LLM-enhanced quantitative trading.
 
-The interactive content is available at the links below:
+The interactive content is available at the link below:
 
-- [Overview](/content/llm-quant/index.html)
-- [LLM Enhanced Quant](/content/llm-quant/llm-enhanced-quant.html)
+- [LLM Enhanced Quant](/content/llm-quant/index.html)
 
 > **Note:** The interactive content opens in a standalone page for the best browsing experience.
