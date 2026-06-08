@@ -174,6 +174,42 @@ if (fs.existsSync(wranglerSrc)) {
 	console.log("已同步 wrangler.toml");
 }
 
+// ── Public assets: content/public/ → public/ (copy, not symlink) ──
+const publicSrc = path.join(CONTENT_DIR, "public");
+if (fs.existsSync(publicSrc)) {
+	// favicon.png: content/public/favicon.png → public/favicon.png
+	const faviconPngSrc = path.join(publicSrc, "favicon.png");
+	if (fs.existsSync(faviconPngSrc)) {
+		fs.copyFileSync(faviconPngSrc, path.join(rootDir, "public/favicon.png"));
+		console.log("已同步 favicon.png");
+	}
+
+	// favicon.ico: content/public/favicon/favicon.ico → public/favicon/favicon.ico
+	const faviconIcoSrc = path.join(publicSrc, "favicon/favicon.ico");
+	if (fs.existsSync(faviconIcoSrc)) {
+		const faviconDestDir = path.join(rootDir, "public/favicon");
+		if (!fs.existsSync(faviconDestDir)) {
+			fs.mkdirSync(faviconDestDir, { recursive: true });
+		}
+		fs.copyFileSync(faviconIcoSrc, path.join(faviconDestDir, "favicon.ico"));
+		console.log("已同步 favicon/favicon.ico");
+	}
+
+	// Interactive content: content/public/content/ → public/content/
+	const contentInteractiveSrc = path.join(publicSrc, "content");
+	if (fs.existsSync(contentInteractiveSrc)) {
+		copyMergeRecursive(contentInteractiveSrc, path.join(rootDir, "public/content"));
+		console.log("已同步交互式内容到 public/content/");
+	}
+
+	// Reposts content: content/public/reposts/ → public/reposts/
+	const repostsSrc = path.join(publicSrc, "reposts");
+	if (fs.existsSync(repostsSrc)) {
+		copyMergeRecursive(repostsSrc, path.join(rootDir, "public/reposts"));
+		console.log("已同步转载内容到 public/reposts/");
+	}
+}
+
 console.log("\n内容同步完成 ✓");
 
 // 递归复制函数（整体替换目标目录）
