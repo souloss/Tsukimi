@@ -91,3 +91,81 @@ The content :spoiler[is hidden **ayyy**]!
 
 ```markdown
 The content :spoiler[is hidden **ayyy**]!
+```
+
+## Code Groups
+
+You can use the `:::tabs` directive to display multiple code implementations with tab switching, which is useful for comparing implementations across different programming languages.
+
+::::tabs
+tab: Python
+
+```python
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+```
+
+tab: Go
+
+```go
+func bubbleSort(arr []int) []int {
+    n := len(arr)
+    for i := 0; i < n; i++ {
+        for j := 0; j < n-i-1; j++ {
+            if arr[j] > arr[j+1] {
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+            }
+        }
+    }
+    return arr
+}
+```
+
+tab: JavaScript
+
+```javascript
+function bubbleSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+    return arr;
+}
+```
+::::
+
+`````markdown
+::::tabs
+tab: Python
+
+```python
+def bubble_sort(arr):
+    ...
+```
+
+tab: Go
+
+```go
+func bubbleSort(arr []int) []int {
+    ...
+}
+```
+
+tab: JavaScript
+
+```javascript
+function bubbleSort(arr) {
+    ...
+}
+```
+::::
+`````

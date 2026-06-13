@@ -89,18 +89,24 @@ export class SwupHooksManager {
 	 * 处理链接点击时的初始状态
 	 */
 	private registerLinkClickHook(): void {
-		window.swup!.hooks.on("link:click", () => {
-			// 移除首次页面加载的延迟
-			document.documentElement.style.setProperty(
-				"--content-delay",
-				"0ms",
-			);
+		window.swup!.hooks.on("link:click", ((_visit, { el }) => {
+				// 跳过 Markdown 指令交互元素（Tab 按钮等），
+				// 这些 <a> 不是页面导航链接，不应触发 Swup 页面过渡
+				if (el.closest(".md-directive")) {
+					return;
+				}
 
-			// 处理 navbar 隐藏
-			if (this.bannerEnabled) {
-				this.handleNavbarHideOnLinkClick();
-			}
-		});
+				// 移除首次页面加载的延迟
+				document.documentElement.style.setProperty(
+					"--content-delay",
+					"0ms",
+				);
+
+				// 处理 navbar 隐藏
+				if (this.bannerEnabled) {
+					this.handleNavbarHideOnLinkClick();
+				}
+			}) as (...args: unknown[]) => void);
 	}
 
 	/**

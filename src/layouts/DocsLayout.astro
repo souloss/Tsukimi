@@ -421,7 +421,8 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 </script>
 
 <script>
-	import "../scripts/directive-interactions.js";
+	import { initDirectiveInteractions } from "../scripts/directive-interactions.js";
+	initDirectiveInteractions();
 </script>
 
 <script>

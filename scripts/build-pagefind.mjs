@@ -33,7 +33,7 @@ try {
 	}
 
 	execSync(
-		`npx pagefind --site ${tempSite} --glob "**/*.html" --output-subdir pagefind/default --silent`,
+		`pnpm exec pagefind --site ${tempSite} --glob "**/*.html" --output-subdir pagefind/default --silent`,
 		{ stdio: "inherit" },
 	);
 
@@ -58,7 +58,7 @@ try {
 console.log("2. Building Tsukimi docs index...");
 try {
 	execSync(
-		`npx pagefind --site ${site} --glob "docs/tsukimi/**/*.html" --output-subdir pagefind/tsukimi --silent`,
+		`pnpm exec pagefind --site ${site} --glob "docs/tsukimi/**/*.html" --output-subdir pagefind/tsukimi --silent`,
 		{ stdio: "inherit" },
 	);
 	console.log("   Tsukimi docs index built.\n");

@@ -410,14 +410,15 @@ if (defaultFontItem) {
 
 <!-- Markdown 指令交互脚本 - 延迟加载 -->
 <script>
+	const loadDirectiveInteractions = () => {
+		import("../scripts/directive-interactions.js").then(({ initDirectiveInteractions }) => {
+			initDirectiveInteractions();
+		});
+	};
 	if ("requestIdleCallback" in window) {
-		requestIdleCallback(() => {
-			import("../scripts/directive-interactions.js");
-		}, { timeout: 5000 });
+		requestIdleCallback(loadDirectiveInteractions, { timeout: 5000 });
 	} else {
-		setTimeout(() => {
-			import("../scripts/directive-interactions.js");
-		}, 2000);
+		setTimeout(loadDirectiveInteractions, 2000);
 	}
 </script>
 
