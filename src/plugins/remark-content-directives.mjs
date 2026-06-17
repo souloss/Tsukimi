@@ -5,7 +5,7 @@
  * using hardcoded Lucide SVG icons (no dynamic imports from @iconify-json).
  */
 
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { visit } from "unist-util-visit";
@@ -696,7 +696,8 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 				hName: "span",
 				hProperties: {
 					class: "md-tag-blur",
-					onclick: "this.classList.toggle('md-tag-blur--revealed')",
+					tabindex: "0",
+					role: "button",
 				},
 			};
 			break;
@@ -705,7 +706,8 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 				hName: "span",
 				hProperties: {
 					class: "md-tag-psw",
-					onclick: "this.classList.toggle('md-tag-psw--revealed')",
+					tabindex: "0",
+					role: "button",
 				},
 			};
 			break;
@@ -1773,6 +1775,58 @@ function processBlockDirective(node) {
 		}
 
 		case "code-tree": {
+			// Directory import: if dir attribute is provided, scan the directory
+			// and inject code blocks from files found within it
+			const dirPath = attrs.dir || "";
+			if (dirPath) {
+				try {
+					const projectRoot = process.cwd();
+					const fullDirPath = join(projectRoot, dirPath);
+					const dirFiles = [];
+					function scanDir(dirPath, base) {
+						const entries = readdirSync(dirPath, { withFileTypes: true });
+						for (const entry of entries) {
+							if (entry.name.startsWith(".") || entry.name === "node_modules")
+								continue;
+							const fp = join(dirPath, entry.name);
+							const rp = base ? `${base}/${entry.name}` : entry.name;
+							if (entry.isDirectory()) {
+								scanDir(fp, rp);
+							} else if (entry.isFile()) {
+								dirFiles.push({ path: rp, fullPath: fp });
+							}
+						}
+					}
+					scanDir(fullDirPath, "");
+					const langMap = {
+						ts: "typescript",
+						js: "javascript",
+						tsx: "tsx",
+						jsx: "jsx",
+						mjs: "javascript",
+						cjs: "javascript",
+					};
+					const codeNodes = dirFiles.map((f) => {
+						const content = readFileSync(f.fullPath, "utf-8");
+						const ext = f.path.split(".").pop() || "";
+						const lang = langMap[ext] || ext;
+						return {
+							type: "code",
+							lang: lang,
+							meta: `title="${f.path}"`,
+							value: content,
+						};
+					});
+					node.children = [...codeNodes, ...node.children];
+				} catch (err) {
+					console.warn(
+						'[code-tree] Failed to read directory "' +
+							dirPath +
+							'": ' +
+							err.message,
+					);
+				}
+			}
 			// Use vscode-icons for file/folder icons (same as :::file-tree)
 			const vsData = getVscodeIconData();
 			const chevronSvg = LUCIDE_ICONS["chevron-down"];
@@ -2054,15 +2108,63 @@ function processBlockDirective(node) {
 			const messages = [];
 			let currentUser = null;
 			const chatLines = [];
+
 			for (const child of node.children) {
 				if (child.type === "paragraph") {
-					const text = child.children.map((c) => c.value || "").join("");
-					chatLines.push(text);
+					// Check if this paragraph contains textDirective nodes (from {:date} syntax)
+					const hasDirective = child.children?.some(
+						(c) => c.type === "textDirective",
+					);
+					if (hasDirective) {
+						// Reconstruct the {:...} text from text + textDirective children
+						const text = child.children
+							.map((c) => {
+								if (c.type === "text") return c.value || "";
+								if (c.type === "textDirective") return `:${c.name}`;
+								return "";
+							})
+							.join("");
+						// The reconstructed text will be like "{:2025-06-17 14:30}"
+						chatLines.push(text);
+					} else {
+						const text = child.children.map((c) => c.value || "").join("");
+						chatLines.push(text);
+					}
 				}
 			}
+
 			for (const line of chatLines) {
 				const trimmed = line.trim();
 				if (!trimmed) continue;
+
+				// Date separator: {:date} or {:2025-03-24 10:15:00}
+				const chatDateMatch = trimmed.match(/^\{:(.+?)\}\s*$/);
+				if (chatDateMatch) {
+					const dateText = chatDateMatch[1].trim();
+					messages.push({
+						type: "date",
+						text: dateText === "date" ? "" : dateText,
+					});
+					continue;
+				}
+
+				// Brace sender: {.} or {username}
+				const chatBraceMatch = trimmed.match(/^\{(.+?)\}\s*(.*)/);
+				if (chatBraceMatch) {
+					const senderName = chatBraceMatch[1];
+					currentUser = senderName === "." ? "self" : senderName;
+					const chatAfterBrace = chatBraceMatch[2].trim();
+					if (chatAfterBrace && currentUser) {
+						messages.push({
+							type: "msg",
+							sender: currentUser,
+							text: chatAfterBrace,
+						});
+					}
+					continue;
+				}
+
+				// Bracket sender: [self] or [username] (existing syntax)
 				const chatBracketMatch = trimmed.match(/^\[(.+?)\]\s*(.*)/);
 				if (chatBracketMatch) {
 					const senderName = chatBracketMatch[1];
@@ -2087,10 +2189,19 @@ function processBlockDirective(node) {
 			const chatHtml =
 				'<div class="md-directive md-directive-chat">' +
 				(chatTitle
-					? `<div class="md-chat-title">${escapeHtml(chatTitle)}</div>`
+					? '<div class="md-chat-header"><span class="md-chat-title">' +
+						escapeHtml(chatTitle) +
+						"</span></div>"
 					: "") +
 				messages
 					.map((m) => {
+						if (m.type === "date") {
+							return (
+								'<div class="md-chat-date-separator">' +
+								(m.text ? `<span>${escapeHtml(m.text)}</span>` : "") +
+								"</div>"
+							);
+						}
 						const isSelf = m.sender === "self" || m.sender === "自己";
 						return (
 							'<div class="md-chat-msg' +
@@ -2108,8 +2219,13 @@ function processBlockDirective(node) {
 					})
 					.join("") +
 				"</div>";
-			node.data = { hName: "div", hProperties: {} };
-			node.children = [{ type: "html", value: chatHtml }];
+			// Convert containerDirective to html node to preserve raw HTML
+			// (remark-rehype strips raw html inside containerDirective nodes)
+			delete node.name;
+			delete node.attributes;
+			delete node.children;
+			node.type = "html";
+			node.value = chatHtml;
 			break;
 		}
 

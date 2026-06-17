@@ -1488,6 +1488,29 @@ img[data-zoomable="1"] {
     text-underline-offset: 3px;
 }
 
+
+/* ── BADGE (inline) ─────────────────────────────────────────────── */
+
+.md-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--badge-color) 12%, transparent);
+  color: var(--badge-color);
+  border: 1px solid color-mix(in srgb, var(--badge-color) 20%, transparent);
+}
+
+:is(.dark, [data-theme="dark"]) .md-tag-badge {
+  background: color-mix(in srgb, var(--badge-color) 18%, transparent);
+  border-color: color-mix(in srgb, var(--badge-color) 28%, transparent);
+}
+
 /* ── SUP / SUB (inline) ────────────────────────────────────────── */
 
 .md-tag-sup,
@@ -2148,7 +2171,7 @@ abbr[title]:hover::after {
 .md-directive-code-tree {
     margin: 1rem 0;
     border: 1px solid var(--line-divider);
-    border-radius: 0.5rem;
+    border-radius: 0;
     overflow: hidden;
     background: var(--card-bg);
 }
@@ -2537,6 +2560,49 @@ abbr[title]:hover::after {
     border-bottom-left-radius: 0.25rem;
 }
 
+
+/* Chat header with title */
+.md-chat-header {
+  text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line-divider);
+  margin-bottom: 0.25rem;
+}
+
+.md-chat-header .md-chat-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Chat date separator */
+.md-chat-date-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.md-chat-date-separator::before,
+.md-chat-date-separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line-divider);
+}
+
+.md-chat-date-separator span {
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary, var(--text-secondary));
+  white-space: nowrap;
+}
+
+:is(.dark, [data-theme="dark"]) .md-chat-date-separator::before,
+:is(.dark, [data-theme="dark"]) .md-chat-date-separator::after {
+  background: var(--line-divider);
+}
+
 /* ── FIELD / FIELD-GROUP ──────────────────────────────────────────── */
 
 .md-directive-field {
@@ -2575,6 +2641,8 @@ abbr[title]:hover::after {
 .md-field-type {
     font-size: 0.8rem;
     color: var(--text-secondary);
+    margin-left: auto;
+    flex-shrink: 0;
 }
 
 .md-field-type code {
@@ -2652,7 +2720,7 @@ abbr[title]:hover::after {
     border-radius: 0;
     border: none;
     border-left: 3px solid var(--accent-color, var(--primary));
-    border-bottom: 1px dashed var(--line-divider);
+    border-bottom: 1px solid var(--line-divider);
 }
 
 .md-directive-field-group .md-directive-field.md-field-required {
