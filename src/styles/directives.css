@@ -2187,8 +2187,7 @@ abbr[title]:hover::after {
 
 .md-code-tree-body {
     display: flex;
-    min-height: 200px;
-    max-height: var(--code-tree-height, 480px);
+    height: var(--code-tree-height, 480px);
 }
 
 .md-code-tree-sidebar {
@@ -2227,15 +2226,27 @@ abbr[title]:hover::after {
     flex: 1;
     min-width: 0;
     width: 100%;
+    box-shadow: none;
 }
 
 .md-code-tree-panel-active .expressive-code .frame {
     width: 100%;
     height: 100%;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.md-code-tree-panel-active .expressive-code .frame .header {
+    border-radius: 0;
+}
+
+.md-code-tree-panel-active .expressive-code .frame .title {
+    border-radius: 0;
 }
 
 .md-code-tree-panel-active .expressive-code pre {
     min-height: 100%;
+    border-radius: 0;
 }
 
 .md-code-tree-file-active {
@@ -2720,7 +2731,10 @@ abbr[title]:hover::after {
     border-radius: 0;
     border: none;
     border-left: 3px solid var(--accent-color, var(--primary));
-    border-bottom: 1px solid var(--line-divider);
+}
+
+.md-directive-field-group .md-directive-field + .md-directive-field {
+    border-top: 1px solid var(--line-divider);
 }
 
 .md-directive-field-group .md-directive-field.md-field-required {
@@ -2733,10 +2747,6 @@ abbr[title]:hover::after {
 
 .md-directive-field-group .md-directive-field.md-field-deprecated {
     border-left-color: oklch(0.6 0.18 25);
-}
-
-.md-directive-field-group .md-directive-field:last-child {
-    border-bottom: none;
 }
 
 /* Standalone field (not in a group) */
