@@ -1762,8 +1762,15 @@ function processBlockDirective(node) {
 						"</div>"
 					: "") +
 				"</div>";
-			node.data = { hName: "div", hProperties: {} };
-			node.children = [{ type: "html", value: fieldHtml }];
+			// Render field HTML directly without a wrapper div,
+			// so .md-directive-field becomes a direct child of .md-directive-field-group
+			node.type = "html";
+			node.value = fieldHtml;
+			delete node.children;
+			delete node.data;
+			delete node.attributes;
+			delete node.name;
+			delete node._skipProcessing;
 			break;
 		}
 		case "field-group": {

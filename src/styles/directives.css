@@ -2200,6 +2200,21 @@ abbr[title]:hover::after {
     background: color-mix(in srgb, var(--line-divider) 8%, var(--card-bg));
 }
 
+/* Remove border-radius from the file-tree sidebar inside code-tree
+   (standalone file-tree keeps its own border-radius)
+   The sidebar element itself carries both .md-code-tree-sidebar and .vp-file-tree
+   classes, so we use a compound selector to match the same element. */
+.md-code-tree-sidebar.vp-file-tree {
+    border-radius: 0;
+    border: none;
+    padding: 0;
+    background: transparent;
+}
+
+.md-code-tree-sidebar .vp-file-tree-info::after {
+    border-radius: 0;
+}
+
 .md-code-tree-panels {
     flex: 1;
     overflow: auto;
@@ -2721,9 +2736,12 @@ abbr[title]:hover::after {
     overflow: hidden;
 }
 
-.md-directive-field-group > .md-directive,
-.md-directive-field-group > div {
+.md-directive-field-group > .md-directive-field {
     margin: 0;
+}
+
+.md-directive-field-group > .md-directive-field + .md-directive-field {
+    border-top: 1px solid var(--line-divider);
 }
 
 .md-directive-field-group .md-directive-field {
@@ -2731,10 +2749,6 @@ abbr[title]:hover::after {
     border-radius: 0;
     border: none;
     border-left: 3px solid var(--accent-color, var(--primary));
-}
-
-.md-directive-field-group .md-directive-field + .md-directive-field {
-    border-top: 1px solid var(--line-divider);
 }
 
 .md-directive-field-group .md-directive-field.md-field-required {
