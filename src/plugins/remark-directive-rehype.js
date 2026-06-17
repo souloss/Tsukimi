@@ -1,77 +1,9 @@
 import { h } from "hastscript";
 import { visit } from "unist-util-visit";
 
-// Directives handled by remark-content-directives.mjs — skip here to avoid interference
-const CONTENT_DIRECTIVE_NAMES = new Set([
-	// Text (inline) directives
-	"mark",
-	"kbd",
-	"blur",
-	"psw",
-	"u",
-	"wavy",
-	"emp",
-	"del",
-	"hashtag",
-	"button",
-	"btn",
-	"color",
-	"sup",
-	"sub",
-	"checkbox",
-	"radio",
-	"step-brackets",
-	"emoji",
-	// Leaf directives
-	"asciinema",
-	"colors",
-	"image",
-	// Container directives
-	"callout",
-	"note",
-	"info",
-	"tip",
-	"warning",
-	"caution",
-	"important",
-	"question",
-	"quote",
-	"bug",
-	"example",
-	"success",
-	"failure",
-	"danger",
-	"folding",
-	"collapse",
-	"folders",
-	"timeline",
-	"tabs",
-	"poetry",
-	"copy",
-	"grid",
-	"panel",
-	"blockquote",
-	"quot",
-	"reel",
-	"paper",
-	"video",
-	"audio",
-	"gallery",
-	"asciinema",
-	"colors",
-	"private",
-	"ghcard",
-	"sites",
-	"card",
-	"banner",
-	"yoicard",
-	"link-card",
-	"link",
-	// Alignment aliases
-	"left",
-	"center",
-	"right",
-]);
+// Single-source directive name registry — imported from remark-content-directives
+// so the two files never drift out of sync.
+import { CONTENT_DIRECTIVE_NAMES } from "./remark-content-directives.mjs";
 
 export function parseDirectiveNode() {
 	return (tree) => {
@@ -89,11 +21,11 @@ export function parseDirectiveNode() {
 					return;
 				}
 
-				// biome-ignore lint/suspicious/noAssignInExpressions: <check later>
+				// biome-ignore lint/suspicious/noAssignInExpressions: lazily init data object
 				const data = node.data || (node.data = {});
 				node.attributes = node.attributes || {};
 				if (
-					node.children.length > 0 &&
+					node.children?.length > 0 &&
 					node.children[0].data &&
 					node.children[0].data.directiveLabel
 				) {

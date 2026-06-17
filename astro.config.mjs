@@ -3,6 +3,7 @@ import sitemap from "@astrojs/sitemap";
 import svelte, { vitePreprocess } from "@astrojs/svelte";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import { pluginTextMarkers } from "@expressive-code/plugin-text-markers";
 import swup from "@swup/astro";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -37,11 +38,13 @@ import { rehypeMarkmap } from "./src/plugins/rehype-markmap.mjs";
 import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
 import { rehypePlantuml } from "./src/plugins/rehype-plantuml.mjs";
 import { rehypeWrapTable } from "./src/plugins/rehype-wrap-table.mjs";
+import { remarkAbbr } from "./src/plugins/remark-abbr.mjs";
 import { remarkCodeLangAliases } from "./src/plugins/remark-code-lang-aliases.js";
 import { remarkContent } from "./src/plugins/remark-content.mjs";
 import remarkContentDirectives from "./src/plugins/remark-content-directives.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkFixGithubAdmonitions } from "./src/plugins/remark-fix-github-admonitions.js";
+import { remarkInclude } from "./src/plugins/remark-include.mjs";
 import { remarkMark } from "./src/plugins/remark-mark.js";
 import { remarkMarkmap } from "./src/plugins/remark-markmap.js";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
@@ -91,6 +94,7 @@ export default defineConfig({
 		expressiveCode({
 			themes: ["github-light", "github-dark"],
 			plugins: [
+				pluginTextMarkers(),
 				pluginCollapsibleSections(),
 				pluginLineNumbers(),
 				pluginLanguageBadge(),
@@ -148,6 +152,7 @@ export default defineConfig({
 			remarkContent,
 			remarkFixGithubAdmonitions,
 			remarkMark,
+			remarkInclude,
 			remarkPlumeCompat,
 			remarkCodeLangAliases,
 			remarkDirective,
@@ -159,6 +164,7 @@ export default defineConfig({
 			[remarkPlantuml, plantumlConfig],
 			[remarkMarkmap, markmapConfig],
 			remarkRelativeLinks,
+			remarkAbbr,
 		],
 		rehypePlugins: [
 			rehypeKatex,
@@ -248,7 +254,7 @@ export default defineConfig({
 					"src/layouts/Layout.astro",
 					"src/pages/[...page].astro",
 					"src/components/widgets/music-player/MusicPlayer.svelte",
-					"src/components/organisms/navigation/Search.svelte",
+					"src/components/organisms/navigation/SearchModal.svelte",
 					"src/components/control/ThemeSwitch.svelte",
 					"src/components/features/settings/DisplaySettings.svelte",
 					"src/scripts/swup-manager.ts",

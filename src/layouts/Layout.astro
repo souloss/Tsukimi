@@ -18,7 +18,7 @@ const BANNER_HEIGHT_HOME = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
 import { PAGE_WIDTH } from "../constants/constants";
 import { pathsEqual, url } from "../utils/url-utils";
 import "../styles/main.css";
-import "../styles/markdown-extend.styl";
+import "../styles/admonitions-diagrams.styl";
 import "../styles/mobile-navbar.css";
 import "../styles/wallpaper-navbar-transparent.css";
 import "../styles/fancybox-custom.css";
@@ -99,10 +99,6 @@ const getDefaultBanner = (): string => {
 	}
 	return "";
 };
-
-if (!banner || typeof banner !== "string" || banner.trim() === "") {
-	banner = getDefaultBanner();
-}
 
 // TODO don't use post cover as banner for now
 banner = getDefaultBanner();

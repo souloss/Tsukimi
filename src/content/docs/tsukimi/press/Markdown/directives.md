@@ -60,8 +60,9 @@ tab: 示例代码
 :::
 ````
 
-- `type` 可选值：`info` | `tip` | `warn` | `danger`
+- `type` 可选值：`info` | `tip` | `warn` | `danger` | `note` | `caution` | `important` | `question` | `quote` | `bug` | `example` | `success` | `failure`
 - `title` 可自定义标题，不传则使用默认值
+- 每种类型也可直接作为指令名使用，如 `:::tip`、`:::caution`、`:::important` 等价于 `:::callout{type="tip"}`
 
 ::::
 
@@ -286,6 +287,169 @@ tab: 标签 B{color=blue}
 
 - `tab: 标签名` 后需要空一行，再写内容
 - `tab: 标签名{color=blue}` 可给标签设置颜色
+
+---
+
+### Code-group 代码分组
+
+将多个代码块以选项卡形式展示，适合多语言代码对比。
+
+::::tabs
+tab: 演示效果
+
+:::code-group
+```js [JavaScript]
+const greeting = 'Hello World'
+console.log(greeting)
+```
+
+```ts [TypeScript]
+const greeting: string = 'Hello World'
+console.log(greeting)
+```
+
+```py [Python]
+greeting = 'Hello World'
+print(greeting)
+```
+:::
+
+tab: 示例代码
+
+`````markdown
+:::code-group
+```js [JavaScript]
+const greeting = 'Hello World'
+console.log(greeting)
+```
+
+```ts [TypeScript]
+const greeting: string = 'Hello World'
+console.log(greeting)
+```
+:::
+`````
+
+- 子内容为多个代码块，每个代码块的 `meta` 中用 `[标签名]` 指定选项卡标签
+- 若未指定标签，则使用语言名作为标签
+- 第一个代码块默认激活
+
+::::
+
+---
+
+### Steps 步骤
+
+将有序列表转换为带编号的步骤展示。
+
+::::tabs
+tab: 演示效果
+
+:::steps
+1. 安装依赖
+2. 配置项目
+3. 启动开发服务器
+:::
+
+tab: 示例代码
+
+````
+:::steps
+1. 安装依赖
+2. 配置项目
+3. 启动开发服务器
+:::
+````
+
+- 子内容为有序列表，每个列表项自动转换为带编号的步骤
+- 列表项文本作为步骤标题，后续内容作为步骤正文
+
+::::
+
+---
+
+### Asciinema 终端录制
+
+嵌入 asciinema 终端录制播放器。
+
+::::tabs
+tab: 演示效果
+
+:::asciinema{src="https://asciinema.org/a/12345.cast" cols="80" rows="24"}
+:::
+
+tab: 示例代码
+
+`````markdown
+:::asciinema{src="https://asciinema.org/a/12345.cast" cols="80" rows="24"}
+:::
+`````
+
+- `src`（**必填**）：asciicast 文件地址（`.cast` 或 `.json` 格式）
+- `cols`：终端列数，默认 `80`
+- `rows`：终端行数，默认 `24`
+
+::::
+
+---
+
+### Colors 色板展示
+
+展示一组颜色色块，适合设计文档或主题色说明。
+
+::::tabs
+tab: 演示效果
+
+:::colors{values="#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ec4899"}
+:::
+
+tab: 示例代码
+
+````
+:::colors{values="#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7, #ec4899"}
+:::
+````
+
+- `values`（**必填**）：逗号分隔的颜色值，支持十六进制（`#ef4444`）和命名色（`red`、`blue` 等）
+- 每个颜色显示为色块，下方标注颜色值
+
+::::
+
+---
+
+### Alignment 对齐指令
+
+使用 `:::left`、`:::center`、`:::right`、`:::justify` 容器指令控制内容对齐方式。
+
+::::tabs
+tab: 演示效果
+
+:::center
+居中对齐的文本
+:::
+
+:::right
+右对齐的文本
+:::
+
+tab: 示例代码
+
+````
+:::center
+居中对齐的文本
+:::
+
+:::right
+右对齐的文本
+:::
+````
+
+- `:::left` — 左对齐
+- `:::center` — 居中对齐
+- `:::right` — 右对齐
+- `:::justify` — 两端对齐
+
+::::
 
 ---
 
@@ -564,6 +728,8 @@ tab: 演示效果
 - 删除线：:del[已删除的内容]
 - 上标：H:sup[2]O 和 注释:sup[1]{color="red"}
 - 下标：CO:sub[2] 和 H:sub[2]O
+- 彩色文字：:color[红色文字]{color="red"} 和 :color[主题色文字]{color="accent"}
+- 徽章标签：:badge[新功能]{type="tip"} 和 :badge[注意]{type="warning"} 和 :badge[危险]{type="danger"} 和 :badge[信息]{type="info"}
 
 tab: 示例代码
 
@@ -575,10 +741,14 @@ tab: 示例代码
 - 删除线：:del[已删除的内容]
 - 上标：H:sup[2]O 和 注释:sup[1]{color="red"}
 - 下标：CO:sub[2] 和 H:sub[2]O
+- 彩色文字：:color[红色文字]{color="red"} 和 :color[主题色文字]{color="accent"}
+- 徽章标签：:badge[新功能]{type="tip"} 和 :badge[注意]{type="warning"} 和 :badge[危险]{type="danger"} 和 :badge[信息]{type="info"}
 ````
 
 - `:mark` 的 `color` 可选值：`yellow`、`red`、`green`、`blue`、`purple` 或任意色值
 - `:u`、`:sup`、`:sub` 同样支持 `color` 属性
+- `:color` 的 `color` 属性为必填，支持命名色（`red`、`blue`、`accent` 等）或十六进制色值
+- `:badge` 的 `type` 可选值：`tip`、`warning`、`danger`、`info`，也可通过 `color` 属性自定义颜色
 
 ::::
 
@@ -663,7 +833,7 @@ tab: 示例代码
 ::::tabs
 tab: 演示效果
 
-:::gallery{layout="grid" size="m" ratio="square"}
+:::gallery{cols="3" gap="8"}
 ![山景1](/images/albums/AcgExample/1.webp)
 ![山景2](/images/albums/AcgExample/2.webp)
 ![森林](/images/albums/AcgExample/3.webp)
@@ -673,7 +843,7 @@ tab: 演示效果
 tab: 示例代码
 
 ````
-:::gallery{layout="grid" size="m" ratio="square"}
+:::gallery{cols="3" gap="8"}
 ![山景1](/images/albums/AcgExample/1.webp)
 ![山景2](/images/albums/AcgExample/2.webp)
 ![森林](/images/albums/AcgExample/3.webp)
@@ -681,9 +851,8 @@ tab: 示例代码
 :::
 ````
 
-- `layout`：`grid`（网格，默认）或 `flow`（瀑布流）
-- `size`：`xs` | `s` | `m` | `l` | `xl` | `mix`
-- `ratio`：`square` | `portrait` | `origin`（保持原始比例）
+- `cols`：列数，默认 `3`
+- `gap`：图片间距，单位 px，默认 `8`
 
 ::::
 
@@ -1164,12 +1333,12 @@ Twemoji 风格的表情 :emoji[1f600]{source="twemoji"} :emoji[1f389]{source="tw
 
  - `:emoji` 为行内指令，可在段落中直接使用
  - `source` 表情源，可选值：
+   - `twemoji` — Twitter Emoji（SVG 格式，**默认**）
    - `qq` — QQ 表情（GIF 格式）
-   - `twemoji` — Twitter Emoji（SVG 格式）
    - `aru` — Aru 表情（GIF 格式）
    - `tieba` — 贴吧表情（PNG 格式）
    - `blobcat` — Blobcat 表情（GIF 格式）
-   - 省略 `source` 时自动使用 `qq` 源
+   - 省略 `source` 时自动使用 `twemoji` 源
  - 方括号内的内容为表情名称
 
 ::::
@@ -1179,7 +1348,7 @@ Twemoji 风格的表情 :emoji[1f600]{source="twemoji"} :emoji[1f389]{source="tw
 
 ### Video 视频播放器
 
-在文章中插入视频，支持本地视频模式。
+在文章中插入视频，支持本地视频、Bilibili 和 YouTube。
 
 #### 本地视频（带封面）
 
@@ -1196,12 +1365,556 @@ tab: 示例代码
 :::
 `````
 
-- `src`（**必填**）：视频文件地址
+- `src`：视频文件地址
 - `poster`：封面图
 - `ratio`：宽高比，默认 `16/9`
-- `title`：可选标题
+- `width`：视频宽度
+- `align`：对齐方式
+- `autoplay`：自动播放（设为 `"true"` 时自动播放并静音）
+- `pip`：画中画模式，可选 `"auto"`（默认）或 `"manual"`（显示画中画按钮）
 
 ::::
 
 ---
+
+#### Bilibili 嵌入
+
+`````markdown
+:::video{bilibili="BV1xx411c7mD" ratio="16/9"}
+:::
+`````
+
+- `bilibili`：Bilibili 视频 BV 号（可省略 `BV` 前缀）
+- `autoplay`：设为 `"true"` 时自动播放
+
+---
+
+#### YouTube 嵌入
+
+`````markdown
+:::video{youtube="dQw4w9WgXcQ" ratio="16/9"}
+:::
+`````
+
+- `youtube`：YouTube 视频 ID
+- `autoplay`：设为 `"true"` 时自动播放并静音
+
+::::
+
+---
+
+### npm-to 包管理器转换
+
+自动将 npm 命令转换为 pnpm、yarn、bun 等对应命令，并以选项卡形式展示。
+
+::::tabs
+tab: 演示效果
+
+:::npm-to
+```bash
+npm install -D astro
+```
+:::
+
+tab: 示例代码
+
+`````markdown
+:::npm-to
+```bash
+npm install -D astro
+```
+:::
+`````
+
+- `tabs`：指定要展示的包管理器，逗号分隔，默认 `"npm,pnpm,yarn,bun"`
+- 支持的命令转换：`install`、`install -D`、`install -g`、`run`、`init`、`create`、`npx`、`uninstall`、`ci`
+
+::::
+
+自定义包管理器列表：
+
+`````markdown
+:::npm-to{tabs="npm,pnpm,bun"}
+```bash
+npm install
+```
+:::
+`````
+
+---
+
+### Chat 对话容器
+
+以聊天气泡的形式展示对话记录，区分自己和对方消息。
+
+::::tabs
+tab: 演示效果
+
+:::chat{title="项目讨论"}
+[Alice]
+你看到新的指令系统了吗？
+[self]
+看到了！基于 vuejs-theme-plume 实现的。
+[Alice]
+太棒了！能做 npm-to 吗？
+[self]
+当然可以！看上面的演示。
+:::
+
+tab: 示例代码
+
+`````markdown
+:::chat{title="项目讨论"}
+[Alice]
+你看到新的指令系统了吗？
+[self]
+看到了！基于 vuejs-theme-plume 实现的。
+[Alice]
+太棒了！能做 npm-to 吗？
+[self]
+当然可以！看上面的演示。
+:::
+`````
+
+- `title`：对话标题（可选）
+- `[用户名]` — 对方消息的发送者（如 `[Alice]`）
+- `[self]` — 标记接下来的消息为"自己"发送（也支持 `[自己]`）
+- 普通文本行 — 消息内容
+
+::::
+
+---
+
+### Field / Field-group 字段文档
+
+用于 API 或配置项的结构化文档展示，支持 `@type`、`@required`、`@default`、`@deprecated`、`@optional`、`@description` 标记。
+
+::::tabs
+tab: 演示效果
+
+:::field{name}
+
+@type string
+
+@required
+
+@description 资源的唯一标识符
+
+:::
+
+::::field-group
+:::field{port}
+
+@type number
+
+@default 3000
+
+@description 监听的端口号
+
+:::
+
+:::field{host}
+
+@type string
+
+@default "localhost"
+
+@deprecated
+
+@description 绑定的主机名（请使用 `address` 替代）
+
+:::
+
+:::field{debug}
+
+@type boolean
+
+@optional
+
+@description 启用调试日志
+
+:::
+::::
+
+tab: 示例代码
+
+`````markdown
+:::field{name}
+
+@type string
+
+@required
+
+@description 资源的唯一标识符
+
+:::
+
+::::field-group
+:::field{port}
+
+@type number
+
+@default 3000
+
+@description 监听的端口号
+
+:::
+
+:::field{host}
+
+@type string
+
+@default "localhost"
+
+@deprecated
+
+@description 绑定的主机名
+
+:::
+::::
+`````
+
+- `:::field{字段名}` — 单个字段，`{}` 内为字段名称
+- `::::field-group` — 字段分组容器，多个字段排列在一起
+- `@type` — 字段类型
+- `@required` — 标记为必填
+- `@default` — 默认值
+- `@deprecated` — 标记为已废弃
+- `@optional` — 标记为可选
+- `@description` — 字段描述
+
+::::
+
+---
+
+### Code-tree 代码树
+
+左侧文件树 + 右侧代码面板的组合视图，点击文件切换代码内容。
+
+::::tabs
+tab: 演示效果
+
+:::code-tree{title="My Project" entry="src/main.ts"}
+```ts title="src/main.ts" :active
+import { app } from './app'
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000')
+})
+```
+
+```ts title="src/app.ts"
+import express from 'express'
+
+export const app = express()
+
+app.get('/', (req, res) => {
+  res.json({ hello: 'world' })
+})
+```
+:::
+
+tab: 示例代码
+
+`````markdown
+:::code-tree{title="My Project" entry="src/main.ts"}
+```ts title="src/main.ts" :active
+import { app } from './app'
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000')
+})
+```
+
+```ts title="src/app.ts"
+import express from 'express'
+
+export const app = express()
+```
+:::
+`````
+
+- `title`：项目标题（可选）
+- `entry`：默认展开的文件路径（可选）
+- 子内容为多个代码块，每个代码块的 `title` 属性作为文件路径
+- `:active` 标记在代码块 meta 中，指定默认激活的文件
+
+::::
+
+---
+
+### Flex 弹性布局
+
+在 Markdown 中直接使用 Flexbox 布局控制内容排列。
+
+::::tabs
+tab: 演示效果
+
+:::flex{justify="between" align="center" gap="2rem"}
+
+**左侧内容**
+
+**右侧内容**
+
+:::
+
+tab: 示例代码
+
+`````markdown
+:::flex{justify="between" align="center" gap="2rem"}
+
+**左侧内容**
+
+**右侧内容**
+
+:::
+`````
+
+- `justify`：主轴对齐，可选 `center`、`between`、`around`、`evenly`
+- `align`：交叉轴对齐，可选 `start`、`center`、`end`、`stretch`
+- `gap`：间距，默认 `1rem`
+- `column="true"`：纵向排列
+
+::::
+
+---
+
+### Card-grid 卡片网格
+
+将多个 `:::card` 以响应式网格布局排列。
+
+::::tabs
+tab: 演示效果
+
+::::card-grid
+:::card{title="快速" icon="lucide:zap" color="#22c55e"}
+基于 Astro 6 静态输出，页面加载极快。
+:::
+
+:::card{title="现代" icon="lucide:code" color="#3b82f6"}
+Svelte 5 runes 模式、Tailwind CSS 4、TypeScript。
+:::
+
+:::card{title="丰富" icon="lucide:bookmark" color="#a855f7"}
+扩展 Markdown 指令 80+，图表、交互组件一应俱全。
+:::
+::::
+
+tab: 示例代码
+
+`````markdown
+::::card-grid
+:::card{title="快速" icon="lucide:zap" color="#22c55e"}
+基于 Astro 6 静态输出，页面加载极快。
+:::
+
+:::card{title="现代" icon="lucide:code" color="#3b82f6"}
+Svelte 5、Tailwind CSS 4、TypeScript。
+:::
+::::
+`````
+
+- `::::card-grid` — 容器，自动使用 `repeat(auto-fill, minmax(280px, 1fr))` 网格
+- 内部放置 `:::card` 指令作为网格单元
+
+::::
+
+---
+
+### Accordion 手风琴模式
+
+`:::folders` 新增 `accordion` 属性，打开一个面板时自动关闭同组其他面板。
+
+::::tabs
+tab: 演示效果
+
+:::folders{accordion}
+folder: 安装
+运行 `npm install` 安装依赖。
+
+folder: 配置
+编辑 `config.json` 设置偏好。
+
+folder: 部署
+运行 `npm run build && npm run deploy`。
+:::
+
+tab: 示例代码
+
+`````markdown
+:::folders{accordion}
+folder: 安装
+运行 `npm install` 安装依赖。
+
+folder: 配置
+编辑 `config.json` 设置偏好。
+
+folder: 部署
+运行 `npm run build && npm run deploy`。
+:::
+`````
+
+- 在 `:::folders` 后添加 `{accordion}` 即可启用手风琴模式
+- 同一组内同时只能展开一个面板
+
+::::
+
+---
+
+### Callout 自定义图标
+
+`:::callout` 新增 `icon` 属性，可覆盖默认图标。
+
+::::tabs
+tab: 演示效果
+
+:::callout{type="info" icon="lucide:rocket" title="启动"}
+这条提示使用了自定义的火箭图标，而非默认的 info 图标。
+:::
+
+tab: 示例代码
+
+`````markdown
+:::callout{type="info" icon="lucide:rocket" title="启动"}
+这条提示使用了自定义的火箭图标。
+:::
+`````
+
+- `icon` — 图标名称，支持 `lucide:`、`fa7-solid:` 前缀，省略前缀默认为 Lucide
+- 例如：`icon="lucide:rocket"`、`icon="fa7-solid:star"`
+
+::::
+
+---
+
+## 行内指令（新增）
+
+### Annotation 内容注释
+
+鼠标悬停或聚焦时显示注释内容的行内指令。
+
+::::tabs
+tab: 演示效果
+
+TypeScript 使用 :anno[结构化]{content="对象只要形状相同就视为兼容，无需显式继承"} 类型系统，而 C# 使用名义类型系统。
+
+tab: 示例代码
+
+`````markdown
+TypeScript 使用 :anno[结构化]{content="对象只要形状相同就视为兼容"} 类型系统，而 C# 使用名义类型系统。
+`````
+
+- `:anno[标签文本]{content="注释内容"}` — 行内指令
+- 鼠标悬停或键盘聚焦时显示注释气泡
+- `content` 属性为注释的完整文本
+
+::::
+
+---
+
+### Abbreviation 缩写词
+
+使用 `:abbr[缩写词]{title="全称"}` 行内指令，悬停时显示完整定义。
+
+::::tabs
+tab: 演示效果
+
+:abbr[HTML]{title="Hyper Text Markup Language"} 和 :abbr[API]{title="Application Programming Interface"} 是 Web 开发的基础。
+
+tab: 示例代码
+
+`````markdown
+:abbr[HTML]{title="Hyper Text Markup Language"}
+:abbr[API]{title="Application Programming Interface"}
+`````
+
+- `:abbr` 为行内指令，方括号内为缩写词文本
+- `title` 属性为悬停时显示的完整定义
+- 渲染为 `<abbr>` 标签，浏览器原生支持悬停提示
+
+::::
+
+---
+
+## 其他增强
+
+### File Include 文件引入
+
+使用 HTML 注释语法在构建时将外部文件内容嵌入当前 Markdown：
+
+`````markdown
+<!-- @include: ./snippet.md -->
+<!-- @include: ./snippet.md{5-10} -->
+<!-- @include: ./snippet.md#region -->
+`````
+
+- 全文引入：`<!-- @include: ./file.md -->`
+- 行范围：`{起始行-结束行}`，如 `{5-10}` 引入第 5~10 行
+- 从某行到末尾：`{5-}`
+- 从开头到某行：`{-10}`
+- 区域引入：`#region名称`，配合代码中的 `#region` / `#endregion` 标记
+
+### Code Block Annotations 代码块标注
+
+Expressive Code 内置支持行内标注，增强代码展示效果：
+
+- `// [!code ++]` — 标记为新增行（绿色高亮）
+- `// [!code --]` — 标记为删除行（红色高亮）
+- `// [!code focus]` — 聚焦此行（其他行变暗）
+- `// [!code error]` — 标记为错误（红色波浪线）
+- `// [!code warning]` — 标记为警告（黄色波浪线）
+
+`````typescript
+function getUser(id: string) {
+  const user = db.findUser(id) // [!code --]
+  const user = db.findById(id) // [!code ++]
+  if (!user) {
+    throw new Error('Not found') // [!code error]
+  }
+  return user // [!code focus]
+}
+`````
+
+### Tabs 选项卡同步
+
+`:::tabs` 新增 `sync` 属性，实现跨选项卡组的联动切换。
+
+`````markdown
+::::tabs{sync="package-manager"}
+tab: npm
+npm install astro
+tab: pnpm
+pnpm add astro
+::::
+
+::::tabs{sync="package-manager"}
+tab: npm
+npm run dev
+tab: pnpm
+pnpm run dev
+::::
+`````
+
+- 添加 `sync="组名"` 属性即可启用同步
+- 同一 `sync` 组内的选项卡，点击一个会自动切换其他组中同名的选项卡
+- 匹配优先按标签文本，回退到索引
+
+---
+
+### Timeline 富文本
+
+`:::timeline` 现在支持 `date|title` 简写后的 Markdown 富文本内容：
+
+`````markdown
+:::timeline
+- 2025-06-14 | 新指令系统
+  新增了 **npm-to**、**chat**、**field**、**code-tree** 等指令，详见[文档](/press/markdown/directives/)。
+
+- 2025-05-21 | 初始版本
+  基础指令系统上线。
+:::
+`````
+
+- 第一行使用 `日期 | 标题` 格式
+- 后续行支持完整 Markdown 语法（链接、加粗、行内指令等）
 

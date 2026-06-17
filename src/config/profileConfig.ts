@@ -3,7 +3,7 @@ import { withOverride } from "../utils/config-override";
 
 const defaults: ProfileConfig = {
 	avatar: "assets/images/avatar.webp",
-	name: "Souloss",
+	name: "Tsukimi",
 	bio: "一直很担心会什么都没有做就这样长大",
 	links: [
 		{

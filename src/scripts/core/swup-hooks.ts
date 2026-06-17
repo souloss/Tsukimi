@@ -6,6 +6,7 @@
 import { pathsEqual, url } from "../../utils/url-utils";
 import type { FancyboxHandler } from "../handlers/fancybox-handler";
 import type { ScrollHandler } from "../handlers/scroll-handler";
+import { reinitDirectiveInteractions } from "../directive-interactions.js";
 import {
 	ANIMATION_CONFIG,
 	BANNER_HEIGHT,
@@ -89,13 +90,7 @@ export class SwupHooksManager {
 	 * 处理链接点击时的初始状态
 	 */
 	private registerLinkClickHook(): void {
-		window.swup!.hooks.on("link:click", ((_visit, { el }) => {
-				// 跳过 Markdown 指令交互元素（Tab 按钮等），
-				// 这些 <a> 不是页面导航链接，不应触发 Swup 页面过渡
-				if (el.closest(".md-directive")) {
-					return;
-				}
-
+		window.swup!.hooks.on("link:click", (() => {
 				// 移除首次页面加载的延迟
 				document.documentElement.style.setProperty(
 					"--content-delay",
@@ -138,6 +133,9 @@ export class SwupHooksManager {
 
 			// 通知其他组件内容已替换（CategoryBar 等依赖此事件）
 			document.dispatchEvent(new CustomEvent("swup:contentReplaced"));
+
+			// 重新初始化需要 per-page setup 的指令交互（asciinema observer 等）
+			reinitDirectiveInteractions();
 		});
 	}
 

@@ -290,6 +290,59 @@ function revertSmartypantsInTree(node) {
 	}
 }
 
+// Inline directives with () syntax that need conversion
+// remark-parse interprets [text](url) as links, breaking :anno[text](content) syntax.
+// We must reconstruct these from AST link nodes before remark-directive runs.
+const parenDirectiveMap = {
+	anno: "content",
+	annotation: "content",
+	abbr: "title",
+};
+
+/**
+ * Transform AST-level patterns where :anno[text](content) or :abbr[text](content)
+ * was parsed by remark-parse as: text(":name") + link("content", [text("text")])
+ * and reconstruct them as textDirective nodes with the parenthetical content
+ * stored as an attribute.
+ */
+function transformInlineParenDirectiveAST(tree) {
+	// Handle both paragraphs and headings
+	visit(tree, (node) => {
+		if (node.type !== "paragraph" && node.type !== "heading") return;
+		if (!Array.isArray(node.children)) return;
+
+		for (let i = node.children.length - 1; i >= 0; i--) {
+			const child = node.children[i];
+			if (child.type !== "link") continue;
+			// Check if the previous text node ends with :anno or :abbr
+			const prev = node.children[i - 1];
+			if (prev?.type !== "text") continue;
+			const match = prev.value.match(/:(anno|annotation|abbr)$/);
+			if (!match) continue;
+			const dirName = match[1];
+			const attrName = parenDirectiveMap[dirName];
+			if (!attrName) continue;
+			// Extract bracket content from link children
+			const bracketContent = child.children
+				? child.children.map((c) => c.value || "").join("")
+				: "";
+			// Extract parenthetical content from link URL
+			const parenContent = child.url || "";
+			if (!parenContent) continue;
+			// Remove trailing :name from previous text node
+			prev.value = prev.value.slice(0, -match[0].length);
+			// Replace the link node with a textDirective
+			const directive = {
+				type: "textDirective",
+				name: dirName,
+				attributes: { [attrName]: parenContent },
+				children: [{ type: "text", value: bracketContent }],
+			};
+			node.children.splice(i, 1, directive);
+		}
+	});
+}
+
 export function remarkPlumeCompat() {
 	return (tree) => {
 		visit(tree, "html", (node) => {
@@ -300,6 +353,7 @@ export function remarkPlumeCompat() {
 			);
 		});
 
+		transformInlineParenDirectiveAST(tree);
 		transformDirectiveBlocks(tree);
 		revertSmartypantsInFileTree(tree);
 	};

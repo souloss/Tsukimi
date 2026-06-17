@@ -4,11 +4,118 @@
  * Handles all custom markdown directives (:::callout, :::tabs, :mark[], etc.)
  * using hardcoded Lucide SVG icons (no dynamic imports from @iconify-json).
  */
+
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { visit } from "unist-util-visit";
 
 // ---------------------------------------------------------------------------
 // Hardcoded Lucide icon SVG data (body only, viewBox 0 0 24 24)
 // ---------------------------------------------------------------------------
+// Lazy-loaded vscode-icons data for code-tree (same as rehype-file-tree)
+let _vscodeIconData = null;
+function getVscodeIconData() {
+	if (!_vscodeIconData) {
+		try {
+			const __ftDir = dirname(fileURLToPath(import.meta.url));
+			_vscodeIconData = JSON.parse(
+				readFileSync(join(__ftDir, "file-icons.json"), "utf-8"),
+			);
+		} catch {
+			_vscodeIconData = null;
+		}
+	}
+	return _vscodeIconData;
+}
+
+// ---------------------------------------------------------------------------
+// Single-source directive name registry
+// ---------------------------------------------------------------------------
+// All directive names handled by this plugin. Shared with remark-directive-rehype.js
+// so the two files never drift out of sync.
+const CONTENT_DIRECTIVE_NAMES = new Set([
+	// Text (inline) directives
+	"mark",
+	"kbd",
+	"blur",
+	"psw",
+	"u",
+	"wavy",
+	"emp",
+	"del",
+	"hashtag",
+	"button",
+	"btn",
+	"color",
+	"sup",
+	"sub",
+	"checkbox",
+	"radio",
+	"step-brackets",
+	"emoji",
+	"badge",
+	"anno",
+	"abbr",
+	// Leaf directives
+	"asciinema",
+	"colors",
+	"image",
+	// Container directives
+	"callout",
+	"note",
+	"info",
+	"tip",
+	"warning",
+	"caution",
+	"important",
+	"question",
+	"quote",
+	"bug",
+	"example",
+	"success",
+	"failure",
+	"danger",
+	"folding",
+	"collapse",
+	"details",
+	"folders",
+	"timeline",
+	"tabs",
+	"code-group",
+	"steps",
+	"poetry",
+	"copy",
+	"grid",
+	"blockquote",
+	"quot",
+	"reel",
+	"paper",
+	"video",
+	"audio",
+	"gallery",
+	"private",
+	"ghcard",
+	"sites",
+	"card",
+	"card-grid",
+	"banner",
+	"yoicard",
+	"link",
+	// Alignment aliases
+	"left",
+	"center",
+	"right",
+	"justify",
+	// New container directives
+	"npm-to",
+	"chat",
+	"field",
+	"field-group",
+	"code-tree",
+	"flex",
+]);
+
 const LUCIDE_ICONS = {
 	info: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></g>',
 	lightbulb:
@@ -47,6 +154,18 @@ const LUCIDE_ICONS = {
 	heart:
 		'<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>',
 	mail: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m22 7l-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect width="20" height="16" x="2" y="4" rx="2"/></g>',
+	box: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7l8.7 5 8.7-5"/><path d="M12 22V12"/></g>',
+	moon: '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+	component:
+		'<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5Zm13 0L22 12l-3.5 3.5L15 12l3.5-3.5ZM12 2l3.5 3.5L12 9 8.5 5.5 12 2Zm0 13 3.5 3.5L12 22l-3.5-3.5L12 15Z"/>',
+	paintbrush:
+		'<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m18.37 2.63-9 9a2.13 2.13 0 0 0-.51 2.17l1.43 4.29a1 1 0 0 0 1.9.07l2.38-5.75a2 2 0 0 1 1.07-1.07l5.75-2.38a1 1 0 0 0-.07-1.9l-4.29-1.43a2.13 2.13 0 0 0-2.17.51Z"/>',
+	"file-code":
+		'<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 13-2 2 2 2"/><path d="m14 17 2-2-2-2"/></g>',
+	"arrow-left":
+		'<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 19-7-7 7-7m7 7H5"/>',
+	"arrow-right":
+		'<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7 7 7-7 7"/>',
 	pen: '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>',
 	search:
 		'<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/></g>',
@@ -125,9 +244,7 @@ function getFa7SolidSvg(name, size = "1em") {
 	return (
 		'<svg xmlns="http://www.w3.org/2000/svg" width="' +
 		size +
-		'" height="' +
-		size +
-		'" viewBox="0 0 576 512">' +
+		'" viewBox="0 0 576 512" preserveAspectRatio="xMidYMid meet">' +
 		body +
 		"</svg>"
 	);
@@ -166,6 +283,20 @@ const NAMED_COLORS = {
 	pink: "#ec4899",
 	cyan: "#06b6d4",
 	accent: "var(--accent-color,#4a7c59)",
+	// Semantic type aliases for badge/callout use
+	tip: "#22c55e",
+	info: "#3b82f6",
+	note: "#3b82f6",
+	warning: "#f97316",
+	caution: "#ef4444",
+	danger: "#ef4444",
+	success: "#22c55e",
+	important: "#a855f7",
+	question: "#3b82f6",
+	quote: "#06b6d4",
+	bug: "#ef4444",
+	example: "#6b7280",
+	failure: "#ef4444",
 };
 
 /** Resolve color name to CSS value */
@@ -175,7 +306,8 @@ function resolveColor(c) {
 
 /** HTML escape */
 function escapeHtml(text) {
-	return text
+	if (text == null) return "";
+	return String(text)
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
@@ -300,6 +432,107 @@ const EMOJI_SOURCES = {
 		"https://gcore.jsdelivr.net/gh/twitter/twemoji/assets/svg/{name}.svg",
 };
 
+// Common emoji name → unicode codepoint mapping for twemoji source
+const EMOJI_UNICODE_MAP = {
+	heart: "2764",
+	red_heart: "2764",
+	orange_heart: "1f9e1",
+	yellow_heart: "1f49b",
+	green_heart: "1f49a",
+	blue_heart: "1f499",
+	purple_heart: "1f49c",
+	rocket: "1f680",
+	fire: "1f525",
+	star: "2b50",
+	star2: "1f31f",
+	thumbsup: "1f44d",
+	thumbsdown: "1f44e",
+	"+1": "1f44d",
+	"-1": "1f44e",
+	check: "2705",
+	x: "274c",
+	warning: "26a0",
+	info: "2139",
+	joy: "1f602",
+	smile: "1f604",
+	grin: "1f601",
+	laugh: "1f606",
+	wink: "1f609",
+	blush: "1f60a",
+	heart_eyes: "1f60d",
+	kissing_heart: "1f618",
+	thinking: "1f914",
+	neutral_face: "1f610",
+	expressionless: "1f611",
+	unamused: "1f612",
+	sweat: "1f613",
+	disappointed: "1f61e",
+	angry: "1f621",
+	cry: "1f622",
+	sob: "1f62d",
+	scream: "1f631",
+	skull: "1f480",
+	party: "1f389",
+	tada: "1f389",
+	clap: "1f44f",
+	pray: "1f64f",
+	muscle: "1f4aa",
+	eyes: "1f440",
+	100: "1f4af",
+	sparkles: "2728",
+	bug: "1f41b",
+	construction: "1f6a7",
+	memo: "1f4dd",
+	pencil: "270f",
+	link: "1f517",
+	lock: "1f512",
+	unlock: "1f513",
+	key: "1f511",
+	zap: "26a1",
+	boom: "1f4a5",
+	bomb: "1f4a3",
+	crown: "1f451",
+	gem: "1f48e",
+	trophy: "1f3c6",
+	medal: "1f3c5",
+	ribbon: "1f380",
+	gift: "1f381",
+	balloon: "1f388",
+	cake: "1f382",
+	coffee: "2615",
+	beer: "1f37a",
+	pizza: "1f355",
+	hamburger: "1f354",
+	apple: "1f34e",
+	cat: "1f431",
+	dog: "1f436",
+	mouse: "1f42d",
+	rabbit: "1f430",
+	unicorn: "1f984",
+	dragon: "1f409",
+	snake: "1f40d",
+	whale: "1f40b",
+	sun: "2600",
+	moon: "1f319",
+	rainbow: "1f308",
+	cloud: "2601",
+	umbrella: "2614",
+	snowflake: "2744",
+	bolt: "26a1",
+	tornado: "1f32a",
+	computer: "1f4bb",
+	phone: "1f4f1",
+	keyboard: "2328",
+	mouse2: "1f5b1",
+	globe: "1f30d",
+	earth: "1f30d",
+	airplane: "2708",
+	car: "1f697",
+	train: "1f685",
+	bike: "1f6b2",
+	boat: "26f5",
+};
+
 // ---------------------------------------------------------------------------
 // Callout colors (Tailwind standard) and default titles
 // ---------------------------------------------------------------------------
@@ -402,9 +635,38 @@ const CALLOUT_ICONS = {
 // ---------------------------------------------------------------------------
 // Inline directive processors
 // ---------------------------------------------------------------------------
-let hashtagIndex = 0;
+// hashtagIndex is scoped inside the plugin function to avoid state leaking
+// between multiple invocations of remarkContentDirectives.
 
-function _processInlineDirective(node) {
+function _processInlineDirective(node, parent, index, hashtagCounter) {
+	// Skip directives inside headings — render as inline code
+	// Walk up the parent chain to check for heading ancestors
+	let _ancestor = parent;
+	let _inHeading = false;
+	while (_ancestor) {
+		if (_ancestor.type === "heading") {
+			_inHeading = true;
+			break;
+		}
+		_ancestor = _ancestor._parent || null;
+	}
+	const _directHeading = parent && parent.type === "heading";
+	if (_inHeading || _directHeading) {
+		const text = node.children
+			? node.children.map((c) => c.value || "").join("")
+			: "";
+		// Render directive syntax as inline code in headings:
+		// :name[text] → `:name[text]`, :name → `:name`
+		const codeText = text ? `:${node.name}[${text}]` : `:${node.name}`;
+		node.type = "inlineCode";
+		node.value = codeText;
+		delete node.children;
+		delete node.data;
+		delete node.attributes;
+		delete node.name;
+		delete node._skipProcessing;
+		return;
+	}
 	const name = node.name;
 	const attrs = node.attributes || {};
 	const text = node.children
@@ -498,8 +760,9 @@ function _processInlineDirective(node) {
 		case "hashtag": {
 			let color = attrs.color ? resolveColor(attrs.color) : "";
 			if (!color) {
-				color = resolveColor(HASHTAG_COLORS[hashtagIndex]);
-				hashtagIndex = (hashtagIndex + 1) % HASHTAG_COLORS.length;
+				color = resolveColor(HASHTAG_COLORS[hashtagCounter.value]);
+				hashtagCounter.value =
+					(hashtagCounter.value + 1) % HASHTAG_COLORS.length;
 			}
 			const hashIcon =
 				'<svg class="md-hash-svg" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M426.6 64.8c34.8 5.8 58.4 38.8 52.6 73.6l-19.6 117.6h190.2l23-138.6c5.8-34.8 38.8-58.4 73.6-52.6s58.4 38.8 52.6 73.6l-19.4 117.6H896c35.4 0 64 28.6 64 64s-28.6 64-64 64h-137.8l-42.6 256H832c35.4 0 64 28.6 64 64s-28.6 64-64 64h-137.8l-23 138.6c-5.8 34.8-38.8 58.4-73.6 52.6s-58.4-38.8-52.6-73.6l19.6-117.4h-190.4l-23 138.6c-5.8 34.8-38.8 58.4-73.6 52.6s-58.4-38.8-52.6-73.6l19.4-117.8H128c-35.4 0-64-28.6-64-64s28.6-64 64-64h137.8l42.6-256H192c-35.4 0-64-28.6-64-64s28.6-64 64-64h137.8l23-138.6c5.8-34.8 38.8-58.4 73.6-52.6z m11.6 319.2l-42.6 256h190.2l42.6-256h-190.2z"/></svg>';
@@ -552,7 +815,30 @@ function _processInlineDirective(node) {
 		case "checkbox": {
 			const chkColor = resolveColor(attrs.color || "blue");
 			const symbol = attrs.symbol || "";
-			const checked = attrs.checked === "true" || attrs.checked === "";
+			// Determine checked state: from attrs.checked, or from text content like "checked"/"unchecked"
+			const checkedKeywords = [
+				"checked",
+				"true",
+				"done",
+				"yes",
+				"x",
+				"v",
+				"✓",
+				"✅",
+			];
+			const uncheckedKeywords = ["unchecked", "false", "todo", "no", " ", "☐"];
+			let isChecked = attrs.checked === "true" || attrs.checked === "";
+			let chkDisplayText = text;
+			if (!isChecked && !attrs.checked) {
+				const lowerText = text.toLowerCase().trim();
+				if (checkedKeywords.includes(lowerText)) {
+					isChecked = true;
+					chkDisplayText = "";
+				} else if (uncheckedKeywords.includes(lowerText)) {
+					isChecked = false;
+					chkDisplayText = "";
+				}
+			}
 			const inline = attrs.inline === "true" || attrs.inline === "";
 			const chkClasses = ["md-tag-checkbox"];
 			if (symbol) {
@@ -565,19 +851,46 @@ function _processInlineDirective(node) {
 				hName: inline ? "span" : "div",
 				hProperties: {
 					class: chkClasses.join(" "),
-					"data-checked": checked ? "true" : "false",
+					"data-checked": isChecked ? "true" : "false",
 					style: `--checkbox-color:${chkColor}`,
 				},
 			};
 			node.children = [
 				{ type: "html", value: '<span class="md-checkbox-box"></span>' },
-				{ type: "text", value: text },
+				...(chkDisplayText ? [{ type: "text", value: chkDisplayText }] : []),
 			];
 			break;
 		}
 		case "radio": {
 			const radColor = resolveColor(attrs.color || "blue");
-			const radChecked = attrs.checked === "true" || attrs.checked === "";
+			// Determine selected state: from attrs.checked, or from text content
+			const radSelectedKeywords = [
+				"selected",
+				"checked",
+				"true",
+				"yes",
+				"✓",
+				"✅",
+			];
+			const radUnselectedKeywords = [
+				"unselected",
+				"unchecked",
+				"false",
+				"no",
+				"☐",
+			];
+			let isRadChecked = attrs.checked === "true" || attrs.checked === "";
+			let radDisplayText = text;
+			if (!isRadChecked && !attrs.checked) {
+				const lowerText = text.toLowerCase().trim();
+				if (radSelectedKeywords.includes(lowerText)) {
+					isRadChecked = true;
+					radDisplayText = "";
+				} else if (radUnselectedKeywords.includes(lowerText)) {
+					isRadChecked = false;
+					radDisplayText = "";
+				}
+			}
 			const radInline = attrs.inline === "true" || attrs.inline === "";
 			const radClasses = ["md-tag-checkbox", "md-tag-radio"];
 			if (radInline) {
@@ -587,13 +900,13 @@ function _processInlineDirective(node) {
 				hName: radInline ? "span" : "div",
 				hProperties: {
 					class: radClasses.join(" "),
-					"data-checked": radChecked ? "true" : "false",
+					"data-checked": isRadChecked ? "true" : "false",
 					style: `--checkbox-color:${radColor}`,
 				},
 			};
 			node.children = [
 				{ type: "html", value: '<span class="md-checkbox-box"></span>' },
-				{ type: "text", value: text },
+				...(radDisplayText ? [{ type: "text", value: radDisplayText }] : []),
 			];
 			break;
 		}
@@ -602,18 +915,23 @@ function _processInlineDirective(node) {
 			let source = attrs.source;
 			let emojiName = attrs.name;
 			if (source === undefined) {
-				const firstSource = Object.keys(EMOJI_SOURCES)[0];
-				if (firstSource) {
-					emojiName = text;
-					source = firstSource;
-				}
+				emojiName = text;
+				source = "twemoji";
 			}
 			if (!emojiName) {
 				emojiName = text;
 			}
 			if (source && emojiName) {
+				// For twemoji source, resolve emoji names to unicode codepoints
+				let resolvedName = emojiName;
+				if (
+					(source === "twemoji" || source === "default") &&
+					EMOJI_UNICODE_MAP[emojiName.toLowerCase()]
+				) {
+					resolvedName = EMOJI_UNICODE_MAP[emojiName.toLowerCase()];
+				}
 				const template = EMOJI_SOURCES[source] || source;
-				const url = template.replace("{name}", emojiName);
+				const url = template.replace("{name}", resolvedName);
 				node.data = {
 					hName: "span",
 					hProperties: {
@@ -637,6 +955,106 @@ function _processInlineDirective(node) {
 			}
 			break;
 		}
+		case "abbr": {
+			let abbrTitle = attrs.title || attrs.desc || "";
+			// Check children for (title) pattern from plume compat: :abbr[HTML](Full Name)
+			if (!abbrTitle && node.children && node.children.length > 1) {
+				const lastChild = node.children[node.children.length - 1];
+				if (lastChild.type === "text") {
+					const parenMatch = lastChild.value.match(/^\(([^)]+)\)$/);
+					if (parenMatch) {
+						abbrTitle = parenMatch[1];
+						node.children.pop();
+					}
+				}
+			}
+			if (!abbrTitle && node.children && node.children.length > 0) {
+				const firstChild = node.children[0];
+				if (firstChild.type === "text") {
+					const parenMatch = firstChild.value.match(/^(.+?)\(([^)]+)\)$/);
+					if (parenMatch) {
+						firstChild.value = parenMatch[1];
+						abbrTitle = parenMatch[2];
+					}
+				}
+			}
+			// Check NEXT SIBLING text node for (title) — remark-parse splits
+			// :abbr[HTML](Full Name) into directive + text "(Full Name)"
+			if (!abbrTitle && parent && Array.isArray(parent.children)) {
+				const nextSibling = parent.children[index + 1];
+				if (nextSibling && nextSibling.type === "text") {
+					const sibMatch = nextSibling.value.match(/^\(([^)]+)\)/);
+					if (sibMatch) {
+						abbrTitle = sibMatch[1];
+						nextSibling.value = nextSibling.value.slice(sibMatch[0].length);
+					}
+				}
+			}
+			node.data = {
+				hName: "abbr",
+				hProperties: abbrTitle
+					? { title: abbrTitle, class: "md-tag-abbr" }
+					: { class: "md-tag-abbr" },
+			};
+			// Keep node.children — they contain the abbreviation text (e.g., "HTML")
+			break;
+		}
+		case "badge": {
+			const badgeColor = resolveColor(attrs.color || attrs.type || "blue");
+			node.data = {
+				hName: "span",
+				hProperties: {
+					class: "md-tag-badge",
+					style: `--badge-color:${badgeColor}`,
+				},
+			};
+			break;
+		}
+		case "anno": {
+			let annoContent = attrs.content || attrs.desc || "";
+			// Check children for (explanation) pattern from plume compat
+			if (!annoContent && node.children && node.children.length > 1) {
+				const lastChild = node.children[node.children.length - 1];
+				if (lastChild.type === "text") {
+					const parenMatch = lastChild.value.match(/^\(([^)]+)\)$/);
+					if (parenMatch) {
+						annoContent = parenMatch[1];
+						node.children.pop();
+					}
+				}
+			}
+			if (!annoContent && node.children && node.children.length > 0) {
+				const firstChild = node.children[0];
+				if (firstChild.type === "text") {
+					const parenMatch = firstChild.value.match(/^(.+?)\(([^)]+)\)$/);
+					if (parenMatch) {
+						firstChild.value = parenMatch[1];
+						annoContent = parenMatch[2];
+					}
+				}
+			}
+			// Check NEXT SIBLING text node for (content) — remark-parse splits
+			// :anno[text](content) into directive + text "(content)"
+			if (!annoContent && parent && Array.isArray(parent.children)) {
+				const nextSibling = parent.children[index + 1];
+				if (nextSibling && nextSibling.type === "text") {
+					const sibMatch = nextSibling.value.match(/^\(([^)]+)\)/);
+					if (sibMatch) {
+						annoContent = sibMatch[1];
+						nextSibling.value = nextSibling.value.slice(sibMatch[0].length);
+					}
+				}
+			}
+			node.data = {
+				hName: "span",
+				hProperties: {
+					class: "md-tag-annotation",
+					"data-annotation": annoContent,
+					tabindex: "0",
+				},
+			};
+			break;
+		}
 		default:
 			break;
 	}
@@ -646,9 +1064,7 @@ function _processInlineDirective(node) {
 // ---------------------------------------------------------------------------
 // Block directive processors
 // ---------------------------------------------------------------------------
-function processBlockDirective(node, options = {}) {
-	const _links = options.links;
-	const _screenshotService = options.screenshotService;
+function processBlockDirective(node) {
 	const name = node.name;
 	const attrs = node.attributes || {};
 
@@ -741,7 +1157,8 @@ function processBlockDirective(node, options = {}) {
 		}
 
 		case "folding":
-		case "collapse": {
+		case "collapse":
+		case "details": {
 			const foldTitle = attrs.title || "Details";
 			const open = attrs.open === "true" || attrs.open === "";
 			const foldColor = resolveColor(attrs.color || "accent");
@@ -771,7 +1188,61 @@ function processBlockDirective(node, options = {}) {
 			break;
 		}
 
+		case "code-group": {
+			const uid = `cg-${Math.random().toString(36).slice(2, 8)}`;
+			const tabItems = [];
+			const paneChildren = [];
+
+			if (node.children) {
+				node.children.forEach((child, i) => {
+					if (child.type === "code") {
+						const lang = child.lang || "";
+						const meta = child.meta || "";
+						// Extract label from [label] in meta
+						const labelMatch = meta.match(/\[([^\]]+)\]/);
+						const label = labelMatch ? labelMatch[1] : lang || `Tab ${i + 1}`;
+						const isActive = i === 0;
+						tabItems.push(
+							`<button type="button" class="md-tab-btn${isActive ? " md-tab-active" : ""}" data-tabs-id="${uid}" data-tab-index="${i}" role="tab" aria-selected="${isActive}">${escapeHtml(label)}</button>`,
+						);
+						// Keep the code AST node so expressive-code can process it
+						// (adds syntax highlighting, language badge, copy button)
+						paneChildren.push(
+							h(
+								"div",
+								{
+									class: `md-tab-pane${isActive ? " md-tab-visible" : ""}`,
+									id: `${uid}-pane-${i}`,
+									role: "tabpanel",
+								},
+								[child],
+							),
+						);
+					}
+				});
+			}
+
+			if (tabItems.length === 0) break;
+
+			const codeGroupDiv = h(
+				"div",
+				{ class: "md-directive md-code-group", id: uid },
+				[
+					{
+						type: "html",
+						value: `<div class="md-tabs-nav" role="tablist">${tabItems.join("")}</div>`,
+					},
+					...paneChildren,
+				],
+			);
+
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [codeGroupDiv];
+			break;
+		}
+
 		case "folders": {
+			const isAccordion = attrs.accordion === "true" || attrs.accordion === "";
 			const folders = [];
 			let currentFolder = null;
 			let currentContent = [];
@@ -798,9 +1269,12 @@ function processBlockDirective(node, options = {}) {
 			if (currentFolder !== null) {
 				folders.push({ title: currentFolder, children: currentContent });
 			}
+			const foldersClass = isAccordion
+				? "md-directive md-directive-folders md-folders-accordion"
+				: "md-directive md-directive-folders";
 			node.data = {
 				hName: "div",
-				hProperties: { class: "md-directive md-directive-folders" },
+				hProperties: { class: foldersClass },
 			};
 			node.children = folders.map((f, i) => {
 				const summaryHtml =
@@ -838,6 +1312,15 @@ function processBlockDirective(node, options = {}) {
 							title: parts[1],
 							desc: parts[2] || "",
 						});
+					} else {
+						const firstSpace = ttext.indexOf(" ");
+						if (firstSpace > 0) {
+							items.push({
+								date: ttext.slice(0, firstSpace).trim(),
+								title: ttext.slice(firstSpace + 1).trim(),
+								desc: "",
+							});
+						}
 					}
 				},
 			);
@@ -898,6 +1381,29 @@ function processBlockDirective(node, options = {}) {
 						currentTabContent = [];
 						continue;
 					}
+					if (/^\[.+\]/.test(ttext2)) {
+						if (currentTab !== null) {
+							tabs.push({
+								label: currentTab,
+								color: currentTabColor,
+								children: currentTabContent,
+							});
+						}
+						const bracketMatch = ttext2.match(/^\[(.+?)\](.*)/);
+						if (bracketMatch) {
+							currentTab = bracketMatch[1].trim();
+							currentTabColor = "";
+							currentTabContent = [];
+							const afterBracket = bracketMatch[2].trim();
+							if (afterBracket) {
+								currentTabContent.push({
+									type: "paragraph",
+									children: [{ type: "text", value: afterBracket }],
+								});
+							}
+						}
+						continue;
+					}
 				}
 				if (currentTab !== null) {
 					currentTabContent.push(tchild);
@@ -956,6 +1462,10 @@ function processBlockDirective(node, options = {}) {
 			if (align) {
 				tabProps.align = align;
 			}
+			const syncId = attrs.sync || "";
+			if (syncId) {
+				tabProps["data-tabs-sync"] = syncId;
+			}
 			node.data = { hName: "div", hProperties: tabProps };
 			node.children = [
 				{
@@ -976,39 +1486,31 @@ function processBlockDirective(node, options = {}) {
 			const pAuthor = attrs.author || "";
 			const pDate = attrs.date || "";
 			const pFooter = attrs.footer || "";
-			node.data = { hName: "div", hProperties: {} };
 			const pMeta = [pAuthor, pDate].filter(Boolean).join(" · ");
-			node.children = [
-				{
-					type: "html",
-					value:
-						'<div class="md-directive md-directive-poetry"><div class="md-poetry-content">' +
-						(pTitle ? `<div class="md-poetry-title">${pTitle}</div>` : "") +
-						(pMeta ? `<div class="md-poetry-meta">${pMeta}</div>` : "") +
-						'<div class="md-poetry-body">',
-				},
-			]
-				.concat(node.children)
-				.concat([
-					{
-						type: "html",
-						value:
-							"</div>" +
-							(pFooter
-								? `<div class="md-poetry-footer">${pFooter}</div>`
-								: "") +
-							"</div></div>",
-					},
-				]);
+			const bodyHtml = serializeToHtml(node.children);
+			const poetryHtml =
+				'<div class="md-directive md-directive-poetry"><div class="md-poetry-content">' +
+				(pTitle ? `<div class="md-poetry-title">${pTitle}</div>` : "") +
+				(pMeta ? `<div class="md-poetry-meta">${pMeta}</div>` : "") +
+				`<div class="md-poetry-body">${bodyHtml}</div>` +
+				(pFooter ? `<div class="md-poetry-footer">${pFooter}</div>` : "") +
+				"</div></div>";
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [{ type: "html", value: poetryHtml }];
 			break;
 		}
 
 		case "copy": {
-			const copyLabel = attrs.label || "";
+			const copyLabel = attrs.label || attrs.title || "";
 			let copyText = "";
-			visit({ type: "root", children: node.children }, "text", (t) => {
-				copyText += t.value;
+			visit({ type: "root", children: node.children }, "code", (codeNode) => {
+				copyText += codeNode.value || "";
 			});
+			if (!copyText) {
+				visit({ type: "root", children: node.children }, "text", (t) => {
+					copyText += t.value;
+				});
+			}
 			copyText = copyText.trim();
 			const copyUid = `copy-${Math.random().toString(36).slice(2, 7)}`;
 			const safeText = copyText
@@ -1043,11 +1545,24 @@ function processBlockDirective(node, options = {}) {
 			const cells = [];
 			let currentCell = [];
 			for (let gi = 0; gi < node.children.length; gi++) {
-				if (node.children[gi].type === "thematicBreak") {
-					cells.push(currentCell);
+				const child = node.children[gi];
+				// Split cells on thematicBreak (---)
+				if (child.type === "thematicBreak") {
+					if (currentCell.length) cells.push(currentCell);
 					currentCell = [];
+				}
+				// Split cells on containerDirective/leafDirective boundaries (e.g. :::card)
+				else if (
+					child.type === "containerDirective" ||
+					child.type === "leafDirective"
+				) {
+					if (currentCell.length) {
+						cells.push(currentCell);
+						currentCell = [];
+					}
+					cells.push([child]);
 				} else {
-					currentCell.push(node.children[gi]);
+					currentCell.push(child);
 				}
 			}
 			if (currentCell.length) {
@@ -1075,6 +1590,617 @@ function processBlockDirective(node, options = {}) {
 				};
 			}
 			node.children = cells.map((c) => h("div", { class: "md-grid-cell" }, c));
+			break;
+		}
+
+		case "steps": {
+			const steps = [];
+			// Collect step items from ordered list or paragraph format
+			for (let si = 0; si < node.children.length; si++) {
+				const schild = node.children[si];
+				// Handle remark-parsed ordered list: list > listItem > paragraph
+				if (schild.type === "list" && schild.ordered) {
+					for (const li of schild.children) {
+						if (li.type === "listItem" && li.children?.length) {
+							// First child is the step title paragraph
+							const titlePara = li.children[0];
+							const titleText =
+								titlePara?.children
+									?.map((c) => c.value || "")
+									.join("")
+									.trim() || "";
+							// Remaining children are the step body
+							const bodyChildren = li.children.slice(1);
+							steps.push({ title: titleText, children: bodyChildren });
+						}
+					}
+					continue;
+				}
+				// Fallback: paragraph starting with "N. Title"
+				if (schild.type === "paragraph") {
+					const stext = schild.children
+						.map((c) => c.value || "")
+						.join("")
+						.trim();
+					if (/^\d+\.\s/.test(stext)) {
+						const stepTitle = stext.replace(/^\d+\.\s*/, "").trim();
+						steps.push({ title: stepTitle, children: [] });
+						continue;
+					}
+				}
+				// Content after a step title belongs to the last step
+				if (steps.length > 0) {
+					steps[steps.length - 1].children.push(schild);
+				}
+			}
+			if (steps.length === 0) break;
+			const stepsHtml = steps
+				.map((s, i) => {
+					const num = i + 1;
+					const titleHtml = s.title
+						? `<div class="md-step-title">${escapeHtml(s.title)}</div>`
+						: "";
+					const bodyHtml = serializeToHtml(s.children);
+					return `<div class="md-step-item"><div class="md-step-number">${num}</div><div class="md-step-content">${titleHtml}<div class="md-step-body">${bodyHtml}</div></div></div>`;
+				})
+				.join("");
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [
+				{
+					type: "html",
+					value: `<div class="md-directive md-directive-steps">${stepsHtml}</div>`,
+				},
+			];
+			break;
+		}
+
+		case "field": {
+			// The field name comes from the directive attribute key itself:
+			//   :::field{port}  → attrs = { port: "" }  → name = "port"
+			//   :::field{name="host"} → attrs = { name: "host" } → name = "host"
+			// We pick the first non-@ attribute key as the field name,
+			// using its value only if explicitly set (non-empty).
+			let fieldName = "";
+			const metaKeys = new Set([
+				"@type",
+				"@required",
+				"@default",
+				"@deprecated",
+				"@optional",
+				"@description",
+			]);
+			if ("name" in attrs && attrs.name !== "") {
+				fieldName = attrs.name;
+			} else if ("title" in attrs && attrs.title !== "") {
+				fieldName = attrs.title;
+			} else {
+				for (const [key, val] of Object.entries(attrs)) {
+					if (!key.startsWith("@") && !metaKeys.has(key)) {
+						fieldName = val || key;
+						break;
+					}
+				}
+			}
+			const fieldMeta = {
+				name: fieldName,
+				type: "",
+				required: false,
+				default: "",
+				deprecated: false,
+				optional: false,
+				description: "",
+			};
+			for (const [key, val] of Object.entries(attrs)) {
+				if (key.startsWith("@type")) fieldMeta.type = val || key.slice(5);
+				else if (key === "@required") fieldMeta.required = true;
+				else if (key.startsWith("@default")) fieldMeta.default = val;
+				else if (key === "@deprecated") fieldMeta.deprecated = true;
+				else if (key === "@optional") fieldMeta.optional = true;
+				else if (key.startsWith("@description"))
+					fieldMeta.description = val || key.slice(11);
+			}
+			if (!fieldMeta.type && node.children?.length) {
+				let rawText = "";
+				for (const child of node.children) {
+					if (child.type === "paragraph" && child.children) {
+						for (const gc of child.children) {
+							if (gc.type === "text" || gc.type === "inlineCode")
+								rawText += `${gc.value} `;
+						}
+						rawText += "\n";
+					} else if (child.type === "text") {
+						rawText += `${child.value}\n`;
+					}
+				}
+				for (const rawLine of rawText.split("\n")) {
+					const line = rawLine.trim();
+					if (!line) continue;
+					if (line.startsWith("@type ")) fieldMeta.type = line.slice(6).trim();
+					else if (line === "@required") fieldMeta.required = true;
+					else if (line.startsWith("@default "))
+						fieldMeta.default = line.slice(9).trim();
+					else if (line === "@deprecated") fieldMeta.deprecated = true;
+					else if (line === "@optional") fieldMeta.optional = true;
+					else if (line.startsWith("@description "))
+						fieldMeta.description = line.slice(12).trim();
+				}
+			}
+			const fieldHtml =
+				'<div class="md-directive md-directive-field' +
+				(fieldMeta.required ? " md-field-required" : "") +
+				(fieldMeta.deprecated ? " md-field-deprecated" : "") +
+				(fieldMeta.optional ? " md-field-optional" : "") +
+				'">' +
+				'<p class="md-field-header"><span class="md-field-name">' +
+				escapeHtml(fieldMeta.name) +
+				"</span>" +
+				(fieldMeta.required
+					? '<span class="md-field-badge md-field-badge-required">Required</span>'
+					: "") +
+				(fieldMeta.optional
+					? '<span class="md-field-badge md-field-badge-optional">Optional</span>'
+					: "") +
+				(fieldMeta.deprecated
+					? '<span class="md-field-badge md-field-badge-deprecated">Deprecated</span>'
+					: "") +
+				(fieldMeta.type
+					? '<span class="md-field-type"><code>' +
+						escapeHtml(fieldMeta.type) +
+						"</code></span>"
+					: "") +
+				"</p>" +
+				(fieldMeta.default
+					? '<p class="md-field-default-row"><span class="md-field-default-label">default: </span><code class="md-field-default-value">' +
+						escapeHtml(fieldMeta.default) +
+						"</code></p>"
+					: "") +
+				(fieldMeta.description
+					? '<div class="md-field-description">' +
+						escapeHtml(fieldMeta.description) +
+						"</div>"
+					: "") +
+				"</div>";
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [{ type: "html", value: fieldHtml }];
+			break;
+		}
+		case "field-group": {
+			node.data = {
+				hName: "div",
+				hProperties: { class: "md-directive md-directive-field-group" },
+			};
+			break;
+		}
+
+		case "code-tree": {
+			// Use vscode-icons for file/folder icons (same as :::file-tree)
+			const vsData = getVscodeIconData();
+			const chevronSvg = LUCIDE_ICONS["chevron-down"];
+			function ftSvgHtml(iconBody, extraClass, viewBox) {
+				if (!iconBody)
+					return '<svg class="vp-file-tree-blank" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"></svg>';
+				const cls = extraClass ? ` class="${extraClass}"` : "";
+				const vb = viewBox || "0 0 24 24";
+				return (
+					"<svg" +
+					cls +
+					' xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="' +
+					vb +
+					'">' +
+					iconBody +
+					"</svg>"
+				);
+			}
+			function ftResolveVscodeIcon(name, isFolder) {
+				if (!vsData) return null;
+				const map = isFolder ? vsData.folderMap : vsData.fileMap;
+				const lookupName = name.toLowerCase();
+				// Try full filename first, then extension
+				if (map[lookupName]) return map[lookupName];
+				const dotIdx = lookupName.lastIndexOf(".");
+				if (dotIdx >= 0) {
+					const ext = lookupName.slice(dotIdx + 1);
+					if (map[ext]) return map[ext];
+				}
+				return null;
+			}
+			function ftGetFileIconHtml(name) {
+				if (vsData) {
+					const iconKey = ftResolveVscodeIcon(name, false);
+					if (iconKey && vsData.icons[iconKey]) {
+						const icon = vsData.icons[iconKey];
+						return ftSvgHtml(icon.body, "vp-file-tree-icon", icon.viewBox);
+					}
+					// Fallback to default file icon
+					if (vsData.icons[vsData.defaultFile]) {
+						const icon = vsData.icons[vsData.defaultFile];
+						return ftSvgHtml(icon.body, "vp-file-tree-icon", icon.viewBox);
+					}
+				}
+				// Fallback to Lucide
+				return ftSvgHtml(
+					LUCIDE_ICONS["file-code"] || LUCIDE_ICONS.file,
+					"vp-file-tree-icon",
+				);
+			}
+			function ftGetFolderIconHtml(name, isOpen) {
+				if (vsData) {
+					const iconKey = ftResolveVscodeIcon(name, true);
+					const defaultKey = isOpen
+						? vsData.defaultFolderOpen
+						: vsData.defaultFolder;
+					const resolvedKey = iconKey || defaultKey;
+					if (resolvedKey && vsData.icons[resolvedKey]) {
+						const icon = vsData.icons[resolvedKey];
+						return ftSvgHtml(icon.body, "vp-file-tree-icon", icon.viewBox);
+					}
+				}
+				// Fallback to Lucide
+				return ftSvgHtml(LUCIDE_ICONS.folder, "vp-file-tree-icon");
+			}
+			function ftGetChevronHtml() {
+				if (vsData?.chevron) {
+					return ftSvgHtml(
+						vsData.chevron.body,
+						"vp-file-tree-arrow-icon",
+						vsData.chevron.viewBox,
+					);
+				}
+				return ftSvgHtml(chevronSvg, "vp-file-tree-arrow-icon");
+			}
+			const treeTitle = attrs.title || "";
+			const entry = attrs.entry || "";
+			const treeHeight = attrs.height || "";
+			const files = [];
+			let activeIndex = 0;
+			visit({ type: "root", children: node.children }, "code", (codeNode) => {
+				const metaStr = codeNode.meta || "";
+				const titleMatch = metaStr.match(/title=["']([^"']+)["']/);
+				const fileTitle = titleMatch ? titleMatch[1] : "";
+				const isActive = metaStr.includes(":active");
+				if (isActive) activeIndex = files.length;
+				files.push({
+					name: fileTitle || `file-${files.length + 1}`,
+					lang: codeNode.lang || "",
+					codeNode,
+					active: isActive,
+				});
+			});
+			if (entry) {
+				const entryIdx = files.findIndex((f) => f.name === entry);
+				if (entryIdx >= 0) activeIndex = entryIdx;
+			}
+			if (files.length === 0) break;
+			const uid = `ct-${Math.random().toString(36).slice(2, 7)}`;
+			const treeRoot = {
+				name: "",
+				children: [],
+				isFile: false,
+				codeIndex: -1,
+				path: "",
+			};
+			for (let fi = 0; fi < files.length; fi++) {
+				const parts = files[fi].name.split("/");
+				let current = treeRoot;
+				for (let pi = 0; pi < parts.length; pi++) {
+					const part = parts[pi];
+					const isFile = pi === parts.length - 1;
+					let child = current.children.find(
+						(c) => c.name === part && c.isFile === isFile,
+					);
+					if (!child) {
+						child = {
+							name: part,
+							children: [],
+							isFile,
+							codeIndex: isFile ? fi : -1,
+							path: parts.slice(0, pi + 1).join("/"),
+							expanded: false,
+						};
+						current.children.push(child);
+					}
+					current = child;
+				}
+			}
+			function markExpanded(n) {
+				if (n.isFile && n.codeIndex === activeIndex) return true;
+				for (const ch of n.children) {
+					if (markExpanded(ch)) {
+						n.expanded = true;
+						return true;
+					}
+				}
+				return false;
+			}
+			markExpanded(treeRoot);
+			function renderTree(n, level) {
+				if (n.isFile) {
+					const idx = n.codeIndex;
+					const isActive = idx === activeIndex;
+					const levelStyle = `--file-tree-level: -${level};`;
+					// File icon from vscode-icons
+					const infoClasses = ["vp-file-tree-info", "file"];
+					if (isActive) infoClasses.push("md-code-tree-file-active");
+					return (
+						'<div class="vp-file-tree-node"><p class="' +
+						infoClasses.join(" ") +
+						'" style="' +
+						levelStyle +
+						'" data-ct-id="' +
+						uid +
+						'" data-ct-index="' +
+						idx +
+						'"><span class="vp-file-tree-diff-indicator"></span><span class="vp-file-tree-arrow-spacer"></span><span class="vp-file-tree-icon">' +
+						ftGetFileIconHtml(n.name) +
+						'</span><span class="vp-file-tree-name file">' +
+						escapeHtml(n.name) +
+						"</span></p></div>"
+					);
+				}
+				const isExpanded = n.expanded;
+				const hasChildren = n.children.length > 0;
+				const levelStyle = `--file-tree-level: -${level};`;
+				// Folder icons from vscode-icons
+				const infoClasses = ["vp-file-tree-info", "folder"];
+				if (isExpanded) infoClasses.push("expanded");
+				const infoKids =
+					'<span class="vp-file-tree-diff-indicator"></span>' +
+					(hasChildren
+						? '<span class="vp-file-tree-arrow">' +
+							ftGetChevronHtml() +
+							"</span>"
+						: '<span class="vp-file-tree-arrow-spacer"></span>') +
+					'<span class="vp-file-tree-icon">' +
+					ftGetFolderIconHtml(n.name, isExpanded) +
+					'</span><span class="vp-file-tree-name folder">' +
+					escapeHtml(n.name) +
+					"</span>";
+				if (!hasChildren)
+					return (
+						'<div class="vp-file-tree-node"><p class="' +
+						infoClasses.join(" ") +
+						'" style="' +
+						levelStyle +
+						'">' +
+						infoKids +
+						"</p></div>"
+					);
+				const childHtml = n.children
+					.map((c) => renderTree(c, level + 1))
+					.join("");
+				return (
+					'<div class="vp-file-tree-node"><details' +
+					(isExpanded ? " open" : "") +
+					'><summary><p class="' +
+					infoClasses.join(" ") +
+					'" style="' +
+					levelStyle +
+					'">' +
+					infoKids +
+					'</p></summary><div class="vp-file-tree-group" style="--file-tree-level: -' +
+					(level + 1) +
+					';">' +
+					childHtml +
+					"</div></details></div>"
+				);
+			}
+			const sidebarHtml = treeRoot.children
+				.map((c) => renderTree(c, 0))
+				.join("");
+			const panelChildren = [];
+			for (let pi = 0; pi < files.length; pi++) {
+				const f = files[pi];
+				const isActive = pi === activeIndex;
+				panelChildren.push(
+					h(
+						"div",
+						{
+							class:
+								"md-code-tree-panel" +
+								(isActive ? " md-code-tree-panel-active" : ""),
+							id: `${uid}-panel-${pi}`,
+						},
+						[f.codeNode],
+					),
+				);
+			}
+			const codeTreeDiv = h(
+				"div",
+				{
+					class: "md-directive md-directive-code-tree",
+					id: uid,
+					style: treeHeight ? `--code-tree-height:${treeHeight}` : "",
+				},
+				[
+					{
+						type: "html",
+						value:
+							(treeTitle
+								? `<div class="md-code-tree-title">${escapeHtml(treeTitle)}</div>`
+								: "") +
+							'<div class="md-code-tree-body"><div class="md-code-tree-sidebar vp-file-tree">' +
+							sidebarHtml +
+							"</div>" +
+							'<div class="md-code-tree-panels">',
+					},
+					...panelChildren,
+					{ type: "html", value: "</div></div></div>" },
+				],
+			);
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [codeTreeDiv];
+			break;
+		}
+
+		case "flex": {
+			const gap = attrs.gap || "1rem";
+			const column = attrs.column === "true" || attrs.column === "" || false;
+			const justify = attrs.justify || attrs.main || "";
+			const align = attrs.align || attrs.cross || "";
+			const style = `--flex-gap:${gap};`;
+			const cssClasses = ["md-directive", "md-directive-flex"];
+			if (column) cssClasses.push("md-flex-column");
+			if (justify) cssClasses.push(`md-flex-justify-${justify}`);
+			if (align) cssClasses.push(`md-flex-align-${align}`);
+			node.data = {
+				hName: "div",
+				hProperties: { class: cssClasses.join(" "), style },
+			};
+			break;
+		}
+
+		case "chat": {
+			const chatTitle = attrs.title || "";
+			const messages = [];
+			let currentUser = null;
+			const chatLines = [];
+			for (const child of node.children) {
+				if (child.type === "paragraph") {
+					const text = child.children.map((c) => c.value || "").join("");
+					chatLines.push(text);
+				}
+			}
+			for (const line of chatLines) {
+				const trimmed = line.trim();
+				if (!trimmed) continue;
+				const chatBracketMatch = trimmed.match(/^\[(.+?)\]\s*(.*)/);
+				if (chatBracketMatch) {
+					const senderName = chatBracketMatch[1];
+					currentUser =
+						senderName === "自己" || senderName === "self"
+							? "self"
+							: senderName;
+					const chatAfterBracket = chatBracketMatch[2].trim();
+					if (chatAfterBracket && currentUser) {
+						messages.push({
+							type: "msg",
+							sender: currentUser,
+							text: chatAfterBracket,
+						});
+					}
+					continue;
+				}
+				if (currentUser) {
+					messages.push({ type: "msg", sender: currentUser, text: trimmed });
+				}
+			}
+			const chatHtml =
+				'<div class="md-directive md-directive-chat">' +
+				(chatTitle
+					? `<div class="md-chat-title">${escapeHtml(chatTitle)}</div>`
+					: "") +
+				messages
+					.map((m) => {
+						const isSelf = m.sender === "self" || m.sender === "自己";
+						return (
+							'<div class="md-chat-msg' +
+							(isSelf ? " md-chat-msg-self" : " md-chat-msg-other") +
+							'">' +
+							(!isSelf
+								? '<div class="md-chat-sender">' +
+									escapeHtml(m.sender) +
+									"</div>"
+								: "") +
+							'<div class="md-chat-bubble">' +
+							escapeHtml(m.text) +
+							"</div></div>"
+						);
+					})
+					.join("") +
+				"</div>";
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [{ type: "html", value: chatHtml }];
+			break;
+		}
+
+		case "npm-to": {
+			const tabList = (attrs.tabs || "npm,pnpm,yarn,bun")
+				.split(",")
+				.map((s) => s.trim());
+			let npmCode = "";
+			let codeLang = "bash";
+			visit({ type: "root", children: node.children }, "code", (codeNode) => {
+				npmCode = codeNode.value || "";
+				if (codeNode.lang) codeLang = codeNode.lang;
+			});
+			if (!npmCode) {
+				visit({ type: "root", children: node.children }, "text", (t) => {
+					npmCode += t.value;
+				});
+			}
+			if (!npmCode && attrs.package) {
+				npmCode = `npm install ${attrs.package}`;
+				codeLang = "bash";
+			}
+			const converted = tabList.map((pm) => ({
+				pm,
+				code: convertNpmCommands(npmCode, pm),
+			}));
+			const uid = `npm-${Math.random().toString(36).slice(2, 7)}`;
+			const navHtml = converted
+				.map(
+					(c, i) =>
+						'<button type="button" class="md-tab-btn' +
+						(i === 0 ? " md-tab-active" : "") +
+						'" data-tabs-id="' +
+						uid +
+						'" data-tab-index="' +
+						i +
+						'" role="tab" aria-selected="' +
+						(i === 0 ? "true" : "false") +
+						'">' +
+						c.pm +
+						"</button>",
+				)
+				.join("");
+			// Create code AST nodes so expressive-code can process them
+			// (adds syntax highlighting, language badge, copy button)
+			const paneChildren = converted.map((c, i) => {
+				const isActive = i === 0;
+				const codeNode = {
+					type: "code",
+					lang: codeLang,
+					meta: "",
+					value: c.code,
+				};
+				return h(
+					"div",
+					{
+						class: `md-tab-pane${isActive ? " md-tab-visible" : ""}`,
+						id: `${uid}-pane-${i}`,
+						role: "tabpanel",
+					},
+					[codeNode],
+				);
+			});
+			const npmToDiv = h(
+				"div",
+				{
+					class: "md-directive md-directive-tabs md-directive-npm-to",
+					id: uid,
+				},
+				[
+					{
+						type: "html",
+						value: `<div class="md-tabs-nav" role="tablist">${navHtml}</div>`,
+					},
+					...paneChildren,
+				],
+			);
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [npmToDiv];
+			break;
+		}
+
+		case "left":
+		case "center":
+		case "right":
+		case "justify": {
+			const alignClass = `md-directive-align-${node.name}`;
+			node.data = {
+				hName: "div",
+				hProperties: { class: `md-directive ${alignClass}` },
+			};
 			break;
 		}
 
@@ -1349,7 +2475,7 @@ function processBlockDirective(node, options = {}) {
 						gImages
 							.map(
 								(img) =>
-									'<div class="md-gallery-item"><img src="' +
+									'<div class="md-gallery-cell"><img src="' +
 									img.src +
 									'" alt="' +
 									escapeHtml(img.alt) +
@@ -1367,18 +2493,20 @@ function processBlockDirective(node, options = {}) {
 			const aCols = attrs.cols || "80";
 			const aRows = attrs.rows || "24";
 			if (aSrc) {
-				node.data = { hName: "div", hProperties: {} };
+				const aUid = `asciinema-${Math.random().toString(36).slice(2, 7)}`;
 				node.children = [
 					{
 						type: "html",
 						value:
-							'<div class="md-directive md-directive-asciinema"><asciinema-player src="' +
+							'<div class="md-directive md-directive-asciinema"><div id="' +
+							aUid +
+							'" class="md-asciinema-container" data-src="' +
 							aSrc +
-							'" cols="' +
+							'" data-cols="' +
 							aCols +
-							'" rows="' +
+							'" data-rows="' +
 							aRows +
-							'" preload="1"></asciinema-player></div>',
+							'" data-preload="1"></div></div>',
 					},
 				];
 			}
@@ -1422,223 +2550,85 @@ function processBlockDirective(node, options = {}) {
 // ---------------------------------------------------------------------------
 // Card directive processors
 // ---------------------------------------------------------------------------
-function processCardDirective(node, _options = {}) {
+function processCardDirective(node) {
+	const attrs = node.attributes || {};
 	switch (node.name) {
-		case "link-card": {
-			const lcHref = attrs.href || attrs.url || "";
-			const lcTitle = attrs.title || "";
-			const lcDesc = attrs.desc || attrs.description || "";
-			const lcImage = attrs.image || attrs.cover || "";
-			const lcIcon = attrs.icon || "";
-			if (lcHref) {
-				const lcImageHtml = lcImage
-					? '<div class="md-link-card-image"><img src="' +
-						lcImage +
-						'" alt="" loading="lazy" /></div>'
-					: "";
-				const lcIconHtml = lcIcon
-					? '<img class="md-link-card-icon" src="' +
-						lcIcon +
-						'" alt="" loading="lazy" />'
-					: "";
-				node.data = { hName: "div", hProperties: {} };
-				node.children = [
-					{
-						type: "html",
-						value:
-							'<a class="md-directive md-directive-link-card" href="' +
-							lcHref +
-							'" target="_blank" rel="external nofollow noopener noreferrer">' +
-							lcImageHtml +
-							'<div class="md-link-card-body">' +
-							lcIconHtml +
-							'<div class="md-link-card-info"><div class="md-link-card-title">' +
-							(lcTitle || lcHref) +
-							"</div>" +
-							(lcDesc ? `<div class="md-link-card-desc">${lcDesc}</div>` : "") +
-							"</div></div></a>",
-					},
-				];
-			}
-			break;
-		}
-
 		case "card": {
 			const cardTitle = attrs.title || "";
 			const cardIcon = attrs.icon || "";
 			const cardHref = attrs.href || "";
 			const cardColor = resolveColor(attrs.color || "accent");
+			const cardImage = attrs.image || attrs.cover || "";
+			const cardDesc = attrs.desc || attrs.description || "";
 			const cardIconHtml = cardIcon
 				? getIconSvg(cardIcon, 20) || `<span>${cardIcon}</span>`
 				: "";
-			const cardWrapperStart = cardHref
-				? '<a class="md-directive md-directive-card" href="' +
-					cardHref +
+			// Link-card style when image is provided
+			if (cardImage && cardHref) {
+				const linkCardHtml =
+					'<a class="md-directive md-directive-card md-card-has-image" href="' +
+					escapeHtml(cardHref) +
 					'" target="_blank" rel="external nofollow noopener noreferrer" style="--card-color:' +
 					cardColor +
-					'">'
-				: '<div class="md-directive md-directive-card" style="--card-color:' +
-					cardColor +
-					'">';
-			const cardWrapperEnd = cardHref ? "</a>" : "</div>";
-			node.data = { hName: "div", hProperties: {} };
-			node.children = [
-				{
-					type: "html",
-					value:
-						cardWrapperStart +
+					'">' +
+					'<div class="md-card-cover"><img src="' +
+					escapeHtml(cardImage) +
+					'" alt="" loading="lazy" /></div>' +
+					'<div class="md-card-content">' +
+					(cardTitle
+						? `<div class="md-card-title">${escapeHtml(cardTitle)}</div>`
+						: "") +
+					(cardDesc
+						? `<div class="md-card-desc">${escapeHtml(cardDesc)}</div>`
+						: "") +
+					"</div></a>";
+				node.data = { hName: "div", hProperties: {} };
+				node.children = [{ type: "html", value: linkCardHtml }];
+				break;
+			}
+			const cardHeaderHtml =
+				cardIconHtml || cardTitle
+					? '<div class="md-card-header">' +
 						(cardIconHtml
 							? `<div class="md-card-icon">${cardIconHtml}</div>`
 							: "") +
 						(cardTitle ? `<div class="md-card-title">${cardTitle}</div>` : "") +
-						'<div class="md-card-body">',
-				},
-			]
-				.concat(node.children)
-				.concat([{ type: "html", value: `</div>${cardWrapperEnd}` }]);
+						"</div>"
+					: "";
+			// Standard card layout — serialize all content into a single HTML block
+			// to avoid display:contents breaking the card border/padding
+			const cardTag = cardHref ? "a" : "div";
+			const cardHrefAttr = cardHref
+				? ' href="' +
+					escapeHtml(cardHref) +
+					'" target="_blank" rel="external nofollow noopener noreferrer"'
+				: "";
+			const cardBodyHtml = serializeToHtml(node.children);
+			const cardHtml =
+				"<" +
+				cardTag +
+				' class="md-directive md-directive-card" style="--card-color:' +
+				cardColor +
+				'"' +
+				cardHrefAttr +
+				">" +
+				cardHeaderHtml +
+				'<div class="md-card-body">' +
+				cardBodyHtml +
+				"</div>" +
+				"</" +
+				cardTag +
+				">";
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [{ type: "html", value: cardHtml }];
 			break;
 		}
 
-		case "panel": {
-			const segments = [];
-			let segLeft = "";
-			let segRight = "";
-			let segContent = [];
-			for (let si = 0; si < node.children.length; si++) {
-				const schild = node.children[si];
-				let smatch = null;
-				if (schild.type === "html" && schild.value) {
-					smatch = schild.value.match(/<!--\s*label:\s*(.*?)\s*-->/);
-				}
-				if (
-					!smatch &&
-					schild.type === "paragraph" &&
-					schild.children &&
-					schild.children.length > 0
-				) {
-					const sfirst = schild.children[0];
-					if (sfirst.type === "html" && sfirst.value) {
-						smatch = sfirst.value.match(/<!--\s*label:\s*(.*?)\s*-->/);
-						if (smatch && schild.children.length === 1) {
-							continue;
-						}
-					}
-				}
-				if (smatch) {
-					if (segContent.length > 0) {
-						segments.push({
-							left: segLeft,
-							right: segRight,
-							children: segContent,
-						});
-					}
-					const sparts = smatch[1].split("|").map((s) => s.trim());
-					segLeft = sparts[0] || "";
-					segRight = sparts[1] || "";
-					segContent = [];
-					continue;
-				}
-				if (schild.type === "code") {
-					const smeta = schild.meta || "";
-					const stMatch = smeta.match(/title=["']([^"']+)["']/);
-					const srMatch = smeta.match(/right=["']([^"']+)["']/);
-					const sLeft = stMatch ? stMatch[1] : schild.lang || "";
-					const sRight = srMatch ? srMatch[1] : "";
-					if (segContent.length > 0) {
-						segments.push({
-							left: segLeft,
-							right: segRight,
-							children: segContent,
-						});
-						segContent = [];
-						segLeft = "";
-						segRight = "";
-					}
-					segments.push({ left: sLeft, right: sRight, children: [schild] });
-					continue;
-				}
-				segContent.push(schild);
-			}
-			if (segContent.length > 0) {
-				segments.push({ left: segLeft, right: segRight, children: segContent });
-			}
-			const panelUid = `panel-${Math.random().toString(36).slice(2, 7)}`;
-			const panelCopyIcon = getIconSvg("lucide:copy", 14);
-			const panelChildren = [];
-			panelChildren.push({
-				type: "html",
-				value: '<div class="md-panel-body">',
-			});
-			for (let segI = 0; segI < segments.length; segI++) {
-				const seg = segments[segI];
-				const segUid = `${panelUid}-seg-${segI}`;
-				let segCopyText = "";
-				for (let sci = 0; sci < seg.children.length; sci++) {
-					if (seg.children[sci].type === "code") {
-						segCopyText = seg.children[sci].value;
-					}
-				}
-				const safeSegCopy = segCopyText
-					.replace(/&/g, "&amp;")
-					.replace(/</g, "&lt;")
-					.replace(/>/g, "&gt;");
-				const segLeftLabel = seg.left
-					? `<span class="md-segment-label-left">${seg.left}</span>`
-					: "";
-				const segRightHtml = seg.right
-					? `<span class="md-segment-right">${seg.right}</span>`
-					: "";
-				const segCopyHtml = segCopyText
-					? '<button class="md-copy-btn md-segment-copy" data-copy-target="' +
-						segUid +
-						'" aria-label="Copy">' +
-						panelCopyIcon +
-						"</button>"
-					: "";
-				const segMetaHtml =
-					segRightHtml || segCopyHtml
-						? '<div class="md-segment-meta">' +
-							segRightHtml +
-							segCopyHtml +
-							"</div>"
-						: "";
-				const segHeaderHtml =
-					segLeftLabel || segMetaHtml
-						? '<div class="md-segment-header">' +
-							segLeftLabel +
-							segMetaHtml +
-							"</div>"
-						: "";
-				panelChildren.push({
-					type: "html",
-					value: `<div class="md-panel-segment">${segHeaderHtml}`,
-				});
-				panelChildren.push.apply(panelChildren, seg.children);
-				panelChildren.push({ type: "html", value: "</div>" });
-				if (segCopyText) {
-					panelChildren.push({
-						type: "html",
-						value:
-							'<textarea id="' +
-							segUid +
-							'" class="md-copy-source" readonly style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">' +
-							safeSegCopy +
-							"</textarea>",
-					});
-				}
-				if (segI < segments.length - 1) {
-					panelChildren.push({
-						type: "html",
-						value: '<div class="md-panel-divider"></div>',
-					});
-				}
-			}
-			panelChildren.push({ type: "html", value: "</div>" });
+		case "card-grid": {
 			node.data = {
 				hName: "div",
-				hProperties: { class: "md-directive md-directive-panel" },
+				hProperties: { class: "md-directive md-directive-card-grid" },
 			};
-			node.children = panelChildren;
 			break;
 		}
 
@@ -1703,7 +2693,7 @@ function processMediaDirective(node) {
 					vUid +
 					'" src="' +
 					src +
-					'" preload="metadata" playsinline disablePictureInPicture ' +
+					'" preload="metadata" playsinline' +
 					(autoplay ? "autoplay muted " : "") +
 					'data-pip-video="' +
 					vUid +
@@ -1730,7 +2720,7 @@ function processMediaDirective(node) {
 					vUid +
 					'" src="' +
 					src +
-					'" controls preload="metadata" playsinline disablePictureInPicture ' +
+					'" controls preload="metadata" playsinline' +
 					(autoplay ? "autoplay muted " : "") +
 					'data-pip-video="' +
 					vUid +
@@ -1769,7 +2759,7 @@ function processMediaDirective(node) {
 						bvid +
 						"&autoplay=" +
 						(autoplay ? 1 : 0) +
-						'&page=1&high_quality=1&as_wide=1" frameborder="0" allowfullscreen scrolling="no" allow="fullscreen" title="Bilibili Video"></iframe></div>',
+						'&page=1&high_quality=1&as_wide=1" scrolling="no" allow="fullscreen" title="Bilibili Video"></iframe></div>',
 				},
 			];
 		} else if (youtube) {
@@ -1790,7 +2780,7 @@ function processMediaDirective(node) {
 					value:
 						'<div class="md-video-wrap"><iframe src="' +
 						ytSrc +
-						'" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube Video"></iframe></div>',
+						'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube Video"></iframe></div>',
 				},
 			];
 		} else {
@@ -1840,18 +2830,20 @@ function processLeafDirective(node) {
 			const alCols = attrs.cols || "80";
 			const alRows = attrs.rows || "24";
 			if (alSrc) {
-				node.data = { hName: "div", hProperties: {} };
+				const alUid = `asciinema-${Math.random().toString(36).slice(2, 7)}`;
 				node.children = [
 					{
 						type: "html",
 						value:
-							'<div class="md-directive md-directive-asciinema"><asciinema-player src="' +
+							'<div class="md-directive md-directive-asciinema"><div id="' +
+							alUid +
+							'" class="md-asciinema-container" data-src="' +
 							alSrc +
-							'" cols="' +
+							'" data-cols="' +
 							alCols +
-							'" rows="' +
+							'" data-rows="' +
 							alRows +
-							'" preload="1"></asciinema-player></div>',
+							'" data-preload="1"></div></div>',
 					},
 				];
 			}
@@ -1891,12 +2883,87 @@ function processLeafDirective(node) {
 }
 
 // ---------------------------------------------------------------------------
-// Main plugin entry
+// NPM command converter (for :::npm-to directive)
 // ---------------------------------------------------------------------------
-export default function remarkContentDirectives(options = {}) {
-	const links = options.links;
-	const screenshotService = options.screenshotService;
+function convertNpmCommands(code, pm) {
+	if (pm === "npm") return code;
+	return code
+		.replace(/npm install -D\s/g, () =>
+			pm === "yarn"
+				? "yarn add -D "
+				: pm === "bun"
+					? "bun add -D "
+					: "pnpm add -D ",
+		)
+		.replace(/npm install --save-dev\s/g, () =>
+			pm === "yarn"
+				? "yarn add -D "
+				: pm === "bun"
+					? "bun add -D "
+					: "pnpm add -D ",
+		)
+		.replace(/npm install -g\s/g, () =>
+			pm === "yarn"
+				? "yarn global add "
+				: pm === "bun"
+					? "bun add -g "
+					: "pnpm add -g ",
+		)
+		.replace(/npm install\s/g, () =>
+			pm === "yarn" ? "yarn add " : pm === "bun" ? "bun add " : "pnpm add ",
+		)
+		.replace(/npm run\s/g, () =>
+			pm === "yarn" ? "yarn run " : pm === "bun" ? "bun run " : "pnpm run ",
+		)
+		.replace(/npm init\s/g, () =>
+			pm === "yarn" ? "yarn init " : pm === "bun" ? "bun init " : "pnpm init ",
+		)
+		.replace(/npm create\s/g, () =>
+			pm === "yarn"
+				? "yarn create "
+				: pm === "bun"
+					? "bun create "
+					: "pnpm create ",
+		)
+		.replace(/npx\s/g, () =>
+			pm === "yarn" ? "yarn dlx " : pm === "bun" ? "bunx " : "pnpm dlx ",
+		)
+		.replace(/npm uninstall\s/g, () =>
+			pm === "yarn"
+				? "yarn remove "
+				: pm === "bun"
+					? "bun remove "
+					: "pnpm remove ",
+		)
+		.replace(/npm ci\b/g, () =>
+			pm === "yarn"
+				? "yarn install --immutable"
+				: pm === "bun"
+					? "bun install --frozen-lockfile"
+					: "pnpm install --frozen-lockfile",
+		);
+}
+
+export default function remarkContentDirectives(_options = {}) {
 	return (tree) => {
+		// Scoped counter for hashtag color cycling — avoids state leaking
+		// between multiple invocations of this plugin.
+		const hashtagCounter = { value: 0 };
+
+		// Add parent references to all nodes for ancestor walking
+		visit(tree, (node, _i, parent) => {
+			if (parent) node._parent = parent;
+		});
+
+		visit(tree, "textDirective", (node, _index, parent) => {
+			_processInlineDirective(node, parent, _index, hashtagCounter);
+		});
+
+		// Clean up parent references after processing
+		visit(tree, (node) => {
+			delete node._parent;
+		});
+
 		visit(tree, "leafDirective", (node) => {
 			processLeafDirective(node);
 		});
@@ -1920,6 +2987,8 @@ export default function remarkContentDirectives(options = {}) {
 				"danger",
 				"folding",
 				"collapse",
+				"details",
+				"code-group",
 				"folders",
 				"timeline",
 				"tabs",
@@ -1933,20 +3002,25 @@ export default function remarkContentDirectives(options = {}) {
 				"gallery",
 				"asciinema",
 				"colors",
+				"left",
+				"center",
+				"right",
+				"justify",
+				"npm-to",
+				"chat",
+				"field",
+				"field-group",
+				"code-tree",
+				"flex",
+				"steps",
 			];
-			const cardNames = ["panel", "link-card", "card"];
+			const cardNames = ["card", "card-grid"];
 			const mediaNames = ["video"];
 
 			if (blockNames.indexOf(name) !== -1) {
-				processBlockDirective(node, {
-					links: links,
-					screenshotService: screenshotService,
-				});
+				processBlockDirective(node);
 			} else if (cardNames.indexOf(name) !== -1) {
-				processCardDirective(node, {
-					links: links,
-					screenshotService: screenshotService,
-				});
+				processCardDirective(node);
 			} else if (mediaNames.indexOf(name) !== -1) {
 				processMediaDirective(node);
 			}
@@ -1954,4 +3028,4 @@ export default function remarkContentDirectives(options = {}) {
 	};
 }
 
-export { remarkContentDirectives };
+export { CONTENT_DIRECTIVE_NAMES, remarkContentDirectives };

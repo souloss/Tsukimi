@@ -1,13 +1,13 @@
 ---
-title: "LLM Enhanced Quantitative Trading"
+title: "LLM 增强量化交易"
 published: 2026-03-01
-description: "An interactive exploration of how large language models can enhance quantitative trading strategies — from factor discovery to portfolio optimization."
+description: "交互式探索大语言模型如何增强量化交易策略——从因子发现到投资组合优化。"
 tags: [AI, Quantitative Trading, LLM, Finance]
 category: Technology
 pinned: false
 draft: false
 copyright: "ARR"
-ogDescription: "Exploring how LLMs enhance quantitative trading: factor mining, signal generation, and portfolio construction with AI."
+ogDescription: "探索 LLM 如何增强量化交易：因子挖掘、信号生成和 AI 投资组合构建。"
 repost:
   originalAuthor: souloss
   originalUrl: https://github.com/souloss/Tsukimi
@@ -16,10 +16,10 @@ repost:
   redirect: /content/llm-quant/index.html
 ---
 
-This is an interactive article about LLM-enhanced quantitative trading.
+这是一篇关于 LLM 增强量化交易的交互式文章。
 
-The interactive content is available at the link below:
+交互式内容可通过以下链接访问：
 
 - [LLM Enhanced Quant](/content/llm-quant/index.html)
 
-> **Note:** The interactive content opens in a standalone page for the best browsing experience.
+> **注意：** 交互式内容将在独立页面中打开，以获得最佳浏览体验。

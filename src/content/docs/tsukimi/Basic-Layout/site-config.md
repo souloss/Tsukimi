@@ -21,8 +21,8 @@ copyright:
 ```typescript title="src/config/"
 const SITE_LANG = "zh_CN"; // 语言代码
 export const siteConfig: SiteConfig = {
-	title: "Souloss",
-	subtitle: "写代码，读源码，跟 AI 较劲",
+	title: "Tsukimi",
+	subtitle: "一直很担心会什么都没有做就这样长大",
 	siteURL: "https://tsukimi.souloss.cn/", // 站点URL，以斜杠结尾
 	siteStartDate: "2020-01-01", // 站点开始运行日期，用于站点统计组件计算运行天数
 	lang: SITE_LANG,
@@ -199,44 +199,46 @@ export const siteConfig: SiteConfig = {
 - `talkingApiUrl`：说说/动态页面 Memos API 地址，用于客户端动态获取数据（可选）
 - `talkingShowComment`：说说/动态页面是否显示评论区（可选）
 
-## 横幅与壁纸配置
+## 横幅配置（siteConfig.banner）
 
-### 壁纸模式配置
-
-```typescript
-	wallpaperMode: {
-		defaultMode: "banner", // 默认壁纸模式："banner", "fullscreen", "none"
-		showModeSwitchOnMobile: "desktop", // 切换按钮显示设置："off", "mobile", "desktop", "both"
-	},
-```
-- `wallpaperMode`：壁纸模式配置
-  - `defaultMode`：默认壁纸模式，`"banner"` 顶部横幅，`"fullscreen"` 全屏壁纸，`"none"` 无壁纸
-  - `showModeSwitchOnMobile`：整体布局方案切换按钮显示设置，`"off"` 不显示，`"mobile"` 仅在移动端显示，`"desktop"` 仅在桌面端显示，`"both"` 在所有设备上显示
-
-### 横幅配置
+横幅的**行为和文案**配置位于 `siteConfig.banner`，而**图片资源**配置位于 `backgroundWallpaperConfig`（见下节）。
 
 ```typescript
 	banner: {
-		src: {
-			desktop: ["/assets/desktop-banner/1.png", ...],
-			mobile: ["/assets/mobile-banner/1.png", ...],
-		}, // 支持单个图片、图片数组或分别设置桌面端和移动端图片
-		position: "center", // 壁纸位置："top", "center", "bottom"
 		carousel: {
 			enable: true, // 是否启用轮播
 			interval: 3, // 轮播间隔时间（秒）
+			switchable: true, // 是否允许用户通过控制面板切换轮播
 		},
 		waves: {
 			enable: true, // 是否启用水波纹效果
+			switchable: true, // 是否允许用户通过控制面板切换水波纹
 			performanceMode: false, // 性能模式：减少动画复杂度
 			mobileDisable: false, // 移动端禁用
 		},
-		imageApi: {
-			enable: false, // 是否启用图片API
-			url: "", // API地址
+		gradient: {
+			enable: true, // 是否启用渐变遮罩
+			switchable: true, // 是否允许用户通过控制面板切换渐变
+			colors: [
+				{ color: "var(--color-bg)", stop: 0.2 },
+				{ color: "transparent", stop: 0.7 },
+			], // 渐变遮罩颜色配置（从下往上）
 		},
-		homeText: {
-			enable: true, // 是否在首页显示自定义文字
+		bannerHomeText: {
+			enable: true, // 是否在 banner 模式下显示自定义文字
+			switchable: true, // 是否允许用户切换 banner 文案显示
+			title: "我的小窝", // 主标题
+			subtitle: ["...", "..."], // 副标题，支持单个字符串或字符串数组
+			typewriter: {
+				enable: true, // 是否启用打字机效果
+				speed: 100, // 打字速度（毫秒）
+				deleteSpeed: 50, // 删除速度（毫秒）
+				pauseTime: 2000, // 完整显示后的暂停时间（毫秒）
+			},
+		},
+		wallpaperHomeText: {
+			enable: true, // 是否在壁纸模式下显示自定义文字
+			switchable: true, // 是否允许用户切换壁纸文案显示
 			title: "我的小窝", // 主标题
 			subtitle: ["...", "..."], // 副标题，支持单个字符串或字符串数组
 			typewriter: {
@@ -252,38 +254,205 @@ export const siteConfig: SiteConfig = {
 			url: "", // 来源链接（可选）
 		},
 		navbar: {
-			transparentMode: "semifull", // 导航栏透明模式："semi", "full", "semifull"
+			transparentMode: "none", // 导航栏透明模式："none", "semi", "full", "semifull"
+			enableBlur: true, // 是否开启毛玻璃模糊效果
+			blur: 10, // 毛玻璃模糊度
 		},
 	},
 ```
-- `banner`：横幅配置
-  - `src`：支持单个图片、图片数组或分别设置桌面端和移动端图片
-  - `position`：壁纸位置：`"top"`, `"center"`, `"bottom"`
+- `carousel`：轮播配置
+  - `enable`：是否启用轮播
+  - `interval`：轮播间隔时间（秒）
+  - `switchable`：是否允许用户通过控制面板切换轮播（可选）
+- `waves`：水波纹效果配置
+  - `enable`：是否启用水波纹效果
+  - `switchable`：是否允许用户通过控制面板切换水波纹（可选）
+  - `performanceMode`：性能模式：减少动画复杂度
+  - `mobileDisable`：移动端禁用
+- `gradient`：渐变遮罩配置
+  - `enable`：是否启用渐变遮罩
+  - `switchable`：是否允许用户通过控制面板切换渐变（可选）
+  - `colors`：渐变遮罩颜色配置（从下往上），每项包含 `color`（CSS 颜色值）和 `stop`（0-1 的位置值）
+- `bannerHomeText`：Banner 模式首页文字配置
+  - `enable`：是否在 banner 模式下显示自定义文字
+  - `switchable`：是否允许用户切换 banner 文案显示（可选）
+  - `title`：主标题
+  - `subtitle`：副标题，支持单个字符串或字符串数组
+  - `typewriter`：打字机效果配置
+    - `enable`：是否启用打字机效果
+    - `speed`：打字速度（毫秒）
+    - `deleteSpeed`：删除速度（毫秒）
+    - `pauseTime`：完整显示后的暂停时间（毫秒）
+- `wallpaperHomeText`：壁纸模式首页文字配置（可选，未设置时 fallback 到 `bannerHomeText`）
+  - `enable`：是否在壁纸模式下显示自定义文字
+  - `switchable`：是否允许用户切换壁纸文案显示（可选）
+  - `title`：主标题
+  - `subtitle`：副标题，支持单个字符串或字符串数组
+  - `typewriter`：打字机效果配置（同 `bannerHomeText.typewriter`）
+- `credit`：壁纸来源标识配置
+  - `enable`：是否显示壁纸来源标识
+  - `text`：来源文本
+  - `url`：来源链接
+- `navbar`：横幅区域导航栏配置
+  - `transparentMode`：导航栏透明模式：`"none"` 不透明, `"semi"`, `"full"`, `"semifull"`
+  - `enableBlur`：是否开启毛玻璃模糊效果（可选）
+  - `blur`：毛玻璃模糊度（可选）
+
+## 背景壁纸配置（backgroundWallpaperConfig）
+
+背景壁纸配置位于 `src/config/backgroundWallpaper.ts` 中的 `backgroundWallpaperConfig` 对象，控制壁纸模式、图片资源和各模式的详细设置。
+
+### 壁纸模式控制
+
+```typescript title="src/config/backgroundWallpaper.ts"
+	mode: {
+		defaultMode: "banner", // 默认壁纸模式："banner", "fullscreen", "overlay", "none"
+		switchable: true, // 是否允许用户通过导航栏切换壁纸模式
+		showModeSwitch: {
+			enable: true, // 是否显示切换按钮
+			visibility: "desktop", // 显示范围："off", "mobile", "desktop", "both"
+		},
+	},
+```
+- `mode`：壁纸模式控制
+  - `defaultMode`：默认壁纸模式，`"banner"` 顶部横幅，`"fullscreen"` 全屏壁纸，`"overlay"` 叠加层壁纸，`"none"` 无壁纸
+  - `switchable`：是否允许用户通过导航栏切换壁纸模式（可选，默认 true）
+  - `showModeSwitch`：切换按钮显示配置
+    - `enable`：是否显示切换按钮
+    - `visibility`：显示范围，`"off"` 不显示，`"mobile"` 仅移动端，`"desktop"` 仅桌面端，`"both"` 全部显示
+
+### Banner 模式图片资源
+
+```typescript
+	banner: {
+		src: {
+			desktop: ["/assets/desktop-banner/1.webp", ...],
+			mobile: ["/assets/mobile-banner/1.webp", ...],
+		}, // 支持单个图片、图片数组或分别设置桌面端和移动端图片
+		position: "center top", // 图片定位，支持 CSS object-position 值
+		imageApi: {
+			enable: false, // 是否启用图片API
+			url: "", // API地址，返回每行一个图片链接的文本
+		},
+	},
+```
+- `banner`：Banner 模式图片资源配置
+  - `src`：支持单个图片（字符串）、图片数组（字符串数组）或分别设置桌面端和移动端图片（`{ desktop, mobile }` 对象）
+  - `position`：图片定位，支持 CSS `object-position` 值，如 `"center"`, `"top"`, `"center top"`
+  - `imageApi`：图片 API 配置
+    - `enable`：是否启用图片 API
+    - `url`：API 地址，返回每行一个图片链接的文本
+
+### 全屏壁纸模式配置
+
+```typescript
+	fullscreen: {
+		src: {
+			desktop: ["/assets/desktop-banner/1.webp", ...],
+			mobile: ["/assets/mobile-banner/1.webp", ...],
+		},
+		position: "center top", // 壁纸位置
+		imageApi: {
+			enable: false,
+			url: "",
+		},
+		carousel: {
+			enable: true, // 是否启用轮播
+			interval: 5, // 轮播间隔时间（秒）
+		},
+		zIndex: -1, // 层级
+		opacity: 0.8, // 壁纸透明度，0-1
+		blur: 1, // 背景模糊度，单位 px
+		gradient: {
+			enable: true, // 是否启用渐变过渡
+			colors: [
+				{ color: "var(--color-bg)", stop: 0.3 },
+				{ color: "transparent", stop: 0.8 },
+			],
+		},
+		navbar: {
+			transparentMode: "semifull", // 导航栏透明模式
+			enableBlur: true, // 是否开启毛玻璃模糊效果
+			blur: 10, // 毛玻璃模糊度
+		},
+	},
+```
+- `fullscreen`：全屏壁纸模式配置（可选）
+  - `src`：图片资源（同 `banner.src` 格式）
+  - `position`：壁纸位置，支持 CSS `object-position` 值
+  - `imageApi`：图片 API 配置（同 `banner.imageApi`）
   - `carousel`：轮播配置
     - `enable`：是否启用轮播
     - `interval`：轮播间隔时间（秒）
-  - `waves`：水波纹效果配置
-    - `enable`：是否启用水波纹效果
-    - `performanceMode`：性能模式：减少动画复杂度
-    - `mobileDisable`：移动端禁用
-  - `imageApi`：图片API配置（PicFlow API）
-    - `enable`：是否启用图片API
-    - `url`：API地址，返回每行一个图片链接的文本
-  - `homeText`：首页文字配置
-    - `enable`：是否在首页显示自定义文字
-    - `title`：主标题
-    - `subtitle`：副标题，支持单个字符串或字符串数组
-    - `typewriter`：打字机效果配置
-      - `enable`：是否启用打字机效果
-      - `speed`：打字速度（毫秒）
-      - `deleteSpeed`：删除速度（毫秒）
-      - `pauseTime`：完整显示后的暂停时间（毫秒）
-  - `credit`：壁纸来源标识配置
-    - `enable`：是否显示壁纸来源标识
-    - `text`：来源文本
-    - `url`：来源链接
-  - `navbar`：导航栏配置
+  - `zIndex`：层级（可选）
+  - `opacity`：壁纸透明度，0-1 之间（可选）
+  - `blur`：背景模糊度，单位 px（可选）
+  - `gradient`：渐变过渡配置
+    - `enable`：是否启用渐变过渡
+    - `colors`：渐变遮罩颜色配置（同 `siteConfig.banner.gradient.colors` 格式）
+  - `navbar`：全屏模式导航栏配置（覆盖 `common.navbar`）
     - `transparentMode`：导航栏透明模式：`"semi"`, `"full"`, `"semifull"`
+    - `enableBlur`：是否开启毛玻璃模糊效果
+    - `blur`：毛玻璃模糊度
+
+### 叠加层壁纸模式配置
+
+```typescript
+	overlay: {
+		src: "/assets/desktop-banner/1.webp", // 单张图片路径
+		position: "bottom-right", // 壁纸位置："top-left", "top-right", "bottom-left", "bottom-right"
+		size: {
+			width: 300, // 宽度(px)
+			height: 400, // 高度(px)
+		},
+		opacity: 0.9, // 壁纸透明度，0-1
+		blur: 0, // 背景模糊度，单位 px
+		cardOpacity: 0.9, // 卡片背景透明度，0-1
+		borderRadius: "1rem", // 圆角
+		margin: "1rem", // 外边距
+		zIndex: 0, // 层级
+		shadow: true, // 是否显示阴影
+		switchable: {
+			opacity: true, // 是否允许用户调整壁纸透明度
+			blur: true, // 是否允许用户调整背景模糊度
+			cardOpacity: true, // 是否允许用户调整卡片透明度
+		},
+	},
+```
+- `overlay`：叠加层壁纸模式配置（可选，小图角落显示）
+  - `src`：图片路径（支持单个字符串、数组或 `{ desktop, mobile }` 对象）
+  - `position`：壁纸位置：`"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`
+  - `size`：壁纸尺寸
+    - `width`：宽度(px)
+    - `height`：高度(px)
+  - `opacity`：壁纸透明度，0-1 之间
+  - `blur`：背景模糊度，单位 px
+  - `cardOpacity`：卡片背景透明度，0-1 之间
+  - `borderRadius`：圆角
+  - `margin`：外边距
+  - `zIndex`：层级
+  - `shadow`：是否显示阴影
+  - `switchable`：用户可调整的选项（支持 `boolean` 或对象形式）
+    - `opacity`：是否允许用户调整壁纸透明度
+    - `blur`：是否允许用户调整背景模糊度
+    - `cardOpacity`：是否允许用户调整卡片透明度
+
+### 通用导航栏配置
+
+```typescript
+	common: {
+		navbar: {
+			transparentMode: "none", // 导航栏透明模式，默认不透明
+			enableBlur: true, // 是否开启毛玻璃模糊效果
+			blur: 10, // 毛玻璃模糊度
+		},
+	},
+```
+- `common`：通用配置，各壁纸模式可覆盖
+  - `navbar`：默认导航栏配置（各模式可单独覆盖）
+    - `transparentMode`：导航栏透明模式：`"none"`, `"semi"`, `"full"`, `"semifull"`
+    - `enableBlur`：是否开启毛玻璃模糊效果
+    - `blur`：毛玻璃模糊度
 
 ## 文章详情页配置
 
@@ -344,7 +513,6 @@ export const siteConfig: SiteConfig = {
 ```typescript
 	analytics: {
 		googleAnalyticsId: "", // Google Analytics ID
-		microsoftClarityId: "", // Microsoft Clarity ID
 		umamiAnalytics: {
 			websiteId: "", // Umami Website ID
 			scriptUrl: "", // Umami JS地址
@@ -370,7 +538,6 @@ export const siteConfig: SiteConfig = {
 ```
 - `analytics`：统计分析配置（可选）
   - `googleAnalyticsId`：Google Analytics ID
-  - `microsoftClarityId`：Microsoft Clarity ID
   - `umamiAnalytics`：Umami 分析配置
     - `websiteId`：Umami Website ID
     - `scriptUrl`：Umami JS地址，支持使用自建
@@ -471,7 +638,7 @@ export const siteConfig: SiteConfig = {
 - **commentConfig**：评论系统配置（支持 Twikoo、Waline、Giscus、Disqus、Artalk）
 - **musicPlayerConfig**：音乐播放器配置
 - **announcementConfig**：公告栏配置
-- **sakuraConfig**：樱花特效配置
+- **sakuraConfig**：樱花特效配置（已废弃，请使用 `effectsConfig.sakura`）
 - **effectsConfig**：特效统一配置（包含樱花等）
 - **fontConfig**：字体配置
 - **sponsorConfig**：赞助页面配置
@@ -479,11 +646,9 @@ export const siteConfig: SiteConfig = {
 - **expressiveCodeConfig**：代码块配置
 - **licenseConfig**：许可证配置
 - **permalinkConfig**：固定链接配置
-- **backgroundWallpaperConfig**：背景壁纸完整配置
-- **fullscreenWallpaperConfig**：全屏壁纸配置（旧版）
+- **backgroundWallpaperConfig**：背景壁纸完整配置（含模式控制、图片资源、全屏/叠加层配置）
 - **pioConfig**：看板娘配置
 - **shareConfig**：分享功能配置
-- **sponsorConfig**：赞赏功能配置
 - **relatedPostsConfig**：相关文章配置
 - **randomPostsConfig**：随机文章配置
 
