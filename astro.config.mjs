@@ -63,7 +63,8 @@ export default defineConfig({
 	experimental: {
 		queuedRendering: {
 			enabled: true,
-			poolSize: 100,
+			poolSize: 1000,
+			contentCache: true,
 		},
 	},
 

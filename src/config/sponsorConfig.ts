@@ -6,7 +6,7 @@ const defaults: SponsorConfig = {
 	// 页面标题
 	title: "支持与赞助",
 	// 页面描述
-	description: "如果这个项目对你有帮助，欢迎支持我继续创作",
+	description: "觉得有用的话，可以请杯咖啡 ☕",
 	// 赞助用途说明
 	usage: "你的支持将用于服务器维护、域名续费等开支，让项目能够持续运行下去。",
 	// 赞助方式列表
