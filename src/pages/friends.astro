@@ -55,14 +55,14 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
       {allTags.length > 0 && (
         <div class="flex flex-wrap gap-2 mb-6">
           <button
-            class="friend-tag active px-3 py-1.5 rounded-lg bg-[var(--primary)] text-white hover:bg-[var(--primary)] transition-colors duration-200 text-sm font-medium cursor-pointer"
+            class="friend-tag active"
             data-tag="all"
           >
             {i18n(I18nKey.tagAll) || "全部"}
           </button>
           {allTags.map((tag) => (
             <button
-              class="friend-tag px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors duration-200 text-sm font-medium cursor-pointer"
+              class="friend-tag"
               data-tag={tag}
             >
               {tag}
@@ -158,9 +158,32 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
     gap: 0.75rem;
   }
 
+  .friend-tag {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    background-color: var(--btn-plain-bg-hover);
+    color: var(--text-secondary);
+  }
+
+  .friend-tag:hover {
+    background-color: var(--btn-plain-bg-hover);
+    color: var(--text-secondary);
+    filter: brightness(0.95);
+  }
+
   .friend-tag.active {
     background-color: var(--primary);
     color: white;
+  }
+
+  .friend-tag.active:hover {
+    background-color: var(--primary);
+    color: white;
+    filter: brightness(1.1);
   }
 </style>
 
@@ -169,16 +192,12 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 		const tags = document.querySelectorAll(".friend-tag");
 		const cards = document.querySelectorAll<HTMLElement>('.friend-card');
 
+		if (tags.length === 0) return;
+
 		tags.forEach((tag) => {
 			tag.addEventListener("click", () => {
-				tags.forEach((t) => {
-					t.classList.remove("active");
-					t.classList.remove("bg-[var(--primary)]", "text-white");
-					t.classList.add("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-400");
-				});
+				tags.forEach((t) => t.classList.remove("active"));
 				tag.classList.add("active");
-				tag.classList.add("bg-[var(--primary)]", "text-white");
-				tag.classList.remove("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-400");
 
 				const selectedTag = tag.getAttribute("data-tag");
 
@@ -194,5 +213,9 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
 		});
 	}
 
-	document.addEventListener("astro:page-load", initFriendsPage);
+	// Direct page load (script executes after DOM is ready in Astro)
+	initFriendsPage();
+
+	// Swup navigation: re-init when content is replaced
+	document.addEventListener("swup:contentReplaced", initFriendsPage);
 </script>
