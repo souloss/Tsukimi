@@ -1,6 +1,7 @@
 // import { getCollection } from "astro:content";
 
 import { getImage } from "astro:assets";
+import { dirname } from "node:path";
 import type { RSSFeedItem } from "@astrojs/rss";
 import rss from "@astrojs/rss";
 import type { APIContext, ImageMetadata } from "astro";
@@ -62,8 +63,10 @@ export async function GET(context: APIContext) {
 					// Path relative to the post file directory
 					const prefixRemoved = src.slice(2);
 					// Check if this post is in a subdirectory (like bestimageapi/index.md)
-					const postPath = post.id; // This gives us the full path like "bestimageapi/index.md"
-					const postDir = postPath.includes("/") ? postPath.split("/")[0] : "";
+					const postFilePath = post.filePath ?? "";
+					const postDir = postFilePath
+						? dirname(postFilePath).replace(/^src\/content\/posts\/?/, "")
+						: "";
 
 					if (postDir) {
 						// For posts in subdirectories
@@ -78,8 +81,10 @@ export async function GET(context: APIContext) {
 					importPath = `/src/content/${cleaned}`;
 				} else {
 					// Handle direct filename (no ./ prefix) - assume it's in the same directory as the post
-					const postPath = post.id; // This gives us the full path like "bestimageapi/index.md"
-					const postDir = postPath.includes("/") ? postPath.split("/")[0] : "";
+					const postFilePath = post.filePath ?? "";
+					const postDir = postFilePath
+						? dirname(postFilePath).replace(/^src\/content\/posts\/?/, "")
+						: "";
 
 					if (postDir) {
 						// For posts in subdirectories
