@@ -16,9 +16,7 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkDirective from "remark-directive";
-import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
-
 import {
 	markmapConfig,
 	plantumlConfig,
@@ -47,6 +45,7 @@ import { remarkFixGithubAdmonitions } from "./src/plugins/remark-fix-github-admo
 import { remarkInclude } from "./src/plugins/remark-include.mjs";
 import { remarkMark } from "./src/plugins/remark-mark.js";
 import { remarkMarkmap } from "./src/plugins/remark-markmap.js";
+import { remarkMathConditional } from "./src/plugins/remark-math-conditional.mjs";
 import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { remarkPlantuml } from "./src/plugins/remark-plantuml.js";
 import { remarkPlumeCompat } from "./src/plugins/remark-plume-compat.js";
@@ -149,7 +148,7 @@ export default defineConfig({
 	],
 	markdown: {
 		remarkPlugins: [
-			remarkMath,
+			remarkMathConditional,
 			remarkContent,
 			remarkFixGithubAdmonitions,
 			remarkMark,
