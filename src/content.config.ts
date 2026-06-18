@@ -38,6 +38,15 @@ const postsCollection = defineCollection({
 		/* Slug - URL 路径中的简短文本标识，只覆盖文件名部分 */
 		slug: z.string().optional(),
 
+		/* Math rendering - conditional inline/display math parsing */
+		math: z
+			.object({
+				inline: z.boolean().optional().default(false),
+				display: z.boolean().optional().default(false),
+			})
+			.optional()
+			.default({ inline: false, display: false }),
+
 		/* Series fields - 专栏/系列 */
 		series: z.string().optional(),
 		seriesOrder: z.number().optional().default(0),
