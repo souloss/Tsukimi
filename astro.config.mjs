@@ -167,7 +167,7 @@ export default defineConfig({
 			remarkAbbr,
 		],
 		rehypePlugins: [
-			rehypeKatex,
+			[rehypeKatex, { strict: { unicodeTextInMathMode: false } }],
 			[
 				rehypeExternalLinks,
 				{
