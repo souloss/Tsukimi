@@ -1,3 +1,4 @@
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import svelte, { vitePreprocess } from "@astrojs/svelte";
@@ -147,74 +148,76 @@ export default defineConfig({
 		mdx(),
 	],
 	markdown: {
-		remarkPlugins: [
-			remarkMathConditional,
-			remarkContent,
-			remarkFixGithubAdmonitions,
-			remarkMark,
-			remarkInclude,
-			remarkPlumeCompat,
-			remarkCodeLangAliases,
-			remarkDirective,
-			remarkContentDirectives,
-			remarkSectionize,
-			parseDirectiveNode,
-			remarkFileTree,
-			remarkMermaid,
-			[remarkPlantuml, plantumlConfig],
-			[remarkMarkmap, markmapConfig],
-			remarkRelativeLinks,
-			remarkAbbr,
-		],
-		rehypePlugins: [
-			[rehypeKatex, { strict: { unicodeTextInMathMode: false } }],
-			[
-				rehypeExternalLinks,
-				{
-					target: "_blank",
-					rel: ["nofollow", "noopener", "noreferrer"],
-				},
+		processor: unified({
+			remarkPlugins: [
+				remarkMathConditional,
+				remarkContent,
+				remarkFixGithubAdmonitions,
+				remarkMark,
+				remarkInclude,
+				remarkPlumeCompat,
+				remarkCodeLangAliases,
+				remarkDirective,
+				remarkContentDirectives,
+				remarkSectionize,
+				parseDirectiveNode,
+				remarkFileTree,
+				remarkMermaid,
+				[remarkPlantuml, plantumlConfig],
+				[remarkMarkmap, markmapConfig],
+				remarkRelativeLinks,
+				remarkAbbr,
 			],
-			rehypeSlug,
-			rehypeWrapTable,
-			rehypeFileTree,
-			rehypeMermaid,
-			rehypePlantuml,
-			rehypeMarkmap,
-			[
-				rehypeComponents,
-				{
-					components: {
-						github: GithubCardComponent,
-						note: (x, y) => AdmonitionComponent(x, y, "note"),
-						tip: (x, y) => AdmonitionComponent(x, y, "tip"),
-						important: (x, y) => AdmonitionComponent(x, y, "important"),
-						caution: (x, y) => AdmonitionComponent(x, y, "caution"),
-						warning: (x, y) => AdmonitionComponent(x, y, "warning"),
+			rehypePlugins: [
+				[rehypeKatex, { strict: { unicodeTextInMathMode: false } }],
+				[
+					rehypeExternalLinks,
+					{
+						target: "_blank",
+						rel: ["nofollow", "noopener", "noreferrer"],
 					},
-				},
-			],
-			[
-				rehypeAutolinkHeadings,
-				{
-					behavior: "append",
-					properties: {
-						className: ["anchor"],
-					},
-					content: {
-						type: "element",
-						tagName: "span",
-						properties: {
-							className: ["anchor-icon"],
-							"data-pagefind-ignore": true,
+				],
+				rehypeSlug,
+				rehypeWrapTable,
+				rehypeFileTree,
+				rehypeMermaid,
+				rehypePlantuml,
+				rehypeMarkmap,
+				[
+					rehypeComponents,
+					{
+						components: {
+							github: GithubCardComponent,
+							note: (x, y) => AdmonitionComponent(x, y, "note"),
+							tip: (x, y) => AdmonitionComponent(x, y, "tip"),
+							important: (x, y) => AdmonitionComponent(x, y, "important"),
+							caution: (x, y) => AdmonitionComponent(x, y, "caution"),
+							warning: (x, y) => AdmonitionComponent(x, y, "warning"),
 						},
-						children: [{ type: "text", value: "#" }],
 					},
-				},
+				],
+				[
+					rehypeAutolinkHeadings,
+					{
+						behavior: "append",
+						properties: {
+							className: ["anchor"],
+						},
+						content: {
+							type: "element",
+							tagName: "span",
+							properties: {
+								className: ["anchor-icon"],
+								"data-pagefind-ignore": true,
+							},
+							children: [{ type: "text", value: "#" }],
+						},
+					},
+				],
+				rehypeImageWidth,
+				rehypeLazyImage,
 			],
-			rehypeImageWidth,
-			rehypeLazyImage,
-		],
+		}),
 	},
 	vite: {
 		customLogger: {
