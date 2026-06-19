@@ -449,12 +449,11 @@ if (defaultFontItem) {
 					btn.innerHTML = '<iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>';
 				}, 1500);
 			} catch {
-				const textarea = document.createElement("textarea");
-				textarea.value = text;
-				document.body.appendChild(textarea);
-				textarea.select();
-				document.execCommand("copy");
-				document.body.removeChild(textarea);
+				// Clipboard API unavailable (insecure context) — no fallback available
+				btn.innerHTML = '<iconify-icon icon="material-symbols:error-outline" class="text-sm text-red-400"></iconify-icon>';
+				setTimeout(() => {
+					btn.innerHTML = '<iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>';
+				}, 1500);
 			}
 		});
 	}
