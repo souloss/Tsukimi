@@ -185,8 +185,8 @@ class CodeBlockCollapser {
 		// 检查构建时插件添加的强制折叠标记
 		const forceCollapse = codeBlock.hasAttribute("data-force-collapse");
 
-		// 统计代码行数
-		const lines = codeBlock.querySelectorAll("code span.line");
+		// 统计代码行数（Expressive Code 使用 .ec-line 类名）
+		const lines = codeBlock.querySelectorAll("code .ec-line");
 		const lineCount = lines.length;
 		this.log(
 			`Code block has ${lineCount} lines (threshold: ${this.config.lineThreshold}, forceCollapse: ${forceCollapse})`,
@@ -233,7 +233,7 @@ class CodeBlockCollapser {
 		let effectiveLineHeight;
 		if (Number.isNaN(lineHeight)) {
 			// lineHeight 为 "normal" 时，通过测量行元素获取实际高度
-			const firstLine = code.querySelector("span.line");
+			const firstLine = code.querySelector(".ec-line");
 			if (firstLine) {
 				effectiveLineHeight = firstLine.getBoundingClientRect().height;
 			} else {
