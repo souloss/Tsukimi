@@ -393,14 +393,17 @@ if (defaultFontItem) {
 
 <!-- 代码块折叠功能 - 延迟加载 -->
 <script>
-	if ("requestIdleCallback" in window) {
-		requestIdleCallback(() => {
-			import("../scripts/code-collapse.js");
-		}, { timeout: 5000 });
-	} else {
-		setTimeout(() => {
-			import("../scripts/code-collapse.js");
-		}, 2000);
+	const collapsibleConfig = window.siteConfig?.collapsible;
+	if (collapsibleConfig?.enable !== false) {
+		if ("requestIdleCallback" in window) {
+			requestIdleCallback(() => {
+				import("../scripts/code-collapse.js");
+			}, { timeout: 5000 });
+		} else {
+			setTimeout(() => {
+				import("../scripts/code-collapse.js");
+			}, 2000);
+		}
 	}
 </script>
 

@@ -25,6 +25,7 @@ import {
 } from "./src/config/index.ts";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
+import { pluginCodeCollapse } from "./src/plugins/expressive-code/plugin-code-collapse.ts";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import {
@@ -100,6 +101,7 @@ export default defineConfig({
 				pluginLineNumbers(),
 				pluginLanguageBadge(),
 				pluginCustomCopyButton(),
+				pluginCodeCollapse(),
 			],
 			defaultProps: {
 				wrap: true,

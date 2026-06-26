@@ -4,6 +4,16 @@ class CodeBlockCollapser {
 		this.observer = null;
 		this.isThemeChanging = false;
 		this.debug = false; // 设置为 true 启用调试日志
+
+		// 从 window.siteConfig 读取代码块折叠配置
+		const config = window.siteConfig?.collapsible || {};
+		this.config = {
+			enable: config.enable !== false, // 默认 true
+			lineThreshold: config.lineThreshold ?? 10,
+			previewLines: config.previewLines ?? 5,
+			defaultCollapsed: config.defaultCollapsed ?? false,
+		};
+
 		this.init();
 	}
 
@@ -14,7 +24,13 @@ class CodeBlockCollapser {
 	}
 
 	init() {
-		this.log("Initializing...");
+		this.log("Initializing...", this.config);
+
+		if (!this.config.enable) {
+			this.log("Collapsible feature is disabled, skipping initialization");
+			return;
+		}
+
 		if (document.readyState === "loading") {
 			document.addEventListener("DOMContentLoaded", () => {
 				this.log("DOMContentLoaded - setting up code blocks");
@@ -160,18 +176,80 @@ class CodeBlockCollapser {
 			return;
 		}
 
+		// 跳过有标题的代码块（保留原有行为）
 		if (frame.classList.contains("has-title")) {
 			this.log("Code block has title, skipping collapse feature");
 			return;
 		}
 
+		// 检查构建时插件添加的强制折叠标记
+		const forceCollapse = codeBlock.hasAttribute("data-force-collapse");
+
+		// 统计代码行数
+		const lines = codeBlock.querySelectorAll("code span.line");
+		const lineCount = lines.length;
+		this.log(
+			`Code block has ${lineCount} lines (threshold: ${this.config.lineThreshold}, forceCollapse: ${forceCollapse})`,
+		);
+
+		// 低于行数阈值且无强制折叠标记时跳过
+		if (!forceCollapse && lineCount < this.config.lineThreshold) {
+			this.log("Below line threshold, skipping collapse feature");
+			return;
+		}
+
 		this.log("Adding collapse feature to code block");
-		codeBlock.classList.add("collapsible", "expanded");
+
+		// 确定初始状态：
+		// - 有强制折叠标记 → 始终折叠
+		// - 否则 → 使用 defaultCollapsed 配置
+		const initialState =
+			forceCollapse || this.config.defaultCollapsed
+				? "collapsed"
+				: "expanded";
+		codeBlock.classList.add("collapsible", initialState);
+
+		// 计算并设置折叠时的最大高度
+		this.setCollapseMaxHeight(codeBlock);
 
 		const toggleBtn = this.createToggleButton();
 		frame.appendChild(toggleBtn);
 
 		this.bindToggleEvents(codeBlock, toggleBtn);
+	}
+
+	/**
+	 * 根据配置的 previewLines 和实际行高计算折叠时的最大高度，
+	 * 并设置为 CSS 自定义属性 --ec-collapse-max-height
+	 */
+	setCollapseMaxHeight(codeBlock) {
+		const code = codeBlock.querySelector("code");
+		if (!code) return;
+
+		// 从渲染后的元素获取实际行高
+		const computedStyle = window.getComputedStyle(code);
+		const lineHeight = parseFloat(computedStyle.lineHeight);
+
+		let effectiveLineHeight;
+		if (Number.isNaN(lineHeight)) {
+			// lineHeight 为 "normal" 时，通过测量行元素获取实际高度
+			const firstLine = code.querySelector("span.line");
+			if (firstLine) {
+				effectiveLineHeight = firstLine.getBoundingClientRect().height;
+			} else {
+				// 最终回退：使用 Astro 配置的 codeLineHeight (1.5rem = 24px at 16px base)
+				effectiveLineHeight = 24;
+			}
+		} else {
+			effectiveLineHeight = lineHeight;
+		}
+
+		const maxHeight = effectiveLineHeight * this.config.previewLines;
+		codeBlock.style.setProperty("--ec-collapse-max-height", `${maxHeight}px`);
+
+		this.log(
+			`Set collapse max-height: ${maxHeight}px (lineHeight: ${effectiveLineHeight}px, previewLines: ${this.config.previewLines})`,
+		);
 	}
 
 	createToggleButton() {
@@ -297,6 +375,7 @@ class CodeBlockCollapser {
 
 	// 公共API方法
 	collapseAll() {
+		if (!this.config.enable) return;
 		const allBlocks = document.querySelectorAll(
 			".expressive-code.expanded",
 		);
@@ -306,6 +385,7 @@ class CodeBlockCollapser {
 	}
 
 	expandAll() {
+		if (!this.config.enable) return;
 		const allBlocks = document.querySelectorAll(
 			".expressive-code.collapsed",
 		);

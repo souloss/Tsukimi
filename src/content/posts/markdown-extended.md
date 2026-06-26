@@ -597,6 +597,77 @@ function getUser(id: string) {
 
 ---
 
+## 代码块折叠
+
+代码块支持两种折叠方式：**自动折叠**（超过行数阈值自动添加折叠按钮）和**强制折叠**（通过 `collapse` 标记手动指定）。
+
+### 自动折叠
+
+当代码块行数超过配置的阈值（默认 10 行）时，自动添加折叠按钮。折叠后显示前 5 行预览，底部渐变遮罩提示可展开。
+
+```typescript
+interface UserProfile {
+  id: string
+  name: string
+  email: string
+  avatar: string
+  bio: string
+  createdAt: Date
+  updatedAt: Date
+  settings: {
+    theme: 'light' | 'dark' | 'system'
+    language: string
+    notifications: boolean
+  }
+}
+
+function formatUserProfile(user: UserProfile): string {
+  const { name, email, bio } = user
+  return `${name} <${email}> — ${bio}`
+}
+```
+
+### 强制折叠
+
+在代码块语言标识后添加 `collapse`，强制代码块默认折叠，无论行数多少：
+
+```go collapse
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+```
+
+源码：
+
+`````markdown
+```go collapse
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+```
+`````
+
+### 配置项
+
+| 配置 | 说明 | 默认值 |
+|------|------|--------|
+| `enable` | 是否启用代码块折叠功能 | `true` |
+| `lineThreshold` | 触发自动折叠的行数阈值 | `10` |
+| `previewLines` | 折叠时显示的预览行数 | `5` |
+| `defaultCollapsed` | 超过阈值时是否默认折叠 | `false` |
+
+配置位于 `src/config/expressiveCodeConfig.ts` 的 `pluginCollapsible` 字段。
+
+---
+
 ## 视频播放器(:::video)
 
 支持本地视频、Bilibili 和 YouTube 三种视频源。

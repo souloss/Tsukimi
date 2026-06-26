@@ -38,11 +38,22 @@ declare global {
 	}
 
 	/**
+	 * Site config collapsible code block section interface
+	 */
+	interface SiteConfigCollapsible {
+		enable?: boolean;
+		lineThreshold?: number;
+		previewLines?: number;
+		defaultCollapsed?: boolean;
+	}
+
+	/**
 	 * Site config interface for type-safe global siteConfig access
 	 */
 	interface SiteConfigWindow {
 		lang?: string;
 		toc?: SiteConfigTOC;
+		collapsible?: SiteConfigCollapsible;
 		wallpaperMode?: {
 			defaultMode?: "banner" | "fullscreen" | "none";
 		};

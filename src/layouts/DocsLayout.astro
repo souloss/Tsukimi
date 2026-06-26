@@ -413,7 +413,10 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 </script>
 
 <script>
-	import "../scripts/code-collapse.js";
+	const collapsibleConfig = window.siteConfig?.collapsible;
+	if (collapsibleConfig?.enable !== false) {
+		import("../scripts/code-collapse.js");
+	}
 </script>
 
 <script>

@@ -18,6 +18,10 @@ import { expressiveCodeConfig, siteConfig } from "@/config";
 		tocEnable: siteConfig.toc.enable,
 		tocDepth: siteConfig.toc.depth,
 		tocUseJapaneseBadge: siteConfig.toc.useJapaneseBadge,
+		collapsibleEnable: expressiveCodeConfig.pluginCollapsible?.enable ?? true,
+		collapsibleLineThreshold: expressiveCodeConfig.pluginCollapsible?.lineThreshold ?? 10,
+		collapsiblePreviewLines: expressiveCodeConfig.pluginCollapsible?.previewLines ?? 5,
+		collapsibleDefaultCollapsed: expressiveCodeConfig.pluginCollapsible?.defaultCollapsed ?? false,
 	}}
 >
 	// 将 TOC 配置传递到前端
@@ -28,4 +32,11 @@ import { expressiveCodeConfig, siteConfig } from "@/config";
 		useJapaneseBadge: tocUseJapaneseBadge,
 	};
 
+	// 将代码块折叠配置传递到前端
+	window.siteConfig.collapsible = {
+		enable: collapsibleEnable,
+		lineThreshold: collapsibleLineThreshold,
+		previewLines: collapsiblePreviewLines,
+		defaultCollapsed: collapsibleDefaultCollapsed,
+	};
 </script>

@@ -131,7 +131,7 @@
 
 /* 代码内容折叠状态 */
 .expressive-code.collapsed .frame pre {
-  max-height: 5rem;
+  max-height: var(--ec-collapse-max-height, 5rem);
   overflow: hidden;
 }
 
@@ -141,7 +141,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2.5rem;
+  height: calc(var(--ec-collapse-max-height, 5rem) * 0.5);
   background: linear-gradient(to bottom, transparent 0%, var(--codeblock-bg) 90%);
   pointer-events: none;
 }
@@ -186,7 +186,7 @@
 
   /* 折叠高度微调 */
   .expressive-code.collapsed .frame pre {
-    max-height: 4.5rem;
+    max-height: var(--ec-collapse-max-height, 4.5rem);
   }
 
   /* 隐藏语言标签以节省空间 */
