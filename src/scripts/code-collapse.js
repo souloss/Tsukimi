@@ -182,8 +182,8 @@ class CodeBlockCollapser {
 			return;
 		}
 
-		// 检查构建时插件添加的强制折叠标记
-		const forceCollapse = codeBlock.hasAttribute("data-force-collapse");
+		// 检查构建时插件添加的强制折叠标记（属性在 .frame 元素上）
+		const forceCollapse = frame.hasAttribute("data-force-collapse");
 
 		// 统计代码行数（Expressive Code 使用 .ec-line 类名）
 		const lines = codeBlock.querySelectorAll("code .ec-line");
