@@ -160,6 +160,7 @@ export default defineConfig({
 				remarkPlumeCompat,
 				remarkCodeLangAliases,
 				remarkDirective,
+				remarkRelativeLinks,
 				remarkContentDirectives,
 				remarkSectionize,
 				parseDirectiveNode,
@@ -167,7 +168,6 @@ export default defineConfig({
 				remarkMermaid,
 				[remarkPlantuml, plantumlConfig],
 				[remarkMarkmap, markmapConfig],
-				remarkRelativeLinks,
 				remarkAbbr,
 			],
 			rehypePlugins: [
