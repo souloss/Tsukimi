@@ -86,7 +86,7 @@ function collectFromContent(textSet) {
 		process.env.ENABLE_CONTENT_SYNC === "true" &&
 		process.env.CONTENT_DIR
 	) {
-		contentDir = path.join(ROOT_DIR, process.env.CONTENT_DIR);
+		contentDir = path.resolve(ROOT_DIR, process.env.CONTENT_DIR);
 		console.log(
 			`ℹ Using external content directory: ${process.env.CONTENT_DIR}`,
 		);

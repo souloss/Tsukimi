@@ -1,3 +1,4 @@
+import { rm } from "node:fs/promises";
 import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -52,6 +53,40 @@ import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { remarkPlantuml } from "./src/plugins/remark-plantuml.js";
 import { remarkPlumeCompat } from "./src/plugins/remark-plume-compat.js";
 import { remarkRelativeLinks } from "./src/plugins/remark-relative-links.mjs";
+
+const disabledFeatureRoutes = Object.entries({
+	"/albums/": siteConfig.featurePages.albums,
+	"/anime/": siteConfig.featurePages.anime,
+	"/devices/": siteConfig.featurePages.devices,
+	"/projects/": siteConfig.featurePages.projects,
+	"/skills/": siteConfig.featurePages.skills,
+	"/timeline/": siteConfig.featurePages.timeline,
+})
+	.filter(([, enabled]) => !enabled)
+	.map(([route]) => route);
+
+const isEnabledRoute = (page) => {
+	const pathname = new URL(page).pathname;
+	return !disabledFeatureRoutes.some(
+		(route) => pathname === route || pathname.startsWith(route),
+	);
+};
+
+const omitDisabledFeaturePages = {
+	name: "tsukimi:omit-disabled-feature-pages",
+	hooks: {
+		"astro:build:done": async ({ dir }) => {
+			await Promise.all(
+				disabledFeatureRoutes.map((route) =>
+					rm(new URL(route.slice(1), dir), {
+						force: true,
+						recursive: true,
+					}),
+				),
+			);
+		},
+	},
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -146,7 +181,8 @@ export default defineConfig({
 			compilerOptions: { runes: true },
 			preprocess: vitePreprocess(),
 		}),
-		sitemap(),
+		sitemap({ filter: isEnabledRoute }),
+		omitDisabledFeaturePages,
 		mdx(),
 	],
 	markdown: {

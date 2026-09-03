@@ -4,9 +4,16 @@ import type { BackgroundWallpaperConfig } from "../../types/config";
 interface Props {
 	config: NonNullable<BackgroundWallpaperConfig["fullscreen"]>;
 	className?: string;
+	defaultMode?: string;
+	wallpaperSwitchable?: boolean;
 }
 
-const { config, className } = Astro.props;
+const {
+	config,
+	className,
+	defaultMode = "banner",
+	wallpaperSwitchable = true,
+} = Astro.props;
 
 // 获取当前设备类型的图片源
 const getImageSources = async () => {
@@ -59,38 +66,26 @@ if (!hasDesktopImages && !hasMobileImages) {
 const isCarouselEnabled =
 	config.carousel?.enable &&
 	(imageSources.desktop.length > 1 || imageSources.mobile.length > 1);
-const carouselInterval = config.carousel?.interval || 5;
+const carouselInterval = config.carousel?.interval ?? 5;
 
 // 样式配置
 const position = config.position || "center";
-const zIndex = config.zIndex || -1;
-const opacity = config.opacity || 0.8;
-const blurAmount = config.blur || 0;
-const positionClass = (() => {
-	switch (position) {
-		case "top":
-			return "object-top";
-		case "bottom":
-			return "object-bottom";
-		default:
-			return "object-center";
-	}
-})();
+const zIndex = config.zIndex ?? -1;
+const opacity = config.opacity ?? 0.8;
+const blurAmount = config.blur ?? 0;
 
-const renderGroups = [
-	{
-		key: "desktop",
-		images: imageSources.desktop,
-		containerClass: "hidden md:block",
-		hasImages: hasDesktopImages,
-	},
-	{
-		key: "mobile",
-		images: imageSources.mobile,
-		containerClass: "block md:hidden",
-		hasImages: hasMobileImages,
-	},
-];
+const frameCount = Math.max(
+	imageSources.desktop.length,
+	imageSources.mobile.length,
+);
+const carouselFrames = Array.from({ length: frameCount }, (_, index) => ({
+	desktop:
+		imageSources.desktop[index % imageSources.desktop.length] ||
+		imageSources.mobile[index % imageSources.mobile.length],
+	mobile:
+		imageSources.mobile[index % imageSources.mobile.length] ||
+		imageSources.desktop[index % imageSources.desktop.length],
+}));
 
 // 渐变过渡配置
 const gradientConfig = config.gradient;
@@ -107,39 +102,47 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 		"fixed inset-0 w-full h-full overflow-hidden pointer-events-none",
 		className
 	]}
-	style={`z-index: ${zIndex}; opacity: var(--wallpaper-opacity, ${opacity}); filter: blur(var(--wallpaper-blur, ${blurAmount}px)); transform: translateZ(0); perspective: 1000px;`}
+	style={`display: ${defaultMode === "fullscreen" ? "block" : "none"}; z-index: ${zIndex}; opacity: var(--wallpaper-opacity, ${opacity}); transform: translateZ(0); perspective: 1000px;`}
 	data-fullscreen-wallpaper
 >
-	<script is:inline>
-	// 立即执行脚本：防止闪烁
-	(function() {
-		const mode = localStorage.getItem('wallpaperMode') || 'banner';
-		if (mode !== 'fullscreen' && mode !== 'overlay') {
-			document.currentScript.parentElement.style.display = 'none';
-		}
-	})();
-	</script>
-
+	{wallpaperSwitchable && (
+		<script is:inline define:vars={{ defaultMode }}>
+			(function() {
+				const mode = localStorage.getItem('wallpaperMode') || defaultMode;
+				document.currentScript.parentElement.style.display =
+					mode === 'fullscreen' ? 'block' : 'none';
+			})();
+		</script>
+	)}
 	{isCarouselEnabled ? (
-		renderGroups.map(group => group.hasImages && (
-			<div class={`${group.containerClass} w-full h-full relative`} style="transform: translateZ(0);">
-				{group.images.map((src, index) => (
+		<div class="h-full w-full relative" style="transform: translateZ(0);">
+			{carouselFrames.map((frame, index) => (
+				<picture
+					class="absolute inset-0 block h-full w-full transition-opacity duration-1000"
+					data-carousel-item={index}
+					style={`transform: translateZ(0); backface-visibility: hidden; will-change: opacity; opacity: ${index === 0 ? 1 : 0};`}
+				>
+					<source
+						media="(min-width: 768px)"
+						srcset={index === 0 ? frame.desktop : undefined}
+						data-srcset={frame.desktop}
+					/>
 					<img
-						src={src}
-						alt={`${group.key} wallpaper ${index + 1}`}
-						class={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${positionClass}`}
-						data-carousel-item={index}
-						style={`transform: translateZ(0); backface-visibility: hidden; will-change: opacity; ${blurAmount > 0 ? `filter: blur(${blurAmount}px);` : ''}; opacity: ${index === 0 ? 1 : 0};`}
+						src={index === 0 ? frame.mobile : undefined}
+						data-src={frame.mobile}
+						alt={`wallpaper ${index + 1}`}
+						class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+						style={`object-position: ${position}; filter: blur(var(--wallpaper-blur, ${blurAmount}px));`}
 						decoding="async"
 						loading={index === 0 ? "eager" : "lazy"}
 						fetchpriority={index === 0 ? "high" : undefined}
 					/>
-				))}
-			</div>
-		))
+				</picture>
+			))}
+		</div>
 	) : (
 		<div id="wallpaper-single-container" class="w-full h-full relative">
-			<script is:inline define:vars={{ desktopImages: imageSources.desktop, mobileImages: imageSources.mobile, positionClass, blurAmount }}>
+			<script is:inline define:vars={{ desktopImages: imageSources.desktop, mobileImages: imageSources.mobile, position, blurAmount }}>
 				(function() {
 					const getRandomImage = (images, storageKey) => {
 						if (images.length === 0) {return null;}
@@ -156,45 +159,24 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 						return images[newIndex];
 					};
 					
-					const desktopSrc = getRandomImage(desktopImages, 'wallpaper_desktop_index');
-					const mobileSrc = getRandomImage(mobileImages, 'wallpaper_mobile_index');
-					
 					const container = document.getElementById('wallpaper-single-container');
-					
-					if (desktopSrc) {
-						const desktopDiv = document.createElement('div');
-						desktopDiv.className = 'hidden lg:block w-full h-full relative';
-						desktopDiv.style.transform = 'translateZ(0)';
-						desktopDiv.innerHTML = `
+					const desktop = window.matchMedia('(min-width: 768px)').matches;
+					const src = getRandomImage(
+						desktop ? desktopImages : mobileImages,
+						desktop ? 'wallpaper_desktop_index' : 'wallpaper_mobile_index',
+					);
+					if (container && src) {
+						container.innerHTML = `
 							<img
-								src="${desktopSrc}"
-								alt="desktop wallpaper"
-								class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${positionClass}"
-								style="transform: translateZ(0); backface-visibility: hidden; will-change: opacity; ${blurAmount > 0 ? `filter: blur(${blurAmount}px);` : ''} opacity: 1;"
+								src="${src}"
+								alt="wallpaper"
+								class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+								style="object-position: ${position}; transform: translateZ(0); backface-visibility: hidden; will-change: opacity; filter: blur(var(--wallpaper-blur, ${blurAmount}px)); opacity: 1;"
 								decoding="async"
 								loading="eager"
 								fetchpriority="high"
 							/>
 						`;
-						container.appendChild(desktopDiv);
-					}
-					
-					if (mobileSrc) {
-						const mobileDiv = document.createElement('div');
-						mobileDiv.className = 'block lg:hidden w-full h-full relative';
-						mobileDiv.style.transform = 'translateZ(0)';
-						mobileDiv.innerHTML = `
-							<img
-								src="${mobileSrc}"
-								alt="mobile wallpaper"
-								class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${positionClass}"
-								style="transform: translateZ(0); backface-visibility: hidden; will-change: opacity; ${blurAmount > 0 ? `filter: blur(${blurAmount}px);` : ''} opacity: 1;"
-								decoding="async"
-								loading="eager"
-								fetchpriority="high"
-							/>
-						`;
-						container.appendChild(mobileDiv);
 					}
 				})();
 			</script>
@@ -212,10 +194,12 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 </div>
 
 {isCarouselEnabled && (
-	<script is:inline define:vars={{ carouselInterval }}>
+	<script is:inline define:vars={{ carouselInterval, defaultMode }}>
 		function initFullscreenWallpaperCarousel() {
 			const container = document.querySelector('[data-fullscreen-wallpaper]');
 			if (!container) {return;}
+			const mode = document.documentElement.dataset.wallpaperMode || defaultMode;
+			if (mode !== 'fullscreen') {return;}
 
 			if (window.__wallpaper_cleanup) {
 				window.__wallpaper_cleanup();
@@ -225,10 +209,7 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 			const STORAGE_KEY = 'tsukimi_wallpaper_index';
 			const savedIndex = parseInt(sessionStorage.getItem(STORAGE_KEY) || '0');
 
-			const groups = [
-				container.querySelectorAll('.hidden.md\\:block [data-carousel-item]'),
-				container.querySelectorAll('.block.md\\:hidden [data-carousel-item]')
-			];
+			const groups = [container.querySelectorAll('[data-carousel-item]')];
 
 			const state = groups.map(items => {
 				const safeIndex = (savedIndex >= 0 && savedIndex < items.length) ? savedIndex : 0;
@@ -247,12 +228,22 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				for (let i = 0; i < items.length; i++) {
 					items[i].style.opacity = i === currentIndex ? '1' : '0';
 				}
+				ensureLoaded(items[currentIndex]);
+			}
+
+			function ensureLoaded(item) {
+				if (!item) {return;}
+				const source = item.querySelector('source[data-srcset]');
+				const image = item.querySelector('img[data-src]');
+				if (source && !source.srcset) {source.srcset = source.dataset.srcset;}
+				if (image && !image.src) {image.src = image.dataset.src;}
 			}
 
 			// 切换下一张
 			function switchNextImage(stateItem) {
 				const { items, currentIndex } = stateItem;
 				const nextIndex = (currentIndex + 1) % items.length;
+				ensureLoaded(items[nextIndex]);
 				
 				items[currentIndex].style.opacity = '0';
 				items[nextIndex].style.opacity = '1';

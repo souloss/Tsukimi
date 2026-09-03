@@ -1085,6 +1085,7 @@ export interface PageProgressBarConfig {
 export interface ThirdPartyAnalyticsConfig {
 	enable: boolean; // 是否启用第三方统计（Microsoft Clarity），默认关闭
 	clarityId?: string; // Clarity 项目 ID
+	gtmId?: string; // Google Tag Manager 容器 ID，可选
 }
 
 /**

@@ -10,6 +10,7 @@ import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import type { WALLPAPER_MODE } from "@types/config";
 import {
+	applyFontToDocument,
 	getDefaultBannerCarouselEnabled,
 	getDefaultBannerTitleEnabled,
 	getDefaultFont,
@@ -109,7 +110,17 @@ let stickyNavbarEnabled = $state(getDefaultStickyNavbar());
 const defaultStickyNavbar = getDefaultStickyNavbar();
 
 const isWallpaperSwitchable =
-	backgroundWallpaperConfig.mode?.switchable ?? true;
+	(backgroundWallpaperConfig.mode?.switchable ?? true) &&
+	(backgroundWallpaperConfig.mode?.showModeSwitch?.enable ?? true) &&
+	backgroundWallpaperConfig.mode?.showModeSwitch?.visibility !== "off";
+const wallpaperModeVisibility =
+	backgroundWallpaperConfig.mode?.showModeSwitch?.visibility ?? "both";
+const showWallpaperModeSwitch = $derived(
+	isWallpaperSwitchable &&
+		(wallpaperModeVisibility === "both" ||
+			(wallpaperModeVisibility === "mobile" && isSmallScreen) ||
+			(wallpaperModeVisibility === "desktop" && !isSmallScreen)),
+);
 const allowLayoutSwitch = siteConfig.postListLayout.allowSwitch;
 const isFontSwitchable = fontConfig?.switchable ?? true;
 const effectiveDefaultLayout = $derived(
@@ -448,6 +459,7 @@ onMount(() => {
 
 	// 从localStorage读取用户偏好字体
 	currentFont = getStoredFont();
+	applyFontToDocument(currentFont);
 
 	// 从localStorage读取固定导航栏设置
 	stickyNavbarEnabled = getStoredStickyNavbar();
@@ -594,7 +606,7 @@ $effect(() => {
 		{/if}
 
 		<!-- Wallpaper Mode Section -->
-		{#if isWallpaperSwitchable}
+		{#if showWallpaperModeSwitch}
 			<div class="mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"

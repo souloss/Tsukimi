@@ -95,25 +95,12 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 			data-carousel-interval={carouselIntervalMs}
 			data-fade-ms={fadeMs}
 		>
-			{/* 移动端：第一张图直接渲染，其余放入 template 延迟加载 */}
-			{mobileImages.length > 0 && (
-				<div class="banner-image-slot-mobile absolute inset-0 block md:hidden">
-					<Image
-						alt="Mobile banner image 1"
-						class="object-cover h-full w-full"
-						src={mobileImages[0]}
-						position={backgroundWallpaperConfig.banner?.position}
-						widths={[640, 1024, 1536]}
-						sizes="100vw"
-						loading="eager"
-						fetchpriority="high"
-					/>
-				</div>
-			)}
-			{mobileImages.slice(1).map((src, i) => (
+			{/* Frames stay inert until the active media query selects a slot. */}
+			<div class="banner-image-slot-mobile absolute inset-0 block md:hidden" />
+			{mobileImages.map((src, i) => (
 				<template class="banner-tpl-mobile">
 					<Image
-						alt={`Mobile banner image ${i + 2}`}
+						alt={`Mobile banner image ${i + 1}`}
 						class="object-cover h-full w-full"
 						src={src}
 						position={backgroundWallpaperConfig.banner?.position}
@@ -125,26 +112,12 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				</template>
 			))}
 
-			{/* 桌面端：第一张图直接渲染，其余放入 template 延迟加载 */}
-			{desktopImages.length > 0 && (
-				<div class="banner-image-slot-desktop absolute inset-0 hidden md:block">
-					<Image
-						id="banner"
-						alt="Desktop banner image 1"
-						class="object-cover h-full w-full"
-						src={desktopImages[0]}
-						position={backgroundWallpaperConfig.banner?.position}
-						widths={[1024, 1536, 2048, 2560]}
-						sizes="100vw"
-						loading="eager"
-						fetchpriority="high"
-					/>
-				</div>
-			)}
-			{desktopImages.slice(1).map((src, i) => (
+			<div class="banner-image-slot-desktop absolute inset-0 hidden md:block" />
+			{desktopImages.map((src, i) => (
 				<template class="banner-tpl-desktop">
 					<Image
-						alt={`Desktop banner image ${i + 2}`}
+						id="banner"
+						alt={`Desktop banner image ${i + 1}`}
 						class="object-cover h-full w-full"
 						src={src}
 						position={backgroundWallpaperConfig.banner?.position}
@@ -196,30 +169,21 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 					const desktopSrc = getRandomImage(desktopImages, "banner_desktop_index");
 					const mobileSrc = getRandomImage(mobileImages, "banner_mobile_index");
 
-					if (mobileSrc) {
-						const mobileImg = document.createElement("img");
-						mobileImg.alt = "Mobile banner image of the blog";
-						mobileImg.className =
-							"block md:hidden object-cover h-full w-full transition duration-700 opacity-100";
-						mobileImg.src = mobileSrc;
-						mobileImg.loading = "eager";
-						mobileImg.fetchPriority = "high";
-						mobileImg.dataset.position = position;
-						container.appendChild(mobileImg);
-					}
-
-					if (desktopSrc) {
-						const desktopImg = document.createElement("img");
-						desktopImg.id = "banner";
-						desktopImg.alt = "Desktop banner image of the blog";
-						desktopImg.className =
-							"hidden md:block object-cover h-full w-full transition duration-700 opacity-100";
-						desktopImg.src = desktopSrc;
-						desktopImg.loading = "eager";
-						desktopImg.fetchPriority = "high";
-						desktopImg.dataset.position = position;
-						container.appendChild(desktopImg);
-					}
+					const desktop = window.matchMedia("(min-width: 768px)").matches;
+					const src = desktop ? desktopSrc : mobileSrc;
+					if (!src) return;
+					const img = document.createElement("img");
+					if (desktop) img.id = "banner";
+					img.alt = desktop
+						? "Desktop banner image of the blog"
+						: "Mobile banner image of the blog";
+					img.className =
+						"object-cover h-full w-full transition duration-700 opacity-100";
+					img.src = src;
+					img.loading = "eager";
+					img.fetchPriority = "high";
+					img.dataset.position = position;
+					container.appendChild(img);
 				})();
 			</script>
 		</div>
@@ -241,9 +205,11 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 	<!-- 轮播脚本：随机起始 + 帧收集 + Ken Burns + Crossfade + 触摸/鼠标事件 -->
 	{isCarouselEnabled && (
 		<script is:inline data-swup-ignore-script>
-			(function initBannerCarousel() {
-				var container = document.getElementById('banner-carousel');
-				if (!container) return;
+				(function initBannerCarousel() {
+					var container = document.getElementById('banner-carousel');
+					if (!container) return;
+					var mode = document.documentElement.dataset.wallpaperMode;
+					if (mode !== 'banner' && mode !== 'overlay') return;
 
 				var mobileCount = parseInt(container.dataset.mobileCount || '0', 10);
 				var desktopCount = parseInt(container.dataset.desktopCount || '0', 10);
@@ -258,58 +224,11 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 					window.__bannerCarouselCleanup = null;
 				}
 
-				// 保存初始帧 HTML，供帧收集使用
-				if (typeof window.__bannerInitialFrameHtml === 'undefined') {
-					window.__bannerInitialFrameHtml = {};
-				}
-
-				function rememberInitialFrame(slotClass) {
-					var slot = container.querySelector('.' + slotClass);
-					if (!slot) return;
-					if (!window.__bannerInitialFrameHtml[slotClass]) {
-						window.__bannerInitialFrameHtml[slotClass] = slot.innerHTML;
-					}
-				}
-
-				rememberInitialFrame('banner-image-slot-mobile');
-				rememberInitialFrame('banner-image-slot-desktop');
-
-				// 随机起始索引（Swup 导航间保留，F5 刷新重置）
-				if (typeof window.__bannerRandomIndex === 'undefined') {
-					window.__bannerRandomIndex = {
-						mobile: mobileCount > 1 ? Math.floor(Math.random() * mobileCount) : 0,
-						desktop: desktopCount > 1 ? Math.floor(Math.random() * desktopCount) : 0
-					};
-				}
-
-				// 从 template 替换默认图片
-				function applyRandom(slotClass, tplClass, randomIndex) {
-					if (randomIndex === 0) return;
-					var slot = container.querySelector('.' + slotClass);
-					var templates = container.querySelectorAll('.' + tplClass);
-					if (!slot || !templates.length) return;
-					var tpl = templates[randomIndex - 1];
-					if (!tpl) return;
-					slot.innerHTML = '';
-					slot.appendChild(tpl.content.cloneNode(true));
-				}
-
-				applyRandom('banner-image-slot-mobile', 'banner-tpl-mobile', window.__bannerRandomIndex.mobile);
-				applyRandom('banner-image-slot-desktop', 'banner-tpl-desktop', window.__bannerRandomIndex.desktop);
-
-				// 收集所有帧 HTML 字符串（仅首次）
+				// Collect inert template frames without triggering image downloads.
 				if (!window.__bannerCarouselFrames) window.__bannerCarouselFrames = {};
 
 				function collectFrames(slotClass, tplClass) {
-					if (window.__bannerCarouselFrames[slotClass]) return;
 					var frames = [];
-					var initialFrame = window.__bannerInitialFrameHtml && window.__bannerInitialFrameHtml[slotClass];
-					var slot = container.querySelector('.' + slotClass);
-					if (initialFrame) {
-						frames.push(initialFrame);
-					} else if (slot) {
-						frames.push(slot.innerHTML);
-					}
 					var tpls = container.querySelectorAll('.' + tplClass);
 					for (var i = 0; i < tpls.length; i++) {
 						frames.push(tpls[i].innerHTML);
@@ -320,6 +239,14 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				collectFrames('banner-image-slot-mobile', 'banner-tpl-mobile');
 				collectFrames('banner-image-slot-desktop', 'banner-tpl-desktop');
 
+				// Random starting index is retained during Swup navigation and reset on reload.
+				if (typeof window.__bannerRandomIndex === 'undefined') {
+					window.__bannerRandomIndex = {
+						mobile: mobileCount > 1 ? Math.floor(Math.random() * mobileCount) : 0,
+						desktop: desktopCount > 1 ? Math.floor(Math.random() * desktopCount) : 0
+					};
+				}
+
 				if (typeof window.__bannerCarouselIndex === 'undefined') {
 					window.__bannerCarouselIndex = {
 						mobile: window.__bannerRandomIndex ? window.__bannerRandomIndex.mobile : 0,
@@ -327,12 +254,34 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 					};
 				}
 
-				// 断点检测（md = 768px）
+				var mediaQuery = window.matchMedia('(min-width: 768px)');
+
+				// Only the active responsive slot receives image markup.
+				function syncResponsiveSlots() {
+					var slots = [
+						['banner-image-slot-mobile', 'mobile', !mediaQuery.matches],
+						['banner-image-slot-desktop', 'desktop', mediaQuery.matches]
+					];
+					for (var i = 0; i < slots.length; i++) {
+						var slot = container.querySelector('.' + slots[i][0]);
+						if (!slot) continue;
+						if (!slots[i][2]) {
+							slot.innerHTML = '';
+							continue;
+						}
+						var frames = window.__bannerCarouselFrames[slots[i][0]] || [];
+						var index = window.__bannerCarouselIndex[slots[i][1]] || 0;
+						slot.innerHTML = frames[index] || frames[0] || '';
+					}
+				}
+
+				syncResponsiveSlots();
+				mediaQuery.addEventListener('change', syncResponsiveSlots);
+
 				function isSlotHiddenByBreakpoint(slot) {
 					var cl = slot.classList;
-					var isMd = window.matchMedia('(min-width: 768px)').matches;
-					if (cl.contains('md:hidden') && isMd) return true;
-					if (cl.contains('hidden') && !cl.contains('md:hidden') && !isMd) return true;
+					if (cl.contains('md:hidden') && mediaQuery.matches) return true;
+					if (cl.contains('hidden') && !cl.contains('md:hidden') && !mediaQuery.matches) return true;
 					return false;
 				}
 
@@ -605,6 +554,7 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 					stopCarousel();
 					remainingTime = 0;
 					intervalStartTime = 0;
+					mediaQuery.removeEventListener('change', syncResponsiveSlots);
 					document.removeEventListener('visibilitychange', visibilityHandler);
 					window.removeEventListener('banner-carousel-change', carouselChangeHandler);
 					if ('ontouchstart' in window) {

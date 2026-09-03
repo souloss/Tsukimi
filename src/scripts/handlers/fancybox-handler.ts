@@ -60,9 +60,18 @@ export class FancyboxHandler {
 	 * 加载 Fancybox 模块和样式
 	 */
 	private async loadFancybox(): Promise<void> {
-		const mod = await import("@fancyapps/ui");
+		const [mod, { default: stylesheetUrl }] = await Promise.all([
+			import("@fancyapps/ui"),
+			import("@fancyapps/ui/dist/fancybox/fancybox.css?url"),
+		]);
 		this.Fancybox = mod.Fancybox;
-		await import("@fancyapps/ui/dist/fancybox/fancybox.css");
+		if (!document.getElementById("fancybox-stylesheet")) {
+			const link = document.createElement("link");
+			link.id = "fancybox-stylesheet";
+			link.rel = "stylesheet";
+			link.href = stylesheetUrl;
+			document.head.appendChild(link);
+		}
 	}
 
 	/**

@@ -79,8 +79,20 @@ export class ScrollHandler {
 	 * 检查并加载 KaTeX 样式
 	 */
 	checkKatex(): void {
-		if (document.querySelector(".katex")) {
-			import("katex/dist/katex.css");
+		if (
+			document.querySelector(".katex") &&
+			!document.getElementById("katex-stylesheet")
+		) {
+			void import("katex/dist/katex.css?url").then(({ default: href }) => {
+				if (document.getElementById("katex-stylesheet")) {
+					return;
+				}
+				const link = document.createElement("link");
+				link.id = "katex-stylesheet";
+				link.rel = "stylesheet";
+				link.href = href;
+				document.head.appendChild(link);
+			});
 		}
 	}
 

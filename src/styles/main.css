@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "katex/dist/katex.css";
 
 /* grid-layout-utils.ts dynamically constructs Tailwind arbitrary-value
    classes that the content scanner cannot detect. Define them as real CSS
@@ -50,9 +49,6 @@
 }
 
 /* 导入相册样式 */
-@import "./albums.css";
-/* 导入追番页面样式 */
-@import "./anime.css";
 /* 导入动画样式 */
 @import "./transition.css";
 @import "./animation-enhancements.css";
@@ -72,8 +68,6 @@
 @import "./directives.css";
 /* 导入文件树样式 */
 @import "./file-tree.css";
-/* 导入 Twikoo 评论样式 */
-@import "./twikoo.css";
 /* 加密内容样式已移除，现在直接使用非加密文章的样式 */
 
 @plugin "@tailwindcss/typography";

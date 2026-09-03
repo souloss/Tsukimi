@@ -46,5 +46,10 @@ const yearSuffix = isChinese ? "年" : " ";
 	class={`hidden md:block ${className}`}
 	style={style}
 >
-	<CalendarWidget client:only="svelte" {monthNames} {weekDays} {yearSuffix} />
+	<CalendarWidget
+		client:media="(min-width: 768px)"
+		{monthNames}
+		{weekDays}
+		{yearSuffix}
+	/>
 </WidgetLayout>

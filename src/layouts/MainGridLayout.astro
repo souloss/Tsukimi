@@ -5,6 +5,7 @@ import Banner from "@components/layout/Banner.astro";
 import RightSideBar from "@components/layout/RightSideBar.astro";
 import FullscreenWallpaper from "@components/misc/FullscreenWallpaper.astro";
 import IconifyLoader from "@components/misc/IconifyLoader.astro";
+import OverlayWallpaper from "@components/misc/OverlayWallpaper.astro";
 import Footer from "@components/organisms/footer/Footer.astro";
 import Navbar from "@components/organisms/navigation/Navbar.astro";
 import SideBar from "@components/widgets/sidebar/SideBar.astro";
@@ -12,7 +13,13 @@ import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 
 import { backgroundWallpaperConfig, siteConfig } from "../config";
-import { BANNER_HEIGHT, WALLPAPER_BANNER } from "../constants/constants";
+import {
+	BANNER_HEIGHT,
+	WALLPAPER_BANNER,
+	WALLPAPER_FULLSCREEN,
+	WALLPAPER_NONE,
+	WALLPAPER_OVERLAY,
+} from "../constants/constants";
 import {
 	calculateGridLayout,
 	getBannerImages,
@@ -40,8 +47,25 @@ interface Props {
 	pageOverlayWords?: string;
 }
 
-// 获取 banner 图片
-const bannerImages = await getBannerImages();
+const defaultWallpaperMode =
+	backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER;
+const wallpaperSwitchable = backgroundWallpaperConfig.mode?.switchable ?? true;
+const wallpaperCanBeUsed =
+	wallpaperSwitchable || defaultWallpaperMode !== WALLPAPER_NONE;
+const shouldRenderBanner =
+	wallpaperCanBeUsed &&
+	(defaultWallpaperMode === WALLPAPER_BANNER || wallpaperSwitchable);
+const shouldRenderFullscreen =
+	wallpaperCanBeUsed &&
+	(defaultWallpaperMode === WALLPAPER_FULLSCREEN || wallpaperSwitchable);
+const shouldRenderOverlay =
+	wallpaperCanBeUsed &&
+	(defaultWallpaperMode === WALLPAPER_OVERLAY || wallpaperSwitchable);
+
+// Avoid fetching or serializing wallpaper assets when the repository has disabled them.
+const bannerImages = shouldRenderBanner
+	? await getBannerImages()
+	: { desktop: "", mobile: "" };
 
 const {
 	title,
@@ -58,7 +82,8 @@ const {
 	pageOverlayCategory,
 	pageOverlayWords,
 } = Astro.props;
-const hasBannerCredit = siteConfig.banner.credit?.enable ?? false;
+const hasBannerCredit =
+	shouldRenderBanner && (siteConfig.banner.credit?.enable ?? false);
 const hasBannerLink = !!siteConfig.banner.credit?.url;
 
 // 检查是否为首页
@@ -67,10 +92,7 @@ const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";
 const mobileNonHomeBannerClass = !isHomePage ? "mobile-hide-banner" : "";
 
 // 计算主内容区域位置
-const finalMainPanelTop = getMainPanelTop(
-	backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER,
-	BANNER_HEIGHT,
-);
+const finalMainPanelTop = getMainPanelTop(defaultWallpaperMode, BANNER_HEIGHT);
 
 // 计算网格布局
 const {
@@ -91,9 +113,7 @@ const { hasRightSidebarComponents, hasMobileDrawerComponents } =
 	sidebarPresence;
 
 // 半透明效果
-const shouldEnable = shouldEnableTransparency(
-	backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER,
-);
+const shouldEnable = shouldEnableTransparency(defaultWallpaperMode);
 const transparentClass = getTransparencyClass(shouldEnable);
 
 // 布局模式
@@ -116,16 +136,30 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 	<GridScripts
 		navbarTransparentMode={siteConfig.banner?.navbar?.transparentMode ||
 			backgroundWallpaperConfig.common?.navbar?.transparentMode || "none"}
-		fullscreenNavbarTransparentMode={backgroundWallpaperConfig.fullscreen?.navbar?.transparentMode ||
+		fullscreenNavbarTransparentMode={backgroundWallpaperConfig.fullscreen
+			?.navbar?.transparentMode ||
 			backgroundWallpaperConfig.common?.navbar?.transparentMode || "none"}
-		defaultWallpaperMode={backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER}
+		defaultWallpaperMode={defaultWallpaperMode}
+		wallpaperSwitchable={wallpaperSwitchable}
 		defaultPostListLayout={siteConfig.postListLayout?.defaultMode || "list"}
 		BANNER_HEIGHT={BANNER_HEIGHT}
 		pageScaling={siteConfig.pageScaling}
 	/>
 
-	<!-- 全屏壁纸 - 始终渲染，通过 JS 控制显示隐藏 -->
-	<FullscreenWallpaper config={backgroundWallpaperConfig.fullscreen!} />
+	{shouldRenderFullscreen && backgroundWallpaperConfig.fullscreen && (
+		<FullscreenWallpaper
+			config={backgroundWallpaperConfig.fullscreen}
+			defaultMode={defaultWallpaperMode}
+			wallpaperSwitchable={wallpaperSwitchable}
+		/>
+	)}
+	{shouldRenderOverlay && backgroundWallpaperConfig.overlay && (
+		<OverlayWallpaper
+			config={backgroundWallpaperConfig.overlay}
+			defaultMode={defaultWallpaperMode}
+			wallpaperSwitchable={wallpaperSwitchable}
+		/>
+	)}
 
 	<!-- 全局图标加载器 -->
 	<IconifyLoader />
@@ -147,13 +181,14 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 		</div>
 	</div>
 
-	<!-- Banner 组件 -->
-	<Banner
-		bannerImages={bannerImages}
-		mobileNonHomeBannerClass={mobileNonHomeBannerClass}
-		showTextOverlay={isHomePage &&
-			(siteConfig.banner.bannerHomeText?.enable ?? false)}
-	/>
+	{shouldRenderBanner && (
+		<Banner
+			bannerImages={bannerImages}
+			mobileNonHomeBannerClass={mobileNonHomeBannerClass}
+			showTextOverlay={isHomePage &&
+				(siteConfig.banner.bannerHomeText?.enable ?? false)}
+		/>
+	)}
 
 	<!-- 页面覆盖层数据源（供 JS 读取，不在首页显示） -->
 	{pageOverlayTitle && (
@@ -170,7 +205,7 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 
 	<!-- Main content -->
 	<div
-		class={`absolute w-full z-30 pointer-events-none ${mobileNonHomeBannerClass ? "mobile-main-no-banner" : ""} ${(backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER) === "none" ? "no-banner-layout" : ""} ${transparentClass}`}
+		class={`absolute w-full z-30 pointer-events-none ${mobileNonHomeBannerClass ? "mobile-main-no-banner" : ""} ${defaultWallpaperMode === WALLPAPER_NONE ? "no-banner-layout" : ""} ${transparentClass}`}
 		style={`top: ${finalMainPanelTop}`}
 	>
 		<!-- The pointer-events-none here prevent blocking the click event of the TOC -->

@@ -20,6 +20,8 @@ export class BackToTopHandler {
 	private navbar: HTMLElement | null = null;
 	private bannerEnabled: boolean;
 	private scrollHandler: () => void;
+	private resizeHandler: () => void;
+	private initialized = false;
 
 	constructor(bannerEnabled: boolean) {
 		this.bannerEnabled = bannerEnabled;
@@ -27,14 +29,19 @@ export class BackToTopHandler {
 			this.handleScroll.bind(this),
 			SCROLL_CONFIG.throttleInterval,
 		);
+		this.resizeHandler = this.handleResize.bind(this);
 	}
 
 	/**
 	 * 初始化返回顶部处理器
 	 */
 	init(): void {
+		if (this.initialized) {
+			return;
+		}
 		this.cacheElements();
 		this.bindEvents();
+		this.initialized = true;
 	}
 
 	/**
@@ -57,7 +64,7 @@ export class BackToTopHandler {
 		window.addEventListener("scroll", this.scrollHandler, {
 			passive: true,
 		});
-		window.addEventListener("resize", this.handleResize.bind(this), {
+		window.addEventListener("resize", this.resizeHandler, {
 			passive: true,
 		});
 	}
@@ -189,9 +196,10 @@ export class BackToTopHandler {
 	 */
 	destroy(): void {
 		window.removeEventListener("scroll", this.scrollHandler);
-		window.removeEventListener("resize", this.handleResize.bind(this));
+		window.removeEventListener("resize", this.resizeHandler);
 		this.backToTopBtn = null;
 		this.navbar = null;
+		this.initialized = false;
 	}
 
 	/**

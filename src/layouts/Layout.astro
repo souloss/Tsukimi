@@ -6,6 +6,7 @@ import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import {
 	backgroundWallpaperConfig,
 	fontConfig,
+	musicPlayerConfig,
 	pioConfig,
 	profileConfig,
 	siteConfig,
@@ -15,7 +16,13 @@ const BANNER_HEIGHT = 35;
 const BANNER_HEIGHT_EXTEND = 30;
 const BANNER_HEIGHT_HOME = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
 
-import { PAGE_WIDTH } from "../constants/constants";
+import {
+	PAGE_WIDTH,
+	WALLPAPER_BANNER,
+	WALLPAPER_FULLSCREEN,
+	WALLPAPER_NONE,
+	WALLPAPER_OVERLAY,
+} from "../constants/constants";
 import { pathsEqual, url } from "../utils/url-utils";
 import "../styles/main.css";
 import "../styles/admonitions-diagrams.styl";
@@ -72,6 +79,12 @@ const shouldShowTopHighlight =
 	navbarTransparentMode === "full" || navbarTransparentMode === "semifull";
 
 // 获取默认banner图片的辅助函数
+const defaultWallpaperMode =
+	backgroundWallpaperConfig.mode?.defaultMode ?? WALLPAPER_BANNER;
+const wallpaperSwitchable = backgroundWallpaperConfig.mode?.switchable ?? true;
+const shouldRenderWallpaper =
+	wallpaperSwitchable || defaultWallpaperMode !== WALLPAPER_NONE;
+
 const getDefaultBanner = (): string => {
 	const src = backgroundWallpaperConfig.banner?.src;
 	if (typeof src === "string") {
@@ -101,9 +114,12 @@ const getDefaultBanner = (): string => {
 };
 
 // TODO don't use post cover as banner for now
-banner = getDefaultBanner();
+banner = shouldRenderWallpaper ? getDefaultBanner() : "";
 
-const enableBanner = !!backgroundWallpaperConfig.banner?.src;
+const enableBanner =
+	shouldRenderWallpaper &&
+	(defaultWallpaperMode === WALLPAPER_BANNER ||
+		defaultWallpaperMode === WALLPAPER_FULLSCREEN);
 
 let pageTitle: string;
 if (title) {
@@ -187,6 +203,7 @@ if (defaultFontItem) {
 <html
 	lang={siteLang}
 	class="bg-[var(--page-bg)] text-[14px] md:text-[16px]"
+	data-wallpaper-mode={defaultWallpaperMode}
 	data-overlayscrollbars-initialize
 >
 	<head>
@@ -201,6 +218,7 @@ if (defaultFontItem) {
 
 		<!-- 第三方分析脚本 -->
 		<AnalyticsScripts
+			gtmId={siteConfig.thirdPartyAnalytics?.gtmId}
 			thirdPartyAnalytics={siteConfig.thirdPartyAnalytics}
 			umamiAnalytics={siteConfig.analytics?.umamiAnalytics}
 		/>
@@ -214,6 +232,35 @@ if (defaultFontItem) {
 			setOGTypeArticle={setOGTypeArticle}
 			configHue={configHue}
 		/>
+
+		<script is:inline>
+			// Swup is loaded asynchronously. Guard cross-layout links from the first
+			// possible click so docs and blog markup are never swapped together.
+			(function installCrossLayoutNavigationGuard() {
+				if (window.__tsukimiCrossLayoutGuard) return;
+				const isDocsPath = (pathname) => pathname.startsWith('/docs/');
+				const guard = (event) => {
+					if (
+						event.defaultPrevented ||
+						event.button !== 0 ||
+						event.metaKey ||
+						event.ctrlKey ||
+						event.shiftKey ||
+						event.altKey
+					) return;
+					if (!(event.target instanceof Element)) return;
+					const link = event.target.closest('a[href]');
+					if (!link || link.target === '_blank' || link.hasAttribute('download')) return;
+					const target = new URL(link.href, window.location.href);
+					if (target.origin !== window.location.origin) return;
+					if (isDocsPath(target.pathname) === isDocsPath(window.location.pathname)) return;
+					event.preventDefault();
+					window.location.assign(target.href);
+				};
+				document.addEventListener('click', guard, true);
+				window.__tsukimiCrossLayoutGuard = guard;
+			})();
+		</script>
 
 		<!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 		<slot name="head" />
@@ -269,18 +316,32 @@ if (defaultFontItem) {
 	<body
 		class="min-h-screen"
 		class:list={[
-			{ "lg:is-home": isHomePage, "enable-banner": enableBanner, "enable-card-border": siteConfig.card?.border },
+			{
+				"lg:is-home": isHomePage,
+				"enable-banner": enableBanner,
+				"fullscreen-banner":
+					defaultWallpaperMode === WALLPAPER_FULLSCREEN,
+				"wallpaper-transparent":
+					defaultWallpaperMode === WALLPAPER_OVERLAY,
+				"no-banner-mode":
+					defaultWallpaperMode === WALLPAPER_NONE ||
+					defaultWallpaperMode === WALLPAPER_OVERLAY,
+				"enable-card-border": siteConfig.card?.border,
+			},
 		]}
 		style={bodyFontFamily ? `font-family: ${bodyFontFamily};` : ""}
 		data-overlayscrollbars-initialize
 	>
-		<noscript
-			><iframe
-				src="https://www.googletagmanager.com/ns.html?id=GTM-KRX3XGVH"
-				height="0"
-				width="0"
-				style="display:none;visibility:hidden"></iframe></noscript
-		>
+		{siteConfig.thirdPartyAnalytics?.gtmId && (
+			<noscript>
+				<iframe
+					src={`https://www.googletagmanager.com/ns.html?id=${siteConfig.thirdPartyAnalytics.gtmId}`}
+					height="0"
+					width="0"
+					style="display:none;visibility:hidden"
+				/>
+			</noscript>
+		)}
 		<!-- 页面顶部渐变高光效果 - 只在full和semifull模式下显示 -->
 		{shouldShowTopHighlight && <div class="top-gradient-highlight" />}
 
@@ -292,8 +353,8 @@ if (defaultFontItem) {
 		/>
 		<slot />
 
-		<!-- Music Player - 核心始终加载（当enable=true），UI通过showFloatingPlayer控制 -->
-		<MusicPlayer client:only="svelte" />
+		<!-- Music Player - disabled configurations do not emit a client island. -->
+		{musicPlayerConfig.enable && <MusicPlayer client:only="svelte" />}
 
 		<!-- Pio 看板娘组件 - 仅在进入视口时加载 -->
 		{pioConfig.enable && <Pio client:only="svelte" />}
@@ -375,20 +436,10 @@ if (defaultFontItem) {
 </style>
 
 <script>
-	// Swup 页面过渡管理器 - 统一入口 - 延迟到 idle 后加载
-	if ("requestIdleCallback" in window) {
-		requestIdleCallback(() => {
-			import("../scripts/swup-manager").then(({ initSwupManager }) => {
-				initSwupManager();
-			});
-		}, { timeout: 2000 });
-	} else {
-		setTimeout(() => {
-			import("../scripts/swup-manager").then(({ initSwupManager }) => {
-				initSwupManager();
-			});
-		}, 500);
-	}
+	// Cross-layout navigation rules must exist before the first user interaction.
+	import("../scripts/swup-manager").then(({ initSwupManager }) => {
+		initSwupManager();
+	});
 </script>
 
 <!-- 代码块折叠功能 - 延迟加载 -->

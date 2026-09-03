@@ -34,70 +34,74 @@ const lastModified = dayjs(updatedDate).utc().format("YYYY-MM-DDTHH:mm:ss[Z]");
 
 	<div class:list={["card-base p-6 mb-4", className]}>
 		<script is:inline>
-			function runtime() {
-				const lastModifiedElement =
-					document.getElementById("last-modified");
-				if (!lastModifiedElement) {
-					return;
-				}
+			(function initLastModifiedTimer() {
+				function runtime() {
+					const lastModifiedElement =
+						document.getElementById("last-modified");
+					if (!lastModifiedElement) {
+						if (window.__lastModifiedTimer) {
+							clearInterval(window.__lastModifiedTimer);
+							delete window.__lastModifiedTimer;
+						}
+						return;
+					}
 
-				const startDate = new Date(
-					lastModifiedElement.dataset.lastModified,
-				);
-				const currentDate = new Date();
-				const diff = currentDate - startDate;
-				// When the date is in the future, show "just now" instead of negative time
-				if (diff < 0) {
+					const startDate = new Date(
+						lastModifiedElement.dataset.lastModified,
+					);
+					const currentDate = new Date();
+					const diff = currentDate - startDate;
+
+					// When the date is in the future, show "just now" instead of negative time.
+					if (diff < 0) {
+						const prefix = lastModifiedElement.dataset.prefix;
+						const secondKey = lastModifiedElement.dataset.second;
+						const modifiedTime = document.getElementById("modifiedtime");
+						if (modifiedTime) {
+							modifiedTime.textContent = prefix + " 0 " + secondKey;
+						}
+						return;
+					}
+
+					const seconds = Math.floor(diff / 1000);
+					const days = Math.floor(seconds / 86400);
+					const hours = Math.floor((seconds % 86400) / 3600);
+					const minutes = Math.floor((seconds % 3600) / 60);
+					const secs = seconds % 60;
+					const years = Math.floor(days / 365);
+					const months = Math.floor((days % 365) / 30);
+					const remainingDays = days % 30;
+
 					const prefix = lastModifiedElement.dataset.prefix;
+					const yearKey = lastModifiedElement.dataset.year;
+					const monthKey = lastModifiedElement.dataset.month;
+					const dayKey = lastModifiedElement.dataset.day;
+					const hourKey = lastModifiedElement.dataset.hour;
+					const minuteKey = lastModifiedElement.dataset.minute;
 					const secondKey = lastModifiedElement.dataset.second;
-					document.getElementById("modifiedtime").innerHTML =
-						prefix + " 0 " + secondKey;
-					return;
-				}
-				const seconds = Math.floor(diff / 1000);
-				const days = Math.floor(seconds / 86400);
-				const hours = Math.floor((seconds % 86400) / 3600);
-				const minutes = Math.floor((seconds % 3600) / 60);
-				const secs = seconds % 60;
 
-				const years = Math.floor(days / 365);
-				const months = Math.floor((days % 365) / 30);
-				const remainingDays = days % 30;
+					let runtimeString = prefix + " ";
+					if (years > 0) runtimeString += `${years} ${yearKey} `;
+					if (months > 0) runtimeString += `${months} ${monthKey} `;
+					if (remainingDays > 0) {
+						runtimeString += `${remainingDays} ${dayKey} `;
+					}
+					runtimeString += `${hours} ${hourKey} `;
+					runtimeString += `${minutes < 10 ? "0" : ""}${minutes} ${minuteKey} `;
+					runtimeString += `${secs < 10 ? "0" : ""}${secs} ${secondKey}`;
 
-				const prefix = lastModifiedElement.dataset.prefix;
-				const yearKey = lastModifiedElement.dataset.year;
-				const monthKey = lastModifiedElement.dataset.month;
-				const dayKey = lastModifiedElement.dataset.day;
-				const hourKey = lastModifiedElement.dataset.hour;
-				const minuteKey = lastModifiedElement.dataset.minute;
-				const secondKey = lastModifiedElement.dataset.second;
-
-				let runtimeString = prefix + " ";
-				if (years > 0) {
-					runtimeString += `${years} ${yearKey} `;
-				}
-				if (months > 0) {
-					runtimeString += `${months} ${monthKey} `;
-				}
-				if (remainingDays > 0) {
-					runtimeString += `${remainingDays} ${dayKey} `;
-				}
-				runtimeString += `${hours} ${hourKey} `;
-				if (minutes < 10) {
-					runtimeString += `0${minutes} ${minuteKey} `;
-				} else {
-					runtimeString += `${minutes} ${minuteKey} `;
-				}
-				if (secs < 10) {
-					runtimeString += `0${secs} ${secondKey}`;
-				} else {
-					runtimeString += `${secs} ${secondKey}`;
+					const modifiedTime = document.getElementById("modifiedtime");
+					if (modifiedTime) {
+						modifiedTime.textContent = runtimeString;
+					}
 				}
 
-				document.getElementById("modifiedtime").innerHTML =
-					runtimeString;
-			}
-			setInterval(runtime, 1000);
+				if (window.__lastModifiedTimer) {
+					clearInterval(window.__lastModifiedTimer);
+				}
+				window.__lastModifiedTimer = setInterval(runtime, 1000);
+				runtime();
+			})();
 		</script>
 		<div class="flex items-center gap-3">
 			<div

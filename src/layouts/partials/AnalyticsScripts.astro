@@ -33,7 +33,7 @@ interface Props {
 }
 
 const {
-	gtmId = "GTM-KRX3XGVH",
+	gtmId = "",
 	thirdPartyAnalytics = { enable: false, clarityId: "" },
 	umamiAnalytics,
 } = Astro.props;
@@ -41,125 +41,118 @@ const {
 const clarityEnable =
 	thirdPartyAnalytics.enable && thirdPartyAnalytics.clarityId;
 const umamiEnable = umamiAnalytics?.websiteId && umamiAnalytics.scriptUrl;
+const hasAnalytics = Boolean(gtmId || clarityEnable || umamiEnable);
 ---
 
-<!-- 第三方分析脚本 - 仅在用户交互后延迟加载 -->
-<script
-	is:inline
-	define:vars={{
-		gtmId,
-		clarityEnable,
-		clarityId: thirdPartyAnalytics.clarityId || "",
-		umamiEnable,
-		umamiWebsiteId: umamiAnalytics?.websiteId || "",
-		umamiScriptUrl: umamiAnalytics?.scriptUrl || "",
-		umamiTrackOutboundLinks: umamiAnalytics?.trackOutboundLinks ?? true,
-		umamiCollectWebVitals: umamiAnalytics?.collectWebVitals ?? false,
-		umamiRelpaysEnabled: umamiAnalytics?.relpays?.enabled ?? false,
-		umamiRelpaysSampleRate: umamiAnalytics?.relpays?.sampleRate ?? 0.15,
-		umamiRelpaysMaskLevel: umamiAnalytics?.relpays?.maskLevel ?? "moderate",
-		umamiRelpaysMaxDuration: umamiAnalytics?.relpays?.maxDuration ?? 300000,
-		umamiRelpaysBlockSelector: umamiAnalytics?.relpays?.blockSelector || "",
-	}}
->
-	(function () {
-		// 标记脚本是否已加载
-		window.analyticsLoaded = window.analyticsLoaded || false;
+{hasAnalytics && (
+	<script is:inline>
+		window.__tsukimiAnalyticsLoaders = [];
+	</script>
+)}
 
-		function loadAnalytics() {
-			if (window.analyticsLoaded) {
-				return;
-			}
-			window.analyticsLoaded = true;
-
-			// Google Tag Manager
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({
-					"gtm.start": new Date().getTime(),
-					event: "gtm.js",
-				});
-				const f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s);
-				j.async = true;
-				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, "script", "dataLayer", gtmId);
-
-			// Clarity (仅在启用时加载)
-			if (clarityEnable && clarityId) {
-				(function (c, l, a, r, i, t, y) {
-					c[a] =
-						c[a] ||
-						function () {
-							(c[a].q = c[a].q || []).push(arguments);
-						};
-					t = l.createElement(r);
-					t.async = 1;
-					t.src = "https://www.clarity.ms/tag/" + i;
-					y = l.getElementsByTagName(r)[0];
-					y.parentNode.insertBefore(t, y);
-				})(window, document, "clarity", "script", clarityId);
-			}
-
-			// Umami (仅在启用时加载)
-			if (umamiEnable && umamiScriptUrl && umamiWebsiteId) {
-				const umamiScript = document.createElement("script");
-				umamiScript.defer = true;
-				umamiScript.src = umamiScriptUrl;
-				umamiScript.setAttribute("data-website-id", umamiWebsiteId);
-				if (umamiTrackOutboundLinks) {
-					umamiScript.setAttribute("data-track-outbound-links", "true");
-				}
-				if (umamiCollectWebVitals) {
-					umamiScript.setAttribute("data-collect-web-vitals", "true");
-				}
-				if (umamiRelpaysEnabled) {
-					umamiScript.setAttribute("data-relpays-enabled", "true");
-					umamiScript.setAttribute("data-relpays-sample-rate", umamiRelpaysSampleRate);
-					umamiScript.setAttribute("data-relpays-mask-level", umamiRelpaysMaskLevel);
-					umamiScript.setAttribute("data-relpays-max-duration", umamiRelpaysMaxDuration);
-					if (umamiRelpaysBlockSelector) {
-						umamiScript.setAttribute("data-relpays-block-selector", umamiRelpaysBlockSelector);
-					}
-				}
-				document.head.appendChild(umamiScript);
-			}
-		}
-
-		// 仅在用户交互后加载分析脚本，减少初始页面加载负担
-		const events = [
-			"scroll",
-			"mousemove",
-			"keydown",
-			"touchstart",
-			"click",
-		];
-		let loaded = false;
-
-		function onInteraction() {
-			if (loaded) {
-				return;
-			}
-			loaded = true;
-			events.forEach(function (event) {
-				window.removeEventListener(event, onInteraction);
+{gtmId && (
+	<script is:inline define:vars={{ gtmId }}>
+		window.__tsukimiAnalyticsLoaders.push(function () {
+			window.dataLayer = window.dataLayer || [];
+			window.dataLayer.push({
+				"gtm.start": Date.now(),
+				event: "gtm.js",
 			});
-			loadAnalytics();
-		}
-
-		events.forEach(function (event) {
-			window.addEventListener(event, onInteraction, {
-				once: true,
-				passive: true,
-			});
+			const script = document.createElement("script");
+			script.async = true;
+			script.src = "https://www.googletagmanager.com/gtm.js?id=" + gtmId;
+			document.head.appendChild(script);
 		});
+	</script>
+)}
 
-		// 备用：如果用户 10 秒内没有交互，则在 idle 时加载
-		setTimeout(function () {
-			if (!loaded) {
-				loadAnalytics();
+{clarityEnable && (
+	<script
+		is:inline
+		define:vars={{ clarityId: thirdPartyAnalytics.clarityId }}
+	>
+		window.__tsukimiAnalyticsLoaders.push(function () {
+			window.clarity = window.clarity || function () {
+				(window.clarity.q = window.clarity.q || []).push(arguments);
+			};
+			const script = document.createElement("script");
+			script.async = true;
+			script.src = "https://www.clarity.ms/tag/" + clarityId;
+			document.head.appendChild(script);
+		});
+	</script>
+)}
+
+{umamiEnable && (
+	<script
+		is:inline
+		define:vars={{
+			umamiWebsiteId: umamiAnalytics?.websiteId,
+			umamiScriptUrl: umamiAnalytics?.scriptUrl,
+			umamiTrackOutboundLinks: umamiAnalytics?.trackOutboundLinks ?? true,
+			umamiCollectWebVitals: umamiAnalytics?.collectWebVitals ?? false,
+			umamiRelpaysEnabled: umamiAnalytics?.relpays?.enabled ?? false,
+			umamiRelpaysSampleRate: umamiAnalytics?.relpays?.sampleRate ?? 0.15,
+			umamiRelpaysMaskLevel:
+				umamiAnalytics?.relpays?.maskLevel ?? "moderate",
+			umamiRelpaysMaxDuration:
+				umamiAnalytics?.relpays?.maxDuration ?? 300000,
+			umamiRelpaysBlockSelector:
+				umamiAnalytics?.relpays?.blockSelector || "",
+		}}
+	>
+		window.__tsukimiAnalyticsLoaders.push(function () {
+			const script = document.createElement("script");
+			script.defer = true;
+			script.src = umamiScriptUrl;
+			script.setAttribute("data-website-id", umamiWebsiteId);
+			if (umamiTrackOutboundLinks) {
+				script.setAttribute("data-track-outbound-links", "true");
 			}
-		}, 10000);
-	})();
-</script>
+			if (umamiCollectWebVitals) {
+				script.setAttribute("data-collect-web-vitals", "true");
+			}
+			if (umamiRelpaysEnabled) {
+				script.setAttribute("data-relpays-enabled", "true");
+				script.setAttribute("data-relpays-sample-rate", umamiRelpaysSampleRate);
+				script.setAttribute("data-relpays-mask-level", umamiRelpaysMaskLevel);
+				script.setAttribute("data-relpays-max-duration", umamiRelpaysMaxDuration);
+				if (umamiRelpaysBlockSelector) {
+					script.setAttribute(
+						"data-relpays-block-selector",
+						umamiRelpaysBlockSelector,
+					);
+				}
+			}
+			document.head.appendChild(script);
+		});
+	</script>
+)}
+
+{hasAnalytics && (
+	<script is:inline>
+		(function scheduleAnalytics() {
+			if (window.analyticsLoaded || window.__tsukimiAnalyticsScheduled) return;
+			window.__tsukimiAnalyticsScheduled = true;
+			const events = ["scroll", "mousemove", "keydown", "touchstart", "click"];
+			function loadAnalytics() {
+				if (window.analyticsLoaded) return;
+				window.analyticsLoaded = true;
+				events.forEach(function (event) {
+					window.removeEventListener(event, loadAnalytics);
+				});
+				window.__tsukimiAnalyticsLoaders.forEach(function (load) {
+					load();
+				});
+				window.__tsukimiAnalyticsLoaders = [];
+			}
+			events.forEach(function (event) {
+				window.addEventListener(event, loadAnalytics, {
+					once: true,
+					passive: true,
+				});
+			});
+			setTimeout(loadAnalytics, 10000);
+		})();
+	</script>
+)}

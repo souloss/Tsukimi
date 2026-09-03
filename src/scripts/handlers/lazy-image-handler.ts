@@ -82,9 +82,18 @@ export class LazyImageHandler {
 	 */
 	private loadImage(img: HTMLImageElement): void {
 		const lazySrc = img.getAttribute("data-lazy-src");
-		if (!lazySrc) {return;}
+		if (!lazySrc) {
+			const markLoaded = () => img.classList.add("lazy-loaded");
+			if (img.complete) {
+				markLoaded();
+			} else {
+				img.addEventListener("load", markLoaded, { once: true });
+			}
+			return;
+		}
 
-		// If src is already correct, just mark as loaded
+		// Do not schedule a second request when the browser already owns the
+		// image lifecycle.
 		if (img.src === lazySrc || img.getAttribute("src") === lazySrc) {
 			img.classList.add("lazy-loaded");
 			return;

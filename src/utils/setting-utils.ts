@@ -345,13 +345,6 @@ export function applyWallpaperModeToDocument(
 	mode: WALLPAPER_MODE,
 	animate = true,
 ) {
-	// Check if wallpaper mode switching is allowed
-	const isSwitchable = backgroundWallpaperConfig.mode?.switchable ?? true;
-	if (!isSwitchable) {
-		// If switching not allowed, return directly, don't perform any operation
-		return;
-	}
-
 	// Get current wallpaper mode
 	const currentMode =
 		(document.documentElement.getAttribute(
@@ -575,27 +568,22 @@ function showBannerMode(animate = false) {
 }
 
 function showFullscreenMode(animate = false) {
-	// Fullscreen mode: show banner wrapper at 100vh (full viewport)
+	// Fullscreen mode uses the dedicated fullscreen image source.
 	const wallpaperWrapper = document.getElementById("wallpaper-wrapper");
 	const fullscreenWallpaper = document.querySelector(
 		"[data-fullscreen-wallpaper]",
 	) as HTMLElement | null;
 
-	// Hide fullscreen wallpaper component, use banner wrapper for fullscreen
 	if (fullscreenWallpaper) {
-		fullscreenWallpaper.style.display = "none";
+		fullscreenWallpaper.style.display = "block";
 	}
 
-	// Show banner wrapper as fullscreen banner (CSS makes it 100vh with fullscreen-banner class)
 	if (wallpaperWrapper) {
+		wallpaperWrapper.style.display = "none";
 		wallpaperWrapper.classList.remove(
 			"wallpaper-overlay",
 			"wallpaper-fullscreen",
-			"mobile-hide-banner",
 		);
-		wallpaperWrapper.style.display = "block";
-		wallpaperWrapper.style.top = "0";
-		wallpaperWrapper.style.transform = "none";
 	}
 
 	// Hide banner text overlay in fullscreen mode
@@ -611,36 +599,24 @@ function showFullscreenMode(animate = false) {
 }
 
 function showOverlayMode() {
-	// Show fullscreen wallpaper as full-page background
+	// Overlay mode is a compact card and must not also enable the fullscreen layer.
 	const fullscreenWallpaper = document.querySelector(
 		"[data-fullscreen-wallpaper]",
 	) as HTMLElement | null;
 	if (fullscreenWallpaper) {
-		fullscreenWallpaper.style.display = "block";
-		// Apply overlay opacity/blur from localStorage to the fullscreen wallpaper
-		const opacity = getStoredOverlayOpacity();
-		const blur = getStoredOverlayBlur();
-		fullscreenWallpaper.style.setProperty(
-			"--wallpaper-opacity",
-			String(opacity),
-		);
-		fullscreenWallpaper.style.setProperty("--wallpaper-blur", `${blur}px`);
+		fullscreenWallpaper.style.display = "none";
 	}
 
-	// Also show wallpaper-wrapper as corner card overlay
+	const overlayWallpaper = document.querySelector(
+		"[data-overlay-wallpaper]",
+	) as HTMLElement | null;
+	if (overlayWallpaper) {
+		overlayWallpaper.style.display = "block";
+	}
+
 	const wallpaperWrapper = document.getElementById("wallpaper-wrapper");
 	if (wallpaperWrapper) {
-		wallpaperWrapper.classList.remove("wallpaper-fullscreen");
-		wallpaperWrapper.classList.add("wallpaper-overlay");
-		wallpaperWrapper.style.display = "block";
-		wallpaperWrapper.style.setProperty("display", "block", "important");
-		wallpaperWrapper.style.top = "";
-		requestAnimationFrame(() => {
-			wallpaperWrapper.classList.remove("hidden");
-			wallpaperWrapper.classList.remove("opacity-0");
-			wallpaperWrapper.classList.add("opacity-100");
-			wallpaperWrapper.classList.remove("mobile-hide-banner");
-		});
+		wallpaperWrapper.style.display = "none";
 	}
 
 	// Hide banner homepage text
@@ -665,6 +641,12 @@ function hideAllWallpapers() {
 
 	if (fullscreenWallpaper) {
 		fullscreenWallpaper.style.display = "none";
+	}
+	const overlayWallpaper = document.querySelector(
+		"[data-overlay-wallpaper]",
+	) as HTMLElement | null;
+	if (overlayWallpaper) {
+		overlayWallpaper.style.display = "none";
 	}
 
 	if (wallpaperWrapper) {
@@ -926,6 +908,9 @@ export function setWallpaperMode(mode: WALLPAPER_MODE): void {
 		typeof localStorage === "undefined" ||
 		typeof localStorage.setItem !== "function"
 	) {
+		return;
+	}
+	if (!(backgroundWallpaperConfig.mode?.switchable ?? true)) {
 		return;
 	}
 	localStorage.setItem("wallpaperMode", mode);

@@ -130,7 +130,9 @@ const archiveUrl = url("/archive/");
 	}
 </style>
 
-<script>
+	<script>
+		let cleanupCategoryScroll = () => {};
+
 	function updateCategoryBar() {
 		const bar = document.getElementById("category-bar");
 		if (!bar) {
@@ -228,6 +230,8 @@ const archiveUrl = url("/archive/");
 	}
 
 	function initScrollFeatures() {
+		cleanupCategoryScroll();
+
 		const bar = document.getElementById("category-bar");
 		if (!bar) {
 			return;
@@ -239,21 +243,23 @@ const archiveUrl = url("/archive/");
 		}
 
 		// 鼠标滚轮横向滚动
-		scroll.addEventListener(
-			"wheel",
-			(e) => {
-				if (scroll.scrollWidth <= scroll.clientWidth) {
-					return;
-				}
-				e.preventDefault();
-				scroll.scrollLeft += e.deltaY;
-			},
-			{ passive: false },
-		);
+		const handleWheel = (event: WheelEvent) => {
+			if (scroll.scrollWidth <= scroll.clientWidth) {
+				return;
+			}
+			event.preventDefault();
+			scroll.scrollLeft += event.deltaY;
+		};
+		scroll.addEventListener("wheel", handleWheel, { passive: false });
 
 		// 监听滚动更新提示图标
 		scroll.addEventListener("scroll", updateScrollHint);
 		window.addEventListener("resize", updateScrollHint);
+		cleanupCategoryScroll = () => {
+			scroll.removeEventListener("wheel", handleWheel);
+			scroll.removeEventListener("scroll", updateScrollHint);
+			window.removeEventListener("resize", updateScrollHint);
+		};
 		updateScrollHint();
 	}
 
@@ -287,11 +293,12 @@ const archiveUrl = url("/archive/");
 		}
 	}
 
-	updateCategoryBar();
-	initScrollFeatures();
-	document.addEventListener("astro:page-load", () => {
+	function initializeCategoryBar() {
 		updateCategoryBar();
 		initScrollFeatures();
-	});
-	document.addEventListener("swup:contentReplaced", updateCategoryBar);
+	}
+
+	initializeCategoryBar();
+	document.addEventListener("astro:page-load", initializeCategoryBar);
+	document.addEventListener("swup:contentReplaced", initializeCategoryBar);
 </script>

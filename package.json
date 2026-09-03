@@ -7,7 +7,7 @@
 		"check-docs-render": "node scripts/check-docs-render.mjs",
 		"init-content": "node scripts/init-content-repo.js",
 		"predev": "node scripts/sync-content.js || true",
-		"prebuild": "node scripts/generate-file-icons.mjs && node scripts/sync-content.js || true",
+		"prebuild": "node scripts/generate-file-icons.mjs && node scripts/sync-content.js",
 		"dev": "NODE_OPTIONS='--max-old-space-size=6144 --max-semi-space-size=2' astro dev",
 		"dev:mem": "NODE_OPTIONS='--max-old-space-size=16384' astro dev",
 		"start": "astro dev",
@@ -16,7 +16,9 @@
 		"update-bangumi": "node scripts/update-bangumi.mjs",
 		"update-bilibili": "node scripts/update-bilibili.mjs",
 		"update-feeds": "node scripts/update-feeds.mjs",
-		"build": "node scripts/update-feeds.mjs && node scripts/update-anime.mjs && node scripts/run-with-mem.js astro build && node scripts/build-pagefind.mjs && node scripts/compress-fonts/index.js",
+		"refresh-data": "pnpm update-feeds && pnpm update-anime",
+		"build": "node scripts/run-with-mem.js astro build && node scripts/build-pagefind.mjs && node scripts/compress-fonts/index.js",
+		"build:refresh-data": "pnpm refresh-data && pnpm build",
 		"submit": "node scripts/indexnow-submit.js",
 		"preview": "astro preview",
 		"astro": "astro",
@@ -121,10 +123,5 @@
 		"*.{js,ts,mjs,svelte,astro,json}": [
 			"biome check --write --no-errors-on-unmatched"
 		]
-	},
-	"pnpm": {
-		"patchedDependencies": {
-			"svelte@5.55.5": "patches/svelte@5.55.5.patch"
-		}
 	}
 }

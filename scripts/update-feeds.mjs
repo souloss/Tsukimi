@@ -12,6 +12,18 @@ const FRIENDS_DATA_PATH = path.join(__dirname, "../src/data/friends.ts");
 const FRIENDS_CONFIG_PATH = path.join(__dirname, "../src/config/friendsConfig.ts");
 const OUTPUT_PATH = path.join(__dirname, "../src/data/friends-circle.json");
 
+async function writeOutput(data) {
+	const dir = path.dirname(OUTPUT_PATH);
+	await fs.mkdir(dir, { recursive: true });
+	const temporaryPath = `${OUTPUT_PATH}.${process.pid}.tmp`;
+	try {
+		await fs.writeFile(temporaryPath, JSON.stringify(data, null, 2));
+		await fs.rename(temporaryPath, OUTPUT_PATH);
+	} finally {
+		await fs.rm(temporaryPath, { force: true });
+	}
+}
+
 // 代理配置：检测环境变量中的代理设置
 const proxyUrl = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
 const httpAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : new http.Agent();
@@ -259,13 +271,7 @@ async function main() {
 	if (!config.showFriendsCircle) {
 		console.log("Friends circle is disabled, skipping.");
 		const emptyData = { lastUpdated: new Date().toISOString(), items: [] };
-		const dir = path.dirname(OUTPUT_PATH);
-		try {
-			await fs.access(dir);
-		} catch {
-			await fs.mkdir(dir, { recursive: true });
-		}
-		await fs.writeFile(OUTPUT_PATH, JSON.stringify(emptyData, null, 2));
+		await writeOutput(emptyData);
 		return;
 	}
 
@@ -274,13 +280,7 @@ async function main() {
 	if (friendsWithRss.length === 0) {
 		console.log("No friends with RSS found.");
 		const emptyData = { lastUpdated: new Date().toISOString(), items: [] };
-		const dir = path.dirname(OUTPUT_PATH);
-		try {
-			await fs.access(dir);
-		} catch {
-			await fs.mkdir(dir, { recursive: true });
-		}
-		await fs.writeFile(OUTPUT_PATH, JSON.stringify(emptyData, null, 2));
+		await writeOutput(emptyData);
 		return;
 	}
 
@@ -290,6 +290,16 @@ async function main() {
 	let allItems = [];
 	let successCount = 0;
 	let failCount = 0;
+	const failedSiteUrls = new Set();
+	let existingItems = [];
+	try {
+		const existingData = JSON.parse(await fs.readFile(OUTPUT_PATH, "utf-8"));
+		if (Array.isArray(existingData.items)) {
+			existingItems = existingData.items;
+		}
+	} catch {
+		// First refresh has no previous snapshot to preserve.
+	}
 
 	for (const friend of friendsWithRss) {
 		console.log(`\nFetching: ${friend.title}`);
@@ -298,6 +308,7 @@ async function main() {
 		const xmlText = await fetchFeed(friend.rss);
 		if (!xmlText) {
 			failCount++;
+			failedSiteUrls.add(friend.siteurl);
 			continue;
 		}
 
@@ -309,6 +320,7 @@ async function main() {
 			successCount++;
 		} else {
 			failCount++;
+			failedSiteUrls.add(friend.siteurl);
 		}
 
 		await delay(500);
@@ -317,6 +329,18 @@ async function main() {
 	console.log(`\n=== Summary ===`);
 	console.log(`Success: ${successCount}, Failed: ${failCount}`);
 	console.log(`Total items before filtering: ${allItems.length}`);
+
+	// Keep the last successful snapshot for individual feeds that failed. A
+	// transient error in one source must not erase that source from the output.
+	if (failedSiteUrls.size > 0) {
+		const links = new Set(allItems.map((item) => item.link));
+		for (const item of existingItems) {
+			if (failedSiteUrls.has(item.siteUrl) && !links.has(item.link)) {
+				allItems.push(item);
+				links.add(item.link);
+			}
+		}
+	}
 
 	// 按发布时间降序排序
 	allItems.sort((a, b) => {
@@ -354,14 +378,7 @@ async function main() {
 		items: finalItems,
 	};
 
-	const dir = path.dirname(OUTPUT_PATH);
-	try {
-		await fs.access(dir);
-	} catch {
-		await fs.mkdir(dir, { recursive: true });
-	}
-
-	await fs.writeFile(OUTPUT_PATH, JSON.stringify(output, null, 2));
+	await writeOutput(output);
 	console.log(`Written to: ${OUTPUT_PATH}`);
 	console.log("=== Done ===");
 }

@@ -26,8 +26,8 @@ import TypewriterText from "../../atoms/typewriter-text/TypewriterText.astro";
 			src={profileConfig.avatar || ""}
 			alt="Profile Image of the Author"
 			class="mx-auto lg:w-full h-full lg:mt-0"
-			loading="eager"
-			fetchpriority="high"
+			loading="lazy"
+			fetchpriority="auto"
 		/>
 	</a>
 	<div class="px-2">

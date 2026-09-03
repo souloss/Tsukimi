@@ -23,6 +23,22 @@ let isHomePage = $state(false);
 
 let observer: IntersectionObserver | undefined;
 let swupListenersRegistered = $state(false);
+let swupPageViewHandler: (() => void) | undefined;
+let popstateHandler: (() => void) | undefined;
+let swupEnableHandler: (() => void) | undefined;
+let initTimer: ReturnType<typeof setTimeout> | undefined;
+
+type SwupHooks = {
+	on: (event: string, cb: () => void) => void;
+	off: (event: string, cb: () => void) => void;
+};
+
+const getSwup = (): { hooks: SwupHooks } | undefined =>
+	(
+		window as unknown as {
+			swup?: { hooks: SwupHooks };
+		}
+	).swup;
 
 const togglePanel = async () => {
 	await panelManager.togglePanel("mobile-toc-panel");
@@ -89,68 +105,46 @@ const setupIntersectionObserver = () => {
 };
 
 const setupSwupListeners = () => {
-	if (
-		typeof window !== "undefined" &&
-		(
-			window as unknown as {
-				swup?: {
-					hooks: {
-						on: (event: string, cb: () => void) => void;
-						off: (event: string) => void;
-					};
-				};
-			}
-		).swup &&
-		!swupListenersRegistered
-	) {
-		const swup = (
-			window as unknown as {
-				swup: {
-					hooks: { on: (event: string, cb: () => void) => void };
-				};
-			}
-		).swup;
-
-		swup.hooks.on("page:view", () => {
-			setTimeout(() => init(), 200);
-		});
-
-		swupListenersRegistered = true;
-	} else if (!swupListenersRegistered) {
-		window.addEventListener("popstate", () => {
-			setTimeout(init, 200);
-		});
-		swupListenersRegistered = true;
+	if (swupListenersRegistered) {
+		return;
 	}
+
+	const swup = getSwup();
+	if (!swup) {
+		if (!popstateHandler) {
+			popstateHandler = () => setTimeout(init, 200);
+			window.addEventListener("popstate", popstateHandler);
+		}
+		return;
+	}
+
+	if (popstateHandler) {
+		window.removeEventListener("popstate", popstateHandler);
+		popstateHandler = undefined;
+	}
+	swupPageViewHandler = () => setTimeout(init, 200);
+	swup.hooks.on("page:view", swupPageViewHandler);
+	swupListenersRegistered = true;
 };
 
 const checkSwupAvailability = () => {
 	if (typeof window !== "undefined") {
-		const w = window as unknown as {
-			swup?: {
-				hooks: {
-					on: (event: string, cb: () => void) => void;
-					off: (event: string) => void;
-				};
-			};
-		};
-		if (w.swup) {
+		if (getSwup()) {
 			setupSwupListeners();
 		} else {
-			const checkSwup = () => {
-				if (w.swup) {
+			setupSwupListeners();
+			if (swupEnableHandler) {
+				return;
+			}
+			swupEnableHandler = () => {
+				if (getSwup()) {
 					setupSwupListeners();
-					document.removeEventListener("swup:enable", checkSwup);
+					if (swupEnableHandler) {
+						document.removeEventListener("swup:enable", swupEnableHandler);
+					}
 				}
 			};
-
-			document.addEventListener("swup:enable", checkSwup);
-			setTimeout(() => {
-				if (w.swup) {
-					setupSwupListeners();
-					document.removeEventListener("swup:enable", checkSwup);
-				}
-			}, 1000);
+			document.addEventListener("swup:enable", swupEnableHandler);
 		}
 	}
 };
@@ -172,27 +166,32 @@ const init = () => {
 };
 
 onMount(() => {
-	setTimeout(init, 100);
+	initTimer = setTimeout(init, 100);
 	window.addEventListener("scroll", updateActiveHeading, {
 		passive: true,
 	});
 
 	return () => {
+		if (initTimer) {
+			clearTimeout(initTimer);
+		}
 		observer?.disconnect();
 		window.removeEventListener("scroll", updateActiveHeading);
 
-		const w = window as unknown as {
-			swup?: {
-				hooks: {
-					on: (event: string, cb: () => void) => void;
-					off: (event: string) => void;
-				};
-			};
-		};
-		if (w.swup) {
-			w.swup.hooks.off("page:view");
+		const swup = getSwup();
+		if (swup && swupPageViewHandler) {
+			swup.hooks.off("page:view", swupPageViewHandler);
+		}
+		if (popstateHandler) {
+			window.removeEventListener("popstate", popstateHandler);
+		}
+		if (swupEnableHandler) {
+			document.removeEventListener("swup:enable", swupEnableHandler);
 		}
 
+		swupPageViewHandler = undefined;
+		popstateHandler = undefined;
+		swupEnableHandler = undefined;
 		swupListenersRegistered = false;
 	};
 });

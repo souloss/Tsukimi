@@ -16,11 +16,12 @@ export function rehypeLazyImage() {
 					return;
 				}
 
-				// Add data-lazy-src for client-side lazy loading
-				node.properties.dataLazySrc = src;
-
-				// Add loading="lazy" for native browser lazy loading
-				node.properties.loading = "lazy";
+				// Keep native lazy loading as the single loading mechanism. The previous
+				// data-lazy-src mirror caused the client handler to mark already-loaded
+				// images immediately and added no actual deferral.
+				if (!node.properties.loading) {
+					node.properties.loading = "lazy";
+				}
 
 				// Add a class for CSS blur transition
 				if (node.properties.className) {

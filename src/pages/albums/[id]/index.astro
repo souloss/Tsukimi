@@ -10,12 +10,16 @@ import { i18n } from "../../../i18n/translation";
 import type { AlbumGroup, Photo } from "../../../types/album";
 import { scanAlbums } from "../../../utils/album-scanner";
 import { encryptContent } from "../../../utils/crypto-utils";
+import "../../../styles/albums.css";
 
 if (!siteConfig.featurePages.albums) {
 	return Astro.redirect("/404/");
 }
 
 export const getStaticPaths = async () => {
+	if (!siteConfig.featurePages.albums) {
+		return [];
+	}
 	const albumsData = await scanAlbums();
 	return albumsData.map((album) => ({
 		params: { id: album.id },

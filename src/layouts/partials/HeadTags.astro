@@ -6,12 +6,13 @@
  * 提取自 Layout.astro 以实现更好的代码组织
  */
 
-import { profileConfig, siteConfig } from "@/config";
+import { fontConfig, profileConfig, siteConfig } from "@/config";
 
 import {
 	DARK_MODE,
 	DEFAULT_THEME,
 	LIGHT_MODE,
+	SYSTEM_MODE,
 } from "../../constants/constants";
 import { defaultFavicons } from "../../constants/icon";
 import type { Favicon } from "../../types/config";
@@ -46,6 +47,13 @@ const keywords = siteConfig.keywords;
 // Favicons
 const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
+
+const configuredFonts = Array.isArray(fontConfig.fonts)
+	? fontConfig.fonts
+	: Object.values(fontConfig.fonts ?? {});
+const defaultFont = configuredFonts.find(
+	(font) => font.id === fontConfig.defaultFont,
+);
 ---
 
 <!-- SEO Meta Tags -->
@@ -99,8 +107,21 @@ const favicons: Favicon[] =
 	))
 }
 
-<!-- 字体通过构建脚本压缩到 /assets/font/ 目录，此处不再预加载以避免 404 -->
-<!-- 字体在构建时通过 scripts/compress-fonts.js 处理并复制到 dist/ -->
+<!-- Load the configured default before paint; saved alternatives are restored by DisplaySettings. -->
+{defaultFont?.googleFonts && (
+	<link
+		rel="stylesheet"
+		href={defaultFont.googleFonts}
+		data-font-id={`${defaultFont.id}-gfonts`}
+	/>
+)}
+{defaultFont?.cdnUrl && (
+	<link
+		rel="stylesheet"
+		href={defaultFont.cdnUrl}
+		data-font-id={`${defaultFont.id}-cdn`}
+	/>
+)}
 
 <!-- 预连接 Iconify API 以减少图标加载延迟 -->
 <link rel="preconnect" href="https://api.iconify.design" crossorigin />
@@ -112,6 +133,7 @@ const favicons: Favicon[] =
 		DEFAULT_THEME,
 		LIGHT_MODE,
 		DARK_MODE,
+		SYSTEM_MODE,
 		BANNER_HEIGHT_EXTEND: 30,
 		configHue,
 		pageScaling: siteConfig.pageScaling,
@@ -119,17 +141,11 @@ const favicons: Favicon[] =
 >
 	// Load the theme from local storage
 	const theme = localStorage.getItem("theme") || DEFAULT_THEME;
-	let isDark = false;
-	switch (theme) {
-		case LIGHT_MODE:
-			document.documentElement.classList.remove("dark");
-			isDark = false;
-			break;
-		case DARK_MODE:
-			document.documentElement.classList.add("dark");
-			isDark = true;
-			break;
-	}
+	const isDark =
+		theme === DARK_MODE ||
+		(theme === SYSTEM_MODE &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches);
+	document.documentElement.classList.toggle("dark", isDark);
 
 	// Set the theme for Expressive Code based on current mode
 	const expressiveTheme = isDark ? "github-dark" : "github-light";
