@@ -31,40 +31,25 @@ const config = {
 
   <script is:inline define:vars={{ config }}>
     (function () {
+      const state = window.__tsukimiTwikoo || (window.__tsukimiTwikoo = {
+        observer: null,
+        observerTarget: null,
+        initPromise: null,
+        scriptPromise: null,
+        pendingInitTimer: null,
+        timeoutId: null,
+        initializedPath: null,
+        initializedElement: null,
+        initToken: 0,
+        listenersInstalled: false,
+        swupHookInstalled: false,
+      });
+      state.config = config;
+
       const TWIKOO_CONTAINER_ID = "twikoo-container";
       const TWIKOO_SCRIPT_URL = "/assets/js/twikoo.all.min.js";
       const ROOT_MARGIN = "200px";
       const LOADING_TIMEOUT = 15000;
-
-      let observer = null;
-      let twikooLoaded = false;
-      let timeoutId = null;
-      let initialized = false;
-      let initializedPath = null;
-
-      // Guard against concurrent init calls
-      let initInProgress = false;
-
-      // Store Swup hook reference for proper cleanup
-      let swupContentReplaceHandler = null;
-
-      function hideLoading() {
-        const loading = document.getElementById('twikoo-loading');
-        if (loading) {
-          loading.style.display = 'none';
-        }
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          timeoutId = null;
-        }
-      }
-
-      function showError(message) {
-        const loading = document.getElementById('twikoo-loading');
-        if (loading) {
-          loading.innerHTML = '<div class="text-center text-muted-foreground">' + message + '</div>';
-        }
-      }
 
       function getCurrentPath() {
         const pathname = window.location.pathname;
@@ -73,219 +58,207 @@ const config = {
           : pathname;
       }
 
-      function createTwikooConfig() {
-        return {
-          el: "#tcomment",
-          envId: config.envId,
-          path: getCurrentPath(),
-          region: config.region || undefined,
-          visitorCount: config.visitorCount !== undefined ? config.visitorCount : false,
-        };
+      function hideLoading() {
+        const loading = document.getElementById("twikoo-loading");
+        if (loading) loading.style.display = "none";
+        if (state.timeoutId) {
+          clearTimeout(state.timeoutId);
+          state.timeoutId = null;
+        }
       }
 
-      async function loadTwikooScript() {
-        if (twikooLoaded || document.getElementById("twikoo-script-loaded")) {
-          return;
+      function showError(message) {
+        const loading = document.getElementById("twikoo-loading");
+        if (loading) {
+          loading.textContent = message;
+          loading.style.display = "block";
         }
-        return new Promise(function (resolve, reject) {
-          const script = document.createElement("script");
-          script.id = "twikoo-script-loaded";
-          script.src = TWIKOO_SCRIPT_URL;
-          script.async = true;
-          script.onload = function () {
-            twikooLoaded = true;
-            resolve();
-          };
-          script.onerror = function () {
-            showError('评论组件加载失败，请检查网络');
-            reject(new Error('Failed to load Twikoo script'));
-          };
-          document.head.appendChild(script);
+      }
+
+      function disconnectObserver() {
+        if (state.observer) state.observer.disconnect();
+        state.observer = null;
+        state.observerTarget = null;
+      }
+
+      function resetPage() {
+        state.initToken += 1;
+        disconnectObserver();
+        if (state.pendingInitTimer) {
+          clearTimeout(state.pendingInitTimer);
+          state.pendingInitTimer = null;
+        }
+        if (state.timeoutId) {
+          clearTimeout(state.timeoutId);
+          state.timeoutId = null;
+        }
+        state.initPromise = null;
+        state.initializedPath = null;
+        state.initializedElement = null;
+      }
+
+      function markProviderStyles() {
+        document.head.querySelectorAll("style").forEach(function (style) {
+          if (style.dataset.tsukimiTwikooStyle === "true") return;
+          const text = style.textContent || "";
+          if (text.includes(".tk-") || text.includes(".el-") || text.includes(".OwO")) {
+            style.dataset.tsukimiTwikooStyle = "true";
+          }
         });
       }
 
-      async function initTwikoo() {
-        // Prevent concurrent init calls
-        if (initInProgress) {
-          return;
-        }
+      function loadTwikooScript() {
+        if (window.twikoo) return Promise.resolve();
+        if (state.scriptPromise) return state.scriptPromise;
 
-        const commentEl = document.getElementById("tcomment");
-        if (!commentEl) {
-          return;
-        }
-
-        if (!config.envId) {
-          showError('评论系统未配置 envId');
-          return;
-        }
-
-        // Skip re-init if already initialized for the current path
-        const currentPath = getCurrentPath();
-        if (initialized && initializedPath === currentPath) {
-          hideLoading();
-          return;
-        }
-
-        initInProgress = true;
-
-        // Set timeout to force hide loading
-        timeoutId = setTimeout(function () {
-          hideLoading();
-        }, LOADING_TIMEOUT);
-
-        try {
-          await loadTwikooScript();
-
-          if (typeof twikoo === "undefined") {
-            showError('评论脚本加载失败，请刷新重试');
-            return;
+        const existing = document.getElementById("twikoo-script-loaded");
+        state.scriptPromise = new Promise(function (resolve, reject) {
+          const script = existing || document.createElement("script");
+          if (!existing) {
+            script.id = "twikoo-script-loaded";
+            script.src = TWIKOO_SCRIPT_URL;
+            script.async = true;
+            document.head.appendChild(script);
           }
-
-          // Clear previous contents only when path changed (genuine re-init)
-          if (initialized) {
-            commentEl.innerHTML = "";
-          }
-
-          const dynamicConfig = createTwikooConfig();
-          await twikoo.init(dynamicConfig);
-          initialized = true;
-          initializedPath = currentPath;
-
-          // Wait for Twikoo's internal Vue components to finish rendering,
-          // then force a synchronous layout reflow so our CSS overrides take effect.
-          await new Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); });
-          void commentEl.offsetHeight;
-
-          hideLoading();
-        } catch (error) {
-          showError('评论加载失败，请刷新重试');
-        } finally {
-          initInProgress = false;
-        }
+          script.addEventListener("load", resolve, { once: true });
+          script.addEventListener("error", reject, { once: true });
+        }).then(function () {
+          markProviderStyles();
+        });
+        return state.scriptPromise;
       }
 
-      function cleanup() {
-        if (observer) {
-          observer.disconnect();
-          observer = null;
+      function initTwikoo() {
+        const commentEl = document.getElementById("tcomment");
+        if (!commentEl) return Promise.resolve();
+        if (!state.config.envId) {
+          showError("评论系统未配置 envId");
+          return Promise.resolve();
         }
-        // Properly remove the Swup hook using the stored reference
-        if (window.swup && window.swup.hooks && swupContentReplaceHandler) {
+
+        const currentPath = getCurrentPath();
+        if (
+          state.initializedPath === currentPath &&
+          state.initializedElement === commentEl
+        ) {
+          hideLoading();
+          return Promise.resolve();
+        }
+        if (state.initPromise) return state.initPromise;
+
+        const token = state.initToken;
+        const initConfig = state.config;
+        state.timeoutId = setTimeout(hideLoading, LOADING_TIMEOUT);
+        const promise = (async function () {
           try {
-            window.swup.hooks.off("content:replace", swupContentReplaceHandler);
-          } catch (_e) {
-            // ignore
+            await loadTwikooScript();
+            if (token !== state.initToken || !document.body.contains(commentEl)) return;
+            if (!window.twikoo) throw new Error("Twikoo API unavailable");
+
+            commentEl.replaceChildren();
+            await window.twikoo.init({
+              ...initConfig,
+              el: "#tcomment",
+              path: currentPath,
+              region: initConfig.region || undefined,
+              visitorCount: initConfig.visitorCount !== undefined
+                ? initConfig.visitorCount
+                : false,
+            });
+            markProviderStyles();
+            if (token !== state.initToken || !document.body.contains(commentEl)) return;
+
+            state.initializedPath = currentPath;
+            state.initializedElement = commentEl;
+            await new Promise(function (resolve) {
+              requestAnimationFrame(function () {
+                requestAnimationFrame(resolve);
+              });
+            });
+            void commentEl.offsetHeight;
+            hideLoading();
+          } catch (error) {
+            if (token === state.initToken) showError("评论加载失败，请刷新重试");
+          } finally {
+            if (state.timeoutId) {
+              clearTimeout(state.timeoutId);
+              state.timeoutId = null;
+            }
           }
-          swupContentReplaceHandler = null;
-        }
-        initialized = false;
-        initializedPath = null;
+        })();
+        state.initPromise = promise;
+        promise.finally(function () {
+          if (state.initPromise === promise) state.initPromise = null;
+        });
+        return promise;
       }
 
       function setupLazyLoad() {
         const container = document.getElementById(TWIKOO_CONTAINER_ID);
         if (!container) {
+          disconnectObserver();
           return;
         }
+        if (state.observerTarget === container) return;
+        disconnectObserver();
 
-        // Don't create a new observer if one already exists
-        if (observer) {
-          return;
-        }
-
-        // Skip if already initialized for current path
-        const currentPath = getCurrentPath();
-        if (initialized && initializedPath === currentPath) {
+        if (
+          state.initializedPath === getCurrentPath() &&
+          state.initializedElement === document.getElementById("tcomment")
+        ) {
           hideLoading();
           return;
         }
-
-        observer = new IntersectionObserver(
-          function (entries) {
-            if (entries[0].isIntersecting) {
-              if (observer) {
-                observer.disconnect();
-                observer = null;
-              }
-              initTwikoo();
-            }
-          },
-          { rootMargin: ROOT_MARGIN },
-        );
-
-        observer.observe(container);
-      }
-
-      function setupSwupHooks() {
-        if (swupContentReplaceHandler) {
-          return; // Already registered
+        if (typeof IntersectionObserver !== "function") {
+          initTwikoo();
+          return;
         }
 
-        var registerHook = function () {
-          if (!window.swup || !window.swup.hooks) return;
-          // Store the handler reference for proper cleanup later
-          swupContentReplaceHandler = function () {
-            // Reset state for new page
-            initialized = false;
-            initializedPath = null;
-            if (observer) {
-              observer.disconnect();
-              observer = null;
-            }
-            // Use the config-driven delay from tsukimi:page:loaded instead
-            // of a hardcoded 200ms, so we don't double-init
-          };
-          window.swup.hooks.on("content:replace", swupContentReplaceHandler);
-        };
-
-        if (window.swup && window.swup.hooks) {
-          registerHook();
-        } else {
-          document.addEventListener("swup:enable", function () {
-            registerHook();
-          }, { once: true });
-        }
+        state.observerTarget = container;
+        state.observer = new IntersectionObserver(function (entries) {
+          if (!entries[0]?.isIntersecting) return;
+          disconnectObserver();
+          initTwikoo();
+        }, { rootMargin: ROOT_MARGIN });
+        state.observer.observe(container);
       }
 
-      // Use a single init entry point after page transitions
-      // to prevent multiple concurrent triggers
-      var pendingInitTimer = null;
       function scheduleInit() {
-        if (pendingInitTimer) {
-          clearTimeout(pendingInitTimer);
-        }
-        pendingInitTimer = setTimeout(function () {
-          pendingInitTimer = null;
+        if (state.pendingInitTimer) clearTimeout(state.pendingInitTimer);
+        state.pendingInitTimer = setTimeout(function () {
+          state.pendingInitTimer = null;
           setupLazyLoad();
         }, 100);
       }
 
-      // Astro page lifecycle events
-      document.addEventListener("astro:page-load", function () {
-        setupSwupHooks();
-        scheduleInit();
-      });
-
-      document.addEventListener("astro:before-swap", cleanup);
-
-      document.addEventListener("tsukimi:page:loaded", function () {
-        // This event fires after the config-driven delay (250ms),
-        // which is the right time to init comments
-        scheduleInit();
-      });
-
-      window.addEventListener("beforeunload", cleanup);
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", function () {
-          setupLazyLoad();
-          setupSwupHooks();
-        });
-      } else {
-        setupLazyLoad();
-        setupSwupHooks();
+      function setupSwupHook() {
+        if (state.swupHookInstalled) return;
+        const register = function () {
+          if (!window.swup?.hooks || state.swupHookInstalled) return;
+          state.swupHook = function () {
+            resetPage();
+            scheduleInit();
+          };
+          window.swup.hooks.on("content:replace", state.swupHook);
+          state.swupHookInstalled = true;
+        };
+        if (window.swup?.hooks) register();
+        else document.addEventListener("swup:enable", register, { once: true });
       }
+
+      if (!state.listenersInstalled) {
+        document.addEventListener("astro:page-load", function () {
+          setupSwupHook();
+          scheduleInit();
+        });
+        document.addEventListener("astro:before-swap", resetPage);
+        document.addEventListener("tsukimi:page:loaded", scheduleInit);
+        window.addEventListener("beforeunload", resetPage);
+        state.listenersInstalled = true;
+      }
+
+      setupSwupHook();
+      setupLazyLoad();
     })();
   </script>
 

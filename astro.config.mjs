@@ -118,7 +118,17 @@ export default defineConfig({
 			cache: true,
 			preload: false,
 			accessibility: true,
-			updateHead: process.env.NODE_ENV === "production",
+			updateHead:
+				process.env.NODE_ENV === "production"
+					? {
+							awaitAssets: true,
+							// Comment providers inject sizeable, page-local stylesheets.
+							// Keep them after a Swup visit so the swapped comment DOM never
+							// renders without its provider styles.
+							persistTags:
+								'link[rel="stylesheet"][href*="twikoo" i], link[rel="stylesheet"][href*="waline" i], style[data-tsukimi-twikoo-style]',
+						}
+					: false,
 			updateBodyClass: false,
 			globalInstance: true,
 			resolveUrl: (url) => url,
