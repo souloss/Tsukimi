@@ -38,6 +38,7 @@
 | `astro-icon` 本地图标目录 | 已完成 | 增加 `src/icons/.gitkeep`，消除默认目录扫描警告并保留未来自定义 SVG 图标入口 |
 | `postcss-import` 17 | 已完成 | 构建期 CSS import 插件升级；Node 22 与 PostCSS 8 peer 条件已满足，完整构建通过 |
 | Pako 3 与依赖归类 | 已完成 | PlantUML 编码器改用命名空间导入，Pako 仅用于构建插件，移入 `devDependencies` |
+| `@types/markdown-it` 14.2 | 已完成 | 仅类型声明更新；RSS/Atom 相关检查和静态构建均通过 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -151,6 +152,11 @@
 - `pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；包含 PlantUML 示例的文档页浏览器验证图片 `naturalWidth > 0`，console/pageerror 均为 0。
 - Pako 3 会产生不同但有效的压缩 URL，已有图示的远程缓存会自然失效一次；不改变图示语义。
 
+### `@types/markdown-it` 14.2 升级
+
+- 从 `14.1.2` 升至 `14.2.0`，仅更新开发期类型声明，不改变运行时代码。
+- `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；148 个页面及 RSS/Atom 产物正常。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -220,3 +226,4 @@
 - 增加 `src/icons/.gitkeep`，完成 astro-icon 默认本地图标目录治理；构建加载本地空集合，原缺失目录警告消失，148 页面构建通过。
 - 升级 `postcss-import` 至 `17.0.0`；冻结安装、检查、类型检查和完整构建通过。在线审计因 registry 无响应超时，沿用升级前最近一次全 0 快照并记录限制。
 - 升级 Pako 至 `3.0.1` 并移入开发依赖，修复命名空间导入；PlantUML 编码、真实 SVG 服务、文档页浏览器加载和完整构建均通过。在线审计仍受 registry 无响应限制。
+- 升级 `@types/markdown-it` 至 `14.2.0`；冻结安装、Astro/TypeScript 检查和完整构建均通过。
