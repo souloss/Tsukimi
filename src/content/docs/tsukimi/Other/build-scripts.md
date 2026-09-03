@@ -39,7 +39,7 @@ pnpm build  # compress-fonts 作为构建流程的一部分自动执行
 - 读取 `src/config/fontConfig.ts` 中的字体配置，发现所有 `localFonts` 数组
 - 根据是否具有 `cjkFontFamily` 将字体分类为 ASCII 字体和 CJK 字体
 - 收集项目中所有使用到的文字字符（数据文件、配置、i18n、文章内容、音乐播放列表、番剧数据等）
-- 使用 Fontmin 库对 TTF/OTF 字体进行子集化，仅保留需要的字符
+- 使用 `subset-font` 对 TTF/OTF 字体进行子集化，仅保留需要的字符，并直接输出 WOFF2
 - 将字体转换为 WOFF2 格式输出到 `dist/assets/font/`
 - 跳过已经是 WOFF/WOFF2 格式的文件（直接复制）
 - 更新 `dist/` 中的 CSS `@font-face` 引用，指向压缩后的 WOFF2 文件

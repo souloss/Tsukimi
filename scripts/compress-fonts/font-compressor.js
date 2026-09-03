@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import Fontmin from "fontmin";
+import subsetFont from "subset-font";
 import { ROOT_DIR } from "./utils.js";
 import { getFontConfigs } from "./config-parser.js";
 import { collectText, getAsciiCharset } from "./text-collector.js";
@@ -75,33 +75,20 @@ export async function compressFonts() {
 				} else if (ext === ".ttf" || ext === ".otf") {
 					console.log(`Compressing ${fontFile}...`);
 
-					const fontmin = new Fontmin()
-						.src(fontSrc)
-						.use(
-							Fontmin.glyph({
-								text,
-								hinting: false,
-							}),
-						)
-						.use(
-							Fontmin.ttf2woff2({
-								clone: false,
-								deflate: true,
-							}),
-						)
-						.dest(distFontDir);
-
-					await new Promise((resolve, reject) => {
-						fontmin.run((err, files) => {
-							if (err) reject(err);
-							else resolve(files);
-						});
-					});
+					const compressedBuffer = await subsetFont(
+						fs.readFileSync(fontSrc),
+						text,
+						{
+							targetFormat: "woff2",
+							noHinting: true,
+						},
+					);
 
 					const compressedFile = path.join(
 						distFontDir,
 						`${baseName}.woff2`,
 					);
+					fs.writeFileSync(compressedFile, compressedBuffer);
 
 					if (fs.existsSync(compressedFile)) {
 						const compressedSize =

@@ -96,14 +96,6 @@ export default defineConfig({
 
 	output: "static",
 
-	experimental: {
-		queuedRendering: {
-			enabled: true,
-			poolSize: 1000,
-			contentCache: true,
-		},
-	},
-
 	integrations: [
 		oddmisc({
 			umami: {

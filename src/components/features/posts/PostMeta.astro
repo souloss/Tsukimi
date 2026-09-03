@@ -94,7 +94,12 @@ const {
     )}
     
     {!isHome && id && (
-        <div class="flex items-center umami-page-views hidden" data-id={id}>
+        <div
+            class="flex items-center umami-page-views hidden"
+            data-id={id}
+            data-pageviews-text={i18n(I18nKey.profileStatsPageViews)}
+            data-visits-text={i18n(I18nKey.profileStatsVisits)}
+        >
             <div class="meta-icon">
                 <Icon name="material-symbols:visibility-outline-rounded" class="text-xl"></Icon>
             </div>
@@ -102,56 +107,55 @@ const {
         </div>
     )}
 
-    {showEncrypted && (
-        <EncryptedBadge />
-    )}
-    
-    {!isHome && id && (
-<script is:inline define:vars={{
-    pageViewsText: i18n(I18nKey.profileStatsPageViews),
-    visitsText: i18n(I18nKey.profileStatsVisits)
-}}>
-    function generateStatsText(pageViews, visits) {
-        return `${pageViewsText} ${pageViews} · ${visitsText} ${visits}`;
-    }
+	{showEncrypted && (
+		<EncryptedBadge />
+	)}
+	</div>
 
-    function fetchPageViews() {
-        var containers = document.querySelectorAll('.umami-page-views');
+<script is:inline>
+    if (!window.__tsukimiPostMetaStatsInitialized) {
+        window.__tsukimiPostMetaStatsInitialized = true;
 
-        if (!window.oddmisc) {
+        function fetchPageViews() {
+            var containers = document.querySelectorAll('.umami-page-views');
+
+            if (!window.oddmisc) {
+                window.addEventListener('oddmisc-ready', function() {
+                    fetchPageViews();
+                }, { once: true });
+                return;
+            }
+
+            containers.forEach(function(container) {
+                var id = container.dataset.id;
+                if (!id) return;
+
+                window.oddmisc.getStats('/posts/' + id + '/').then(function(stats) {
+                    var pageViews = stats.pageviews || 0;
+                    var visits = stats.visits || 0;
+                    var pageViewsText = container.dataset.pageviewsText || '';
+                    var visitsText = container.dataset.visitsText || '';
+
+                    container.classList.remove('hidden');
+                    container.querySelector('.page-views-display').textContent =
+                        `${pageViewsText} ${pageViews} · ${visitsText} ${visits}`;
+                }).catch(function(error) {
+                    console.error('Error fetching page views:', error);
+                    container.classList.add('hidden');
+                });
+            });
+        }
+
+        // Try immediately if oddmisc is already available, otherwise wait
+        if (window.oddmisc) {
+            fetchPageViews();
+        } else {
             window.addEventListener('oddmisc-ready', function() {
                 fetchPageViews();
             }, { once: true });
-            return;
         }
 
-        containers.forEach(function(container) {
-            var id = container.dataset.id;
-            if (!id) return;
-
-            window.oddmisc.getStats('/posts/' + id + '/').then(function(stats) {
-                var pageViews = stats.pageviews || 0;
-                var visits = stats.visits || 0;
-
-                container.classList.remove('hidden');
-                container.querySelector('.page-views-display').textContent = generateStatsText(pageViews, visits);
-            }).catch(function(error) {
-                console.error('Error fetching page views:', error);
-                container.classList.add('hidden');
-            });
-        });
+        // Re-fetch on Swup page transitions
+        document.addEventListener('swup:contentReplaced', fetchPageViews);
     }
-
-    // Try immediately if oddmisc is already available, otherwise wait
-    if (window.oddmisc) {
-        fetchPageViews();
-    } else {
-        window.addEventListener('oddmisc-ready', function() {
-            fetchPageViews();
-        }, { once: true });
-    }
-
-    // Re-fetch on Swup page transitions
-    document.addEventListener('swup:contentReplaced', fetchPageViews);
 </script>
-)}
