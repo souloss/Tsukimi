@@ -41,6 +41,7 @@
 | `@types/markdown-it` 14.2 | 已完成 | 仅类型声明更新；RSS/Atom 相关检查和静态构建均通过 |
 | Biome 2.5 | 已完成 | 开发期格式/检查工具升级；受影响文件检查、项目检查和构建均通过 |
 | `node-html-parser` 9 | 已完成 | RSS/Atom 构建期解析器升级；图片属性重写和完整静态构建通过 |
+| Markdown-it 15 与 linkify-it 6 | 已完成 | RSS/Atom 构建期 Markdown 渲染升级；feed 内容对比和完整静态构建通过 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -128,14 +129,14 @@
 
 - `satori` 从 `0.26.0` 升至 `0.33.4`；直接执行带本地字体的 SVG→PNG smoke test（SVG 3612 bytes、PNG 2442 bytes）通过。
 - Satori 及 `@shuding/opentype.js` 的旧精确依赖通过 `fflate: 0.8.3` override 统一到修复版；完整 OG/静态构建通过。
-- 传递依赖 override：`yaml 2.8.3`、`brace-expansion 1.1.18/2.1.4/5.0.9`、`browserslist 4.28.7`、`svgo 2.8.3`、`postcss-selector-parser 6.1.3/7.1.3`、`serialize-javascript 7.0.5`。
+- 传递依赖 override：`yaml 2.8.3`、`brace-expansion 1.1.18/2.1.4/5.0.9`、`browserslist 4.28.7`、`svgo 2.8.3`、`postcss-selector-parser 6.1.3/7.1.3`、`linkify-it 6.1.0`、`serialize-javascript 7.0.5`。
 - `pnpm audit` 与 `pnpm audit --prod` 最终均为 `0 critical / 0 high / 0 moderate / 0 low`；`serialize-javascript` override 已验证 CommonJS 调用兼容。
 
 ### 低风险工具与图标数据更新
 
 - 更新 `@astrojs/ts-plugin@1.10.11`、Iconify FA/Lucide/Material/Simple/Vscode 数据包、`@types/hast@3.0.5`、`fast-xml-parser@5.11.1`、`https-proxy-agent@9.1.0`、`lint-staged@17.4.1`、`postcss-nesting@14.0.1`、`simple-git-hooks@2.14.0` 和 JetBrains Mono 字体包 `5.3.0`。
 - 这些更新不改变运行时 API；冻结离线安装、Astro 检查、TypeScript 检查、完整构建和最终审计均通过。
-- 未升级 Markdown-it、KaTeX、l2d-widget、TypeScript 7 等跨主版本包；它们当前无阻断性安全收益，迁移成本高于收益。
+- 未升级 KaTeX、l2d-widget、TypeScript 7 等跨主版本包；它们当前无阻断性安全收益，迁移成本高于收益。
 
 ### `postcss-import` 17 升级
 
@@ -169,6 +170,13 @@
 
 - 从 `7.1.0` 升至 `9.0.3`；调用面仅为 RSS/Atom 中的 `parse`、`querySelectorAll`、`getAttribute` 和 `setAttribute`。
 - `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；RSS/Atom、图片 URL 重写和 148 个静态页面产物正常。
+
+### Markdown-it 15 与 linkify-it 6 升级
+
+- `markdown-it` 从 `14.2.0` 升至 `15.0.1`；配套将 workspace 中的 `linkify-it` override 从 `5.0.2` 调整为 `6.1.0`，满足 Markdown-it 15 的 ESM 命名导出要求。
+- 升级初次验证发现 `linkify-it@5` 导致 `LinkifyIt` 导出缺失；同步 override 后标准 Markdown 渲染恢复，Astro 配置可正常加载。
+- RSS feed 构建前后 SHA-256 完全一致；Atom feed 忽略动态 `<updated>` 后内容完全一致。
+- `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；148 个页面、RSS/Atom、Pagefind 和字体压缩均完成。
 
 ### 孤立直接依赖清理
 
@@ -209,7 +217,7 @@
 
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
-- **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
+- **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
 - **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
 
@@ -242,3 +250,4 @@
 - 升级 `@types/markdown-it` 至 `14.2.0`；冻结安装、Astro/TypeScript 检查和完整构建均通过。
 - 升级 Biome 至 `2.5.12`；受影响文件检查、Astro/TypeScript 检查和完整构建均通过，全量扫描保留生成 JSON 的既有格式差异。
 - 升级 `node-html-parser` 至 `9.0.3`；冻结安装、Astro/TypeScript 检查和完整构建均通过，RSS/Atom 图片处理保持正常。
+- 升级 Markdown-it 至 `15.0.1` 并将 `linkify-it` override 调整至 `6.1.0`；标准渲染、RSS/Atom 内容对比和完整构建均通过。
