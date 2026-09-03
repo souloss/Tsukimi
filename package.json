@@ -101,7 +101,7 @@
 		"https-proxy-agent": "^9.1.0",
 		"lint-staged": "^17.4.1",
 		"markdown-it": "^14.1.1",
-		"node-html-parser": "^7.1.0",
+		"node-html-parser": "^9.0.3",
 		"pagefind": "^1.5.2",
 		"pako": "^3.0.1",
 		"postcss-import": "^17.0.0",

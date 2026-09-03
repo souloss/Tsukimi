@@ -40,6 +40,7 @@
 | Pako 3 与依赖归类 | 已完成 | PlantUML 编码器改用命名空间导入，Pako 仅用于构建插件，移入 `devDependencies` |
 | `@types/markdown-it` 14.2 | 已完成 | 仅类型声明更新；RSS/Atom 相关检查和静态构建均通过 |
 | Biome 2.5 | 已完成 | 开发期格式/检查工具升级；受影响文件检查、项目检查和构建均通过 |
+| `node-html-parser` 9 | 已完成 | RSS/Atom 构建期解析器升级；图片属性重写和完整静态构建通过 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -134,7 +135,7 @@
 
 - 更新 `@astrojs/ts-plugin@1.10.11`、Iconify FA/Lucide/Material/Simple/Vscode 数据包、`@types/hast@3.0.5`、`fast-xml-parser@5.11.1`、`https-proxy-agent@9.1.0`、`lint-staged@17.4.1`、`postcss-nesting@14.0.1`、`simple-git-hooks@2.14.0` 和 JetBrains Mono 字体包 `5.3.0`。
 - 这些更新不改变运行时 API；冻结离线安装、Astro 检查、TypeScript 检查、完整构建和最终审计均通过。
-- 未升级 Markdown-it、node-html-parser、Pako、KaTeX、l2d-widget、TypeScript 7 等跨主版本包；它们当前无阻断性安全收益，迁移成本高于收益。
+- 未升级 Markdown-it、KaTeX、l2d-widget、TypeScript 7 等跨主版本包；它们当前无阻断性安全收益，迁移成本高于收益。
 
 ### `postcss-import` 17 升级
 
@@ -163,6 +164,11 @@
 - 从 `2.4.16` 升至 `2.5.12`，仅更新开发期格式化/静态检查 CLI，不进入站点运行时产物。
 - `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；构建仍生成 148 个页面。
 - 受影响的 `package.json` 与源码文件通过只读 Biome 检查；全量扫描唯一已有差异是生成文件 `src/data/friends-circle.json` 使用两空格，而仓库格式配置要求制表符，本批次未自动改写该数据文件。
+
+### `node-html-parser` 9 升级
+
+- 从 `7.1.0` 升至 `9.0.3`；调用面仅为 RSS/Atom 中的 `parse`、`querySelectorAll`、`getAttribute` 和 `setAttribute`。
+- `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；RSS/Atom、图片 URL 重写和 148 个静态页面产物正常。
 
 ### 孤立直接依赖清理
 
@@ -235,3 +241,4 @@
 - 升级 Pako 至 `3.0.1` 并移入开发依赖，修复命名空间导入；PlantUML 编码、真实 SVG 服务、文档页浏览器加载和完整构建均通过。在线审计仍受 registry 无响应限制。
 - 升级 `@types/markdown-it` 至 `14.2.0`；冻结安装、Astro/TypeScript 检查和完整构建均通过。
 - 升级 Biome 至 `2.5.12`；受影响文件检查、Astro/TypeScript 检查和完整构建均通过，全量扫描保留生成 JSON 的既有格式差异。
+- 升级 `node-html-parser` 至 `9.0.3`；冻结安装、Astro/TypeScript 检查和完整构建均通过，RSS/Atom 图片处理保持正常。
