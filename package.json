@@ -75,7 +75,7 @@
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",
 		"@astrojs/ts-plugin": "^1.10.11",
-		"@biomejs/biome": "^2.4.15",
+		"@biomejs/biome": "^2.5.12",
 		"@expressive-code/core": "^0.44.2",
 		"@expressive-code/plugin-collapsible-sections": "^0.44.2",
 		"@expressive-code/plugin-line-numbers": "^0.44.2",

@@ -39,6 +39,7 @@
 | `postcss-import` 17 | 已完成 | 构建期 CSS import 插件升级；Node 22 与 PostCSS 8 peer 条件已满足，完整构建通过 |
 | Pako 3 与依赖归类 | 已完成 | PlantUML 编码器改用命名空间导入，Pako 仅用于构建插件，移入 `devDependencies` |
 | `@types/markdown-it` 14.2 | 已完成 | 仅类型声明更新；RSS/Atom 相关检查和静态构建均通过 |
+| Biome 2.5 | 已完成 | 开发期格式/检查工具升级；受影响文件检查、项目检查和构建均通过 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -157,6 +158,12 @@
 - 从 `14.1.2` 升至 `14.2.0`，仅更新开发期类型声明，不改变运行时代码。
 - `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；148 个页面及 RSS/Atom 产物正常。
 
+### Biome 2.5 升级
+
+- 从 `2.4.16` 升至 `2.5.12`，仅更新开发期格式化/静态检查 CLI，不进入站点运行时产物。
+- `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；构建仍生成 148 个页面。
+- 受影响的 `package.json` 与源码文件通过只读 Biome 检查；全量扫描唯一已有差异是生成文件 `src/data/friends-circle.json` 使用两空格，而仓库格式配置要求制表符，本批次未自动改写该数据文件。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -227,3 +234,4 @@
 - 升级 `postcss-import` 至 `17.0.0`；冻结安装、检查、类型检查和完整构建通过。在线审计因 registry 无响应超时，沿用升级前最近一次全 0 快照并记录限制。
 - 升级 Pako 至 `3.0.1` 并移入开发依赖，修复命名空间导入；PlantUML 编码、真实 SVG 服务、文档页浏览器加载和完整构建均通过。在线审计仍受 registry 无响应限制。
 - 升级 `@types/markdown-it` 至 `14.2.0`；冻结安装、Astro/TypeScript 检查和完整构建均通过。
+- 升级 Biome 至 `2.5.12`；受影响文件检查、Astro/TypeScript 检查和完整构建均通过，全量扫描保留生成 JSON 的既有格式差异。
