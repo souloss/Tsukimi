@@ -37,6 +37,7 @@
 | 孤立直接依赖清理 | 已完成 | 删除无源码/配置引用的 Roboto、Iconify utils、Rollup YAML 包；PostCSS 插件因配置实际引用而保留 |
 | `astro-icon` 本地图标目录 | 已完成 | 增加 `src/icons/.gitkeep`，消除默认目录扫描警告并保留未来自定义 SVG 图标入口 |
 | `postcss-import` 17 | 已完成 | 构建期 CSS import 插件升级；Node 22 与 PostCSS 8 peer 条件已满足，完整构建通过 |
+| Pako 3 与依赖归类 | 已完成 | PlantUML 编码器改用命名空间导入，Pako 仅用于构建插件，移入 `devDependencies` |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -142,6 +143,14 @@
 - `pnpm build`：通过；148 个静态页面、Pagefind、RSS/Atom、sitemap、OG 和字体压缩均成功。
 - 在线 `pnpm audit` 在 registry 端连续无响应，60 秒有限重试超时；本批次没有新增运行时依赖，升级前最近一次全量/生产审计均为全 0，提交前保留该网络限制记录，不把超时当成审计通过。
 
+### Pako 3 与依赖归类
+
+- 将 `pako` 从 `2.1.0` 升至 `3.0.1`，并从生产 `dependencies` 移入 `devDependencies`；全仓调用仅位于 `src/plugins/plantuml-encoder.js`，属于 Markdown 构建期编码器，静态产物不需要 Pako。
+- Pako 3 移除了 ESM 默认导出；编码器改用 `import * as pako`，避免 Astro/Vite 配置加载失败。
+- PlantUML 编码样例可通过 `inflateRaw` 无损回读；真实 PlantUML SVG 服务返回 HTTP 200。
+- `pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；包含 PlantUML 示例的文档页浏览器验证图片 `naturalWidth > 0`，console/pageerror 均为 0。
+- Pako 3 会产生不同但有效的压缩 URL，已有图示的远程缓存会自然失效一次；不改变图示语义。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -180,7 +189,7 @@
 ## 最终评估
 
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
-- **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成，以及可重复的 frozen/offline 安装。
+- **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
 - **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
 - **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
@@ -210,3 +219,4 @@
 - 完成低风险工具、类型、图标数据和字体包更新；再次冻结安装、检查、类型检查和完整构建均通过，审计仍保持全量/生产全 0。
 - 增加 `src/icons/.gitkeep`，完成 astro-icon 默认本地图标目录治理；构建加载本地空集合，原缺失目录警告消失，148 页面构建通过。
 - 升级 `postcss-import` 至 `17.0.0`；冻结安装、检查、类型检查和完整构建通过。在线审计因 registry 无响应超时，沿用升级前最近一次全 0 快照并记录限制。
+- 升级 Pako 至 `3.0.1` 并移入开发依赖，修复命名空间导入；PlantUML 编码、真实 SVG 服务、文档页浏览器加载和完整构建均通过。在线审计仍受 registry 无响应限制。
