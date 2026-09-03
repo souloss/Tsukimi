@@ -69,7 +69,6 @@
 		"stylus": "^0.64.0",
 		"svelte": "5.57.0",
 		"tailwindcss": "^4.3.3",
-		"typescript": "^6.0.3",
 		"unist-util-visit": "^5.1.0"
 	},
 	"devDependencies": {
@@ -112,6 +111,7 @@
 		"sharp": "^0.35.4",
 		"simple-git-hooks": "^2.14.0",
 		"subset-font": "^2.7.0",
+		"typescript": "^6.0.3",
 		"unified": "^11.0.5"
 	},
 	"packageManager": "pnpm@10.33.0",

@@ -43,6 +43,7 @@
 | `node-html-parser` 9 | 已完成 | RSS/Atom 构建期解析器升级；图片属性重写和完整静态构建通过 |
 | Markdown-it 15 与 linkify-it 6 | 已完成 | RSS/Atom 构建期 Markdown 渲染升级；feed 内容对比和完整静态构建通过 |
 | `l2d-widget` 0.1.2 | 回退/暂缓 | 静态检查和构建通过，但本地 NOIR Cubism 6 模型在新版解析阶段失败；已恢复 0.0.2 |
+| TypeScript 依赖归类 | 已完成 | TypeScript 仅供检查/编译使用，已从生产依赖移入开发依赖；生产安装保留 Astro |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -187,6 +188,13 @@
 - 新版 `0.1.2` 请求 `noir.model3.json`、`noir.moc3`、physics 和 texture 均为 HTTP 200，但在 `noir.moc3` 解析阶段抛出 `TypeError: et[t[((h + 36) >> 2)]] is not a function`，Canvas 未完成渲染；旧版 `0.0.2` 在完全相同的 Chromium/WebGL 条件下成功渲染 280x280 Canvas，且无 page error。
 - 运行时门禁失败，已恢复 `package.json`/`pnpm-lock.yaml` 到 `l2d-widget@0.0.2`；Pio 的原始关闭覆盖配置也已恢复，未改变生产功能开关。后续需等待上游修复 Cubism 6 解析回归或准备模型兼容性迁移后再重试。
 
+### TypeScript 依赖归类
+
+- TypeScript 没有被源码、Astro 配置或浏览器 bundle 直接导入，仅由 `tsc`、`@astrojs/check`、`@astrojs/svelte` 及相关类型工具使用；已从 `dependencies` 移入 `devDependencies`，版本仍为 `6.0.3`，不改变编译器版本。
+- `pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和完整 `pnpm build` 均通过；构建继续生成 148 个页面及 Pagefind/RSS/Atom/字体产物。
+- 在独立临时目录执行 `pnpm install --prod --frozen-lockfile --ignore-scripts`：根目录没有 `node_modules/typescript`，但 `astro` 正常安装；说明生产运行时不再声明直接 TypeScript 依赖，同时保留正常构建依赖集合。旧 Swup 适配器链中的传递 `typescript@4.9.5` 仍存在，属于上游依赖范围，后续 Swup 现代化时再处理。
+- 本批次没有版本升级；在线 `pnpm audit --prod` 因 registry 无响应在 45 秒超时，沿用此前最近一次全量/生产全 0 审计快照，不将超时视为通过。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -261,3 +269,4 @@
 - 升级 `node-html-parser` 至 `9.0.3`；冻结安装、Astro/TypeScript 检查和完整构建均通过，RSS/Atom 图片处理保持正常。
 - 升级 Markdown-it 至 `15.0.1` 并将 `linkify-it` override 调整至 `6.1.0`；标准渲染、RSS/Atom 内容对比和完整构建均通过。
 - 试验升级 `l2d-widget` 至 `0.1.2`；静态门禁和构建通过，但本地 NOIR 模型解析回归，已在相同 WebGL 条件下与 `0.0.2` 对照并回退，暂不合并新版。
+- 将 TypeScript `6.0.3` 从生产依赖移入开发依赖；生产安装验证无根目录 TypeScript 且保留 Astro，检查、类型检查和完整构建通过；在线生产审计因 registry 无响应超时。
