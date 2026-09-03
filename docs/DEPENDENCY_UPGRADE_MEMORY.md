@@ -35,6 +35,7 @@
 | Satori/字体生成链 | 已完成 | Satori `0.33.4`，`subset-font` 替换 Fontmin；fflate 和字体输出均完成安全验证 |
 | 传递依赖安全收敛 | 已完成 | 修复版 yaml、brace-expansion、browserslist、svgo、postcss-selector-parser、serialize-javascript 通过 workspace override 统一 |
 | 孤立直接依赖清理 | 已完成 | 删除无源码/配置引用的 Roboto、Iconify utils、Rollup YAML 包；PostCSS 插件因配置实际引用而保留 |
+| `astro-icon` 本地图标目录 | 已完成 | 增加 `src/icons/.gitkeep`，消除默认目录扫描警告并保留未来自定义 SVG 图标入口 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -154,7 +155,7 @@
 - `pnpm build`：通过，148 个页面、Pagefind 主站/文档索引、RSS/Atom、sitemap、OG 生成和字体压缩均完成。
 - `pnpm audit` 与 `pnpm audit --prod`：均为 `0 info / 0 low / 0 moderate / 0 high / 0 critical`。
 - 生产预览浏览器冒烟：首页、归档页、Markdown 文章页均 HTTP 200，标题/正文正常，`console error` 与 `pageerror` 均为 0。
-- `git diff --check`：通过。构建仍提示已有的 `src/icons/` 缺失扫描警告，未影响产物。
+- `git diff --check`：通过；增加 `src/icons/.gitkeep` 后，astro-icon 正常加载本地空集合，缺失目录警告已消除。
 
 ## Astro 7 迁移门禁
 
@@ -197,3 +198,4 @@
 - 将 Svelte 升至 `5.57.0` 并移除旧 patch；check、type-check、浏览器水合冒烟和完整构建均通过，审计进一步改善为全量 `0 critical / 14 high / 4 moderate / 4 low`、生产 `0 critical / 11 high / 2 moderate / 4 low`。
 - 完成 Astro 7/Vite 8 迁移、Satori `0.33.4` 升级和传递依赖修复版 override；最终全量与生产审计均为 `0 critical / 0 high / 0 moderate / 0 low`。
 - 完成低风险工具、类型、图标数据和字体包更新；再次冻结安装、检查、类型检查和完整构建均通过，审计仍保持全量/生产全 0。
+- 增加 `src/icons/.gitkeep`，完成 astro-icon 默认本地图标目录治理；构建加载本地空集合，原缺失目录警告消失，148 页面构建通过。
