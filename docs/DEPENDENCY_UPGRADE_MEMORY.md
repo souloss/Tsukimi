@@ -42,6 +42,7 @@
 | Biome 2.5 | 已完成 | 开发期格式/检查工具升级；受影响文件检查、项目检查和构建均通过 |
 | `node-html-parser` 9 | 已完成 | RSS/Atom 构建期解析器升级；图片属性重写和完整静态构建通过 |
 | Markdown-it 15 与 linkify-it 6 | 已完成 | RSS/Atom 构建期 Markdown 渲染升级；feed 内容对比和完整静态构建通过 |
+| `l2d-widget` 0.1.2 | 回退/暂缓 | 静态检查和构建通过，但本地 NOIR Cubism 6 模型在新版解析阶段失败；已恢复 0.0.2 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -136,7 +137,7 @@
 
 - 更新 `@astrojs/ts-plugin@1.10.11`、Iconify FA/Lucide/Material/Simple/Vscode 数据包、`@types/hast@3.0.5`、`fast-xml-parser@5.11.1`、`https-proxy-agent@9.1.0`、`lint-staged@17.4.1`、`postcss-nesting@14.0.1`、`simple-git-hooks@2.14.0` 和 JetBrains Mono 字体包 `5.3.0`。
 - 这些更新不改变运行时 API；冻结离线安装、Astro 检查、TypeScript 检查、完整构建和最终审计均通过。
-- 未升级 KaTeX、l2d-widget、TypeScript 7 等跨主版本包；它们当前无阻断性安全收益，迁移成本高于收益。
+- 未升级 KaTeX、l2d-widget、TypeScript 7 等跨主版本包；l2d-widget 0.1.2 已完成一次真实模型回归但因解析失败回退，KaTeX 与 TypeScript 7 仍受 peer/工具链约束。
 
 ### `postcss-import` 17 升级
 
@@ -177,6 +178,14 @@
 - 升级初次验证发现 `linkify-it@5` 导致 `LinkifyIt` 导出缺失；同步 override 后标准 Markdown 渲染恢复，Astro 配置可正常加载。
 - RSS feed 构建前后 SHA-256 完全一致；Atom feed 忽略动态 `<updated>` 后内容完全一致。
 - `pnpm install`、`pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 `pnpm build` 均通过；148 个页面、RSS/Atom、Pagefind 和字体压缩均完成。
+
+### l2d-widget 0.1.2 回归与回退
+
+- 试验升级 `l2d-widget` `0.0.2 -> 0.1.2`；新版类型/API 与 `src/components/features/pio/Pio.svelte` 的 `createWidget`、模型、菜单、销毁调用保持兼容，且包声明无运行时依赖。
+- 静态门禁通过：`pnpm install`、离线冻结安装、`pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check` 和完整 `pnpm build`（148 页面）均通过。
+- 首轮生产浏览器探针未产生模型请求，原因是工作区忽略目录 `src/overrides/pioConfig.ts` 将 Pio 配置为 `enable: false`，并非升级结论；临时打开配置后再测，两个版本均能创建 WebGL Canvas 并请求本地模型资源。
+- 新版 `0.1.2` 请求 `noir.model3.json`、`noir.moc3`、physics 和 texture 均为 HTTP 200，但在 `noir.moc3` 解析阶段抛出 `TypeError: et[t[((h + 36) >> 2)]] is not a function`，Canvas 未完成渲染；旧版 `0.0.2` 在完全相同的 Chromium/WebGL 条件下成功渲染 280x280 Canvas，且无 page error。
+- 运行时门禁失败，已恢复 `package.json`/`pnpm-lock.yaml` 到 `l2d-widget@0.0.2`；Pio 的原始关闭覆盖配置也已恢复，未改变生产功能开关。后续需等待上游修复 Cubism 6 解析回归或准备模型兼容性迁移后再重试。
 
 ### 孤立直接依赖清理
 
@@ -251,3 +260,4 @@
 - 升级 Biome 至 `2.5.12`；受影响文件检查、Astro/TypeScript 检查和完整构建均通过，全量扫描保留生成 JSON 的既有格式差异。
 - 升级 `node-html-parser` 至 `9.0.3`；冻结安装、Astro/TypeScript 检查和完整构建均通过，RSS/Atom 图片处理保持正常。
 - 升级 Markdown-it 至 `15.0.1` 并将 `linkify-it` override 调整至 `6.1.0`；标准渲染、RSS/Atom 内容对比和完整构建均通过。
+- 试验升级 `l2d-widget` 至 `0.1.2`；静态门禁和构建通过，但本地 NOIR 模型解析回归，已在相同 WebGL 条件下与 `0.0.2` 对照并回退，暂不合并新版。
