@@ -36,6 +36,7 @@
 | 传递依赖安全收敛 | 已完成 | 修复版 yaml、brace-expansion、browserslist、svgo、postcss-selector-parser、serialize-javascript 通过 workspace override 统一 |
 | 孤立直接依赖清理 | 已完成 | 删除无源码/配置引用的 Roboto、Iconify utils、Rollup YAML 包；PostCSS 插件因配置实际引用而保留 |
 | `astro-icon` 本地图标目录 | 已完成 | 增加 `src/icons/.gitkeep`，消除默认目录扫描警告并保留未来自定义 SVG 图标入口 |
+| `postcss-import` 17 | 已完成 | 构建期 CSS import 插件升级；Node 22 与 PostCSS 8 peer 条件已满足，完整构建通过 |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
 | Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
 
@@ -132,6 +133,15 @@
 - 这些更新不改变运行时 API；冻结离线安装、Astro 检查、TypeScript 检查、完整构建和最终审计均通过。
 - 未升级 Markdown-it、node-html-parser、Pako、KaTeX、l2d-widget、TypeScript 7 等跨主版本包；它们当前无阻断性安全收益，迁移成本高于收益。
 
+### `postcss-import` 17 升级
+
+- 从 `16.1.1` 升至 `17.0.0`；该版本要求 Node `>=22.0.0`，项目的 Node `22.12.0` 约束满足，PostCSS peer 仍为 8.x。
+- `pnpm install` 与 `pnpm install --offline --frozen-lockfile`：均通过。
+- `pnpm check`：通过，358 个文件，`0 errors / 0 warnings / 0 hints`。
+- `pnpm type-check`：通过。
+- `pnpm build`：通过；148 个静态页面、Pagefind、RSS/Atom、sitemap、OG 和字体压缩均成功。
+- 在线 `pnpm audit` 在 registry 端连续无响应，60 秒有限重试超时；本批次没有新增运行时依赖，升级前最近一次全量/生产审计均为全 0，提交前保留该网络限制记录，不把超时当成审计通过。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -172,7 +182,7 @@
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成，以及可重复的 frozen/offline 安装。
 - **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
-- **暂缓项**：TypeScript 7 等待 Astro/Svelte 工具链正式支持；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
+- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
 
 ## 回退策略
@@ -199,3 +209,4 @@
 - 完成 Astro 7/Vite 8 迁移、Satori `0.33.4` 升级和传递依赖修复版 override；最终全量与生产审计均为 `0 critical / 0 high / 0 moderate / 0 low`。
 - 完成低风险工具、类型、图标数据和字体包更新；再次冻结安装、检查、类型检查和完整构建均通过，审计仍保持全量/生产全 0。
 - 增加 `src/icons/.gitkeep`，完成 astro-icon 默认本地图标目录治理；构建加载本地空集合，原缺失目录警告消失，148 页面构建通过。
+- 升级 `postcss-import` 至 `17.0.0`；冻结安装、检查、类型检查和完整构建通过。在线审计因 registry 无响应超时，沿用升级前最近一次全 0 快照并记录限制。
