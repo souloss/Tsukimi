@@ -12,6 +12,7 @@
 			"!**/dist/**/*",
 			"!**/node_modules/**/*",
 			"!**/.astro/**/*",
+			"!**/src/generated/**/*",
 			"!**/public/**/*",
 			"!**/demo/**/*",
 			"!**/scripts/**/*",

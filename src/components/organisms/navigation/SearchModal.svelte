@@ -1,7 +1,7 @@
 <script lang="ts">
+import Icon from "@components/atoms/Icon/LocalIcon.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
-import Icon from "@iconify/svelte";
 import { navigateToPage } from "@utils/navigation-utils";
 import { url } from "@utils/url-utils";
 import { onDestroy, onMount } from "svelte";

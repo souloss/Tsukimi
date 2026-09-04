@@ -46,11 +46,6 @@ const subtitle = i18n(I18nKey.talkingSubtitle);
 <MainGridLayout title={title} description={subtitle}>
 	<script>
 		import("../scripts/right-sidebar-layout.js");
-		import { loadIconify } from "../utils/icon-loader";
-
-		loadIconify().catch((error) => {
-			console.error("Failed to load Iconify:", error);
-		});
 	</script>
 
 	<script is:inline src="/js/filter-tabs-handler.js"></script>

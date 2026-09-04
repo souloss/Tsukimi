@@ -95,11 +95,6 @@ function getCatHue(name: string): number {
 <MainGridLayout title={title} description={subtitle}>
 	<script>
 		import("../../scripts/right-sidebar-layout.js");
-		import { loadIconify } from "../../utils/icon-loader";
-
-		loadIconify().catch((e) => {
-			console.error("Failed to load Iconify:", e);
-		});
 	</script>
 
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from "@iconify/svelte";
+import Icon from "@components/atoms/Icon/LocalIcon.svelte";
 import { onMount } from "svelte";
 
 let dateCheckInterval: ReturnType<typeof setInterval> | null = null;

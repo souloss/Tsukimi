@@ -1,6 +1,6 @@
 <script lang="ts">
+import Icon from "@components/atoms/Icon/LocalIcon.svelte";
 import { DARK_MODE, DEFAULT_THEME, LIGHT_MODE } from "@constants/constants";
-import Icon from "@iconify/svelte";
 import { getStoredTheme, setTheme } from "@utils/setting-utils";
 import { onDestroy, onMount } from "svelte";
 

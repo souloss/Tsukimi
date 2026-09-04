@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from "@iconify/svelte";
+import Icon from "@components/atoms/Icon/LocalIcon.svelte";
 import { onDestroy, onMount } from "svelte";
 import { cubicOut } from "svelte/easing";
 import { fly } from "svelte/transition";

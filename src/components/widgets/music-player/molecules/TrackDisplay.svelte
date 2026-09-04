@@ -1,5 +1,5 @@
 <script lang="ts">
-import Icon from "@iconify/svelte";
+import Icon from "@components/atoms/Icon/LocalIcon.svelte";
 
 import Key from "../../../../i18n/i18nKey";
 import { i18n } from "../../../../i18n/translation";
