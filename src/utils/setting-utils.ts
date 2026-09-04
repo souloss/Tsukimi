@@ -9,7 +9,7 @@ import {
 	WALLPAPER_NONE,
 	WALLPAPER_OVERLAY,
 } from "@constants/constants";
-import { getFontStylesheets } from "@utils/font-utils";
+import { getFontFamily, getFontStylesheets } from "@utils/font-utils";
 import {
 	backgroundWallpaperConfig,
 	effectsConfig,
@@ -1371,7 +1371,18 @@ export function getStoredFont(): string {
 		return getDefaultFont();
 	}
 	const stored = localStorage.getItem(FONT_STORAGE_KEY);
-	return stored || getDefaultFont();
+	if (!stored) {
+		return getDefaultFont();
+	}
+	const fonts = fontConfig?.fonts;
+	const fontList = Array.isArray(fonts)
+		? fonts
+		: fonts
+			? Object.values(fonts)
+			: [];
+	return fontList.some((font) => font.id === stored)
+		? stored
+		: getDefaultFont();
 }
 
 export function setFont(fontId: string): void {
@@ -1397,24 +1408,7 @@ export function applyFontToDocument(fontId: string): void {
 			: [];
 	const fontOption = fontList.find((f) => f.id === fontId);
 	if (fontOption) {
-		const mainFamily = fontOption.fontFamily ?? fontOption.family ?? null;
-		// Build full font-family string: mainFamily, cjkFontFamily, system fallbacks
-		const familyParts: string[] = [];
-		if (mainFamily) {
-			familyParts.push(mainFamily);
-		}
-		if (fontOption.cjkFontFamily) {
-			familyParts.push(fontOption.cjkFontFamily);
-		}
-		familyParts.push(
-			"system-ui",
-			"-apple-system",
-			"BlinkMacSystemFont",
-			"'Segoe UI'",
-			"Roboto",
-			"sans-serif",
-		);
-		const fullFontFamily = familyParts.join(", ");
+		const fullFontFamily = getFontFamily(fontOption);
 
 		// Set CSS variable for any CSS rules that reference it
 		document.documentElement.style.setProperty("--font-family", fullFontFamily);

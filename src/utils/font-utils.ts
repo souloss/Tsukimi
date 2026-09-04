@@ -1,8 +1,30 @@
 import type { FontItem } from "@/types/config";
 
+const FALLBACK_FONT_FAMILIES = [
+	"system-ui",
+	"-apple-system",
+	"BlinkMacSystemFont",
+	"'Segoe UI'",
+	"Roboto",
+	"sans-serif",
+] as const;
+
 export interface FontStylesheet {
 	id: string;
 	href: string;
+}
+
+export function getFontFamily(font: FontItem): string {
+	const familyParts: string[] = [];
+	const mainFamily = font.fontFamily ?? font.family;
+	if (mainFamily) {
+		familyParts.push(mainFamily);
+	}
+	if (font.cjkFontFamily) {
+		familyParts.push(font.cjkFontFamily);
+	}
+	familyParts.push(...FALLBACK_FONT_FAMILIES);
+	return familyParts.join(", ");
 }
 
 export function getFontStylesheets(font: FontItem): FontStylesheet[] {

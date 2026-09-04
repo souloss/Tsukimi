@@ -6,7 +6,7 @@
  * 提取自 Layout.astro 以实现更好的代码组织
  */
 
-import { getFontStylesheets } from "@utils/font-utils";
+import { getFontFamily, getFontStylesheets } from "@utils/font-utils";
 import { fontConfig, profileConfig, siteConfig } from "@/config";
 
 import {
@@ -55,9 +55,12 @@ const configuredFonts = Array.isArray(fontConfig.fonts)
 const defaultFont = configuredFonts.find(
 	(font) => font.id === fontConfig.defaultFont,
 );
-const defaultFontStylesheets = defaultFont
-	? getFontStylesheets(defaultFont)
-	: [];
+const fontBootstrapOptions = configuredFonts.map((font) => ({
+	id: font.id,
+	family: getFontFamily(font),
+	stylesheets: getFontStylesheets(font),
+}));
+const defaultFontId = defaultFont?.id ?? configuredFonts[0]?.id ?? "system";
 ---
 
 <!-- SEO Meta Tags -->
@@ -111,12 +114,43 @@ const defaultFontStylesheets = defaultFont
 	))
 }
 
-<!-- Load the configured default before paint; saved alternatives are restored by DisplaySettings. -->
-{
-	defaultFontStylesheets.map(({ id, href }) => (
-		<link rel="stylesheet" href={href} data-font-id={id} />
-	))
-}
+<!-- Restore a saved font before paint and load only the selected font resources. -->
+<script is:inline define:vars={{ fontBootstrapOptions, defaultFontId }}>
+	(() => {
+		const storedFontId = localStorage.getItem("selectedFont");
+		const selectedFont =
+			fontBootstrapOptions.find((font) => font.id === storedFontId) ??
+			fontBootstrapOptions.find((font) => font.id === defaultFontId);
+		if (!selectedFont) return;
+
+		document.documentElement.setAttribute("data-font", selectedFont.id);
+		let fontStyle = document.getElementById("tsukimi-font-bootstrap");
+		if (!(fontStyle instanceof HTMLStyleElement)) {
+			fontStyle = document.createElement("style");
+			fontStyle.id = "tsukimi-font-bootstrap";
+			document.head.appendChild(fontStyle);
+		}
+		fontStyle.textContent = `body { font-family: ${selectedFont.family} !important; }`;
+
+		for (const stylesheet of selectedFont.stylesheets) {
+			const absoluteHref = new URL(stylesheet.href, document.baseURI).href;
+			const alreadyLoaded = [
+				...document.querySelectorAll('link[rel="stylesheet"]'),
+			].some(
+				(link) =>
+					link.dataset.fontId === stylesheet.id ||
+					link.href === absoluteHref,
+			);
+			if (alreadyLoaded) continue;
+
+			const link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = stylesheet.href;
+			link.dataset.fontId = stylesheet.id;
+			document.head.appendChild(link);
+		}
+	})();
+</script>
 
 <!-- Set the theme before the page is rendered to avoid a flash -->
 <script
