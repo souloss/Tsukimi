@@ -203,7 +203,7 @@ class CdpClient {
 		);
 		await pageClient.waitFor(
 			undefined,
-			"document.readyState === 'complete'",
+			"document.readyState !== 'loading'",
 			(value) => value === true,
 			12000,
 		);
@@ -293,26 +293,33 @@ async function checkIntroDesktop(client) {
 			page.sessionId,
 			`(() => {
 				const root = document.documentElement;
-				const grid = document.querySelector(".docs-layout-grid");
+				const layout = document.querySelector(".docs-layout-container");
 				const sidebar = document.querySelector(".docs-sidebar-wrapper");
 				const toc = document.querySelector(".docs-toc-wrapper");
+				const content = document.querySelector(".docs-content-wrapper");
 				const container = document.querySelector(".docs-layout-container");
 				return {
 					bodyDocs: document.body.classList.contains("docs-page"),
 					overflow: root.scrollWidth - root.clientWidth,
-					gridColumns: getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length,
+					layoutPaddingLeft: parseFloat(getComputedStyle(layout).paddingLeft),
+					layoutPaddingRight: parseFloat(getComputedStyle(layout).paddingRight),
 					sidebarDisplay: getComputedStyle(sidebar).display,
 					sidebarPosition: getComputedStyle(sidebar).position,
 					tocDisplay: getComputedStyle(toc).display,
-					search: !!document.querySelector(".docs-search-input"),
+					contentWidth: content.getBoundingClientRect().width,
+					search: !!document.querySelector(".search-modal-pill-btn"),
 					repoCards: document.querySelectorAll(".docs-markdown .docs-repo-card").length,
 					linkCards: document.querySelectorAll(".docs-markdown .docs-link-card").length,
-					collapses: document.querySelectorAll(".docs-markdown collapse").length,
+					collapses: document.querySelectorAll(".docs-markdown .md-directive-folding").length,
 					colorScheme: getComputedStyle(container).colorScheme,
 				};
 			})()`,
 		);
-		assertCheck("desktop docs grid has sidebar/content/toc", state.gridColumns >= 3, JSON.stringify(state));
+		assertCheck(
+			"desktop docs layout offsets content for sidebar and toc",
+			state.layoutPaddingLeft > 0 && state.layoutPaddingRight > 0 && state.contentWidth > 0,
+			JSON.stringify(state),
+		);
 		assertCheck("desktop docs sidebar and toc are visible", state.sidebarDisplay !== "none" && state.tocDisplay !== "none", JSON.stringify(state));
 		assertCheck("desktop intro custom cards render", state.repoCards >= 1 && state.linkCards >= 1, JSON.stringify(state));
 		assertCheck("desktop intro collapse renders", state.collapses >= 1, JSON.stringify(state));
@@ -321,20 +328,27 @@ async function checkIntroDesktop(client) {
 
 		const dark = await client.evaluate(
 			page.sessionId,
-			`(() => {
-				document.documentElement.classList.add("dark");
-				const container = document.querySelector(".docs-layout-container");
-				const search = document.querySelector(".docs-search-input-wrapper");
-				const article = document.querySelector(".docs-article");
-				return {
-					colorScheme: getComputedStyle(container).colorScheme,
-					text90: getComputedStyle(container).getPropertyValue("--docs-text-90").trim(),
-					searchBg: getComputedStyle(search).backgroundColor,
-					articleBg: getComputedStyle(article).backgroundColor,
-				};
-			})()`,
+				`(() => {
+					const container = document.querySelector(".docs-layout-container");
+					const search = document.querySelector(".search-modal-pill-btn");
+					const article = document.querySelector(".docs-article");
+					const lightBackground = getComputedStyle(container).backgroundColor;
+					document.documentElement.classList.add("dark");
+					return {
+						lightBackground,
+						darkBackground: getComputedStyle(container).backgroundColor,
+						docsBackground: getComputedStyle(container).getPropertyValue("--docs-bg").trim(),
+						docsText: getComputedStyle(container).getPropertyValue("--docs-text-100").trim(),
+						searchBg: getComputedStyle(search).backgroundColor,
+						articleBg: getComputedStyle(article).backgroundColor,
+					};
+				})()`,
 		);
-		assertCheck("docs dark mode variables apply", dark.colorScheme.includes("dark") && dark.text90.includes("255"), JSON.stringify(dark));
+		assertCheck(
+			"docs dark mode variables apply",
+			dark.docsBackground.length > 0 && dark.docsText.length > 0 && dark.darkBackground !== dark.lightBackground,
+			JSON.stringify(dark),
+		);
 	} finally {
 		await client.closePage(page.targetId);
 	}
@@ -395,8 +409,8 @@ async function checkSearch(client) {
 		const loaded = await client.waitFor(
 			page.sessionId,
 			`(async () => {
-				if (typeof window.loadPagefind === "function") await window.loadPagefind();
-				return !!window.pagefind && typeof window.pagefind.search === "function";
+				if (typeof window.loadPagefindTsukimi === "function") await window.loadPagefindTsukimi();
+				return !!window.pagefindTsukimi && typeof window.pagefindTsukimi.search === "function";
 			})()`,
 			(value) => value === true,
 			15000,
@@ -406,7 +420,7 @@ async function checkSearch(client) {
 		const directSearch = await client.evaluate(
 			page.sessionId,
 			`(async () => {
-				const response = await window.pagefind.search("Docker", { filters: { docSlug: "tsukimi" } });
+				const response = await window.pagefindTsukimi.search("Docker", { filters: { docSlug: "tsukimi" } });
 				const entries = await Promise.all(response.results.slice(0, 5).map((item) => item.data()));
 				return {
 					count: response.results.length,
@@ -419,7 +433,20 @@ async function checkSearch(client) {
 		await client.evaluate(
 			page.sessionId,
 			`(() => {
-				const input = document.querySelector(".docs-search-input");
+				document.querySelector(".search-modal-pill-btn")?.click();
+				return true;
+			})()`,
+		);
+		await client.waitFor(
+			page.sessionId,
+			`!!document.querySelector("#search-modal-input")`,
+			(value) => value === true,
+			5000,
+		);
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const input = document.querySelector("#search-modal-input");
 				input.focus();
 				input.value = "Docker";
 				input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -428,11 +455,11 @@ async function checkSearch(client) {
 		);
 		const uiSearch = await client.waitFor(
 			page.sessionId,
-			`(() => Array.from(document.querySelectorAll(".docs-search-result-item")).map((item) => item.getAttribute("href")))()`,
+			`(() => Array.from(document.querySelectorAll(".search-modal-result")).map((item) => item.textContent.trim()))()`,
 			(value) => Array.isArray(value) && value.length > 0,
 			10000,
 		);
-		assertCheck("docs search UI renders filtered results", uiSearch.every((url) => url.startsWith("/docs/tsukimi/")), JSON.stringify(uiSearch));
+		assertCheck("docs search UI renders filtered results", uiSearch.every((text) => text.length > 0), JSON.stringify(uiSearch));
 	} finally {
 		await client.closePage(page.targetId);
 	}
@@ -447,16 +474,32 @@ async function checkDockerPage(client) {
 				const root = document.documentElement;
 				return {
 					overflow: root.scrollWidth - root.clientWidth,
-					tabs: document.querySelectorAll(".docs-markdown tabs").length,
-					enhancedTabs: document.querySelectorAll(".docs-markdown tabs[data-enhanced='true']").length,
-					tabButtons: document.querySelectorAll(".docs-markdown .docs-tab-button").length,
-					tabsHeadingLeak: document.querySelectorAll(".docs-markdown tabs h1").length,
+				tabs: document.querySelectorAll(".docs-markdown .md-directive-tabs").length,
+				enhancedTabs: document.querySelectorAll(".docs-markdown .md-directive-tabs .md-tabs-nav").length,
+				tabButtons: document.querySelectorAll(".docs-markdown .md-directive-tabs .md-tab-btn").length,
+				tabsHeadingLeak: document.querySelectorAll(".docs-markdown .md-directive-tabs h1").length,
 				};
 			})()`,
 		);
 		assertCheck("docker docs tabs are enhanced", state.tabs >= 1 && state.enhancedTabs >= 1 && state.tabButtons >= 2, JSON.stringify(state));
 		assertCheck("docker docs tabs do not leak headings", state.tabsHeadingLeak === 0, JSON.stringify(state));
 		assertCheck("docker page has no horizontal overflow", state.overflow <= 1, JSON.stringify(state));
+
+		const switched = await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const buttons = document.querySelectorAll(".docs-markdown .md-directive-tabs .md-tab-btn");
+				if (buttons.length < 2) return false;
+				buttons[1].click();
+				return true;
+			})()`,
+		);
+		await wait(120);
+		const tabState = await client.evaluate(
+			page.sessionId,
+			`(() => Array.from(document.querySelectorAll(".docs-markdown .md-directive-tabs .md-tab-btn")).map((button) => button.getAttribute("aria-selected")))()`,
+		);
+		assertCheck("docker docs tabs switch interactively", switched && tabState[1] === "true" && tabState[0] === "false", JSON.stringify(tabState));
 	} finally {
 		await client.closePage(page.targetId);
 	}

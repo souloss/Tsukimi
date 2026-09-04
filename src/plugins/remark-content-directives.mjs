@@ -1356,6 +1356,30 @@ function processBlockDirective(node) {
 			let currentTabContent = [];
 			for (let ti = 0; ti < node.children.length; ti++) {
 				const tchild = node.children[ti];
+				if (
+					tchild.type === "section" &&
+					tchild.children?.[0]?.type === "heading"
+				) {
+					tabs.push({
+						label: getInlineText(tchild.children[0].children).trim(),
+						color: "",
+						children: tchild.children.slice(1),
+					});
+					continue;
+				}
+				if (tchild.type === "heading") {
+					if (currentTab !== null) {
+						tabs.push({
+							label: currentTab,
+							color: currentTabColor,
+							children: currentTabContent,
+						});
+					}
+					currentTab = getInlineText(tchild.children).trim();
+					currentTabColor = "";
+					currentTabContent = [];
+					continue;
+				}
 				if (tchild.type === "paragraph") {
 					const ttext2 = tchild.children
 						.map((c) => c.value || "")

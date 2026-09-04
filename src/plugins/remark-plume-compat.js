@@ -11,6 +11,7 @@ const directiveNames = new Set([
 	"important",
 	"note",
 	"steps",
+	"tabs",
 	"tip",
 	"warning",
 	"caution",
