@@ -37,14 +37,20 @@ export const fontConfig: FontConfig = {
             fontFamily: "'Literata', system-ui, sans-serif",
             cjkFontFamily: "'LXGW WenKai', serif",
             googleFonts: "https://fonts.googleapis.com/css2?family=Literata:wght@400;500;700&display=swap",
-            cdnUrl: "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css",
+            cdnUrls: [
+                "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css",
+                "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css",
+            ],
         },
         {
             id: "lxgw",
             name: "霞鹜文楷",
             i18nKey: "fontLxgw",
             fontFamily: "'LXGW WenKai', serif",
-            cdnUrl: "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css",
+            cdnUrls: [
+                "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css",
+                "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css",
+            ],
         },
         {
             id: "2d",
@@ -102,6 +108,7 @@ export const fontConfig: FontConfig = {
 | `format` | `"woff" \| "woff2" \| "truetype" \| ...` | 字体格式 |
 | `googleFonts` | `string` | Google Fonts 引入 URL |
 | `cdnUrl` | `string` | 外部 CDN 字体样式表 URL |
+| `cdnUrls` | `string[]` | 多个外部 CDN 字体样式表 URL，可按字重加载 |
 | `localFonts` | `Array \| string[]` | 本地字体配置 |
 | `enableCompress` | `boolean` | 是否启用字体子集优化 |
 
@@ -113,7 +120,7 @@ Tsukimi 支持三种字体加载方式：
 |------|----------|------|
 | 系统字体 | 仅 `fontFamily` | 使用用户系统自带字体，零网络请求 |
 | Google Fonts | `googleFonts` | 从 Google Fonts CDN 加载 |
-| CDN 样式表 | `cdnUrl` | 从外部 CDN 加载字体 CSS |
+| CDN 样式表 | `cdnUrl` / `cdnUrls` | 从外部 CDN 加载一个或多个字体 CSS |
 | 本地字体 | `localFonts` | 从网站服务器加载本地字体文件 |
 
 ## 添加自定义字体

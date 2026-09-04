@@ -6,6 +6,7 @@
  * 提取自 Layout.astro 以实现更好的代码组织
  */
 
+import { getFontStylesheets } from "@utils/font-utils";
 import { fontConfig, profileConfig, siteConfig } from "@/config";
 
 import {
@@ -54,6 +55,9 @@ const configuredFonts = Array.isArray(fontConfig.fonts)
 const defaultFont = configuredFonts.find(
 	(font) => font.id === fontConfig.defaultFont,
 );
+const defaultFontStylesheets = defaultFont
+	? getFontStylesheets(defaultFont)
+	: [];
 ---
 
 <!-- SEO Meta Tags -->
@@ -108,20 +112,11 @@ const defaultFont = configuredFonts.find(
 }
 
 <!-- Load the configured default before paint; saved alternatives are restored by DisplaySettings. -->
-{defaultFont?.googleFonts && (
-	<link
-		rel="stylesheet"
-		href={defaultFont.googleFonts}
-		data-font-id={`${defaultFont.id}-gfonts`}
-	/>
-)}
-{defaultFont?.cdnUrl && (
-	<link
-		rel="stylesheet"
-		href={defaultFont.cdnUrl}
-		data-font-id={`${defaultFont.id}-cdn`}
-	/>
-)}
+{
+	defaultFontStylesheets.map(({ id, href }) => (
+		<link rel="stylesheet" href={href} data-font-id={id} />
+	))
+}
 
 <!-- Set the theme before the page is rendered to avoid a flash -->
 <script

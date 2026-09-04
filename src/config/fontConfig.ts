@@ -25,16 +25,20 @@ const defaults: FontConfig = {
 			cjkFontFamily: "'LXGW WenKai', serif",
 			googleFonts:
 				"https://fonts.googleapis.com/css2?family=Literata:wght@400;500;700&display=swap",
-			cdnUrl:
-				"https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css",
+			cdnUrls: [
+				"https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css",
+				"https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css",
+			],
 		},
 		{
 			id: "lxgw",
 			name: "霞鹜文楷",
 			i18nKey: "fontLxgw",
 			fontFamily: "'LXGW WenKai', serif",
-			cdnUrl:
-				"https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.min.css",
+			cdnUrls: [
+				"https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css",
+				"https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css",
+			],
 		},
 		{
 			id: "2d",

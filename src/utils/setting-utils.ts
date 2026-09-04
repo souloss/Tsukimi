@@ -9,7 +9,7 @@ import {
 	WALLPAPER_NONE,
 	WALLPAPER_OVERLAY,
 } from "@constants/constants";
-
+import { getFontStylesheets } from "@utils/font-utils";
 import {
 	backgroundWallpaperConfig,
 	effectsConfig,
@@ -1421,31 +1421,21 @@ export function applyFontToDocument(fontId: string): void {
 		// Apply directly to body via inline style to override Layout.astro's inline style
 		document.body.style.setProperty("font-family", fullFontFamily, "important");
 
-		// Load Google Fonts if specified
-		if (fontOption.googleFonts) {
-			const existingLink = document.querySelector(
-				`link[data-font-id="${fontId}-gfonts"]`,
+		for (const { id, href } of getFontStylesheets(fontOption)) {
+			const absoluteHref = new URL(href, document.baseURI).href;
+			const alreadyLoaded = [
+				...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'),
+			].some(
+				(link) => link.dataset.fontId === id || link.href === absoluteHref,
 			);
-			if (!existingLink) {
-				const link = document.createElement("link");
-				link.rel = "stylesheet";
-				link.href = fontOption.googleFonts;
-				link.dataset.fontId = `${fontId}-gfonts`;
-				document.head.appendChild(link);
+			if (alreadyLoaded) {
+				continue;
 			}
-		}
-		// Load CDN font stylesheet if specified
-		if (fontOption.cdnUrl) {
-			const existingLink = document.querySelector(
-				`link[data-font-id="${fontId}-cdn"]`,
-			);
-			if (!existingLink) {
-				const link = document.createElement("link");
-				link.rel = "stylesheet";
-				link.href = fontOption.cdnUrl;
-				link.dataset.fontId = `${fontId}-cdn`;
-				document.head.appendChild(link);
-			}
+			const link = document.createElement("link");
+			link.rel = "stylesheet";
+			link.href = href;
+			link.dataset.fontId = id;
+			document.head.appendChild(link);
 		}
 	} else {
 		// Font not found, reset to default

@@ -567,6 +567,7 @@ export interface FontItem {
 		| "svg"; // 字体格式，仅当 src 为本地文件时需要
 	googleFonts?: string; // Google Fonts 引入URL
 	cdnUrl?: string; // 外部 CDN 字体样式表 URL
+	cdnUrls?: string[]; // 多个外部 CDN 字体样式表 URL（用于按字重加载）
 	localFonts?:
 		| Array<{
 				family: string; // 字体族名
