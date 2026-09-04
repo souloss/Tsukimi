@@ -195,6 +195,13 @@
 - 在独立临时目录执行 `pnpm install --prod --frozen-lockfile --ignore-scripts`：根目录没有 `node_modules/typescript`，但 `astro` 正常安装；说明生产运行时不再声明直接 TypeScript 依赖，同时保留正常构建依赖集合。旧 Swup 适配器链中的传递 `typescript@4.9.5` 仍存在，属于上游依赖范围，后续 Swup 现代化时再处理。
 - 本批次没有版本升级；在线 `pnpm audit --prod` 因 registry 无响应在 45 秒超时，沿用此前最近一次全量/生产全 0 审计快照，不将超时视为通过。
 
+### 剩余升级门禁复核
+
+- `typescript@7.0.2` 当前要求 Node `>=16.20.0`，但 `@astrojs/check@0.9.10` 的 peer 仍为 `^5.0.0 || ^6.0.0`，`@astrojs/svelte@9.0.1` 的 peer 仍为 `^5.3.3 || ^6.0.0`；继续升级会产生未声明的工具链组合，暂缓。
+- `katex@0.18.5` 已是最新版本，但 `rehype-katex@7.0.1` 仍声明 `katex: ^0.16.0`，当前 Markdown 数学渲染链没有兼容的配套版本，暂缓。
+- `oddmisc@1.2.11` 的导出结构仍与项目配置导入不兼容，继续固定 `1.2.5`；`l2d-widget@0.1.2` 已因本地 Cubism 6 模型解析回归回退到 `0.0.2`。
+- 当前 `pnpm outdated` 仅剩以上四项；没有同时满足安全收益、peer 合约和运行时回归门禁的下一项，后续等待上游版本变化再复验。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -235,7 +242,7 @@
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
 - **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
-- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
+- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；KaTeX 0.18 等待 `rehype-katex` 放宽依赖范围；Live2D 等待上游修复 0.1.2 的 Cubism 6 解析回归；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
 
 ## 回退策略
@@ -270,3 +277,4 @@
 - 升级 Markdown-it 至 `15.0.1` 并将 `linkify-it` override 调整至 `6.1.0`；标准渲染、RSS/Atom 内容对比和完整构建均通过。
 - 试验升级 `l2d-widget` 至 `0.1.2`；静态门禁和构建通过，但本地 NOIR 模型解析回归，已在相同 WebGL 条件下与 `0.0.2` 对照并回退，暂不合并新版。
 - 将 TypeScript `6.0.3` 从生产依赖移入开发依赖；生产安装验证无根目录 TypeScript 且保留 Astro，检查、类型检查和完整构建通过；在线生产审计因 registry 无响应超时。
+- 复核剩余 outdated 项：TypeScript 7、KaTeX 0.18.5、oddmisc 1.2.11 和 l2d-widget 0.1.2 均因 peer 或真实运行时回归门禁暂缓，当前没有可继续安全合并的升级项。
