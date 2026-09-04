@@ -42,6 +42,7 @@
 | Biome 2.5 | 已完成 | 开发期格式/检查工具升级；受影响文件检查、项目检查和构建均通过 |
 | `node-html-parser` 9 | 已完成 | RSS/Atom 构建期解析器升级；图片属性重写和完整静态构建通过 |
 | Markdown-it 15 与 linkify-it 6 | 已完成 | RSS/Atom 构建期 Markdown 渲染升级；feed 内容对比和完整静态构建通过 |
+| KaTeX 0.18.5 | 已完成 | 通过 workspace override 让 `rehype-katex` 使用同一版本；公式渲染和内容仓库构建通过 |
 | `l2d-widget` 0.1.2 | 回退/暂缓 | 静态检查和构建通过，但本地 NOIR Cubism 6 模型在新版解析阶段失败；已恢复 0.0.2 |
 | TypeScript 依赖归类 | 已完成 | TypeScript 仅供检查/编译使用，已从生产依赖移入开发依赖；生产安装保留 Astro |
 | TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
@@ -205,12 +206,19 @@
 - 内容仓库自带格式脚本报告 514 个扫描文件中 278 个存在编辑规范提示，指令脚本报告 25 个错误和 250 个警告，主要来自草稿和既有指令风格；Astro 构建已验证这些内容可以被当前插件链解析，本批次不修改内容文本。
 - 本批次未改动 `Tsukimi-Content`，因此无需内容仓库提交；后续内容更新继续以其 `main` 提交为构建输入。
 
+### KaTeX 0.18.5 与内容仓库公式联调
+
+- `katex` 从 `0.16.47` 升至 `0.18.5`；由于 `rehype-katex@7.0.1` 仍声明 `katex: ^0.16.0`，在 `pnpm-workspace.yaml` 增加 `katex: 0.18.5` override，使直接依赖、`remark-math` 使用的链路和 `rehype-katex` 传递依赖只解析出一个 KaTeX 版本。
+- 0.18 系列带来 MathML/CSS 和解析器维护更新；当前页面只依赖 `.katex`、`.katex-display` 等公开渲染类名，fixture 与现有文章验证未发现样式选择器回归。0.18.2 的设置原型污染修复也纳入了生产依赖链。
+- 内容仓库原始 490 篇 Markdown 的 `pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check` 和完整构建（584 页面）通过。随后在内容副本中临时加入含行内公式、块级公式和 `aligned` 环境的 smoke fixture，585 页面构建及预览浏览器冒烟通过；生成 HTML 含 3 个 `.katex`、2 个 `.katex-display`，按需 CSS、KaTeX 字体和可见布局均正常且无站内 console/pageerror。fixture 未提交到任何仓库。
+- 主工作区更新后再次执行 `pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 148 页面完整构建均通过；本次 `pnpm audit --prod` 因 registry 无响应超时，沿用上一个批次最近一次 `No known vulnerabilities found` 快照，不将超时视为通过。
+
 ### 剩余升级门禁复核
 
 - `typescript@7.0.2` 当前要求 Node `>=16.20.0`，但 `@astrojs/check@0.9.10` 的 peer 仍为 `^5.0.0 || ^6.0.0`，`@astrojs/svelte@9.0.1` 的 peer 仍为 `^5.3.3 || ^6.0.0`；继续升级会产生未声明的工具链组合，暂缓。
-- `katex@0.18.5` 已是最新版本，但 `rehype-katex@7.0.1` 仍声明 `katex: ^0.16.0`，当前 Markdown 数学渲染链没有兼容的配套版本，暂缓。
+- `katex@0.18.5` 已通过 workspace override 与 `rehype-katex@7.0.1` 统一解析，内容仓库公式联调通过；后续关注 rehype-katex 官方依赖范围放宽后移除 override 的机会。
 - `oddmisc@1.2.11` 已通过改用 `oddmisc/astro` 子路径完成兼容升级；`l2d-widget@0.1.2` 仍因本地 Cubism 6 模型解析回归回退到 `0.0.2`。
-- `typescript@7.0.2`、`katex@0.18.5` 和 `l2d-widget@0.1.2` 仍未同时满足 peer/运行时门禁；Swup 适配器也没有可直接替换的现代版本，继续暂缓。
+- `typescript@7.0.2` 和 `l2d-widget@0.1.2` 仍未同时满足 peer/运行时门禁；Swup 适配器也没有可直接替换的现代版本，继续暂缓。KaTeX 已通过统一 override 完成升级。
 
 ### 孤立直接依赖清理
 
@@ -252,7 +260,7 @@
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
 - **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
-- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；KaTeX 0.18 等待 `rehype-katex` 放宽依赖范围；Live2D 等待上游修复 0.1.2 的 Cubism 6 解析回归；Swup 不替换为未经验证的方案。`oddmisc` 已通过 `oddmisc/astro` 子路径完成升级，并经内容仓库联调验证。
+- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；Live2D 等待上游修复 0.1.2 的 Cubism 6 解析回归；Swup 不替换为未经验证的方案。KaTeX 已通过统一 override 完成升级，`oddmisc` 已通过 `oddmisc/astro` 子路径完成升级，并经内容仓库联调验证。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
 
 ## 回退策略
@@ -287,4 +295,5 @@
 - 升级 Markdown-it 至 `15.0.1` 并将 `linkify-it` override 调整至 `6.1.0`；标准渲染、RSS/Atom 内容对比和完整构建均通过。
 - 试验升级 `l2d-widget` 至 `0.1.2`；静态门禁和构建通过，但本地 NOIR 模型解析回归，已在相同 WebGL 条件下与 `0.0.2` 对照并回退，暂不合并新版。
 - 将 TypeScript `6.0.3` 从生产依赖移入开发依赖；生产安装验证无根目录 TypeScript 且保留 Astro，检查、类型检查和完整构建通过；在线生产审计因 registry 无响应超时。
-- 复核剩余 outdated 项：TypeScript 7、KaTeX 0.18.5 和 l2d-widget 0.1.2 仍因 peer 或真实运行时回归门禁暂缓；`oddmisc@1.2.11` 已迁移至 `oddmisc/astro` 并通过内容仓库完整联调。
+- 初次复核时 TypeScript 7、KaTeX 0.18.5 和 l2d-widget 0.1.2 因 peer 或真实运行时门禁暂缓；随后 `oddmisc@1.2.11` 已迁移至 `oddmisc/astro` 并通过内容仓库完整联调。
+- 升级 KaTeX `0.18.5` 并将 `rehype-katex` 传递依赖统一到同一版本；内容仓库原始 584 页面及含公式 fixture 的 585 页面构建和预览冒烟均通过。

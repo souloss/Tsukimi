@@ -50,7 +50,7 @@
 		"astro-icon": "^1.2.0",
 		"dayjs": "^1.11.23",
 		"hastscript": "^9.0.1",
-		"katex": "^0.16.47",
+		"katex": "^0.18.5",
 		"l2d-widget": "^0.0.2",
 		"marked": "^18.0.11",
 		"oddmisc": "1.2.11",
