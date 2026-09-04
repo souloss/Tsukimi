@@ -5,8 +5,22 @@
  * from folder-map.json + folder-open-icons.json, and swaps SVGs on
  * <details> toggle. The resolution logic mirrors the server-side plugin.
  */
-import folderMap from "../plugins/folder-map.json";
-import openIcons from "../plugins/folder-open-icons.json";
+let folderMap;
+let openIcons;
+let fileTreeDataPromise;
+
+function loadFileTreeData() {
+	if (!fileTreeDataPromise) {
+		fileTreeDataPromise = Promise.all([
+			import("../plugins/folder-map.json"),
+			import("../plugins/folder-open-icons.json"),
+		]).then(([folderMapModule, openIconsModule]) => {
+			folderMap = folderMapModule.default;
+			openIcons = openIconsModule.default;
+		});
+	}
+	return fileTreeDataPromise;
+}
 
 function resolveOpenIconName(folderName) {
 	const lower = folderName.toLowerCase();
@@ -23,11 +37,14 @@ function svgFromEntry(entry) {
 	return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${entry.viewBox}">${entry.body}</svg>`;
 }
 
-function initFileTree(root = document) {
+async function initFileTree(root = document) {
 	const detailsList = root.querySelectorAll(".vp-file-tree details");
 	if (!detailsList.length) return;
+	await loadFileTreeData();
 
 	for (const details of detailsList) {
+		if (!details.isConnected) continue;
+		if (details.dataset.fileTreeInitialized === "true") continue;
 		const icon = details.querySelector(":scope > summary .vp-file-tree-icon");
 		if (!icon) continue;
 
@@ -41,6 +58,7 @@ function initFileTree(root = document) {
 
 		const closedSvg = icon.innerHTML;
 		const openSvg = svgFromEntry(openEntry);
+		details.dataset.fileTreeInitialized = "true";
 
 		details.addEventListener("toggle", () => {
 			icon.innerHTML = details.open ? openSvg : closedSvg;
@@ -52,16 +70,26 @@ function initFileTree(root = document) {
 	}
 }
 
+function scheduleInit(root = document) {
+	void initFileTree(root).catch((error) => {
+		console.warn("Failed to load file-tree icon data:", error);
+	});
+}
+
 if (typeof window !== "undefined") {
 	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", () => initFileTree());
+		document.addEventListener("DOMContentLoaded", () => scheduleInit());
 	} else {
-		initFileTree();
+		scheduleInit();
 	}
 }
 
 document.addEventListener("swup:contentReplaced", () => {
-	initFileTree();
+	scheduleInit();
+});
+
+document.addEventListener("astro:page-load", () => {
+	scheduleInit();
 });
 
 export { initFileTree };
