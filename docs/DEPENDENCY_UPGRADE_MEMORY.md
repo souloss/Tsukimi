@@ -5,10 +5,10 @@
 ## 基线
 
 - 记录日期：2026-09-04
-- 当前提交：`3044f51`
+- 当前提交：`36f71aa`
 - Node：`v26.4.0`；pnpm：`10.33.0`
 - 架构：Astro 静态输出、Svelte 5、Tailwind 4、统一的 Markdown/MDX 插件链、Swup、Pagefind、OG 图片和字体压缩。
-- 当前工作区已有未提交修改。本轮只修改依赖、升级脚本、为 Astro 7 修复必要的 PostMeta 模板兼容性，以及本记忆文档，不覆盖其它用户功能文件。
+- 当前工作区除正在记录的记忆文档外保持干净；本轮不覆盖其它用户功能文件。
 - 基线验证：此前 `pnpm check` 与 `pnpm type-check` 通过；完整构建需要在每个依赖批次后复验。
 
 ## 执行规则
@@ -48,6 +48,7 @@
 | TypeScript 7 | 回退/暂缓 | `tsc` 和构建可通过，但 Astro language server 因 TS 7 API 变化崩溃；等待正式支持 |
 | Swup 4.10 兼容刷新 | 已完成 | 保留 `@swup/astro@1.8.0`，在其兼容范围内统一核心及两个插件补丁版；内容站真实转场通过 |
 | Swup 适配器替换 | 暂缓 | 当前没有高收益的直接替代；滚动和 morph 插件的新主版本也不强行越过适配器约束 |
+| 转场合成层与 CSS 动画属性 | 已完成 | 页面切换期间才启用 `will-change`，并将只涉及位移/透明度的过渡从 `all` 收窄，降低常驻合成层和误动画布局属性的开销。 |
 
 ## 同主版本批次
 
@@ -242,6 +243,15 @@
 - `oddmisc@1.2.11` 已通过改用 `oddmisc/astro` 子路径完成兼容升级；`l2d-widget@0.1.2` 仍因本地 MOC3 v5 模型解析回归回退到 `0.0.2`，内容站通过配置关闭 Pio，无需内容迁移。
 - Swup 核心和适配器兼容范围内的插件已安全刷新；仅适配器替换、scroll 4、morph 2 和旧构建链清理继续暂缓。当前真正剩余的升级门禁只有 TypeScript 7、Live2D 0.1.2 与 Swup 适配器主链现代化。
 
+### 转场合成层与 CSS 动画属性优化
+
+- 将 `transition-main`/`transition-leaving` 的 `will-change` 从常驻样式改为仅在 Swup 的 `is-changing`/`is-animating` 生命周期内启用；保留原有移动端位移规则和页面转场时序。
+- 将 Swup fade、slide-in、card 和导航动画的 `transition: all` 收窄为 `opacity` 与 `transform`，避免未来布局、尺寸或交互属性变化时触发额外动画和布局/绘制工作。
+- 生产浏览器探针（Chromium，桌面 1440x1000、移动 390x844）确认首屏 `#content-wrapper` 的 `will-change` 为 `auto`，转场 `content:replace`/`page:view` 阶段为 `transform, opacity`，转场结束后恢复 `auto`；桌面真实 Swup 跳转至归档成功，应用错误为 0。
+- 阻断第三方请求后的本地渲染基线：DOMContentLoaded 约 0.29–0.48 秒（移动/桌面），页面约 1,129–1,142 个元素；本次 CSS 修改不改变页面结构或资源数量。
+- `pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check`、完整 `pnpm build`（148 页面）和桌面/移动截图验证均通过。该项不变更依赖版本，审计沿用最近一次成功快照，不把在线审计超时视为新结果。
+- 回退方式：仅回退提交 `36f71aa` 即可恢复原有常驻合成提示和 `transition: all` 规则，不影响依赖锁文件或内容仓库。
+
 ### 孤立直接依赖清理
 
 - 删除 `@fontsource/roboto`、`@iconify/utils`、`@rollup/plugin-yaml`；全仓源码、Astro/Vite 配置和脚本均无引用。
@@ -281,6 +291,7 @@
 
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
+- **性能与体验维护**：转场合成提示按生命周期启用，动画属性范围明确，减少常驻 GPU 合成层、无意布局动画和移动端内存压力；导航首屏资源优化仍按后续批次单独验证。
 - **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠兼容范围内的传递依赖 override，后续 Swup 适配器升级时应移除这些 override 并重新验证页面转场。
 - **暂缓项**：TypeScript 7 已证实会破坏 Astro check；Live2D 0.1.2 已证实不能解析当前 NOIR 模型；Swup 仅暂缓适配器和插件主版本替换，核心 4.10 及兼容插件补丁已完成。KaTeX 与 `oddmisc` 均已升级并经内容仓库联调验证。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
@@ -323,3 +334,4 @@
 - 验证 TypeScript 6/7 双编译器隔离可行，TS 7 CLI 在项目上约快 5.7 倍，但绝对只节省约 2.7 秒且 Astro 仍依赖 TS 6；判定维护成本高于收益，未合入别名依赖。
 - 复核 Live2D 内容兼容：模型来自主题仓库且为 MOC3 v5，内容仓库只关闭 Pio；新版没有可选旧 core 的配置，因此继续保留能正常渲染的 `l2d-widget@0.0.2`。
 - 在 `@swup/astro@1.8.0` 兼容范围内统一 Swup `4.10.0`、a11y `5.2.1` 和 fragment `1.3.1`；主站 148 页面、内容站 584 页面构建通过，三次真实无刷新转场的完整钩子序列和内存状态均验证成功。
+- 将转场 `will-change` 限定在 Swup 活跃生命周期，并收窄四处 `transition: all`；主站 148 页面构建、桌面/移动浏览器探针和真实归档转场均通过，提交 `36f71aa` 已推送远程。
