@@ -230,7 +230,10 @@
 
 - 在独立工作树中试装 `typescript@7.0.2`；`@astrojs/check@0.9.10`、`@astrojs/svelte@9.0.1` 和 `svelte2tsx@0.7.55` 均报告只支持 TypeScript 4/5/6 的 peer 范围。
 - `pnpm type-check` 与含内容仓库的完整生产构建能够通过，但 `pnpm check` 在 `@astrojs/language-server/dist/check.js` 读取 `fileExists` 时崩溃；运行时探针也确认 TS 7 包不再暴露旧 JS API 的 `createProgram`。因此“能构建”不足以满足项目的开发门禁。
-- 实验后已恢复 `typescript@6.0.3`，内容仓库和主工作区均未留下 TS 7 改动。后续只有当 Astro check、Svelte 集成和 svelte2tsx 明确支持 TS 7 后才值得重试；当前强行升级会直接损坏日常诊断能力，性价比为负。
+- 继续试验了双编译器方案：保留 `typescript@6.0.3` 供 Astro language server 使用，另以 npm alias 安装 `typescript@7.0.2` 并直接调用其 native CLI。该组合可让 `astro check` 和两套 `tsc --noEmit` 都通过，说明隔离在技术上可行。
+- 在完整内容工作树上各运行三次：TS 6 为 3.29–3.38 秒、约 410–412 MiB RSS；TS 7 为 0.57–0.61 秒、约 298–303 MiB RSS。相对约快 5.7 倍，但一次 CI 只节省约 2.7 秒，Astro 的 358 文件检查仍必须走 TS 6，还会增加第二套编译器与非标准调用路径，综合收益不足，未合入。
+- Astro 的 TypeScript Native 跟踪明确说明 language service 新 API 尚未稳定：<https://github.com/withastro/roadmap/discussions/1321>；TypeScript 7.1 API 路线图仍把 Astro/Svelte 所需扩展接口列为待完成：<https://github.com/microsoft/typescript-go/issues/4830>。
+- 实验后已恢复 `typescript@6.0.3`，内容仓库和主工作区均未留下 TS 7 改动。后续只有当 Astro check、Svelte 集成和 svelte2tsx 明确支持 TS 7 后才值得重试；直接替换会损坏日常诊断，双版本方案当前则是可行但低性价比。
 
 ### 剩余升级门禁复核
 
@@ -317,5 +320,6 @@
 - 初次复核时 TypeScript 7、KaTeX 0.18.5 和 l2d-widget 0.1.2 因 peer 或真实运行时门禁暂缓；随后 `oddmisc@1.2.11` 已迁移至 `oddmisc/astro` 并通过内容仓库完整联调。
 - 升级 KaTeX `0.18.5` 并将 `rehype-katex` 传递依赖统一到同一版本；内容仓库原始 584 页面及含公式 fixture 的 585 页面构建和预览冒烟均通过。
 - 实际试装 TypeScript `7.0.2`：类型检查和生产构建可通过，但 Astro check 因 language server 调用已移除的 TS API 崩溃；已恢复 `6.0.3` 并明确暂缓条件。
+- 验证 TypeScript 6/7 双编译器隔离可行，TS 7 CLI 在项目上约快 5.7 倍，但绝对只节省约 2.7 秒且 Astro 仍依赖 TS 6；判定维护成本高于收益，未合入别名依赖。
 - 复核 Live2D 内容兼容：模型来自主题仓库且为 MOC3 v5，内容仓库只关闭 Pio；新版没有可选旧 core 的配置，因此继续保留能正常渲染的 `l2d-widget@0.0.2`。
 - 在 `@swup/astro@1.8.0` 兼容范围内统一 Swup `4.10.0`、a11y `5.2.1` 和 fragment `1.3.1`；主站 148 页面、内容站 584 页面构建通过，三次真实无刷新转场的完整钩子序列和内存状态均验证成功。
