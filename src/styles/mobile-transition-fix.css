@@ -6,7 +6,7 @@
 
 /* 移动端页面切换性能优化 */
 @media (max-width: 768px) {
-  /* 为所有动画元素添加硬件加速 */
+  /* 页面切换期间才提示合成器，避免隐藏元素常驻合成层。 */
   .transition-main,
   .transition-leaving,
   .onload-animation,
@@ -17,7 +17,6 @@
   .widget-container {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    will-change: transform, opacity;
   }
 
   /* 优化页面切换动画 */

@@ -40,7 +40,9 @@ html.is-animating.is-leaving .transition-leaving {
 
 /* Swup fade 动画 */
 html.is-changing .transition-swup-fade {
-  transition: all var(--transition-duration) ease-out;
+  transition:
+    opacity var(--transition-duration) ease-out,
+    transform var(--transition-duration) ease-out;
 }
 
 html.is-animating .transition-swup-fade {
@@ -112,7 +114,9 @@ html.is-animating .transition-swup-fade {
 .transition-slide-in {
   opacity: 0;
   transform: translateY(calc(var(--transition-translate) * 1.2));
-  transition: all calc(var(--transition-duration) * 1.5) var(--transition-easing);
+  transition:
+    opacity calc(var(--transition-duration) * 1.5) var(--transition-easing),
+    transform calc(var(--transition-duration) * 1.5) var(--transition-easing);
 }
 
 .transition-slide-in.active {
@@ -124,7 +128,9 @@ html.is-animating .transition-swup-fade {
 .card-animation {
   opacity: 0;
   transform: translateY(calc(var(--transition-translate) * 1.5)) scale(0.98);
-  transition: all calc(var(--transition-duration) * 1.2) var(--transition-easing);
+  transition:
+    opacity calc(var(--transition-duration) * 1.2) var(--transition-easing),
+    transform calc(var(--transition-duration) * 1.2) var(--transition-easing);
 }
 
 .card-animation.visible {
@@ -136,7 +142,9 @@ html.is-animating .transition-swup-fade {
 .nav-animation {
   opacity: 0;
   transform: translateX(calc(var(--transition-translate) * -1));
-  transition: all calc(var(--transition-duration) * 0.8) var(--transition-easing);
+  transition:
+    opacity calc(var(--transition-duration) * 0.8) var(--transition-easing),
+    transform calc(var(--transition-duration) * 0.8) var(--transition-easing);
 }
 
 .nav-animation.loaded {
@@ -144,14 +152,12 @@ html.is-animating .transition-swup-fade {
   transform: translateX(0);
 }
 
-/* 性能优化 */
-.transition-main,
-.transition-leaving,
-.onload-animation,
-.transition-slide-in,
-.card-animation {
-  transform: translateZ(0);
-  will-change: transform;
+/* 仅在页面切换期间创建合成提示，避免常驻合成层占用内存。 */
+html.is-changing .transition-main,
+html.is-changing .transition-leaving,
+html.is-animating .transition-main,
+html.is-animating .transition-leaving {
+  will-change: transform, opacity;
 }
 
 /* GPU 加速优化 - 用于 wave 等重型动画 */
