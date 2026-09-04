@@ -406,29 +406,11 @@ async function checkIntroMobile(client) {
 async function checkSearch(client) {
 	const page = await client.newPage(routes.intro, { width: 1440, height: 900 });
 	try {
-		const loaded = await client.waitFor(
+		const eagerPagefindLoads = await client.evaluate(
 			page.sessionId,
-			`(async () => {
-				if (typeof window.loadPagefindTsukimi === "function") await window.loadPagefindTsukimi();
-				return !!window.pagefindTsukimi && typeof window.pagefindTsukimi.search === "function";
-			})()`,
-			(value) => value === true,
-			15000,
+			`performance.getEntriesByType("resource").filter((entry) => entry.name.includes("/pagefind/tsukimi/pagefind.js")).length`,
 		);
-		assertCheck("pagefind loads in preview", loaded === true);
-
-		const directSearch = await client.evaluate(
-			page.sessionId,
-			`(async () => {
-				const response = await window.pagefindTsukimi.search("Docker", { filters: { docSlug: "tsukimi" } });
-				const entries = await Promise.all(response.results.slice(0, 5).map((item) => item.data()));
-				return {
-					count: response.results.length,
-					urls: entries.map((entry) => entry.url),
-				};
-			})()`,
-		);
-		assertCheck("pagefind docSlug filter returns docs results", directSearch.count > 0 && directSearch.urls.every((url) => url.startsWith("/docs/tsukimi/")), JSON.stringify(directSearch));
+		assertCheck("docs pagefind index stays lazy before search", eagerPagefindLoads === 0, JSON.stringify({ eagerPagefindLoads }));
 
 		await client.evaluate(
 			page.sessionId,
@@ -459,7 +441,30 @@ async function checkSearch(client) {
 			(value) => Array.isArray(value) && value.length > 0,
 			10000,
 		);
-		assertCheck("docs search UI renders filtered results", uiSearch.every((text) => text.length > 0), JSON.stringify(uiSearch));
+		assertCheck("docs search UI loads index on demand", uiSearch.every((text) => text.length > 0), JSON.stringify(uiSearch));
+
+		const loaded = await client.waitFor(
+			page.sessionId,
+			`(async () => {
+				return !!window.pagefindTsukimi && typeof window.pagefindTsukimi.search === "function";
+			})()`,
+			(value) => value === true,
+			15000,
+		);
+		assertCheck("pagefind loads in preview", loaded === true);
+
+		const directSearch = await client.evaluate(
+			page.sessionId,
+			`(async () => {
+				const response = await window.pagefindTsukimi.search("Docker", { filters: { docSlug: "tsukimi" } });
+				const entries = await Promise.all(response.results.slice(0, 5).map((item) => item.data()));
+				return {
+					count: response.results.length,
+					urls: entries.map((entry) => entry.url),
+				};
+			})()`,
+		);
+		assertCheck("pagefind docSlug filter returns docs results", directSearch.count > 0 && directSearch.urls.every((url) => url.startsWith("/docs/tsukimi/")), JSON.stringify(directSearch));
 	} finally {
 		await client.closePage(page.targetId);
 	}
