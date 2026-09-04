@@ -45,8 +45,9 @@
 | KaTeX 0.18.5 | 已完成 | 通过 workspace override 让 `rehype-katex` 使用同一版本；公式渲染和内容仓库构建通过 |
 | `l2d-widget` 0.1.2 | 回退/暂缓 | 静态检查和构建通过，但本地 NOIR Cubism 6 模型在新版解析阶段失败；已恢复 0.0.2 |
 | TypeScript 依赖归类 | 已完成 | TypeScript 仅供检查/编译使用，已从生产依赖移入开发依赖；生产安装保留 Astro |
-| TypeScript 7 | 暂缓 | 等 Astro/Svelte 工具链稳定支持 |
-| Swup 现代化 | 暂缓 | 当前适配器无对应升级，需单独评估替换成本 |
+| TypeScript 7 | 回退/暂缓 | `tsc` 和构建可通过，但 Astro language server 因 TS 7 API 变化崩溃；等待正式支持 |
+| Swup 4.10 兼容刷新 | 已完成 | 保留 `@swup/astro@1.8.0`，在其兼容范围内统一核心及两个插件补丁版；内容站真实转场通过 |
+| Swup 适配器替换 | 暂缓 | 当前没有高收益的直接替代；滚动和 morph 插件的新主版本也不强行越过适配器约束 |
 
 ## 同主版本批次
 
@@ -188,6 +189,8 @@
 - 首轮生产浏览器探针未产生模型请求，原因是工作区忽略目录 `src/overrides/pioConfig.ts` 将 Pio 配置为 `enable: false`，并非升级结论；临时打开配置后再测，两个版本均能创建 WebGL Canvas 并请求本地模型资源。
 - 新版 `0.1.2` 请求 `noir.model3.json`、`noir.moc3`、physics 和 texture 均为 HTTP 200，但在 `noir.moc3` 解析阶段抛出 `TypeError: et[t[((h + 36) >> 2)]] is not a function`，Canvas 未完成渲染；旧版 `0.0.2` 在完全相同的 Chromium/WebGL 条件下成功渲染 280x280 Canvas，且无 page error。
 - 运行时门禁失败，已恢复 `package.json`/`pnpm-lock.yaml` 到 `l2d-widget@0.0.2`；Pio 的原始关闭覆盖配置也已恢复，未改变生产功能开关。后续需等待上游修复 Cubism 6 解析回归或准备模型兼容性迁移后再重试。
+- 进一步核对确认模型属于主题仓库 `public/pio/models/NOIR`，两个 `noir.moc3` 副本均为 1,016,384 bytes，文件头为 `MOC3 05 00 00 00`；内容仓库本身不携带 Live2D 模型，而是通过 `overrides/pioConfig.ts` 将 Pio 关闭。
+- `0.1.2` 只有自动选择 Cubism core 的路径，没有供项目显式选择旧 core 的配置。并装旧版别名会保留两套运行时且没有收益，替换/重新导出模型又超出依赖升级范围，因此当前最安全且性价比最高的兼容方案仍是保留 `0.0.2`。
 
 ### TypeScript 依赖归类
 
@@ -213,12 +216,28 @@
 - 内容仓库原始 490 篇 Markdown 的 `pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check` 和完整构建（584 页面）通过。随后在内容副本中临时加入含行内公式、块级公式和 `aligned` 环境的 smoke fixture，585 页面构建及预览浏览器冒烟通过；生成 HTML 含 3 个 `.katex`、2 个 `.katex-display`，按需 CSS、KaTeX 字体和可见布局均正常且无站内 console/pageerror。fixture 未提交到任何仓库。
 - 主工作区更新后再次执行 `pnpm install --offline --frozen-lockfile`、`pnpm check`、`pnpm type-check` 和 148 页面完整构建均通过；本次 `pnpm audit --prod` 因 registry 无响应超时，沿用上一个批次最近一次 `No known vulnerabilities found` 快照，不将超时视为通过。
 
+### Swup 4.10 兼容刷新与内容仓库转场联调
+
+- npm registry 中 `@swup/astro` 仍为 `1.8.0`，它声明 `swup: ^4.0.0` 并管理整组 Swup 插件；本批次不替换适配器，而是在现有范围内通过 workspace override 将核心 `4.9.0 -> 4.10.0`、`@swup/a11y-plugin 5.1.0 -> 5.2.1`、`@swup/fragment-plugin 1.3.0 -> 1.3.1`。`pnpm why` 确认三者各只有一个解析版本。
+- Swup `4.10.0` 改善浏览器已执行原生 View Transition 时的历史动画处理，并重构失败 visit 的状态逻辑；属于现有 API 范围内的运行时维护更新。官方变更记录：<https://github.com/swup/swup/commit/854ff00c7fbb0251f45e7a1488002a28aa12e07f>。
+- 内容仓库 `main@77c4906` 的 490 篇 Markdown 在独立工作树中完成 `pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check` 和完整 `pnpm build`，生成 584 页面、两套 Pagefind 索引、RSS/Atom、sitemap 和字体产物。
+- 生产预览中依次执行主页到归档、归档到 `/posts/golang/go-start/`、浏览器后退到归档；每次均完整触发 `visit:start`、`content:replace`、`page:view`，页面标题/正文正确更新，注入的 JS 内存标记全程保留，证明没有退化为整页刷新，站内 console/pageerror 为 0。
+- 主工作区再次通过离线冻结安装、`pnpm check`、`pnpm type-check` 和 148 页面完整构建。生产审计请求在 45 秒内无响应而超时，最近一次成功快照仍是 oddmisc 批次的 `No known vulnerabilities found`，本批次不宣称新的审计结果。
+- 不强制升级 `@swup/scroll-plugin` 4 或 `swup-morph-plugin` 2：它们超出当前适配器依赖范围。旧 `@swup/plugin@3.0.1 -> microbundle` 链仍会带入传递 `typescript@4.9.5`，只有上游适配器重构后才能无额外维护成本地移除。
+- 本批次未修改 `Tsukimi-Content`；兼容措施位于主题依赖解析层，内容仓库保持 `main@77c4906` 干净，无需创建空提交。
+
+### TypeScript 7 实际兼容实验
+
+- 在独立工作树中试装 `typescript@7.0.2`；`@astrojs/check@0.9.10`、`@astrojs/svelte@9.0.1` 和 `svelte2tsx@0.7.55` 均报告只支持 TypeScript 4/5/6 的 peer 范围。
+- `pnpm type-check` 与含内容仓库的完整生产构建能够通过，但 `pnpm check` 在 `@astrojs/language-server/dist/check.js` 读取 `fileExists` 时崩溃；运行时探针也确认 TS 7 包不再暴露旧 JS API 的 `createProgram`。因此“能构建”不足以满足项目的开发门禁。
+- 实验后已恢复 `typescript@6.0.3`，内容仓库和主工作区均未留下 TS 7 改动。后续只有当 Astro check、Svelte 集成和 svelte2tsx 明确支持 TS 7 后才值得重试；当前强行升级会直接损坏日常诊断能力，性价比为负。
+
 ### 剩余升级门禁复核
 
-- `typescript@7.0.2` 当前要求 Node `>=16.20.0`，但 `@astrojs/check@0.9.10` 的 peer 仍为 `^5.0.0 || ^6.0.0`，`@astrojs/svelte@9.0.1` 的 peer 仍为 `^5.3.3 || ^6.0.0`；继续升级会产生未声明的工具链组合，暂缓。
+- `typescript@7.0.2` 已完成实际试装：除 peer 不支持外，`astro check` 会在 language server 内崩溃；继续保留 `6.0.3`，不是仅凭版本范围保守推断。
 - `katex@0.18.5` 已通过 workspace override 与 `rehype-katex@7.0.1` 统一解析，内容仓库公式联调通过；后续关注 rehype-katex 官方依赖范围放宽后移除 override 的机会。
-- `oddmisc@1.2.11` 已通过改用 `oddmisc/astro` 子路径完成兼容升级；`l2d-widget@0.1.2` 仍因本地 Cubism 6 模型解析回归回退到 `0.0.2`。
-- `typescript@7.0.2` 和 `l2d-widget@0.1.2` 仍未同时满足 peer/运行时门禁；Swup 适配器也没有可直接替换的现代版本，继续暂缓。KaTeX 已通过统一 override 完成升级。
+- `oddmisc@1.2.11` 已通过改用 `oddmisc/astro` 子路径完成兼容升级；`l2d-widget@0.1.2` 仍因本地 MOC3 v5 模型解析回归回退到 `0.0.2`，内容站通过配置关闭 Pio，无需内容迁移。
+- Swup 核心和适配器兼容范围内的插件已安全刷新；仅适配器替换、scroll 4、morph 2 和旧构建链清理继续暂缓。当前真正剩余的升级门禁只有 TypeScript 7、Live2D 0.1.2 与 Swup 适配器主链现代化。
 
 ### 孤立直接依赖清理
 
@@ -259,8 +278,8 @@
 
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
-- **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
-- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；Live2D 等待上游修复 0.1.2 的 Cubism 6 解析回归；Swup 不替换为未经验证的方案。KaTeX 已通过统一 override 完成升级，`oddmisc` 已通过 `oddmisc/astro` 子路径完成升级，并经内容仓库联调验证。
+- **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠兼容范围内的传递依赖 override，后续 Swup 适配器升级时应移除这些 override 并重新验证页面转场。
+- **暂缓项**：TypeScript 7 已证实会破坏 Astro check；Live2D 0.1.2 已证实不能解析当前 NOIR 模型；Swup 仅暂缓适配器和插件主版本替换，核心 4.10 及兼容插件补丁已完成。KaTeX 与 `oddmisc` 均已升级并经内容仓库联调验证。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
 
 ## 回退策略
@@ -297,3 +316,6 @@
 - 将 TypeScript `6.0.3` 从生产依赖移入开发依赖；生产安装验证无根目录 TypeScript 且保留 Astro，检查、类型检查和完整构建通过；在线生产审计因 registry 无响应超时。
 - 初次复核时 TypeScript 7、KaTeX 0.18.5 和 l2d-widget 0.1.2 因 peer 或真实运行时门禁暂缓；随后 `oddmisc@1.2.11` 已迁移至 `oddmisc/astro` 并通过内容仓库完整联调。
 - 升级 KaTeX `0.18.5` 并将 `rehype-katex` 传递依赖统一到同一版本；内容仓库原始 584 页面及含公式 fixture 的 585 页面构建和预览冒烟均通过。
+- 实际试装 TypeScript `7.0.2`：类型检查和生产构建可通过，但 Astro check 因 language server 调用已移除的 TS API 崩溃；已恢复 `6.0.3` 并明确暂缓条件。
+- 复核 Live2D 内容兼容：模型来自主题仓库且为 MOC3 v5，内容仓库只关闭 Pio；新版没有可选旧 core 的配置，因此继续保留能正常渲染的 `l2d-widget@0.0.2`。
+- 在 `@swup/astro@1.8.0` 兼容范围内统一 Swup `4.10.0`、a11y `5.2.1` 和 fragment `1.3.1`；主站 148 页面、内容站 584 页面构建通过，三次真实无刷新转场的完整钩子序列和内存状态均验证成功。

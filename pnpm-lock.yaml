@@ -5,6 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@swup/a11y-plugin': 5.2.1
+  '@swup/fragment-plugin': 1.3.1
   sharp: 0.35.4
   fast-uri: 3.1.7
   js-yaml: 4.3.2
@@ -22,6 +24,7 @@ overrides:
   postcss-selector-parser@6.1.2: 6.1.3
   postcss-selector-parser@7.1.1: 7.1.3
   serialize-javascript: 7.0.5
+  swup: 4.10.0
 
 importers:
 
@@ -1793,10 +1796,10 @@ packages:
       svelte: ^5.46.4
       vite: ^8.0.0-beta.7 || ^8.0.0
 
-  '@swup/a11y-plugin@5.1.0':
-    resolution: {integrity: sha512-lKiwKLbVeoJfM08VEu+RUA6y+CuS1Pqt12K5bzN7qXUXsrguWuUFQfmazMvMUnbDRZLr0AVFX5N2qmmBKWO1/A==}
+  '@swup/a11y-plugin@5.2.1':
+    resolution: {integrity: sha512-n7gphzG+LBuE1RZVYpMxVELqDVFtUNhbehoVZsUiKXaAEkQV64YASe42XmffRnwzmLVtNHBFOSUKd21whctUBg==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/astro@1.8.0':
     resolution: {integrity: sha512-FI8/jNXgyUoWpnOgdB3MOUobRtRzedKBE8+qbBH5c8CE4q9Ni/GHPGrXK/0xG+g1ZiIQuTF3OXRvTLNVouiBig==}
@@ -1804,7 +1807,7 @@ packages:
   '@swup/body-class-plugin@3.3.0':
     resolution: {integrity: sha512-4h/6mAgDd0+ml8Gc2kX8tikIR0HZZLF+WTnfm0JTVrGDw74bgEBenbsaWFfIS+gn4RWKZdWBUOfaZ+Im5J7Gvw==}
     peerDependencies:
-      swup: ^4.6.0
+      swup: 4.10.0
 
   '@swup/browserslist-config@1.0.1':
     resolution: {integrity: sha512-/3nBqG7LqmK1uqaCSTA6s2NwQBDQXNyLAFBzlX6uaxqjIQcAZyq6K+sgcQ40oj02Vn/2mLSkeL9DOfP7BPOwVA==}
@@ -1812,37 +1815,37 @@ packages:
   '@swup/debug-plugin@4.1.0':
     resolution: {integrity: sha512-R+RP4hjoeXrO+wowSswaTM4P05lu6iDg6UwdbQn0wfJ082KiUpH+DDwHYNOatxusKVExFuhLec+X9IbyAyiv8w==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/fade-theme@2.0.2':
     resolution: {integrity: sha512-x2XLIzAk8akrmVkozrlv0cU8wWnzt8MC164F1801qdffzY7mOi1v2mHl5Db9pqrP3BZ4UqC+5683/hQJ4obYEA==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/forms-plugin@3.6.0':
     resolution: {integrity: sha512-pRN6OR5wR27LvJqQOlCgu1fP9Z0ZsGauxWOE6nRCtjP1+98wlGTMiMsQ+jGvvs+IOK9IDTJQ7jvprnJAZaw9zw==}
     peerDependencies:
-      swup: ^4.6.0
+      swup: 4.10.0
 
-  '@swup/fragment-plugin@1.3.0':
-    resolution: {integrity: sha512-wz1aaLrvdWfucjO5fs7DgtptYKj3DpfIUNsEyzlt46iOxy9bV74VGDcBOEmnR8blmKBytNBRqDNPT0fhcVCr9w==}
+  '@swup/fragment-plugin@1.3.1':
+    resolution: {integrity: sha512-kB+yq7eimv+5TOG8JfK56j53LSoJnwVzI5NBnavdk8l84lZ7A0mPvdquJ4ZlFBajSaCYlvl9R4fs5uE1fTN9mg==}
     peerDependencies:
-      swup: ^4.6.0
+      swup: 4.10.0
 
   '@swup/head-plugin@2.3.1':
     resolution: {integrity: sha512-kdv60fO9c0/3+K40f7Fj/uV34nSuuPeCsld83J5uVVFizOmoovA737C5M1Iqac5Spf2GLU7q+mhN6AbohSIBjA==}
     peerDependencies:
-      swup: ^4.6.0
+      swup: 4.10.0
 
   '@swup/overlay-theme@2.0.2':
     resolution: {integrity: sha512-nfk5jrEru0lbFzlOzkT/f77sUwVHM/iUzlPMAT/KkWecn4/YuT4Y+lgIY3Se9VtD8TbSFrXYoHJea4GMZPJRAg==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/parallel-plugin@0.4.0':
     resolution: {integrity: sha512-un37RpdFz2vuJV1r9Hr0nCl5qgloN/Z3SczC3wi1XfkiHtzZ8kFTcm5pIW5rUkDVwtCTil44mlAA/STouBEgDw==}
     peerDependencies:
-      swup: ^4.6.0
+      swup: 4.10.0
 
   '@swup/plugin@3.0.1':
     resolution: {integrity: sha512-A9yiJeKTmQ9kac2Eo3MbMWW+Tiw23W5OSzAHVTCfW6n5zze6dexY3FLEUSDTcvRgciknvXfMZ9JTnebbvCKKWw==}
@@ -1854,7 +1857,7 @@ packages:
   '@swup/preload-plugin@3.2.11':
     resolution: {integrity: sha512-dq50u+d8L+63/pU6dUDnypuBoF49ubjRzRJqitGem2K7wRn7xccxRSvdyeGKdA2vNvzGDAmLfwVTZdSotvvDrw==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/prettier-config@1.1.0':
     resolution: {integrity: sha512-EF4DMdIGieEsuY2XK0PuLf7Uw7yUQOMbA6IdCMvvRvKXj03WLLpnNIFfFp+6hmMtXRSUE88VBpRyp6Giiu1Pbg==}
@@ -1862,32 +1865,32 @@ packages:
   '@swup/progress-plugin@3.2.0':
     resolution: {integrity: sha512-Ur+D4+aee9swR6pn7JbEyGMwVP1BTcN5ygjlno7IaSQ/vMZbuJ73po1RkKlIi86p+/PZ+1kynkH4K4eMZuHKKg==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/route-name-plugin@4.1.0':
     resolution: {integrity: sha512-1tw3WeExEKwI3pVMXTptCGxFUDOSEpc63D741eeUCjjGW/f9q7ekuqEaPQd5YJ6POpzDjdt1jjuC9yv54CbeXA==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/scripts-plugin@2.1.0':
     resolution: {integrity: sha512-JSMFsFCN9gn4q3m1Ccv0gq3gwRoZl6UGALOQO3OeQ8wOIq9vPC5dcUD3CMBuaPanksjR4GC8ZoukIjHrlT52fg==}
     peerDependencies:
-      swup: ^4.2.0
+      swup: 4.10.0
 
   '@swup/scroll-plugin@3.3.2':
     resolution: {integrity: sha512-jwngTz8LZza8p7ZWqaqQIzkH8x4hwyPh8RbrJSwTKussx24YUQuV9sgjDCzvJ16k/aYk9NCCvqLbb+4TcT3jqA==}
     peerDependencies:
-      swup: ^4.2.0
+      swup: 4.10.0
 
   '@swup/slide-theme@2.0.2':
     resolution: {integrity: sha512-CLFD+Nd/wIDLMOfg7D7sOX2d1AyhZsoLXT+G6xB4ARELaP1j+nQGDjyuRvgAESMW+GA1EL43y/BcXOAKTjzrsg==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@swup/theme@2.1.0':
     resolution: {integrity: sha512-nwAzx+GYySIYs6uSCFYGNdpLWv2z/mEryRD1gvmIqsaSP2N7sVd4mKAboraJAzIzbasRhTsTQzyN1LfLeti3AA==}
     peerDependencies:
-      swup: ^4.0.0
+      swup: 4.10.0
 
   '@tailwindcss/node@4.3.3':
     resolution: {integrity: sha512-/T8IKEsf9VTU6tLjgC7+sv2mOPtQxzE2jMw7u4Tt40Tx+QSZxpzh95/H6cMKoja9XuW7iMdLJYBB0o9G1CaAgg==}
@@ -4985,10 +4988,10 @@ packages:
   swup-morph-plugin@1.3.0:
     resolution: {integrity: sha512-vTqWYA5ZFkWMo54K8jlol5OCvboqRsELLfM1PUkS2IiL+1dDDChzMHa4ZBI5+yfl7bZUCWgd8EmuhMd/i/o+Qg==}
     peerDependencies:
-      swup: ^4.6.0
+      swup: 4.10.0
 
-  swup@4.9.0:
-    resolution: {integrity: sha512-XRM9gfvIAXMh/FxeQLJXMAqmKv3jmr4jCm0Efpv1qz5RRII714EqvpPACS2jZFp58RMGbAS/+5R5HxPVy9g0hw==}
+  swup@4.10.0:
+    resolution: {integrity: sha512-bzl5u94ovy5YDc+6No28De2TgMWK47Ym0uuMpN9kmzu+NWm3/mhQrmRPjArsFpfVTWO1nMFUZrKRwpRjS6eNJg==}
 
   tailwindcss@4.3.3:
     resolution: {integrity: sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ==}
@@ -7170,78 +7173,78 @@ snapshots:
       vite: 8.2.2(@types/node@25.9.1)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0)(terser@5.48.0)(yaml@2.8.3)
       vitefu: 1.1.3(vite@8.2.2(@types/node@25.9.1)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0)(terser@5.48.0)(yaml@2.8.3))
 
-  '@swup/a11y-plugin@5.1.0(swup@4.9.0)':
+  '@swup/a11y-plugin@5.2.1(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
       focus-options-polyfill: 1.6.0
-      swup: 4.9.0
+      swup: 4.10.0
 
   '@swup/astro@1.8.0(rolldown@1.2.7)':
     dependencies:
-      '@swup/a11y-plugin': 5.1.0(swup@4.9.0)
-      '@swup/body-class-plugin': 3.3.0(swup@4.9.0)
-      '@swup/debug-plugin': 4.1.0(swup@4.9.0)
-      '@swup/fade-theme': 2.0.2(swup@4.9.0)
-      '@swup/forms-plugin': 3.6.0(swup@4.9.0)
-      '@swup/fragment-plugin': 1.3.0(swup@4.9.0)
-      '@swup/head-plugin': 2.3.1(swup@4.9.0)
-      '@swup/overlay-theme': 2.0.2(swup@4.9.0)
-      '@swup/parallel-plugin': 0.4.0(rolldown@1.2.7)(swup@4.9.0)
-      '@swup/preload-plugin': 3.2.11(swup@4.9.0)
-      '@swup/progress-plugin': 3.2.0(swup@4.9.0)
-      '@swup/route-name-plugin': 4.1.0(rolldown@1.2.7)(swup@4.9.0)
-      '@swup/scripts-plugin': 2.1.0(swup@4.9.0)
-      '@swup/scroll-plugin': 3.3.2(swup@4.9.0)
-      '@swup/slide-theme': 2.0.2(swup@4.9.0)
-      swup: 4.9.0
-      swup-morph-plugin: 1.3.0(swup@4.9.0)
+      '@swup/a11y-plugin': 5.2.1(swup@4.10.0)
+      '@swup/body-class-plugin': 3.3.0(swup@4.10.0)
+      '@swup/debug-plugin': 4.1.0(swup@4.10.0)
+      '@swup/fade-theme': 2.0.2(swup@4.10.0)
+      '@swup/forms-plugin': 3.6.0(swup@4.10.0)
+      '@swup/fragment-plugin': 1.3.1(swup@4.10.0)
+      '@swup/head-plugin': 2.3.1(swup@4.10.0)
+      '@swup/overlay-theme': 2.0.2(swup@4.10.0)
+      '@swup/parallel-plugin': 0.4.0(rolldown@1.2.7)(swup@4.10.0)
+      '@swup/preload-plugin': 3.2.11(swup@4.10.0)
+      '@swup/progress-plugin': 3.2.0(swup@4.10.0)
+      '@swup/route-name-plugin': 4.1.0(rolldown@1.2.7)(swup@4.10.0)
+      '@swup/scripts-plugin': 2.1.0(swup@4.10.0)
+      '@swup/scroll-plugin': 3.3.2(swup@4.10.0)
+      '@swup/slide-theme': 2.0.2(swup@4.10.0)
+      swup: 4.10.0
+      swup-morph-plugin: 1.3.0(swup@4.10.0)
     transitivePeerDependencies:
       - '@types/babel__core'
       - rolldown
       - supports-color
       - ts-node
 
-  '@swup/body-class-plugin@3.3.0(swup@4.9.0)':
+  '@swup/body-class-plugin@3.3.0(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
   '@swup/browserslist-config@1.0.1': {}
 
-  '@swup/debug-plugin@4.1.0(swup@4.9.0)':
+  '@swup/debug-plugin@4.1.0(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/fade-theme@2.0.2(swup@4.9.0)':
+  '@swup/fade-theme@2.0.2(swup@4.10.0)':
     dependencies:
-      '@swup/theme': 2.1.0(swup@4.9.0)
-      swup: 4.9.0
+      '@swup/theme': 2.1.0(swup@4.10.0)
+      swup: 4.10.0
 
-  '@swup/forms-plugin@3.6.0(swup@4.9.0)':
-    dependencies:
-      '@swup/plugin': 4.0.0
-      swup: 4.9.0
-
-  '@swup/fragment-plugin@1.3.0(swup@4.9.0)':
+  '@swup/forms-plugin@3.6.0(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/head-plugin@2.3.1(swup@4.9.0)':
+  '@swup/fragment-plugin@1.3.1(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/overlay-theme@2.0.2(swup@4.9.0)':
+  '@swup/head-plugin@2.3.1(swup@4.10.0)':
     dependencies:
-      '@swup/theme': 2.1.0(swup@4.9.0)
-      swup: 4.9.0
+      '@swup/plugin': 4.0.0
+      swup: 4.10.0
 
-  '@swup/parallel-plugin@0.4.0(rolldown@1.2.7)(swup@4.9.0)':
+  '@swup/overlay-theme@2.0.2(swup@4.10.0)':
+    dependencies:
+      '@swup/theme': 2.1.0(swup@4.10.0)
+      swup: 4.10.0
+
+  '@swup/parallel-plugin@0.4.0(rolldown@1.2.7)(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 3.0.1(rolldown@1.2.7)
-      swup: 4.9.0
+      swup: 4.10.0
     transitivePeerDependencies:
       - '@types/babel__core'
       - rolldown
@@ -7257,7 +7260,7 @@ snapshots:
       prettier: 2.8.8
       shelljs: 0.8.5
       shelljs-live: 0.0.5(shelljs@0.8.5)
-      swup: 4.9.0
+      swup: 4.10.0
     transitivePeerDependencies:
       - '@types/babel__core'
       - rolldown
@@ -7266,50 +7269,50 @@ snapshots:
 
   '@swup/plugin@4.0.0':
     dependencies:
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/preload-plugin@3.2.11(swup@4.9.0)':
+  '@swup/preload-plugin@3.2.11(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
   '@swup/prettier-config@1.1.0': {}
 
-  '@swup/progress-plugin@3.2.0(swup@4.9.0)':
+  '@swup/progress-plugin@3.2.0(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/route-name-plugin@4.1.0(rolldown@1.2.7)(swup@4.9.0)':
+  '@swup/route-name-plugin@4.1.0(rolldown@1.2.7)(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 3.0.1(rolldown@1.2.7)
-      swup: 4.9.0
+      swup: 4.10.0
     transitivePeerDependencies:
       - '@types/babel__core'
       - rolldown
       - supports-color
       - ts-node
 
-  '@swup/scripts-plugin@2.1.0(swup@4.9.0)':
+  '@swup/scripts-plugin@2.1.0(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/scroll-plugin@3.3.2(swup@4.9.0)':
+  '@swup/scroll-plugin@3.3.2(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
       scrl: 2.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
-  '@swup/slide-theme@2.0.2(swup@4.9.0)':
+  '@swup/slide-theme@2.0.2(swup@4.10.0)':
     dependencies:
-      '@swup/theme': 2.1.0(swup@4.9.0)
-      swup: 4.9.0
+      '@swup/theme': 2.1.0(swup@4.10.0)
+      swup: 4.10.0
 
-  '@swup/theme@2.1.0(swup@4.9.0)':
+  '@swup/theme@2.1.0(swup@4.10.0)':
     dependencies:
       '@swup/plugin': 4.0.0
-      swup: 4.9.0
+      swup: 4.10.0
 
   '@tailwindcss/node@4.3.3':
     dependencies:
@@ -11183,13 +11186,13 @@ snapshots:
       picocolors: 1.1.1
       sax: 1.6.1
 
-  swup-morph-plugin@1.3.0(swup@4.9.0):
+  swup-morph-plugin@1.3.0(swup@4.10.0):
     dependencies:
       '@swup/plugin': 4.0.0
       morphdom: 2.7.8
-      swup: 4.9.0
+      swup: 4.10.0
 
-  swup@4.9.0:
+  swup@4.10.0:
     dependencies:
       delegate-it: 6.4.0
       path-to-regexp: 6.3.0
