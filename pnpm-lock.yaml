@@ -81,8 +81,8 @@ importers:
         specifier: ^18.0.11
         version: 18.0.11
       oddmisc:
-        specifier: 1.2.5
-        version: 1.2.5
+        specifier: 1.2.11
+        version: 1.2.11(astro@7.3.1(@astrojs/markdown-remark@7.3.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(jiti@2.7.0)(stylus@0.64.0)(terser@5.48.0)(yaml@2.8.3))
       overlayscrollbars:
         specifier: ^2.16.0
         version: 2.16.0
@@ -3980,8 +3980,13 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oddmisc@1.2.5:
-    resolution: {integrity: sha512-FbTIyYm825JWArqiEvZrtWjJe1rCi6Pk4Bxjt6gScsE6TlvhMaQ2L0VWtRzZLuWo/JCcehmirClaxUgTE2Rssg==}
+  oddmisc@1.2.11:
+    resolution: {integrity: sha512-+bTo1H++VLbNUDzLjDZUcE0TvZuqZKTQx/ONerQshW17ulrM4bRhjY8se7nc+c79iei761/FYPXiMF45T4d5ig==}
+    peerDependencies:
+      astro: '>=4.0.0'
+    peerDependenciesMeta:
+      astro:
+        optional: true
 
   ofetch@1.5.1:
     resolution: {integrity: sha512-2W4oUZlVaqAPAil6FUg/difl6YhqhUR7x2eZY4bQCko22UXg3hptq9KLQdqFClV+Wu85UX7hNtdGTngi/1BxcA==}
@@ -9954,7 +9959,9 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oddmisc@1.2.5: {}
+  oddmisc@1.2.11(astro@7.3.1(@astrojs/markdown-remark@7.3.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(jiti@2.7.0)(stylus@0.64.0)(terser@5.48.0)(yaml@2.8.3)):
+    optionalDependencies:
+      astro: 7.3.1(@astrojs/markdown-remark@7.3.0)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(jiti@2.7.0)(stylus@0.64.0)(terser@5.48.0)(yaml@2.8.3)
 
   ofetch@1.5.1:
     dependencies:

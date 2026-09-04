@@ -15,7 +15,7 @@
 
 1. 先完成同主版本安全更新，再进行 Astro 7 大版本迁移。
 2. 每个批次必须记录 `pnpm install`、`pnpm check`、`pnpm type-check`、`pnpm build` 和 `pnpm audit` 结果。
-3. `oddmisc` 暂时固定为 `1.2.5`。`1.2.11` 已验证会移除配置使用的命名导出 `oddmisc`。
+3. `oddmisc` 使用 `1.2.11` 时必须从 `oddmisc/astro` 导入 Astro 集成；根路径只保留运行时客户端导出。
 4. Svelte 补丁和 Astro/Vite 两个 `postinstall` 内部补丁均为迁移门禁，不能直接带入大版本升级。
 5. 任何失败都记录原因、影响范围和恢复方式，不用强制升级掩盖问题。
 
@@ -26,7 +26,7 @@
 | 基线与依赖用途盘点 | 已完成 | 已区分浏览器运行时、构建工具和数据脚本依赖 |
 | 同主版本安全批次 | 已完成 | Astro 6、Astro 集成、astro-icon、Axios、Sharp、HTML 清理、Tailwind 等 |
 | Vite 7 安全 override | 已完成（已由 Vite 8 接替） | Astro 7 迁移前曾统一到 `7.3.6`；迁移后移除该 override，由 Astro 7 使用 Vite `8.2.2` |
-| `oddmisc` 版本固定 | 已完成 | 已固定 `1.2.5`，避免解析到已验证不兼容的 `1.2.11` |
+| `oddmisc` Astro 子路径迁移 | 已完成 | 升至 `1.2.11` 并从 `oddmisc/astro` 导入集成；运行时统计 API 保持兼容 |
 | 构建依赖归类 | 已完成 | 将检查器、数据脚本、静态构建和 RSS 解析专用包移入 `devDependencies` |
 | Node/pnpm 运行环境统一 | 已完成 | 增加 engines 与 `.nvmrc`，部署使用 Node 22.12.0，移除 Node 23 矩阵 |
 | Fontmin 风险治理 | 已完成 | 已用 `subset-font` 替换 Fontmin，移除 node-gyp/tar 旧链 |
@@ -195,12 +195,22 @@
 - 在独立临时目录执行 `pnpm install --prod --frozen-lockfile --ignore-scripts`：根目录没有 `node_modules/typescript`，但 `astro` 正常安装；说明生产运行时不再声明直接 TypeScript 依赖，同时保留正常构建依赖集合。旧 Swup 适配器链中的传递 `typescript@4.9.5` 仍存在，属于上游依赖范围，后续 Swup 现代化时再处理。
 - 本批次没有版本升级；在线 `pnpm audit --prod` 因 registry 无响应在 45 秒超时，沿用此前最近一次全量/生产全 0 审计快照，不将超时视为通过。
 
+### oddmisc 1.2.11 与内容仓库联调
+
+- `oddmisc@1.2.11` 的根入口仅导出 Umami 运行时客户端，Astro 集成迁移到 `oddmisc/astro`；项目原有 `import { oddmisc } from "oddmisc"` 因此不再兼容。
+- 已将 `astro.config.mjs` 改为从 `oddmisc/astro` 导入，并将直接依赖从 `1.2.5` 升至 `1.2.11`。新版声明的 Astro peer `>=4.0.0` 与当前 Astro `7.3.1` 满足。
+- 在独立工作树中同步 `Tsukimi-Content` `main@77c4906`（不含 `.git`，避免测试触发内容仓库强制 reset），实际接入 490 篇 Markdown，其中 273 篇位于 `_draft`；`pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check` 和完整 `pnpm build` 均通过，生成 584 个静态页面、两套 Pagefind 索引、RSS/Atom、sitemap 和字体产物。
+- 预览冒烟覆盖首页、归档、Go 文章、Markdown 扩展和友情链接：全部 HTTP 200、正文正常；`window.oddmisc` 的 `getStats`、`getSiteStats`、`getPageStats` 三个现有调用均存在，应用 console/pageerror 为 0（第三方广告/指纹网络错误已排除）。
+- 主工作区的 `pnpm install --offline --frozen-lockfile`、`pnpm check`（358 文件，0 error/warning/hint）、`pnpm type-check` 和完整 `pnpm build`（148 页面）均通过；在线 `pnpm audit --prod` 返回 `No known vulnerabilities found`。
+- 内容仓库自带格式脚本报告 514 个扫描文件中 278 个存在编辑规范提示，指令脚本报告 25 个错误和 250 个警告，主要来自草稿和既有指令风格；Astro 构建已验证这些内容可以被当前插件链解析，本批次不修改内容文本。
+- 本批次未改动 `Tsukimi-Content`，因此无需内容仓库提交；后续内容更新继续以其 `main` 提交为构建输入。
+
 ### 剩余升级门禁复核
 
 - `typescript@7.0.2` 当前要求 Node `>=16.20.0`，但 `@astrojs/check@0.9.10` 的 peer 仍为 `^5.0.0 || ^6.0.0`，`@astrojs/svelte@9.0.1` 的 peer 仍为 `^5.3.3 || ^6.0.0`；继续升级会产生未声明的工具链组合，暂缓。
 - `katex@0.18.5` 已是最新版本，但 `rehype-katex@7.0.1` 仍声明 `katex: ^0.16.0`，当前 Markdown 数学渲染链没有兼容的配套版本，暂缓。
-- `oddmisc@1.2.11` 的导出结构仍与项目配置导入不兼容，继续固定 `1.2.5`；`l2d-widget@0.1.2` 已因本地 Cubism 6 模型解析回归回退到 `0.0.2`。
-- 当前 `pnpm outdated` 仅剩以上四项；没有同时满足安全收益、peer 合约和运行时回归门禁的下一项，后续等待上游版本变化再复验。
+- `oddmisc@1.2.11` 已通过改用 `oddmisc/astro` 子路径完成兼容升级；`l2d-widget@0.1.2` 仍因本地 Cubism 6 模型解析回归回退到 `0.0.2`。
+- `typescript@7.0.2`、`katex@0.18.5` 和 `l2d-widget@0.1.2` 仍未同时满足 peer/运行时门禁；Swup 适配器也没有可直接替换的现代版本，继续暂缓。
 
 ### 孤立直接依赖清理
 
@@ -242,7 +252,7 @@
 - **建议升级并合并**：本轮升级直接覆盖 Astro/Vite/Svelte 主构建链、字体工具链和运行环境约束，最终审计清零，属于高收益、可验证的维护批次。
 - **获得的能力**：Astro 7 默认队列渲染和 Vite 8 工具链、Svelte 无本地 runtime patch、Node 22+ 统一 CI/部署、无 node-gyp 的字体子集化、Satori 新版 OG 生成、构建期 Pako 不进入生产安装，以及可重复的 frozen/offline 安装。
 - **成本与风险**：锁文件变化较大；Astro 7 暴露并修复了一个旧 Astro 模板语法问题；Markdown-it 15 需要配套 `linkify-it` 6 override；`@swup/astro@1.8.0` 仍是维护瓶颈，目前依靠同主版本传递依赖 override，后续 Swup 适配器升级时应重新移除这些 override 并回归验证页面转场。
-- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；KaTeX 0.18 等待 `rehype-katex` 放宽依赖范围；Live2D 等待上游修复 0.1.2 的 Cubism 6 解析回归；Swup 不替换为未经验证的方案；`oddmisc` 继续固定 `1.2.5`，直到上游恢复配置使用的命名导出。
+- **暂缓项**：TypeScript 7 等待 `@astrojs/check` 与 `@astrojs/svelte` 放宽 peer 范围；KaTeX 0.18 等待 `rehype-katex` 放宽依赖范围；Live2D 等待上游修复 0.1.2 的 Cubism 6 解析回归；Swup 不替换为未经验证的方案。`oddmisc` 已通过 `oddmisc/astro` 子路径完成升级，并经内容仓库联调验证。
 - **维护建议**：每周运行 `pnpm audit`、每月检查 Astro/Svelte/Swup 更新；一旦 `@swup/astro` 发布兼容 Astro 7/Vite 8 的版本，优先删除其相关 override 并执行完整构建与浏览器冒烟。
 
 ## 回退策略
@@ -277,4 +287,4 @@
 - 升级 Markdown-it 至 `15.0.1` 并将 `linkify-it` override 调整至 `6.1.0`；标准渲染、RSS/Atom 内容对比和完整构建均通过。
 - 试验升级 `l2d-widget` 至 `0.1.2`；静态门禁和构建通过，但本地 NOIR 模型解析回归，已在相同 WebGL 条件下与 `0.0.2` 对照并回退，暂不合并新版。
 - 将 TypeScript `6.0.3` 从生产依赖移入开发依赖；生产安装验证无根目录 TypeScript 且保留 Astro，检查、类型检查和完整构建通过；在线生产审计因 registry 无响应超时。
-- 复核剩余 outdated 项：TypeScript 7、KaTeX 0.18.5、oddmisc 1.2.11 和 l2d-widget 0.1.2 均因 peer 或真实运行时回归门禁暂缓，当前没有可继续安全合并的升级项。
+- 复核剩余 outdated 项：TypeScript 7、KaTeX 0.18.5 和 l2d-widget 0.1.2 仍因 peer 或真实运行时回归门禁暂缓；`oddmisc@1.2.11` 已迁移至 `oddmisc/astro` 并通过内容仓库完整联调。
