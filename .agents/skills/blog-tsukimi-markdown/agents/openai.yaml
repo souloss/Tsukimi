@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tsukimi Markdown 写作"
+  short_description: "Tsukimi 博客 Markdown 指令与文章写作参考"
+  default_prompt: "Use $blog-tsukimi-markdown to draft or edit a Tsukimi blog post with supported frontmatter and Markdown extensions."
