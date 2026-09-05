@@ -49,6 +49,7 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"astro": "^7.3.1",
 		"astro-icon": "^1.2.0",
+		"bytefield-svg": "1.11.0",
 		"dayjs": "^1.11.23",
 		"hastscript": "^9.0.1",
 		"katex": "^0.18.5",
@@ -70,7 +71,11 @@
 		"stylus": "^0.64.0",
 		"svelte": "5.57.0",
 		"tailwindcss": "^4.3.3",
-		"unist-util-visit": "^5.1.0"
+		"unist-util-visit": "^5.1.0",
+		"vega": "6.4.0",
+		"vega-embed": "7.2.0",
+		"vega-lite": "6.4.3",
+		"wavedrom": "3.7.0"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",
@@ -100,7 +105,9 @@
 		"axios": "^1.20.0",
 		"fast-xml-parser": "^5.11.1",
 		"glob": "^13.0.6",
+		"hast-util-from-html": "2.0.3",
 		"https-proxy-agent": "^9.1.0",
+		"json5": "2.2.3",
 		"lint-staged": "^17.4.1",
 		"markdown-it": "^15.0.1",
 		"node-html-parser": "^9.0.3",
@@ -114,6 +121,7 @@
 		"sharp": "^0.35.4",
 		"simple-git-hooks": "^2.14.0",
 		"subset-font": "^2.7.0",
+		"svgo": "4.1.0",
 		"typescript": "^6.0.3",
 		"unified": "^11.0.5"
 	},

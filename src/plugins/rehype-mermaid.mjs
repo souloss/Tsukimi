@@ -1,12 +1,6 @@
 import { h } from "hastscript";
 import { visit } from "unist-util-visit";
 
-import diagramThemeCoordinator from "./diagram-theme-coordinator.js?raw";
-import mermaidRenderScript from "./mermaid-render-script.js?raw";
-
-/** 已注入协调器脚本的 tree 集合 */
-const coordinatorInjectedTrees = new WeakSet();
-
 /**
  * 递归提取 HAST 节点树中的所有文本内容
  */
@@ -40,7 +34,6 @@ function isDevMode(options) {
 
 export function rehypeMermaid(options = {}) {
 	return (tree) => {
-		let mermaidCount = 0;
 		visit(tree, "element", (node) => {
 			if (
 				node.tagName === "div" &&
@@ -73,8 +66,6 @@ export function rehypeMermaid(options = {}) {
 					return;
 				}
 
-				mermaidCount++;
-
 				const mermaidId = `mermaid-${Math.random().toString(36).slice(-6)}`;
 
 				// 创建 Mermaid 容器
@@ -95,23 +86,13 @@ export function rehypeMermaid(options = {}) {
 
 				// 替换原始节点
 				node.tagName = "div";
-				node.properties = { className: ["mermaid-diagram-container"] };
+				node.properties = {
+					className: ["mermaid-diagram-container"],
+					"data-tsukimi-diagram": "mermaid",
+				};
 				node.children = [mermaidContainer];
 			}
 		});
-
-		// 注入协调器脚本（单例守卫防止重复初始化）和渲染脚本
-		if (mermaidCount > 0) {
-			if (!coordinatorInjectedTrees.has(tree)) {
-				coordinatorInjectedTrees.add(tree);
-				tree.children.push(
-					h("script", { type: "text/javascript" }, diagramThemeCoordinator),
-				);
-			}
-			tree.children.push(
-				h("script", { type: "text/javascript" }, mermaidRenderScript),
-			);
-		}
 	};
 }
 

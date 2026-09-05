@@ -38,6 +38,7 @@ import { rehypeLazyImage } from "./src/plugins/rehype-lazy-image.mjs";
 import { rehypeMarkmap } from "./src/plugins/rehype-markmap.mjs";
 import { rehypeMermaid } from "./src/plugins/rehype-mermaid.mjs";
 import { rehypePlantuml } from "./src/plugins/rehype-plantuml.mjs";
+import { rehypeVegaLite } from "./src/plugins/rehype-vega-lite.mjs";
 import { rehypeWrapTable } from "./src/plugins/rehype-wrap-table.mjs";
 import { remarkAbbr } from "./src/plugins/remark-abbr.mjs";
 import { remarkCodeLangAliases } from "./src/plugins/remark-code-lang-aliases.js";
@@ -53,6 +54,8 @@ import { remarkMermaid } from "./src/plugins/remark-mermaid.js";
 import { remarkPlantuml } from "./src/plugins/remark-plantuml.js";
 import { remarkPlumeCompat } from "./src/plugins/remark-plume-compat.js";
 import { remarkRelativeLinks } from "./src/plugins/remark-relative-links.mjs";
+import { remarkStaticDiagrams } from "./src/plugins/remark-static-diagrams.js";
+import { remarkVegaLite } from "./src/plugins/remark-vega-lite.js";
 
 const disabledFeatureRoutes = Object.entries({
 	"/albums/": siteConfig.featurePages.albums,
@@ -206,6 +209,8 @@ export default defineConfig({
 				remarkMermaid,
 				[remarkPlantuml, plantumlConfig],
 				[remarkMarkmap, markmapConfig],
+				remarkStaticDiagrams,
+				remarkVegaLite,
 				remarkAbbr,
 			],
 			rehypePlugins: [
@@ -223,6 +228,7 @@ export default defineConfig({
 				rehypeMermaid,
 				rehypePlantuml,
 				rehypeMarkmap,
+				rehypeVegaLite,
 				[
 					rehypeComponents,
 					{

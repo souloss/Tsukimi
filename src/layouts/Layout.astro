@@ -33,6 +33,7 @@ import "../styles/fancybox-custom.css";
 import "../styles/expressive-code.css";
 import "../styles/panel-animations.css";
 import "../styles/directives.css";
+import "../styles/visual-diagrams.css";
 
 // 导入新提取的 Head 组件
 import AnalyticsScripts from "./partials/AnalyticsScripts.astro";
@@ -443,6 +444,16 @@ if (defaultFontItem) {
 	});
 </script>
 
+<!-- Markdown 图表统一按视口懒加载 -->
+<script>
+	const loadDiagramLoader = () => {
+		if (!document.querySelector("[data-tsukimi-diagram]")) return;
+		import("../scripts/diagram-loader.js");
+	};
+	loadDiagramLoader();
+	document.addEventListener("astro:page-load", loadDiagramLoader);
+</script>
+
 <!-- 代码块折叠功能 - 延迟加载 -->
 <script>
 	const collapsibleConfig = window.siteConfig?.collapsible;
@@ -459,31 +470,16 @@ if (defaultFontItem) {
 	}
 </script>
 
-<!-- Markdown 指令交互脚本 - 延迟加载 -->
+<!-- Markdown 指令交互脚本 -->
 <script>
-	const loadDirectiveInteractions = () => {
-		import("../scripts/directive-interactions.js").then(({ initDirectiveInteractions }) => {
-			initDirectiveInteractions();
-		});
-	};
-	if ("requestIdleCallback" in window) {
-		requestIdleCallback(loadDirectiveInteractions, { timeout: 5000 });
-	} else {
-		setTimeout(loadDirectiveInteractions, 2000);
-	}
+	import("../scripts/directive-interactions.js").then(({ initDirectiveInteractions }) => {
+		initDirectiveInteractions();
+	});
 </script>
 
-<!-- File-tree folder icon toggle - 延迟加载 -->
+<!-- File-tree folder icon toggle -->
 <script>
-	if ("requestIdleCallback" in window) {
-		requestIdleCallback(() => {
-			import("../scripts/file-tree.js");
-		}, { timeout: 5000 });
-	} else {
-		setTimeout(() => {
-			import("../scripts/file-tree.js");
-		}, 2000);
-	}
+	import("../scripts/file-tree.js");
 </script>
 
 <!-- Friends page copy button — global delegation, survives Swup transitions -->

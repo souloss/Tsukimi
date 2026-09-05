@@ -478,21 +478,42 @@
 			bindErrorHandler(img, container);
 			bindLoadHandler(img, container);
 		});
-		// Cache the initial theme's images in background
-		const isDark = document.documentElement.classList.contains("dark");
-		document.querySelectorAll(".plantuml-image").forEach((img) => {
-			const src = img.getAttribute("src");
-			if (src) {
-				saveImageToCache(src);
-			}
-			// Also pre-cache the opposite theme's URL
-			const light = img.getAttribute("data-light-src") || "";
-			const dark = img.getAttribute("data-dark-src") || light;
-			const opposite = isDark ? light : dark;
-			if (opposite) {
-				saveImageToCache(opposite);
-			}
-		});
+
+		// Keep browser-level lazy loading effective: cache only diagrams that are
+		// close to the viewport instead of fetching every image on the page.
+		const cacheVisibleImages = (images) => {
+			const isDark = document.documentElement.classList.contains("dark");
+			images.forEach((img) => {
+				const src = img.getAttribute("src");
+				if (src) saveImageToCache(src);
+				const light = img.getAttribute("data-light-src") || "";
+				const dark = img.getAttribute("data-dark-src") || light;
+				const opposite = isDark ? light : dark;
+				if (opposite && opposite !== src) saveImageToCache(opposite);
+			});
+		};
+		const images = [...document.querySelectorAll(".plantuml-image")];
+		if (typeof IntersectionObserver === "function") {
+			const cacheObserver = new IntersectionObserver(
+				(entries, observer) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						observer.unobserve(entry.target);
+						cacheVisibleImages([entry.target]);
+					});
+				},
+				{ rootMargin: "300px 0px" },
+			);
+			images.forEach((img) => {
+				cacheObserver.observe(img);
+			});
+		} else {
+			cacheVisibleImages(
+				images.filter(
+					(img) => img.getBoundingClientRect().top < window.innerHeight + 300,
+				),
+			);
+		}
 	}
 
 	// Theme change handler from coordinator

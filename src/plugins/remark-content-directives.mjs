@@ -114,6 +114,7 @@ const CONTENT_DIRECTIVE_NAMES = new Set([
 	"field-group",
 	"code-tree",
 	"flex",
+	"bitmap",
 ]);
 
 const LUCIDE_ICONS = {
@@ -301,7 +302,8 @@ const NAMED_COLORS = {
 
 /** Resolve color name to CSS value */
 function resolveColor(c) {
-	return NAMED_COLORS[c] || c || "var(--accent-color,#4a7c59)";
+	const value = NAMED_COLORS[c] || c || NAMED_COLORS.accent;
+	return sanitizeCssValue(value, NAMED_COLORS.accent);
 }
 
 /** HTML escape */
@@ -312,6 +314,153 @@ function escapeHtml(text) {
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
 		.replace(/"/g, "&quot;");
+}
+
+/** Keep user-provided values safe when they are placed in an inline style. */
+function sanitizeCssValue(value, fallback = "") {
+	const text = String(value ?? "").trim();
+	if (!text || /[<>`'";{}\r\n]/.test(text)) return fallback;
+	return text;
+}
+
+/** Convert an AST subtree to plain text for directive metadata. */
+function getInlineText(nodes) {
+	if (!Array.isArray(nodes)) return "";
+	return nodes
+		.map((node) => {
+			if (!node) return "";
+			if (node.type === "text" || node.type === "inlineCode")
+				return node.value || "";
+			if (node.type === "break") return "\n";
+			return getInlineText(node.children);
+		})
+		.join("");
+}
+
+function sanitizeClassToken(value, fallback = "") {
+	const token = String(value ?? "").trim();
+	return /^[A-Za-z0-9_-]+$/.test(token) ? token : fallback;
+}
+
+function normalizeCssLength(value, fallback, unit = "px") {
+	const text = sanitizeCssValue(value, "");
+	if (!text) return fallback;
+	if (/^-?(?:\d+|\d*\.\d+)$/.test(text)) return `${text}${unit}`;
+	return /^-?(?:\d+|\d*\.\d+)(?:px|rem|em|%|vw|vh|ch)$/.test(text)
+		? text
+		: fallback;
+}
+
+function normalizeInteger(value, fallback, min = 1, max = 1000) {
+	const parsed = Number.parseInt(String(value ?? ""), 10);
+	return Number.isFinite(parsed) && parsed >= min && parsed <= max
+		? parsed
+		: fallback;
+}
+
+/** Extract a lossless text grid from a bitmap directive body. */
+function getBitmapSource(children) {
+	const code = (children || []).find((child) => child?.type === "code");
+	if (code?.value) return code.value;
+
+	return (children || [])
+		.map((child) => {
+			if (child?.type === "paragraph") return getInlineText(child.children);
+			if (child?.type === "text") return child.value || "";
+			return "";
+		})
+		.filter(Boolean)
+		.join("\n");
+}
+
+/** Render a small ASCII pixel grid as an accessible, theme-friendly SVG. */
+function renderBitmapDirective(node) {
+	const attrs = node.attributes || {};
+	const rawSource = getBitmapSource(node.children)
+		.replace(/\r\n?/g, "\n")
+		.replace(/\t/g, "    ");
+	const rows = rawSource.split("\n");
+	while (rows.length && !rows[0].trim()) rows.shift();
+	while (rows.length && !rows.at(-1).trim()) rows.pop();
+	if (rows.length === 0) return "";
+
+	const maxSize = 256;
+	const height = Math.min(rows.length, maxSize);
+	const width = Math.min(
+		Math.max(...rows.slice(0, height).map((row) => row.length)),
+		maxSize,
+	);
+	if (!width || !height) return "";
+
+	const palette = String(attrs.palette || "")
+		.split(/[\s,]+/)
+		.map((color) => color.trim())
+		.filter(Boolean)
+		.slice(0, 16)
+		.map((color) => resolveColor(color));
+	const fallbackColor = resolveColor(attrs.color || "var(--primary,#4a7c59)");
+	const symbols = [
+		...new Set(
+			rows
+				.slice(0, height)
+				.join("")
+				.slice(0, maxSize * maxSize)
+				.split("")
+				.filter((symbol) => symbol !== " " && symbol !== "."),
+		),
+	];
+	const colorBySymbol = new Map(
+		symbols.map((symbol, index) => [symbol, palette[index] || fallbackColor]),
+	);
+	const rects = [];
+	for (let y = 0; y < height; y++) {
+		const row = rows[y].slice(0, width).padEnd(width, " ");
+		for (let x = 0; x < width; x++) {
+			const symbol = row[x];
+			if (symbol === " " || symbol === ".") continue;
+			rects.push(
+				`<rect x="${x}" y="${y}" width="1" height="1" fill="${escapeHtml(colorBySymbol.get(symbol) || fallbackColor)}"/>`,
+			);
+		}
+	}
+
+	const scale = normalizeInteger(attrs.scale, 8, 1, 32);
+	const title = String(attrs.title || attrs.alt || "Bitmap image").trim();
+	const background = attrs.background
+		? `<rect width="${width}" height="${height}" fill="${escapeHtml(resolveColor(attrs.background))}"/>`
+		: "";
+	return `<div class="md-directive md-directive-bitmap"><svg class="md-bitmap-svg" role="img" aria-label="${escapeHtml(title)}" width="${width * scale}" height="${height * scale}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges"><title>${escapeHtml(title)}</title>${background}${rects.join("")}</svg></div>`;
+}
+
+function sanitizeUrl(value, fallback = "") {
+	const text = String(value ?? "").trim();
+	if (
+		!text ||
+		Array.from(text).some((char) => {
+			const code = char.charCodeAt(0);
+			return code <= 31 || code === 127;
+		})
+	) {
+		return fallback;
+	}
+	if (/^(?:javascript|vbscript):/i.test(text)) return fallback;
+	if (/^data:/i.test(text) && !/^data:(?:image|audio|video)\//i.test(text)) {
+		return fallback;
+	}
+	return text;
+}
+
+function serializeHtmlProperties(properties) {
+	return Object.entries(properties || {})
+		.filter(([, value]) => value !== false && value != null && value !== "")
+		.map(([key, value]) => {
+			const name =
+				key === "className" ? "class" : key === "htmlFor" ? "for" : key;
+			return value === true
+				? ` ${name}`
+				: ` ${name}="${escapeHtml(Array.isArray(value) ? value.join(" ") : value)}"`;
+		})
+		.join("");
 }
 
 /** Create a hast container node */
@@ -331,43 +480,48 @@ function serializeToHtml(nodes) {
 			if (!node) {
 				return "";
 			}
+			if (node.type === "textDirective" && node.data?.hName) {
+				const tag = sanitizeClassToken(node.data.hName, "span");
+				const properties = serializeHtmlProperties(node.data.hProperties);
+				return `<${tag}${properties}>${serializeToHtml(node.children || [])}</${tag}>`;
+			}
 			switch (node.type) {
 				case "text":
 					return escapeHtml(node.value || "");
 				case "inlineCode":
 					return `<code>${escapeHtml(node.value || "")}</code>`;
 				case "strong":
-					return `<strong>${serializeToHtml(node.children)}</strong>`;
+					return `<strong>${serializeToHtml(node.children || [])}</strong>`;
 				case "emphasis":
-					return `<em>${serializeToHtml(node.children)}</em>`;
+					return `<em>${serializeToHtml(node.children || [])}</em>`;
 				case "delete":
-					return `<del>${serializeToHtml(node.children)}</del>`;
+					return `<del>${serializeToHtml(node.children || [])}</del>`;
 				case "link":
 					return (
 						'<a href="' +
-						(node.url || "#") +
+						escapeHtml(sanitizeUrl(node.url || "", "#")) +
 						'">' +
-						serializeToHtml(node.children) +
+						serializeToHtml(node.children || []) +
 						"</a>"
 					);
 				case "image":
 					return (
 						'<img src="' +
-						(node.url || "") +
+						escapeHtml(sanitizeUrl(node.url || "")) +
 						'" alt="' +
-						(node.alt || "") +
+						escapeHtml(node.alt || "") +
 						'" loading="lazy" />'
 					);
 				case "break":
 					return "<br>";
 				case "paragraph":
-					return `<p>${serializeToHtml(node.children)}</p>`;
+					return `<p>${serializeToHtml(node.children || [])}</p>`;
 				case "heading":
 					return (
 						"<h" +
 						(node.depth || 2) +
 						">" +
-						serializeToHtml(node.children) +
+						serializeToHtml(node.children || []) +
 						"</h" +
 						(node.depth || 2) +
 						">"
@@ -375,21 +529,54 @@ function serializeToHtml(nodes) {
 				case "code":
 					return (
 						'<pre><code class="language-' +
-						(node.lang || "") +
+						escapeHtml(node.lang || "") +
 						'">' +
 						escapeHtml(node.value || "") +
 						"</code></pre>"
 					);
 				case "blockquote":
-					return `<blockquote>${serializeToHtml(node.children)}</blockquote>`;
+					return `<blockquote>${serializeToHtml(node.children || [])}</blockquote>`;
+				case "linkReference":
+					return serializeToHtml(node.children || []);
+				case "textDirective":
+					return serializeToHtml(node.children || []);
+				case "table": {
+					const rows = node.children || [];
+					const align = node.align || [];
+					return `<table><thead>${serializeToHtml(
+						rows[0]
+							? {
+									type: "tableRow",
+									children: rows[0].children,
+									_header: true,
+									align,
+								}
+							: { type: "tableRow", children: [], _header: true, align },
+					)}</thead><tbody>${serializeToHtml(
+						rows.slice(1).map((row) => ({ ...row, align })),
+					)}</tbody></table>`;
+				}
+				case "tableRow": {
+					const cells = node.children || [];
+					return `<tr>${cells
+						.map((cell, index) => {
+							const tag = node._header ? "th" : "td";
+							const alignment = node.align?.[index];
+							const alignAttr = alignment ? ` align="${alignment}"` : "";
+							return `<${tag}${alignAttr}>${serializeToHtml(cell.children || [])}</${tag}>`;
+						})
+						.join("")}</tr>`;
+				}
+				case "tableCell":
+					return serializeToHtml(node.children || []);
 				case "list": {
 					const tag = node.ordered ? "ol" : "ul";
 					return (
 						"<" +
 						tag +
 						">" +
-						node.children
-							.map((item) => `<li>${serializeToHtml(item.children)}</li>`)
+						(node.children || [])
+							.map((item) => `<li>${serializeToHtml(item.children || [])}</li>`)
 							.join("") +
 						"</" +
 						tag +
@@ -397,13 +584,13 @@ function serializeToHtml(nodes) {
 					);
 				}
 				case "listItem":
-					return serializeToHtml(node.children);
+					return serializeToHtml(node.children || []);
 				case "thematicBreak":
 					return "<hr>";
 				case "html":
 					return node.value || "";
 				case "container":
-					return serializeToHtml(node.children);
+					return serializeToHtml(node.children || []);
 				default:
 					return "";
 			}
@@ -632,6 +819,14 @@ const CALLOUT_ICONS = {
 	important: "flame",
 };
 
+const CALLOUT_TYPES = new Set(Object.keys(CALLOUT_DEFAULT_TITLES));
+
+function normalizeCalloutType(value) {
+	const type = String(value || "info").toLowerCase();
+	if (type === "warning") return "warn";
+	return CALLOUT_TYPES.has(type) ? type : "info";
+}
+
 // ---------------------------------------------------------------------------
 // Inline directive processors
 // ---------------------------------------------------------------------------
@@ -652,9 +847,7 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 	}
 	const _directHeading = parent && parent.type === "heading";
 	if (_inHeading || _directHeading) {
-		const text = node.children
-			? node.children.map((c) => c.value || "").join("")
-			: "";
+		const text = node.children ? getInlineText(node.children) : "";
 		// Render directive syntax as inline code in headings:
 		// :name[text] → `:name[text]`, :name → `:name`
 		const codeText = text ? `:${node.name}[${text}]` : `:${node.name}`;
@@ -669,16 +862,12 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 	}
 	const name = node.name;
 	const attrs = node.attributes || {};
-	const text = node.children
-		? node.children.map((c) => c.value || "").join("")
-		: "";
+	const text = node.children ? getInlineText(node.children) : "";
 
 	switch (name) {
 		case "mark": {
 			const bg = resolveColor(attrs.color || "yellow");
-			const bgAlpha = bg.startsWith("var(")
-				? `color-mix(in srgb,${bg} 30%,transparent)`
-				: `${bg}55`;
+			const bgAlpha = `color-mix(in srgb,${bg} 30%,transparent)`;
 			node.data = {
 				hName: "mark",
 				hProperties: {
@@ -698,6 +887,7 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 					class: "md-tag-blur",
 					tabindex: "0",
 					role: "button",
+					"aria-expanded": "false",
 				},
 			};
 			break;
@@ -708,6 +898,7 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 					class: "md-tag-psw",
 					tabindex: "0",
 					role: "button",
+					"aria-expanded": "false",
 				},
 			};
 			break;
@@ -771,7 +962,7 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 			node.data = {
 				hName: "a",
 				hProperties: {
-					href: attrs.href || "#",
+					href: sanitizeUrl(attrs.href || "#", "#"),
 					class: "md-tag-hashtag",
 					style: `--tag-hash-color:${color}`,
 				},
@@ -794,9 +985,9 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 			break;
 		}
 		case "step-brackets": {
-			const num = text;
-			const stepTitle = attrs.title || "";
-			node.data = { hName: "div", hProperties: { class: "md-step-brackets" } };
+			const num = escapeHtml(text);
+			const stepTitle = escapeHtml(attrs.title || "");
+			node.data = { hName: "span", hProperties: { class: "md-step-brackets" } };
 			node.children = [
 				{
 					type: "html",
@@ -841,16 +1032,17 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 					chkDisplayText = "";
 				}
 			}
-			const inline = attrs.inline === "true" || attrs.inline === "";
+			const inline = attrs.inline !== "false";
 			const chkClasses = ["md-tag-checkbox"];
-			if (symbol) {
-				chkClasses.push(`md-checkbox-symbol-${symbol}`);
+			const safeSymbol = sanitizeClassToken(symbol);
+			if (safeSymbol) {
+				chkClasses.push(`md-checkbox-symbol-${safeSymbol}`);
 			}
 			if (inline) {
 				chkClasses.push("md-checkbox-inline");
 			}
 			node.data = {
-				hName: inline ? "span" : "div",
+				hName: "span",
 				hProperties: {
 					class: chkClasses.join(" "),
 					"data-checked": isChecked ? "true" : "false",
@@ -893,13 +1085,13 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 					radDisplayText = "";
 				}
 			}
-			const radInline = attrs.inline === "true" || attrs.inline === "";
+			const radInline = attrs.inline !== "false";
 			const radClasses = ["md-tag-checkbox", "md-tag-radio"];
 			if (radInline) {
 				radClasses.push("md-checkbox-inline");
 			}
 			node.data = {
-				hName: radInline ? "span" : "div",
+				hName: "span",
 				hProperties: {
 					class: radClasses.join(" "),
 					"data-checked": isRadChecked ? "true" : "false",
@@ -933,12 +1125,14 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 					resolvedName = EMOJI_UNICODE_MAP[emojiName.toLowerCase()];
 				}
 				const template = EMOJI_SOURCES[source] || source;
-				const url = template.replace("{name}", resolvedName);
+				const url = sanitizeUrl(template.replace("{name}", resolvedName));
+				if (!url) break;
+				const safeHeight = sanitizeCssValue(height, "1.75em");
 				node.data = {
 					hName: "span",
 					hProperties: {
 						class: "md-tag-emoji",
-						style: `--emoji-height:${height}`,
+						style: `--emoji-height:${safeHeight}`,
 					},
 				};
 				node.children = [
@@ -946,11 +1140,11 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 						type: "html",
 						value:
 							'<img src="' +
-							url +
+							escapeHtml(url) +
 							'" alt="' +
-							emojiName +
+							escapeHtml(emojiName) +
 							'" loading="lazy" style="height:' +
-							height +
+							safeHeight +
 							'" />',
 					},
 				];
@@ -1086,13 +1280,9 @@ function processBlockDirective(node) {
 		case "success":
 		case "failure":
 		case "danger": {
-			let type = attrs.type || name;
-			if (type === "warning") {
-				type = "warn";
-			}
-			if (name === "callout") {
-				type = attrs.type || "info";
-			}
+			const type = normalizeCalloutType(
+				name === "callout" ? attrs.type : attrs.type || name,
+			);
 
 			const title = attrs.title || CALLOUT_DEFAULT_TITLES[type] || "Info";
 			const iconName = CALLOUT_ICONS[type] || "info";
@@ -1161,7 +1351,7 @@ function processBlockDirective(node) {
 		case "folding":
 		case "collapse":
 		case "details": {
-			const foldTitle = attrs.title || "Details";
+			const foldTitle = escapeHtml(attrs.title || "Details");
 			const open = attrs.open === "true" || attrs.open === "";
 			const foldColor = resolveColor(attrs.color || "accent");
 			node.data = {
@@ -1192,8 +1382,7 @@ function processBlockDirective(node) {
 
 		case "code-group": {
 			const uid = `cg-${Math.random().toString(36).slice(2, 8)}`;
-			const tabItems = [];
-			const paneChildren = [];
+			const codeTabs = [];
 
 			if (node.children) {
 				node.children.forEach((child, i) => {
@@ -1203,28 +1392,36 @@ function processBlockDirective(node) {
 						// Extract label from [label] in meta
 						const labelMatch = meta.match(/\[([^\]]+)\]/);
 						const label = labelMatch ? labelMatch[1] : lang || `Tab ${i + 1}`;
-						const isActive = i === 0;
-						tabItems.push(
-							`<button type="button" class="md-tab-btn${isActive ? " md-tab-active" : ""}" data-tabs-id="${uid}" data-tab-index="${i}" role="tab" aria-selected="${isActive}">${escapeHtml(label)}</button>`,
-						);
-						// Keep the code AST node so expressive-code can process it
-						// (adds syntax highlighting, language badge, copy button)
-						paneChildren.push(
-							h(
-								"div",
-								{
-									class: `md-tab-pane${isActive ? " md-tab-visible" : ""}`,
-									id: `${uid}-pane-${i}`,
-									role: "tabpanel",
-								},
-								[child],
-							),
-						);
+						codeTabs.push({
+							label,
+							child,
+							active: /(?:^|\s):active(?:\s|$)/.test(meta),
+						});
 					}
 				});
 			}
 
-			if (tabItems.length === 0) break;
+			if (codeTabs.length === 0) break;
+			const requestedActiveIndex = codeTabs.findIndex((tab) => tab.active);
+			const activeIndex = requestedActiveIndex >= 0 ? requestedActiveIndex : 0;
+			const tabItems = codeTabs.map((tab, i) => {
+				const active = i === activeIndex;
+				return `<button type="button" id="${uid}-tab-${i}" class="md-tab-btn${active ? " md-tab-active" : ""}" data-tabs-id="${uid}" data-tab-index="${i}" role="tab" aria-selected="${active}" aria-controls="${uid}-pane-${i}" tabindex="${active ? "0" : "-1"}">${escapeHtml(tab.label)}</button>`;
+			});
+			// Keep code nodes in the AST so Expressive Code can highlight them.
+			const paneChildren = codeTabs.map((tab, i) =>
+				h(
+					"div",
+					{
+						class: `md-tab-pane${i === activeIndex ? " md-tab-visible" : ""}`,
+						id: `${uid}-pane-${i}`,
+						role: "tabpanel",
+						"aria-labelledby": `${uid}-tab-${i}`,
+						"aria-hidden": i === activeIndex ? "false" : "true",
+					},
+					[tab.child],
+				),
+			);
 
 			const codeGroupDiv = h(
 				"div",
@@ -1251,10 +1448,7 @@ function processBlockDirective(node) {
 			for (let fi = 0; fi < node.children.length; fi++) {
 				const fchild = node.children[fi];
 				if (fchild.type === "paragraph") {
-					const ftext = fchild.children
-						.map((c) => c.value || "")
-						.join("")
-						.trim();
+					const ftext = getInlineText(fchild.children).trim();
 					if (ftext.startsWith("folder:")) {
 						if (currentFolder !== null) {
 							folders.push({ title: currentFolder, children: currentContent });
@@ -1271,6 +1465,13 @@ function processBlockDirective(node) {
 			if (currentFolder !== null) {
 				folders.push({ title: currentFolder, children: currentContent });
 			}
+			if (folders.length === 0) {
+				node.data = {
+					hName: "div",
+					hProperties: { class: "md-directive md-directive-folders" },
+				};
+				return;
+			}
 			const foldersClass = isAccordion
 				? "md-directive md-directive-folders md-folders-accordion"
 				: "md-directive md-directive-folders";
@@ -1281,7 +1482,7 @@ function processBlockDirective(node) {
 			node.children = folders.map((f, i) => {
 				const summaryHtml =
 					'<summary><span class="md-folder-title">' +
-					f.title +
+					escapeHtml(f.title) +
 					'</span><span class="md-folder-arrow">' +
 					getIconSvg("lucide:chevron-down", 12) +
 					"</span></summary>";
@@ -1303,16 +1504,13 @@ function processBlockDirective(node) {
 				{ type: "root", children: node.children },
 				"listItem",
 				(listItem) => {
-					let ttext = "";
-					visit(listItem, "text", (t) => {
-						ttext += t.value;
-					});
+					const ttext = getInlineText(listItem.children).trim();
 					const parts = ttext.split("|").map((s) => s.trim());
 					if (parts.length >= 2) {
 						items.push({
 							date: parts[0],
 							title: parts[1],
-							desc: parts[2] || "",
+							desc: parts.slice(2).join(" | "),
 						});
 					} else {
 						const firstSpace = ttext.indexOf(" ");
@@ -1334,11 +1532,11 @@ function processBlockDirective(node) {
 							'<li class="md-timeline-node"><div class="md-timeline-dot' +
 							(i === 0 ? " md-timeline-dot-first" : "") +
 							'"></div><div class="md-timeline-content"><time>' +
-							item.date +
+							escapeHtml(item.date) +
 							"</time><h3>" +
-							item.title +
+							escapeHtml(item.title) +
 							"</h3>" +
-							(item.desc ? `<p>${item.desc}</p>` : "") +
+							(item.desc ? `<p>${escapeHtml(item.desc)}</p>` : "") +
 							"</div></li>",
 					)
 					.join("") +
@@ -1349,7 +1547,9 @@ function processBlockDirective(node) {
 		}
 
 		case "tabs": {
-			const align = attrs.align || "";
+			const align = ["left", "center", "right"].includes(attrs.align)
+				? attrs.align
+				: "";
 			const tabs = [];
 			let currentTab = null;
 			let currentTabColor = "";
@@ -1381,10 +1581,7 @@ function processBlockDirective(node) {
 					continue;
 				}
 				if (tchild.type === "paragraph") {
-					const ttext2 = tchild.children
-						.map((c) => c.value || "")
-						.join("")
-						.trim();
+					const ttext2 = getInlineText(tchild.children).trim();
 					if (ttext2.startsWith("tab:")) {
 						if (currentTab !== null) {
 							tabs.push({
@@ -1401,7 +1598,7 @@ function processBlockDirective(node) {
 									m[2]
 										.slice(6)
 										.trim()
-										.replace(/^['"""]+|['"""]+$/g, ""),
+										.replace(/^[\\"'“”]+|[\\"'“”]+$/gu, ""),
 								)
 							: "";
 						currentTabContent = [];
@@ -1442,31 +1639,45 @@ function processBlockDirective(node) {
 					children: currentTabContent,
 				});
 			}
+			if (tabs.length === 0) {
+				node.data = {
+					hName: "div",
+					hProperties: { class: "md-directive md-directive-tabs" },
+				};
+				return;
+			}
 
 			const uid = `tabs-${Math.random().toString(36).slice(2, 7)}`;
 			const navHtml = tabs
 				.map((t, i) => {
-					const isActive = i === 0 ? "md-tab-active" : "";
+					const isActive = i === 0;
 					const colorStyle = t.color
 						? ` style="--tab-active-color:${t.color}"`
 						: "";
-					const href = `${uid}-pane-${i}`;
 					return (
-						'<a href="#' +
-						href +
+						'<button type="button" id="' +
+						uid +
+						"-tab-" +
+						i +
 						'" role="tab" aria-selected="' +
-						(i === 0 ? "true" : "false") +
+						(isActive ? "true" : "false") +
+						'" aria-controls="' +
+						uid +
+						"-pane-" +
+						i +
 						'" class="md-tab-btn ' +
-						isActive +
+						(isActive ? "md-tab-active" : "") +
 						'"' +
 						colorStyle +
 						' data-tab-index="' +
 						i +
 						'" data-tabs-id="' +
 						uid +
+						'" tabindex="' +
+						(isActive ? "0" : "-1") +
 						'">' +
-						t.label +
-						"</a>"
+						escapeHtml(t.label) +
+						"</button>"
 					);
 				})
 				.join("");
@@ -1480,6 +1691,7 @@ function processBlockDirective(node) {
 						class: `md-tab-pane ${isVisible}`,
 						role: "tabpanel",
 						"aria-labelledby": `${uid}-tab-${i}`,
+						"aria-hidden": i === 0 ? "false" : "true",
 					},
 					t.children,
 				);
@@ -1508,10 +1720,10 @@ function processBlockDirective(node) {
 		}
 
 		case "poetry": {
-			const pTitle = attrs.title || "";
-			const pAuthor = attrs.author || "";
-			const pDate = attrs.date || "";
-			const pFooter = attrs.footer || "";
+			const pTitle = escapeHtml(attrs.title || "");
+			const pAuthor = escapeHtml(attrs.author || "");
+			const pDate = escapeHtml(attrs.date || "");
+			const pFooter = escapeHtml(attrs.footer || "");
 			const pMeta = [pAuthor, pDate].filter(Boolean).join(" · ");
 			const bodyHtml = serializeToHtml(node.children);
 			const poetryHtml =
@@ -1527,7 +1739,7 @@ function processBlockDirective(node) {
 		}
 
 		case "copy": {
-			const copyLabel = attrs.label || attrs.title || "";
+			const copyLabel = escapeHtml(attrs.label || attrs.title || "");
 			let copyText = "";
 			visit({ type: "root", children: node.children }, "code", (codeNode) => {
 				copyText += codeNode.value || "";
@@ -1539,10 +1751,7 @@ function processBlockDirective(node) {
 			}
 			copyText = copyText.trim();
 			const copyUid = `copy-${Math.random().toString(36).slice(2, 7)}`;
-			const safeText = copyText
-				.replace(/"/g, "&quot;")
-				.replace(/</g, "&lt;")
-				.replace(/>/g, "&gt;");
+			const safeText = escapeHtml(copyText);
 			const copyIcon = getIconSvg("lucide:copy", 14);
 			const copyHtml =
 				'<div class="md-directive md-directive-copy" data-md-copy="1">' +
@@ -1551,9 +1760,7 @@ function processBlockDirective(node) {
 				copyUid +
 				'" readonly value="' +
 				safeText +
-				'" class="md-copy-input" style="width:' +
-				Math.max(copyText.length * 8, 120) +
-				'px"><button class="md-copy-btn" data-copy-target="' +
+				'" class="md-copy-input"><button type="button" class="md-copy-btn" aria-label="Copy" title="Copy" data-copy-target="' +
 				copyUid +
 				'">' +
 				copyIcon +
@@ -1564,10 +1771,10 @@ function processBlockDirective(node) {
 		}
 
 		case "grid": {
-			const cols = attrs.cols || "";
-			const gap = attrs.gap || "16";
-			const minw = attrs.minw || "240px";
-			const bg = attrs.bg || "card";
+			const cols = attrs.cols ? normalizeInteger(attrs.cols, 2, 1, 12) : "";
+			const gap = normalizeCssLength(attrs.gap || "16", "16px");
+			const minw = normalizeCssLength(attrs.minw || "240px", "240px");
+			const bg = ["card", "box", "none"].includes(attrs.bg) ? attrs.bg : "card";
 			const cells = [];
 			let currentCell = [];
 			for (let gi = 0; gi < node.children.length; gi++) {
@@ -1595,7 +1802,7 @@ function processBlockDirective(node) {
 				cells.push(currentCell);
 			}
 			const gridClasses = ["md-directive-grid", `md-grid-bg-${bg}`];
-			const gridStyle = `--grid-gap:${gap}px`;
+			const gridStyle = `--grid-gap:${gap}`;
 			if (cols) {
 				gridClasses.push("md-grid-cols");
 				node.data = {
@@ -1630,11 +1837,7 @@ function processBlockDirective(node) {
 						if (li.type === "listItem" && li.children?.length) {
 							// First child is the step title paragraph
 							const titlePara = li.children[0];
-							const titleText =
-								titlePara?.children
-									?.map((c) => c.value || "")
-									.join("")
-									.trim() || "";
+							const titleText = getInlineText(titlePara?.children).trim();
 							// Remaining children are the step body
 							const bodyChildren = li.children.slice(1);
 							steps.push({ title: titleText, children: bodyChildren });
@@ -1644,10 +1847,7 @@ function processBlockDirective(node) {
 				}
 				// Fallback: paragraph starting with "N. Title"
 				if (schild.type === "paragraph") {
-					const stext = schild.children
-						.map((c) => c.value || "")
-						.join("")
-						.trim();
+					const stext = getInlineText(schild.children).trim();
 					if (/^\d+\.\s/.test(stext)) {
 						const stepTitle = stext.replace(/^\d+\.\s*/, "").trim();
 						steps.push({ title: stepTitle, children: [] });
@@ -1677,6 +1877,14 @@ function processBlockDirective(node) {
 					value: `<div class="md-directive md-directive-steps">${stepsHtml}</div>`,
 				},
 			];
+			break;
+		}
+
+		case "bitmap": {
+			const bitmapHtml = renderBitmapDirective(node);
+			if (!bitmapHtml) break;
+			node.data = { hName: "div", hProperties: {} };
+			node.children = [{ type: "html", value: bitmapHtml }];
 			break;
 		}
 
@@ -1935,7 +2143,9 @@ function processBlockDirective(node) {
 			}
 			const treeTitle = attrs.title || "";
 			const entry = attrs.entry || "";
-			const treeHeight = attrs.height || "";
+			const treeHeight = attrs.height
+				? normalizeCssLength(attrs.height, "480px")
+				: "";
 			const files = [];
 			let activeIndex = 0;
 			visit({ type: "root", children: node.children }, "code", (codeNode) => {
@@ -2007,7 +2217,19 @@ function processBlockDirective(node) {
 					const infoClasses = ["vp-file-tree-info", "file"];
 					if (isActive) infoClasses.push("md-code-tree-file-active");
 					return (
-						'<div class="vp-file-tree-node"><p class="' +
+						'<div class="vp-file-tree-node"><button type="button" id="' +
+						uid +
+						"-file-" +
+						idx +
+						'" role="tab" aria-controls="' +
+						uid +
+						"-panel-" +
+						idx +
+						'" aria-selected="' +
+						(isActive ? "true" : "false") +
+						'" tabindex="' +
+						(isActive ? "0" : "-1") +
+						'" class="' +
 						infoClasses.join(" ") +
 						'" style="' +
 						levelStyle +
@@ -2019,7 +2241,7 @@ function processBlockDirective(node) {
 						ftGetFileIconHtml(n.name) +
 						'</span><span class="vp-file-tree-name file">' +
 						escapeHtml(n.name) +
-						"</span></p></div>"
+						"</span></button></div>"
 					);
 				}
 				const isExpanded = n.expanded;
@@ -2036,19 +2258,19 @@ function processBlockDirective(node) {
 							"</span>"
 						: '<span class="vp-file-tree-arrow-spacer"></span>') +
 					'<span class="vp-file-tree-icon">' +
-					ftGetFolderIconHtml(n.name, isExpanded) +
+					ftGetFolderIconHtml(n.name, false) +
 					'</span><span class="vp-file-tree-name folder">' +
 					escapeHtml(n.name) +
 					"</span>";
 				if (!hasChildren)
 					return (
-						'<div class="vp-file-tree-node"><p class="' +
+						'<div class="vp-file-tree-node"><span class="' +
 						infoClasses.join(" ") +
 						'" style="' +
 						levelStyle +
 						'">' +
 						infoKids +
-						"</p></div>"
+						"</span></div>"
 					);
 				const childHtml = n.children
 					.map((c) => renderTree(c, level + 1))
@@ -2056,13 +2278,13 @@ function processBlockDirective(node) {
 				return (
 					'<div class="vp-file-tree-node"><details' +
 					(isExpanded ? " open" : "") +
-					'><summary><p class="' +
+					'><summary><span class="' +
 					infoClasses.join(" ") +
 					'" style="' +
 					levelStyle +
 					'">' +
 					infoKids +
-					'</p></summary><div class="vp-file-tree-group" style="--file-tree-level: -' +
+					'</span></summary><div class="vp-file-tree-group" style="--file-tree-level: -' +
 					(level + 1) +
 					';">' +
 					childHtml +
@@ -2084,6 +2306,9 @@ function processBlockDirective(node) {
 								"md-code-tree-panel" +
 								(isActive ? " md-code-tree-panel-active" : ""),
 							id: `${uid}-panel-${pi}`,
+							role: "tabpanel",
+							"aria-labelledby": `${uid}-file-${pi}`,
+							"aria-hidden": isActive ? "false" : "true",
 						},
 						[f.codeNode],
 					),
@@ -2103,7 +2328,7 @@ function processBlockDirective(node) {
 							(treeTitle
 								? `<div class="md-code-tree-title">${escapeHtml(treeTitle)}</div>`
 								: "") +
-							'<div class="md-code-tree-body"><div class="md-code-tree-sidebar vp-file-tree">' +
+							'<div class="md-code-tree-body"><div class="md-code-tree-sidebar vp-file-tree" role="tablist" aria-label="Files">' +
 							sidebarHtml +
 							"</div>" +
 							'<div class="md-code-tree-panels">',
@@ -2118,10 +2343,25 @@ function processBlockDirective(node) {
 		}
 
 		case "flex": {
-			const gap = attrs.gap || "1rem";
+			const gap = normalizeCssLength(attrs.gap || "1rem", "1rem");
 			const column = attrs.column === "true" || attrs.column === "" || false;
-			const justify = attrs.justify || attrs.main || "";
-			const align = attrs.align || attrs.cross || "";
+			const justifyValue = attrs.justify || attrs.main || "";
+			const alignValue = attrs.align || attrs.cross || "";
+			const justify = [
+				"start",
+				"center",
+				"end",
+				"between",
+				"around",
+				"evenly",
+			].includes(justifyValue)
+				? justifyValue
+				: "";
+			const align = ["start", "center", "end", "stretch", "baseline"].includes(
+				alignValue,
+			)
+				? alignValue
+				: "";
 			const style = `--flex-gap:${gap};`;
 			const cssClasses = ["md-directive", "md-directive-flex"];
 			if (column) cssClasses.push("md-flex-column");
@@ -2149,16 +2389,16 @@ function processBlockDirective(node) {
 					if (hasDirective) {
 						// Reconstruct the {:...} text from text + textDirective children
 						const text = child.children
-							.map((c) => {
-								if (c.type === "text") return c.value || "";
-								if (c.type === "textDirective") return `:${c.name}`;
-								return "";
-							})
+							.map((c) =>
+								c.type === "textDirective"
+									? `:${c.name}${getInlineText(c.children)}`
+									: getInlineText([c]),
+							)
 							.join("");
 						// The reconstructed text will be like "{:2025-06-17 14:30}"
 						chatLines.push(text);
 					} else {
-						const text = child.children.map((c) => c.value || "").join("");
+						const text = getInlineText(child.children);
 						chatLines.push(text);
 					}
 				}
@@ -2261,9 +2501,13 @@ function processBlockDirective(node) {
 		}
 
 		case "npm-to": {
-			const tabList = (attrs.tabs || "npm,pnpm,yarn,bun")
+			const requestedTabs = (attrs.tabs || "npm,pnpm,yarn,bun")
 				.split(",")
-				.map((s) => s.trim());
+				.map((s) => s.trim().toLowerCase())
+				.filter((pm) => ["npm", "pnpm", "yarn", "bun"].includes(pm));
+			const tabList = requestedTabs.length
+				? [...new Set(requestedTabs)]
+				: ["npm", "pnpm", "yarn", "bun"];
 			let npmCode = "";
 			let codeLang = "bash";
 			visit({ type: "root", children: node.children }, "code", (codeNode) => {
@@ -2271,9 +2515,7 @@ function processBlockDirective(node) {
 				if (codeNode.lang) codeLang = codeNode.lang;
 			});
 			if (!npmCode) {
-				visit({ type: "root", children: node.children }, "text", (t) => {
-					npmCode += t.value;
-				});
+				npmCode = getInlineText(node.children);
 			}
 			if (!npmCode && attrs.package) {
 				npmCode = `npm install ${attrs.package}`;
@@ -2287,7 +2529,11 @@ function processBlockDirective(node) {
 			const navHtml = converted
 				.map(
 					(c, i) =>
-						'<button type="button" class="md-tab-btn' +
+						'<button type="button" id="' +
+						uid +
+						"-tab-" +
+						i +
+						'" class="md-tab-btn' +
 						(i === 0 ? " md-tab-active" : "") +
 						'" data-tabs-id="' +
 						uid +
@@ -2295,8 +2541,14 @@ function processBlockDirective(node) {
 						i +
 						'" role="tab" aria-selected="' +
 						(i === 0 ? "true" : "false") +
+						'" aria-controls="' +
+						uid +
+						"-pane-" +
+						i +
+						'" tabindex="' +
+						(i === 0 ? "0" : "-1") +
 						'">' +
-						c.pm +
+						escapeHtml(c.pm) +
 						"</button>",
 				)
 				.join("");
@@ -2316,6 +2568,8 @@ function processBlockDirective(node) {
 						class: `md-tab-pane${isActive ? " md-tab-visible" : ""}`,
 						id: `${uid}-pane-${i}`,
 						role: "tabpanel",
+						"aria-labelledby": `${uid}-tab-${i}`,
+						"aria-hidden": isActive ? "false" : "true",
 					},
 					[codeNode],
 				);
@@ -2357,17 +2611,14 @@ function processBlockDirective(node) {
 			const rightQuote = getIconSvg("bxs:quote-right", 28);
 			const qIcon = attrs.icon || "";
 			if (qIcon || name === "quot") {
-				let qText = "";
-				visit({ type: "root", children: node.children }, "text", (t) => {
-					qText += t.value;
-				});
-				qText = qText.trim();
+				const qText = getInlineText(node.children).trim();
 				let qIconHtml = "";
 				if (qIcon) {
 					if (/^https?:\/\//i.test(qIcon)) {
+						const qIconUrl = sanitizeUrl(qIcon);
 						qIconHtml =
 							'<img class="md-quot-icon" src="' +
-							qIcon +
+							escapeHtml(qIconUrl) +
 							'" alt="" style="height:28px;width:auto;" />';
 					} else {
 						const qMatch = qIcon.match(/^([a-z0-9-]+):([a-z0-9-]+)$/i);
@@ -2380,7 +2631,7 @@ function processBlockDirective(node) {
 							const qSvg = getIconSvg(`lucide:${qIcon}`, "1.75rem");
 							qIconHtml = qSvg
 								? `<span class="md-quot-icon">${qSvg}</span>`
-								: `<span class="md-quot-icon">${qIcon}</span>`;
+								: `<span class="md-quot-icon">${escapeHtml(qIcon)}</span>`;
 						}
 					}
 				} else {
@@ -2390,7 +2641,7 @@ function processBlockDirective(node) {
 					'<div class="md-directive md-directive-quot">' +
 					qIconHtml +
 					'<p class="md-quot-text">' +
-					qText +
+					escapeHtml(qText) +
 					"</p></div>";
 				node.data = { hName: "div", hProperties: {} };
 				node.children = [{ type: "html", value: quotHtml }];
@@ -2423,10 +2674,10 @@ function processBlockDirective(node) {
 		}
 
 		case "reel": {
-			const reelTitle = attrs.title || "";
-			const reelAuthor = attrs.author || "";
-			const reelDate = attrs.date || "";
-			const reelFooter = attrs.footer || "";
+			const reelTitle = escapeHtml(attrs.title || "");
+			const reelAuthor = escapeHtml(attrs.author || "");
+			const reelDate = escapeHtml(attrs.date || "");
+			const reelFooter = escapeHtml(attrs.footer || "");
 			node.data = {
 				hName: "div",
 				hProperties: { class: "md-directive md-directive-reel" },
@@ -2481,11 +2732,11 @@ function processBlockDirective(node) {
 		}
 
 		case "paper": {
-			const paperStyle = attrs.style || "";
-			const paperTitle = attrs.title || "";
-			const paperAuthor = attrs.author || "";
-			const paperDate = attrs.date || "";
-			const paperFooter = attrs.footer || "";
+			const paperStyle = sanitizeClassToken(attrs.style || "");
+			const paperTitle = escapeHtml(attrs.title || "");
+			const paperAuthor = escapeHtml(attrs.author || "");
+			const paperDate = escapeHtml(attrs.date || "");
+			const paperFooter = escapeHtml(attrs.footer || "");
 			const paperClasses = ["md-paper-content"];
 			if (paperStyle) {
 				paperClasses.push(paperStyle);
@@ -2510,7 +2761,7 @@ function processBlockDirective(node) {
 								type: "html",
 								value:
 									'<div class="md-paper-section-title">' +
-									currentSectionTitle +
+									escapeHtml(currentSectionTitle) +
 									"</div>",
 							},
 							h(
@@ -2603,12 +2854,20 @@ function processBlockDirective(node) {
 		}
 
 		case "gallery": {
-			const gCols = attrs.cols || "3";
-			const gGap = attrs.gap || "8";
+			const gCols = normalizeInteger(attrs.cols, 3, 1, 8);
+			const gGap = normalizeCssLength(attrs.gap || "8", "8px");
 			const gImages = [];
 			visit({ type: "root", children: node.children }, "image", (img) => {
-				gImages.push({ src: img.url, alt: img.alt || "" });
+				const src = sanitizeUrl(img.url);
+				if (src) gImages.push({ src, alt: img.alt || "" });
 			});
+			if (gImages.length === 0) {
+				node.data = {
+					hName: "div",
+					hProperties: { class: "md-directive md-directive-gallery" },
+				};
+				return;
+			}
 			node.data = { hName: "div", hProperties: {} };
 			node.children = [
 				{
@@ -2618,15 +2877,17 @@ function processBlockDirective(node) {
 						gCols +
 						";--gallery-gap:" +
 						gGap +
-						'px">' +
+						'">' +
 						gImages
 							.map(
 								(img) =>
-									'<div class="md-gallery-cell"><img src="' +
-									img.src +
+									'<button type="button" class="md-gallery-cell" data-fancybox="markdown-gallery" data-src="' +
+									escapeHtml(img.src) +
+									'" aria-label="View image"><img class="md-gallery-image" src="' +
+									escapeHtml(img.src) +
 									'" alt="' +
 									escapeHtml(img.alt) +
-									'" loading="lazy" /></div>',
+									'" loading="lazy" /></button>',
 							)
 							.join("") +
 						"</div>",
@@ -2636,9 +2897,9 @@ function processBlockDirective(node) {
 		}
 
 		case "asciinema": {
-			const aSrc = attrs.src || "";
-			const aCols = attrs.cols || "80";
-			const aRows = attrs.rows || "24";
+			const aSrc = sanitizeUrl(attrs.src || "");
+			const aCols = normalizeInteger(attrs.cols, 80, 1, 500);
+			const aRows = normalizeInteger(attrs.rows, 24, 1, 200);
 			if (aSrc) {
 				const aUid = `asciinema-${Math.random().toString(36).slice(2, 7)}`;
 				node.children = [
@@ -2648,7 +2909,7 @@ function processBlockDirective(node) {
 							'<div class="md-directive md-directive-asciinema"><div id="' +
 							aUid +
 							'" class="md-asciinema-container" data-src="' +
-							aSrc +
+							escapeHtml(aSrc) +
 							'" data-cols="' +
 							aCols +
 							'" data-rows="' +
@@ -2664,7 +2925,8 @@ function processBlockDirective(node) {
 			const colorValues = (attrs.values || "")
 				.split(",")
 				.map((s) => s.trim())
-				.filter(Boolean);
+				.filter(Boolean)
+				.map((label) => ({ label, color: resolveColor(label) }));
 			if (colorValues.length > 0) {
 				node.data = { hName: "div", hProperties: {} };
 				node.children = [
@@ -2676,9 +2938,9 @@ function processBlockDirective(node) {
 								.map(
 									(c) =>
 										'<div class="md-color-swatch" style="background:' +
-										c +
+										c.color +
 										'"><span class="md-color-label">' +
-										c +
+										escapeHtml(c.label) +
 										"</span></div>",
 								)
 								.join("") +
@@ -2703,12 +2965,12 @@ function processCardDirective(node) {
 		case "card": {
 			const cardTitle = attrs.title || "";
 			const cardIcon = attrs.icon || "";
-			const cardHref = attrs.href || "";
+			const cardHref = sanitizeUrl(attrs.href || "");
 			const cardColor = resolveColor(attrs.color || "accent");
-			const cardImage = attrs.image || attrs.cover || "";
+			const cardImage = sanitizeUrl(attrs.image || attrs.cover || "");
 			const cardDesc = attrs.desc || attrs.description || "";
 			const cardIconHtml = cardIcon
-				? getIconSvg(cardIcon, 20) || `<span>${cardIcon}</span>`
+				? getIconSvg(cardIcon, 20) || `<span>${escapeHtml(cardIcon)}</span>`
 				: "";
 			// Link-card style when image is provided
 			if (cardImage && cardHref) {
@@ -2739,7 +3001,9 @@ function processCardDirective(node) {
 						(cardIconHtml
 							? `<div class="md-card-icon">${cardIconHtml}</div>`
 							: "") +
-						(cardTitle ? `<div class="md-card-title">${cardTitle}</div>` : "") +
+						(cardTitle
+							? `<div class="md-card-title">${escapeHtml(cardTitle)}</div>`
+							: "") +
 						"</div>"
 					: "";
 			// Standard card layout — serialize all content into a single HTML block
@@ -2792,15 +3056,17 @@ function processMediaDirective(node) {
 	const attrs = node.attributes || {};
 
 	if (name === "video") {
-		const src = attrs.src || "";
-		const bilibili = attrs.bilibili || "";
-		const youtube = attrs.youtube || "";
-		const poster = attrs.poster || "";
+		const src = sanitizeUrl(attrs.src || "");
+		const bilibili = String(attrs.bilibili || "").replace(/[^A-Za-z0-9]/g, "");
+		const youtube = String(attrs.youtube || "").replace(/[^A-Za-z0-9_-]/g, "");
+		const poster = sanitizeUrl(attrs.poster || "");
 		const ratio = attrs.ratio || "16/9";
-		const width = attrs.width || "";
-		const vAlign = attrs.align || "";
+		const width = attrs.width ? normalizeCssLength(attrs.width, "100%") : "";
+		const vAlign = ["left", "center", "right"].includes(attrs.align)
+			? attrs.align
+			: "";
 		const autoplay = attrs.autoplay === "true" || attrs.autoplay === "";
-		const pip = attrs.pip || "auto";
+		const pip = attrs.pip === "manual" ? "manual" : "auto";
 
 		function ratioToPadding(r) {
 			const parts = r.split("/").map(Number);
@@ -2811,6 +3077,7 @@ function processMediaDirective(node) {
 		}
 		const ratioPct = ratioToPadding(ratio);
 		let containerStyle = `--video-ratio-pct:${ratioPct};`;
+		const alignClass = vAlign ? ` md-video-align-${vAlign}` : "";
 		if (width) {
 			containerStyle += `--video-width:${width};`;
 		}
@@ -2835,14 +3102,14 @@ function processMediaDirective(node) {
 			if (poster) {
 				videoHtml =
 					'<img class="md-video-poster-img" src="' +
-					poster +
+					escapeHtml(poster) +
 					'" alt="" loading="lazy" /><video class="md-video-element" id="' +
 					vUid +
 					'" src="' +
-					src +
+					escapeHtml(src) +
 					'" preload="metadata" playsinline' +
-					(autoplay ? "autoplay muted " : "") +
-					'data-pip-video="' +
+					(autoplay ? " autoplay muted" : "") +
+					' data-pip-video="' +
 					vUid +
 					'" data-pip-mode="' +
 					pip +
@@ -2857,7 +3124,7 @@ function processMediaDirective(node) {
 				node.data = {
 					hName: "div",
 					hProperties: {
-						class: "md-directive md-directive-video md-video-has-poster",
+						class: `md-directive md-directive-video md-video-has-poster${alignClass}`,
 						style: containerStyle,
 					},
 				};
@@ -2866,10 +3133,10 @@ function processMediaDirective(node) {
 					'<video class="md-video-element" id="' +
 					vUid +
 					'" src="' +
-					src +
+					escapeHtml(src) +
 					'" controls preload="metadata" playsinline' +
-					(autoplay ? "autoplay muted " : "") +
-					'data-pip-video="' +
+					(autoplay ? " autoplay muted" : "") +
+					' data-pip-video="' +
 					vUid +
 					'" data-pip-mode="' +
 					pip +
@@ -2878,7 +3145,7 @@ function processMediaDirective(node) {
 				node.data = {
 					hName: "div",
 					hProperties: {
-						class: "md-directive md-directive-video",
+						class: `md-directive md-directive-video${alignClass}`,
 						style: containerStyle,
 					},
 				};
@@ -2894,7 +3161,7 @@ function processMediaDirective(node) {
 			node.data = {
 				hName: "div",
 				hProperties: {
-					class: "md-directive md-directive-video md-video-iframe",
+					class: `md-directive md-directive-video md-video-iframe${alignClass}`,
 					style: containerStyle,
 				},
 			};
@@ -2917,7 +3184,7 @@ function processMediaDirective(node) {
 			node.data = {
 				hName: "div",
 				hProperties: {
-					class: "md-directive md-directive-video md-video-iframe",
+					class: `md-directive md-directive-video md-video-iframe${alignClass}`,
 					style: containerStyle,
 				},
 			};
@@ -2934,7 +3201,7 @@ function processMediaDirective(node) {
 			node.data = {
 				hName: "div",
 				hProperties: {
-					class: "md-directive md-directive-video",
+					class: `md-directive md-directive-video${alignClass}`,
 					style: containerStyle,
 				},
 			};
@@ -2958,7 +3225,7 @@ function processLeafDirective(node) {
 
 	switch (name) {
 		case "image": {
-			const iSrc = attrs.src || "";
+			const iSrc = sanitizeUrl(attrs.src || "");
 			const iAlt = attrs.alt || "";
 			node.data = {
 				hName: "img",
@@ -2973,9 +3240,9 @@ function processLeafDirective(node) {
 			break;
 		}
 		case "asciinema": {
-			const alSrc = attrs.src || "";
-			const alCols = attrs.cols || "80";
-			const alRows = attrs.rows || "24";
+			const alSrc = sanitizeUrl(attrs.src || "");
+			const alCols = normalizeInteger(attrs.cols, 80, 1, 500);
+			const alRows = normalizeInteger(attrs.rows, 24, 1, 200);
 			if (alSrc) {
 				const alUid = `asciinema-${Math.random().toString(36).slice(2, 7)}`;
 				node.children = [
@@ -2985,7 +3252,7 @@ function processLeafDirective(node) {
 							'<div class="md-directive md-directive-asciinema"><div id="' +
 							alUid +
 							'" class="md-asciinema-container" data-src="' +
-							alSrc +
+							escapeHtml(alSrc) +
 							'" data-cols="' +
 							alCols +
 							'" data-rows="' +
@@ -3000,7 +3267,8 @@ function processLeafDirective(node) {
 			const clValues = (attrs.values || "")
 				.split(",")
 				.map((s) => s.trim())
-				.filter(Boolean);
+				.filter(Boolean)
+				.map((label) => ({ label, color: resolveColor(label) }));
 			if (clValues.length > 0) {
 				node.data = { hName: "div", hProperties: {} };
 				node.children = [
@@ -3012,9 +3280,9 @@ function processLeafDirective(node) {
 								.map(
 									(c) =>
 										'<div class="md-color-swatch" style="background:' +
-										c +
+										c.color +
 										'"><span class="md-color-label">' +
-										c +
+										escapeHtml(c.label) +
 										"</span></div>",
 								)
 								.join("") +
@@ -3159,6 +3427,7 @@ export default function remarkContentDirectives(_options = {}) {
 				"field-group",
 				"code-tree",
 				"flex",
+				"bitmap",
 				"steps",
 			];
 			const cardNames = ["card", "card-grid"];

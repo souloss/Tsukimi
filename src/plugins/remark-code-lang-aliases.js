@@ -7,6 +7,13 @@ const languageAliases = new Map([
 	["deploy.yml", { lang: "yaml", title: "deploy.yml" }],
 	["deploy.yaml", { lang: "yaml", title: "deploy.yaml" }],
 	["env", { lang: "bash" }],
+	["bytefield", { lang: "clojure", diagram: "bytefield" }],
+	["bytefield-svg", { lang: "clojure", diagram: "bytefield" }],
+	["wavedrom", { lang: "json", diagram: "wavedrom" }],
+	["wave", { lang: "json", diagram: "wavedrom" }],
+	["vega-lite", { lang: "json", diagram: "vega-lite" }],
+	["vegalite", { lang: "json", diagram: "vega-lite" }],
+	["vl", { lang: "json", diagram: "vega-lite" }],
 	["redis", { lang: "txt" }],
 	["vcl", { lang: "txt" }],
 ]);
@@ -32,6 +39,9 @@ export function remarkCodeLangAliases() {
 			}
 
 			node.lang = alias.lang;
+			if (alias.diagram) {
+				node.data = { ...(node.data || {}), tsukimiDiagram: alias.diagram };
+			}
 			node.meta = appendTitle(node.meta, alias.title);
 		});
 	};

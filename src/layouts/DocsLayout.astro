@@ -7,6 +7,7 @@ import "../styles/markdown.css";
 import "../styles/admonitions-diagrams.styl";
 import "../styles/docs-layout.css";
 import "../styles/directives.css";
+import "../styles/visual-diagrams.css";
 
 import BackToHome from "@components/control/BackToHome.astro";
 import BackToTop from "@components/control/BackToTop.astro";
@@ -412,6 +413,15 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 </script>
 
 <script>
+	const loadDiagramLoader = () => {
+		if (!document.querySelector("[data-tsukimi-diagram]")) return;
+		import("../scripts/diagram-loader.js");
+	};
+	loadDiagramLoader();
+	document.addEventListener("astro:page-load", loadDiagramLoader);
+</script>
+
+<script>
 	const collapsibleConfig = window.siteConfig?.collapsible;
 	if (collapsibleConfig?.enable !== false) {
 		import("../scripts/code-collapse.js");
@@ -425,6 +435,10 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 <script>
 	import { initDirectiveInteractions } from "../scripts/directive-interactions.js";
 	initDirectiveInteractions();
+</script>
+
+<script>
+	import "../scripts/file-tree.js";
 </script>
 
 <script>
