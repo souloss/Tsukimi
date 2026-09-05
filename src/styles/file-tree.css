@@ -30,7 +30,7 @@
 	position: relative;
 }
 
-/* ── Info row (the <p> element) ────────────────────────────────── */
+/* ── Info row ──────────────────────────────────────────────────── */
 
 .vp-file-tree-info {
 	display: flex;

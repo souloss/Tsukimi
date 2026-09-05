@@ -2,7 +2,7 @@
  * directive-interactions.js — Client-side JS for interactive markdown directives
  *
  * Handles: tab switching, copy buttons, blur/psw reveal, folding/folders,
- * asciinema player loading, gallery lightbox, and video player.
+ * asciinema player loading, and video player controls.
  */
 
 /** Guard: e.target may not be an Element (e.g. Text node, Document) */
@@ -10,10 +10,54 @@ function closest(el, sel) {
   return el && el.closest ? el.closest(sel) : null;
 }
 
+function getTabs(container) {
+  return Array.from(container.querySelectorAll('.md-tab-btn')).filter(
+    (btn) => btn.dataset.tabsId === container.id,
+  );
+}
+
+function getTabPanes(container) {
+  const prefix = `${container.id}-pane-`;
+  return Array.from(container.querySelectorAll('.md-tab-pane')).filter((pane) =>
+    pane.id.startsWith(prefix),
+  );
+}
+
+function activateTab(container, tabBtn, { focus = false, sync = true } = {}) {
+  getTabs(container).forEach((btn) => {
+    const active = btn === tabBtn;
+    btn.classList.toggle('md-tab-active', active);
+    btn.setAttribute('aria-selected', String(active));
+    btn.tabIndex = active ? 0 : -1;
+  });
+  getTabPanes(container).forEach((pane) => {
+    const active = pane.id === tabBtn.getAttribute('aria-controls');
+    pane.classList.toggle('md-tab-visible', active);
+    pane.setAttribute('aria-hidden', String(!active));
+  });
+
+  if (focus) tabBtn.focus();
+  if (!sync) return;
+
+  const syncId = container.dataset.tabsSync;
+  if (!syncId) return;
+  const clickedLabel = tabBtn.textContent.trim();
+  const clickedIndex = tabBtn.dataset.tabIndex;
+  document.querySelectorAll('[data-tabs-sync]').forEach((syncedContainer) => {
+    if (syncedContainer === container || syncedContainer.dataset.tabsSync !== syncId) return;
+    const syncedTabs = getTabs(syncedContainer);
+    const matchingBtn = syncedTabs.find((btn) => btn.textContent.trim() === clickedLabel)
+      || syncedTabs.find((btn) => btn.dataset.tabIndex === clickedIndex);
+    if (matchingBtn) activateTab(syncedContainer, matchingBtn, { sync: false });
+  });
+}
+
 function initTabs() {
   document.addEventListener('click', (e) => {
     const tabBtn = closest(e.target, '.md-tab-btn');
     if (!tabBtn) {return;}
+
+    e.preventDefault();
 
     const tabsId = tabBtn.dataset.tabsId;
     if (!tabsId) {return;}
@@ -21,58 +65,25 @@ function initTabs() {
     const container = document.getElementById(tabsId);
     if (!container) {return;}
 
-    // Deactivate all tabs in this group
-    container.querySelectorAll('.md-tab-btn').forEach((btn) => {
-      btn.classList.remove('md-tab-active');
-      btn.setAttribute('aria-selected', 'false');
-    });
-    container.querySelectorAll('.md-tab-pane').forEach((pane) => {
-      pane.classList.remove('md-tab-visible');
-    });
+    activateTab(container, tabBtn);
+  });
 
-    // Activate clicked tab
-    tabBtn.classList.add('md-tab-active');
-    tabBtn.setAttribute('aria-selected', 'true');
+  document.addEventListener('keydown', (e) => {
+    const tabBtn = closest(e.target, '.md-tab-btn');
+    if (!tabBtn || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    const container = document.getElementById(tabBtn.dataset.tabsId || '');
+    if (!container) return;
+    const tabs = getTabs(container);
+    const currentIndex = tabs.indexOf(tabBtn);
+    if (currentIndex < 0) return;
 
-    const tabIndex = tabBtn.dataset.tabIndex;
-    const targetPane = container.querySelector(`#${tabsId}-pane-${tabIndex}`);
-    if (targetPane) {
-      targetPane.classList.add('md-tab-visible');
-    }
-
-    // Sync tabs across groups with the same data-tabs-sync value
-    const syncId = container.dataset.tabsSync;
-    if (syncId) {
-      const clickedLabel = tabBtn.textContent.trim();
-      const clickedIndex = tabBtn.dataset.tabIndex;
-      document.querySelectorAll(`[data-tabs-sync="${syncId}"]`).forEach((syncedContainer) => {
-        if (syncedContainer === container) {return;}
-        // Find matching tab by label text, fall back to index
-        let matchingBtn = Array.from(syncedContainer.querySelectorAll('.md-tab-btn')).find(
-          (btn) => btn.textContent.trim() === clickedLabel
-        );
-        if (!matchingBtn && clickedIndex) {
-          matchingBtn = syncedContainer.querySelector(`.md-tab-btn[data-tab-index="${clickedIndex}"]`);
-        }
-        if (!matchingBtn) {return;}
-        // Deactivate all, activate matching
-        syncedContainer.querySelectorAll('.md-tab-btn').forEach((btn) => {
-          btn.classList.remove('md-tab-active');
-          btn.setAttribute('aria-selected', 'false');
-        });
-        syncedContainer.querySelectorAll('.md-tab-pane').forEach((pane) => {
-          pane.classList.remove('md-tab-visible');
-        });
-        matchingBtn.classList.add('md-tab-active');
-        matchingBtn.setAttribute('aria-selected', 'true');
-        const syncedTabsId = matchingBtn.dataset.tabsId;
-        const syncedTabIndex = matchingBtn.dataset.tabIndex;
-        const syncedPane = syncedContainer.querySelector(`#${syncedTabsId}-pane-${syncedTabIndex}`);
-        if (syncedPane) {
-          syncedPane.classList.add('md-tab-visible');
-        }
-      });
-    }
+    e.preventDefault();
+    let nextIndex = currentIndex;
+    if (e.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    if (e.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+    if (e.key === 'Home') nextIndex = 0;
+    if (e.key === 'End') nextIndex = tabs.length - 1;
+    activateTab(container, tabs[nextIndex], { focus: true });
   });
 }
 
@@ -80,6 +91,8 @@ function initCopy() {
   document.addEventListener('click', (e) => {
     const copyBtn = closest(e.target, '.md-copy-btn, .md-segment-copy, .md-code-copy-btn');
     if (!copyBtn) {return;}
+
+    e.preventDefault();
 
     const targetId = copyBtn.dataset.copyTarget;
     if (!targetId) {return;}
@@ -94,27 +107,35 @@ function initCopy() {
       text = target.textContent || '';
     }
 
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(() => {
-        showCopyFeedback(copyBtn);
+    const onCopied = () => showCopyFeedback(copyBtn);
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(onCopied).catch(() => {
+        if (copyWithFallback(target)) onCopied();
       });
-    } else {
-      // Fallback for older browsers
-      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
-        target.select();
-        document.execCommand('copy');
-      } else {
-        const range = document.createRange();
-        range.selectNodeContents(target);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        document.execCommand('copy');
-        sel.removeAllRanges();
-      }
-      showCopyFeedback(copyBtn);
+    } else if (copyWithFallback(target)) {
+      onCopied();
     }
   });
+}
+
+function copyWithFallback(target) {
+  try {
+    if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+      target.select();
+      return document.execCommand('copy');
+    }
+    const range = document.createRange();
+    range.selectNodeContents(target);
+    const selection = window.getSelection();
+    if (!selection) return false;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    const copied = document.execCommand('copy');
+    selection.removeAllRanges();
+    return copied;
+  } catch {
+    return false;
+  }
 }
 
 function showCopyFeedback(btn) {
@@ -136,16 +157,20 @@ function showCopyFeedback(btn) {
 }
 
 function initBlurReveal() {
+  const toggleReveal = (el) => {
+    const className = el.classList.contains('md-tag-blur')
+      ? 'md-tag-blur--revealed'
+      : 'md-tag-psw--revealed';
+    const revealed = el.classList.toggle(className);
+    el.setAttribute('aria-expanded', String(revealed));
+  };
+
   // Click to toggle blur/psw reveal — only toggle the relevant class
   document.addEventListener('click', (e) => {
     const el = closest(e.target, '.md-tag-blur, .md-tag-psw');
     if (el) {
       e.preventDefault();
-      if (el.classList.contains('md-tag-blur')) {
-        el.classList.toggle('md-tag-blur--revealed');
-      } else {
-        el.classList.toggle('md-tag-psw--revealed');
-      }
+      toggleReveal(el);
       return;
     }
   });
@@ -156,35 +181,70 @@ function initBlurReveal() {
       const el = closest(e.target, '.md-tag-blur, .md-tag-psw');
       if (el) {
         e.preventDefault();
-        if (el.classList.contains('md-tag-blur')) {
-          el.classList.toggle('md-tag-blur--revealed');
-        } else {
-          el.classList.toggle('md-tag-psw--revealed');
-        }
+        toggleReveal(el);
       }
     }
   });
 }
 
+let asciinemaAssetsPromise = null;
+
+function loadAsciinemaPlayer() {
+  if (globalThis.AsciinemaPlayer) {
+    return Promise.resolve(globalThis.AsciinemaPlayer);
+  }
+  if (asciinemaAssetsPromise) return asciinemaAssetsPromise;
+
+  if (!document.querySelector('link[data-asciinema-player]')) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdn.jsdelivr.net/npm/asciinema-player@3.15.1/dist/bundle/asciinema-player.min.css';
+    css.dataset.asciinemaPlayer = 'true';
+    document.head.appendChild(css);
+  }
+
+  asciinemaAssetsPromise = new Promise((resolve, reject) => {
+    let script = document.querySelector('script[data-asciinema-player]');
+    if (!script) {
+      script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/asciinema-player@3.15.1/dist/bundle/asciinema-player.min.js';
+      script.async = true;
+      script.dataset.asciinemaPlayer = 'true';
+      document.head.appendChild(script);
+    }
+    script.addEventListener('load', () => resolve(globalThis.AsciinemaPlayer), { once: true });
+    script.addEventListener('error', () => {
+      script.remove();
+      reject(new Error('Failed to load asciinema-player'));
+    }, { once: true });
+  }).catch((error) => {
+    asciinemaAssetsPromise = null;
+    throw error;
+  });
+
+  return asciinemaAssetsPromise;
+}
+
 function initAsciinema() {
   // Lazy-load asciinema player and initialize with AsciinemaPlayer.create()
-  const containers = document.querySelectorAll('.md-asciinema-container[data-src]');
+  const containers = Array.from(
+    document.querySelectorAll('.md-asciinema-container[data-src]'),
+  ).filter((el) => !el.dataset.asciinemaInitialized);
   if (!containers.length) {return;}
 
-  let scriptLoaded = false;
-  const pendingPlayers = [];
-
-  function createPlayer(el) {
+  async function createPlayer(el) {
     const src = el.getAttribute('data-src');
     const cols = parseInt(el.getAttribute('data-cols') || '80', 10);
     const rows = parseInt(el.getAttribute('data-rows') || '24', 10);
     const hasPreload = el.hasAttribute('data-preload');
-    if (typeof AsciinemaPlayer !== 'undefined') {
+    try {
+      const player = await loadAsciinemaPlayer();
+      if (!player || !el.isConnected) return;
       // Clear container before mounting — AsciinemaPlayer.create() appends its
       // UI into the element, so any pre-existing content would show as a
       // duplicate frame around the player.
       el.textContent = '';
-      AsciinemaPlayer.create(src, el, {
+      player.create(src, el, {
         cols: cols,
         rows: rows,
         preload: hasPreload,
@@ -194,7 +254,19 @@ function initAsciinema() {
         terminalFontFamily: 'var(--font-mono, monospace)',
         theme: 'auto/asciinema',
       });
+      el.dataset.asciinemaInitialized = 'true';
+    } catch {
+      delete el.dataset.asciinemaInitialized;
+      console.warn('[directive] Failed to load asciinema-player script');
     }
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    containers.forEach((el) => {
+      el.dataset.asciinemaInitialized = 'pending';
+      createPlayer(el);
+    });
+    return;
   }
 
   const observer = new IntersectionObserver(
@@ -203,80 +275,16 @@ function initAsciinema() {
         if (!entry.isIntersecting) {continue;}
         const el = entry.target;
         observer.unobserve(el);
-
-        if (!scriptLoaded) {
-          scriptLoaded = true;
-          // Load CSS first
-          const css = document.createElement('link');
-          css.rel = 'stylesheet';
-          css.href = 'https://cdn.jsdelivr.net/npm/asciinema-player@3.15.1/dist/bundle/asciinema-player.min.css';
-          document.head.appendChild(css);
-          // Then load JS
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/npm/asciinema-player@3.15.1/dist/bundle/asciinema-player.min.js';
-          script.async = true;
-          script.onload = () => {
-            // Initialize all pending containers
-            for (const p of pendingPlayers) {
-              createPlayer(p);
-            }
-            pendingPlayers.length = 0;
-          };
-          script.onerror = () => {
-            console.warn('[directive] Failed to load asciinema-player script');
-          };
-          document.head.appendChild(script);
-        }
-
-        if (typeof AsciinemaPlayer !== 'undefined') {
-          createPlayer(el);
-        } else {
-          pendingPlayers.push(el);
-        }
+        createPlayer(el);
       }
     },
     { rootMargin: '200px' },
   );
 
-  containers.forEach((el) => observer.observe(el));
-}
-
-function initGallery() {
-  let overlay = null;
-
-  document.addEventListener('click', (e) => {
-    const img = closest(e.target, '.md-gallery-cell img');
-    if (!img) {
-      // Close overlay if clicking outside the image
-      if (overlay && e.target === overlay) {
-        closeOverlay();
-      }
-      return;
-    }
-
-    e.preventDefault();
-    overlay = document.createElement('div');
-    overlay.className = 'md-gallery-overlay';
-    overlay.innerHTML = `<img src="${img.src}" alt="${img.alt}" />`;
-    overlay.addEventListener('click', closeOverlay);
-    document.body.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add('md-gallery-overlay--visible'));
+  containers.forEach((el) => {
+    el.dataset.asciinemaInitialized = 'pending';
+    observer.observe(el);
   });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay) {
-      closeOverlay();
-    }
-  });
-
-  function closeOverlay() {
-    if (!overlay) {return;}
-    overlay.classList.remove('md-gallery-overlay--visible');
-    setTimeout(() => {
-      overlay.remove();
-      overlay = null;
-    }, 300);
-  }
 }
 
 // Initialization guard — prevent duplicate event listener registration
@@ -292,7 +300,6 @@ export function initDirectiveInteractions() {
   initCopy();
   initBlurReveal();
   initAsciinema();
-  initGallery();
   initVideo();
   initFoldersAccordion();
   initCodeTree();
@@ -301,7 +308,7 @@ export function initDirectiveInteractions() {
 
 /**
  * Re-initialize directives that need per-page setup after Swup transitions.
- * Delegated handlers (tabs, copy, blur, gallery, video) survive navigation,
+ * Delegated handlers (tabs, copy, blur, video) survive navigation,
  * but IntersectionObserver-based handlers (asciinema) must be re-created.
  */
 export function reinitDirectiveInteractions() {
@@ -450,33 +457,54 @@ function initFoldersAccordion() {
 }
 
 function initCodeTree() {
-  // Click file in sidebar to switch code panel
-  // Folders use native <details>/<summary> — no JS handler needed for toggle
+  const activateFile = (fileInfo, focus = false) => {
+    const ctId = fileInfo.dataset.ctId;
+    if (!ctId) return;
+    const container = document.getElementById(ctId);
+    if (!container) return;
+    const files = Array.from(
+      container.querySelectorAll('.md-code-tree-sidebar .vp-file-tree-info.file[data-ct-id]'),
+    ).filter((file) => file.dataset.ctId === ctId);
+
+    files.forEach((file) => {
+      const active = file === fileInfo;
+      file.classList.toggle('md-code-tree-file-active', active);
+      file.setAttribute('aria-selected', String(active));
+      file.tabIndex = active ? 0 : -1;
+    });
+    container.querySelectorAll('.md-code-tree-panel').forEach((panel) => {
+      const active = panel.id === fileInfo.getAttribute('aria-controls');
+      panel.classList.toggle('md-code-tree-panel-active', active);
+      panel.setAttribute('aria-hidden', String(!active));
+    });
+    if (focus) fileInfo.focus();
+  };
+
+  // Folders use native <details>/<summary>; file rows switch code panels.
   document.addEventListener('click', (e) => {
     const fileInfo = closest(e.target, '.md-code-tree-sidebar .vp-file-tree-info.file');
     if (!fileInfo) {return;}
+    activateFile(fileInfo);
+  });
 
-    const ctId = fileInfo.dataset.ctId;
-    const ctIndex = fileInfo.dataset.ctIndex;
-    if (!ctId || ctIndex === undefined) {return;}
+  document.addEventListener('keydown', (e) => {
+    const fileInfo = closest(e.target, '.md-code-tree-sidebar .vp-file-tree-info.file');
+    if (!fileInfo || !['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) return;
+    const container = document.getElementById(fileInfo.dataset.ctId || '');
+    if (!container) return;
+    const files = Array.from(
+      container.querySelectorAll('.md-code-tree-sidebar .vp-file-tree-info.file[data-ct-id]'),
+    ).filter((file) => file.dataset.ctId === container.id);
+    const currentIndex = files.indexOf(fileInfo);
+    if (currentIndex < 0) return;
 
-    const container = document.getElementById(ctId);
-    if (!container) {return;}
-
-    // Deactivate all files and panels
-    container.querySelectorAll('.md-code-tree-file-active').forEach((f) => {
-      f.classList.remove('md-code-tree-file-active');
-    });
-    container.querySelectorAll('.md-code-tree-panel').forEach((p) => {
-      p.classList.remove('md-code-tree-panel-active');
-    });
-
-    // Activate clicked file and its panel
-    fileInfo.classList.add('md-code-tree-file-active');
-    const panel = container.querySelector(`#${ctId}-panel-${ctIndex}`);
-    if (panel) {
-      panel.classList.add('md-code-tree-panel-active');
-    }
+    e.preventDefault();
+    let nextIndex = currentIndex;
+    if (e.key === 'ArrowUp') nextIndex = (currentIndex - 1 + files.length) % files.length;
+    if (e.key === 'ArrowDown') nextIndex = (currentIndex + 1) % files.length;
+    if (e.key === 'Home') nextIndex = 0;
+    if (e.key === 'End') nextIndex = files.length - 1;
+    activateFile(files[nextIndex], true);
   });
 }
 

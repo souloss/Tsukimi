@@ -187,7 +187,7 @@ function buildNodeHtml(node, level) {
 	const levelStyle = `--file-tree-level: -${level};`;
 
 	if (isEllipsis) {
-		return `<div class="vp-file-tree-node"><p class="vp-file-tree-info file" style="${levelStyle}"><span class="vp-file-tree-diff-indicator"></span><span class="vp-file-tree-arrow-spacer"></span><span class="vp-file-tree-icon vp-file-tree-ellipsis">${svgHtml(iconData.ellipsis)}</span><span class="vp-file-tree-name vp-file-tree-ellipsis-text">…</span></p></div>`;
+		return `<div class="vp-file-tree-node"><span class="vp-file-tree-info file" style="${levelStyle}"><span class="vp-file-tree-diff-indicator"></span><span class="vp-file-tree-arrow-spacer"></span><span class="vp-file-tree-icon vp-file-tree-ellipsis">${svgHtml(iconData.ellipsis)}</span><span class="vp-file-tree-name vp-file-tree-ellipsis-text">…</span></span></div>`;
 	}
 
 	const infoClasses = ["vp-file-tree-info", isFolder ? "folder" : "file"];
@@ -224,11 +224,11 @@ function buildNodeHtml(node, level) {
 	}
 
 	if (!isFolder) {
-		return `<div class="vp-file-tree-node"><p class="${infoClasses.join(" ")}" style="${levelStyle}">${infoKids}</p></div>`;
+		return `<div class="vp-file-tree-node"><span class="${infoClasses.join(" ")}" style="${levelStyle}">${infoKids}</span></div>`;
 	}
 
 	if (children.length === 0) {
-		return `<div class="vp-file-tree-node"><p class="${infoClasses.join(" ")}" style="${levelStyle}">${infoKids}</p></div>`;
+		return `<div class="vp-file-tree-node"><span class="${infoClasses.join(" ")}" style="${levelStyle}">${infoKids}</span></div>`;
 	}
 
 	const childLevel = level + 1;
@@ -238,7 +238,7 @@ function buildNodeHtml(node, level) {
 		infoClasses.push("expanded");
 	}
 
-	return `<div class="vp-file-tree-node"><details${isOpen ? " open" : ""}><summary><p class="${infoClasses.join(" ")}" style="${levelStyle}">${infoKids}</p></summary><div class="vp-file-tree-group" style="--file-tree-level: -${childLevel};">${childHtml}</div></details></div>`;
+	return `<div class="vp-file-tree-node"><details${isOpen ? " open" : ""}><summary><span class="${infoClasses.join(" ")}" style="${levelStyle}">${infoKids}</span></summary><div class="vp-file-tree-group" style="--file-tree-level: -${childLevel};">${childHtml}</div></details></div>`;
 }
 
 function buildFileTreeHtml(nodes) {
