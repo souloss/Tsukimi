@@ -171,7 +171,15 @@ export class SwupManager {
 		if (!window.swup) {return;}
 
 		const originalIgnoreVisit = window.swup.options.ignoreVisit;
-		const isDocsPage = () => !!document.querySelector(".docs-layout-container");
+		const getLayoutKey = (pathname: string) => {
+			const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+			if (normalizedPath === "/docs") return "docs-index";
+			if (normalizedPath.startsWith("/docs/")) {
+				const [, , docSlug] = normalizedPath.split("/");
+				return `docs-project:${docSlug}`;
+			}
+			return "main";
+		};
 
 		window.swup.options.ignoreVisit = (url: string, opts: { el?: Element; event?: Event } = {}) => {
 			// 先检查原始的 ignoreVisit 逻辑
@@ -179,13 +187,13 @@ export class SwupManager {
 				return true;
 			}
 
-			// 判断目标 URL 是否为 docs 页面
 			const targetPath = new URL(url, window.location.origin).pathname;
-			const targetIsDocs = targetPath.startsWith("/docs/");
-			const currentIsDocs = isDocsPage();
+			const currentPath = window.location.pathname;
 
-			// 跨布局切换时跳过 Swup，强制整页刷新
-			if (targetIsDocs !== currentIsDocs) {
+			// The docs index and each project have different persistent navigation
+			// trees. A full reload prevents an old sidebar/TOC from surviving a
+			// transition between those layouts.
+			if (getLayoutKey(targetPath) !== getLayoutKey(currentPath)) {
 				return true;
 			}
 

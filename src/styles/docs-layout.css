@@ -119,6 +119,7 @@ body.docs-page .main-grid-container {
 	height: var(--docs-navbar-height);
 	background: var(--docs-bg);
 	border-bottom: 1px solid var(--docs-divider);
+	box-shadow: var(--docs-shadow-2);
 	transition: background var(--docs-transition), border-color var(--docs-transition);
 }
 
@@ -134,6 +135,17 @@ body.docs-page .main-grid-container {
 
 .docs-navbar-inner > div {
 	max-width: none;
+}
+
+/* The shared mobile navbar rule targets #navbar > div. Keep its card shadow
+ * from being applied to the inner flex row, so the docs navbar shadow stays
+ * behind the complete header instead of appearing as a strip below its text. */
+body.docs-page .docs-navbar #navbar > div {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	backdrop-filter: none;
 }
 
 /* Override blog theme's Navbar card-base styling on docs pages */

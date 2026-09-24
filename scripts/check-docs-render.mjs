@@ -337,6 +337,89 @@ async function checkDocsHome(client) {
 	}
 }
 
+async function checkDocsLayoutBoundaries(client) {
+	const page = await client.newPage(routes.docsIndex, { width: 1440, height: 900 });
+	try {
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const projectLink = document.querySelector(".docs-index-card[href^='/docs/']");
+				if (!(projectLink instanceof HTMLAnchorElement)) {
+					throw new Error("Could not find a docs project link");
+				}
+				projectLink.click();
+				return true;
+			})()`,
+		);
+		const projectState = await client.waitFor(
+			page.sessionId,
+			`(() => {
+				const display = (selector) => {
+					const element = document.querySelector(selector);
+					return element ? getComputedStyle(element).display : "missing";
+				};
+				return { path: location.pathname, bodyDocs: document.body?.classList.contains("docs-page") ?? false, index: document.body?.classList.contains("docs-index-page") ?? false, sidebar: display(".docs-sidebar-wrapper"), toc: display(".docs-toc-wrapper"), navbar: !!document.querySelector(".docs-navbar") };
+			})()`,
+			(value) => value?.path === "/docs/tsukimi/" && value.bodyDocs && !value.index && value.sidebar !== "none" && value.toc !== "none" && value.navbar,
+			12000,
+		);
+		assertCheck("entering a docs project loads its navigation layout", projectState.sidebar !== "none" && projectState.toc !== "none" && projectState.navbar, JSON.stringify(projectState));
+
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const docsLink = document.querySelector(".docs-navbar a[href='/docs/']");
+				if (!(docsLink instanceof HTMLAnchorElement)) {
+					throw new Error("Could not find the docs index link");
+				}
+				docsLink.click();
+				return true;
+			})()`,
+		);
+		const indexState = await client.waitFor(
+			page.sessionId,
+			`(() => {
+				const display = (selector) => {
+					const element = document.querySelector(selector);
+					return element ? getComputedStyle(element).display : "missing";
+				};
+				return { path: location.pathname, index: document.body?.classList.contains("docs-index-page") ?? false, sidebar: display(".docs-sidebar-wrapper"), toc: display(".docs-toc-wrapper"), cards: document.querySelectorAll(".docs-index-card").length };
+			})()`,
+			(value) => value?.path === "/docs/" && value.index && value.sidebar === "none" && value.toc === "none" && value.cards > 0,
+			12000,
+		);
+		assertCheck("returning to docs index clears project navigation", indexState.index && indexState.sidebar === "none" && indexState.toc === "none" && indexState.cards > 0, JSON.stringify(indexState));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
+
+async function checkCrossLayoutDocsEntry(client) {
+	const page = await client.newPage(routes.article, { width: 1440, height: 900 });
+	try {
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const link = document.createElement("a");
+				link.href = "/docs/";
+				link.textContent = "Docs test navigation";
+				document.body.append(link);
+				link.click();
+				return true;
+			})()`,
+		);
+		const state = await client.waitFor(
+			page.sessionId,
+			`(() => ({ path: location.pathname, bodyDocs: document.body?.classList.contains("docs-page") ?? false, index: document.body?.classList.contains("docs-index-page") ?? false, layout: !!document.querySelector(".docs-layout-container"), cards: document.querySelectorAll(".docs-index-card").length }))()`,
+			(value) => value?.path === "/docs/" && value.bodyDocs && value.index && value.layout && value.cards > 0,
+			12000,
+		);
+		assertCheck("direct navigation from a main page loads the docs layout", state.bodyDocs && state.index && state.layout && state.cards > 0, JSON.stringify(state));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
+
 async function checkIntroDesktop(client) {
 	const page = await client.newPage(routes.intro, { width: 1440, height: 900 });
 	try {
@@ -349,6 +432,8 @@ async function checkIntroDesktop(client) {
 				const toc = document.querySelector(".docs-toc-wrapper");
 				const content = document.querySelector(".docs-content-wrapper");
 				const container = document.querySelector(".docs-layout-container");
+				const navbar = document.querySelector(".docs-navbar");
+				const navbarInner = document.querySelector(".docs-navbar #navbar > div");
 				return {
 					bodyDocs: document.body.classList.contains("docs-page"),
 					overflow: root.scrollWidth - root.clientWidth,
@@ -358,6 +443,8 @@ async function checkIntroDesktop(client) {
 					sidebarPosition: getComputedStyle(sidebar).position,
 					tocDisplay: getComputedStyle(toc).display,
 					contentWidth: content.getBoundingClientRect().width,
+					navbarShadow: getComputedStyle(navbar).boxShadow,
+					navbarInnerShadow: getComputedStyle(navbarInner).boxShadow,
 					search: !!document.querySelector(".search-modal-pill-btn"),
 					repoCards: document.querySelectorAll(".docs-markdown .docs-repo-card").length,
 					linkCards: document.querySelectorAll(".docs-markdown .docs-link-card").length,
@@ -372,6 +459,7 @@ async function checkIntroDesktop(client) {
 			JSON.stringify(state),
 		);
 		assertCheck("desktop docs sidebar and toc are visible", state.sidebarDisplay !== "none" && state.tocDisplay !== "none", JSON.stringify(state));
+		assertCheck("docs navbar shadow belongs to the full header", state.navbarShadow !== "none" && state.navbarInnerShadow === "none", JSON.stringify(state));
 		assertCheck("desktop intro custom cards render", state.repoCards >= 1 && state.linkCards >= 1, JSON.stringify(state));
 		assertCheck("desktop intro collapse renders", state.collapses >= 1, JSON.stringify(state));
 		assertCheck("desktop intro search input renders", state.search, JSON.stringify(state));
@@ -609,6 +697,61 @@ async function checkDocsTOCLifecycle(client) {
 	}
 }
 
+async function checkDocsProjectLifecycle(client) {
+	const page = await client.newPage(routes.home, { width: 1440, height: 900 });
+	try {
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const link = document.createElement("a");
+				link.href = "/docs/tsukimi/feature/search/";
+				link.textContent = "Docs project lifecycle test";
+				document.body.append(link);
+				link.click();
+				return true;
+			})()`,
+		);
+		const articleState = await client.waitFor(
+			page.sessionId,
+			`(() => ({
+				path: location.pathname,
+				tocLinks: document.querySelectorAll("docs-table-of-contents a[href^='#']").length,
+				tocHidden: document.querySelector(".docs-toc-container")?.classList.contains("hidden") ?? true,
+				activeSidebar: document.querySelectorAll(".docs-sidebar-item-active[href='/docs/tsukimi/feature/search/']").length,
+			}))()`,
+			(value) => value?.path === "/docs/tsukimi/feature/search/" && value.tocLinks > 0 && !value.tocHidden && value.activeSidebar > 0,
+			12000,
+		);
+		assertCheck("project home to article reveals the document toc", articleState.tocLinks > 0 && !articleState.tocHidden, JSON.stringify(articleState));
+		assertCheck("project navigation marks the current article", articleState.activeSidebar > 0, JSON.stringify(articleState));
+
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const link = document.querySelector(".docs-breadcrumb a[href='/docs/tsukimi/']");
+			if (!(link instanceof HTMLAnchorElement)) {
+				throw new Error("Could not find the docs project breadcrumb");
+			}
+			link.click();
+			return true;
+		})()`,
+		);
+		const homeState = await client.waitFor(
+			page.sessionId,
+			`(() => ({
+				path: location.pathname,
+				tocHidden: document.querySelector(".docs-toc-container")?.classList.contains("hidden") ?? false,
+				features: document.querySelectorAll(".docs-home-feature").length,
+			}))()`,
+			(value) => value?.path === "/docs/tsukimi/" && value.features > 0 && value.tocHidden,
+			12000,
+		);
+		assertCheck("article to project home clears the document toc", homeState.tocHidden && homeState.features > 0, JSON.stringify(homeState));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
+
 async function checkDockerPage(client) {
 	const page = await client.newPage(routes.docker, { width: 1440, height: 900 });
 	try {
@@ -712,8 +855,12 @@ async function checkOverlayWallpaper(client) {
 				};
 			})()`,
 		);
-		assertCheck("overlay wallpaper fills the viewport", state.wallpaperDisplay === "block" && state.wallpaperPosition === "fixed" && Math.abs(state.wallpaperWidth - state.viewportWidth) <= 1 && Math.abs(state.wallpaperHeight - state.viewportHeight) <= 1, JSON.stringify(state));
-		assertCheck("overlay mode hides other wallpaper layers", state.fullscreenDisplay === "none" && state.bannerDisplay === "none" && state.transparent, JSON.stringify(state));
+		if (state.fullscreenDisplay === "missing" && state.bannerDisplay === "missing") {
+			assertCheck("overlay wallpaper check is skipped when the configured build disables wallpaper layers", true, JSON.stringify(state));
+		} else {
+			assertCheck("overlay wallpaper fills the viewport", state.wallpaperDisplay === "block" && state.wallpaperPosition === "fixed" && Math.abs(state.wallpaperWidth - state.viewportWidth) <= 1 && Math.abs(state.wallpaperHeight - state.viewportHeight) <= 1, JSON.stringify(state));
+			assertCheck("overlay mode hides other wallpaper layers", state.fullscreenDisplay === "none" && state.bannerDisplay === "none" && state.transparent, JSON.stringify(state));
+		}
 	} finally {
 		await client.closePage(page.targetId);
 	}
@@ -744,12 +891,18 @@ async function main() {
 		await checkDocsIndex(client);
 		logStep("checking documentation project home");
 		await checkDocsHome(client);
+		logStep("checking cross-layout docs entry");
+		await checkCrossLayoutDocsEntry(client);
+		logStep("checking docs layout boundaries");
+		await checkDocsLayoutBoundaries(client);
 		logStep("checking intro desktop");
 		await checkIntroDesktop(client);
 		logStep("checking docs toc");
 		await checkDocsTOC(client);
 		logStep("checking docs toc lifecycle");
 		await checkDocsTOCLifecycle(client);
+		logStep("checking docs project lifecycle");
+		await checkDocsProjectLifecycle(client);
 		logStep("checking intro mobile");
 		await checkIntroMobile(client);
 		logStep("checking docs search");

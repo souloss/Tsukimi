@@ -359,6 +359,54 @@ const isDocsIndexPage = isHomePage && !docSlug;
 		overlay?.classList.remove("docs-sidebar-overlay-active");
 	}
 
+	function normalizePath(pathname: string) {
+		return pathname.replace(/\/+$/, "") || "/";
+	}
+
+	function refreshDocsNavigation() {
+		const currentPath = normalizePath(window.location.pathname);
+		const sidebarLinks = Array.from(
+			document.querySelectorAll("#docs-sidebar .docs-sidebar-item[href]"),
+		);
+
+		for (const link of sidebarLinks) {
+			const targetPath = normalizePath(
+				new URL(link.getAttribute("href") || "", window.location.href).pathname,
+			);
+			const isCurrent = targetPath === currentPath;
+			link.classList.toggle("docs-sidebar-item-active", isCurrent);
+			if (isCurrent) {
+				link.setAttribute("aria-current", "page");
+			} else {
+				link.removeAttribute("aria-current");
+			}
+		}
+
+		for (const section of document.querySelectorAll(".docs-sidebar-section")) {
+			const hasActiveItem =
+				section.querySelector(".docs-sidebar-item-active") !== null;
+			section.classList.toggle("docs-sidebar-section-active", hasActiveItem);
+
+			const sectionToggle = section.querySelector("[data-section-toggle]");
+			const sectionItems = section.querySelector(".docs-sidebar-section-items");
+			if (hasActiveItem && sectionToggle && sectionItems) {
+				sectionToggle.classList.remove("docs-sidebar-section-collapsed");
+				sectionItems.classList.remove("docs-sidebar-section-items-hidden");
+			}
+
+			for (const group of section.querySelectorAll(".docs-sidebar-nested-group")) {
+				const hasActiveChild =
+					group.querySelector(".docs-sidebar-item-active") !== null;
+				const groupToggle = group.querySelector("[data-nested-toggle]");
+				const groupItems = group.querySelector(".docs-sidebar-nested-items");
+				if (hasActiveChild && groupToggle && groupItems) {
+					groupToggle.classList.add("docs-sidebar-nested-open");
+					groupItems.classList.remove("docs-sidebar-nested-items-hidden");
+				}
+			}
+		}
+	}
+
 	if (toggleBtn && sidebar) {
 		toggleBtn.addEventListener("click", () => {
 			if (sidebar.classList.contains("docs-sidebar-open")) {
@@ -368,6 +416,9 @@ const isDocsIndexPage = isHomePage && !docSlug;
 			}
 		});
 	}
+	refreshDocsNavigation();
+	document.addEventListener("astro:page-load", refreshDocsNavigation);
+	document.addEventListener("swup:content:replace", refreshDocsNavigation);
 
 	// Close sidebar on overlay click
 	if (overlay) {
