@@ -135,7 +135,13 @@ function parseRSS2(xmlText, friendInfo) {
 	const feedTitle = channel.title || friendInfo.title;
 
 	return items.map((item) => {
-		const content = item.description || item.content?.["#text"] || item.summary || "";
+		const content =
+			item.description ||
+			item["content:encoded"]?.["#text"] ||
+			item["content:encoded"] ||
+			item.content?.["#text"] ||
+			item.summary ||
+			"";
 		let link = item.link;
 		if (typeof link === "object" && link?.["@_href"]) {
 			link = link["@_href"];

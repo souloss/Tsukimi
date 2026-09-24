@@ -293,7 +293,7 @@ Tsukimi 支持同时部署两个站点：
 
 #### Step 2: 配置内容更新自动触发
 
-内容仓库推送时，通过 CF Pages Deploy Hook 触发私人站重新构建。
+内容仓库推送或每日定时任务运行时，通过 CF Pages Deploy Hook 触发私人站重新构建。
 
 **2.1 获取 Deploy Hook URL**
 
@@ -319,20 +319,25 @@ name: Trigger Blog Rebuild
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "17 0 * * *"  # 每天 08:17（北京时间）刷新 RSS
+  workflow_dispatch:
 
 jobs:
   dispatch:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Cloudflare Pages rebuild
-        run: curl -X POST "${{ secrets.CF_DEPLOY_HOOK }}"
+        env:
+          CF_DEPLOY_HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: curl --fail --silent --show-error --retry 3 -X POST "$CF_DEPLOY_HOOK"
 ```
 
 #### 触发流程
 
 ```
 代码仓库 master 推送 → CF Pages 自动构建两个项目（各自环境变量不同）
-内容仓库推送 → trigger-build.yml → curl Deploy Hook → 只触发 astro-blog 重新构建
+内容仓库推送或每日定时任务 → trigger-build.yml → curl Deploy Hook → 只触发 astro-blog 重新构建
 ```
 
 **优势：**

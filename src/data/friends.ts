@@ -35,7 +35,7 @@ export const friendsData: FriendItem[] = [
 		tags: ["Wiki", "Resources"],
 		enabled: true,
 		weight: 10,
-		rss: "https://fm-hy.top/feed.rss",
+		rss: "https://fmhy.net/feed.rss",
 	},
 	{
 		id: 3,

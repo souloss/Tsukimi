@@ -12,7 +12,7 @@
 		"check-docs-render": "node scripts/check-docs-render.mjs",
 		"init-content": "node scripts/init-content-repo.js",
 		"predev": "node scripts/generate-svelte-icons.mjs && (node scripts/sync-content.js || true)",
-		"prebuild": "node scripts/generate-svelte-icons.mjs && node scripts/generate-file-icons.mjs && node scripts/sync-content.js",
+		"prebuild": "node scripts/generate-svelte-icons.mjs && node scripts/generate-file-icons.mjs && node scripts/sync-content.js && node scripts/update-feeds.mjs",
 		"dev": "NODE_OPTIONS='--max-old-space-size=6144 --max-semi-space-size=2' astro dev",
 		"dev:mem": "NODE_OPTIONS='--max-old-space-size=16384' astro dev",
 		"start": "astro dev",
