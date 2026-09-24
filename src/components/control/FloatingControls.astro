@@ -20,7 +20,7 @@ const { headings = [] } = Astro.props;
 			musicPlayerConfig.showFloatingPlayer &&
 			(musicPlayerConfig.floatingEntryMode ?? "default") === "fab" && (
 				<div class="floating-control-item" data-control-key="music">
-					<MusicFabButton client:only="svelte" />
+					<MusicFabButton client:idle />
 				</div>
 			)
 	}

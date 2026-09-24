@@ -43,6 +43,15 @@ jobs:
       - name: Run TypeScript Check
         run: pnpm type-check
 
+      - name: Run Tests
+        run: pnpm test
+
+      - name: Validate Content
+        run: pnpm check-content
+
+      - name: Validate Configuration
+        run: pnpm check-config
+
   build:
     name: Astro Build
     runs-on: ubuntu-latest
@@ -68,3 +77,9 @@ jobs:
         env:
           ENABLE_CONTENT_SYNC: false
           BILI_SESSDATA: ${{ secrets.BILI_SESSDATA }}
+
+      - name: Audit Images
+        run: pnpm check-images
+
+      - name: Audit Fonts
+        run: pnpm check-fonts

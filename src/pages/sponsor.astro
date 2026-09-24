@@ -84,7 +84,8 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
                               src={url(method.qrCode)}
                               alt={`${method.name}`}
                               class="w-full h-full object-contain sponsor-qr-img"
-                              loading="lazy"
+								loading="lazy"
+								decoding="async"
                             />
                           </div>
                         )}

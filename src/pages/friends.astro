@@ -90,7 +90,8 @@ const allTags = [...new Set(friendsList.flatMap((f) => f.tags || []))];
                 src={friend.imgurl}
                 alt={friend.title}
                 class="w-full h-full object-cover"
-                loading="lazy"
+				loading="lazy"
+				decoding="async"
               />
             </div>
 

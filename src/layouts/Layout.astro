@@ -356,10 +356,10 @@ if (defaultFontItem) {
 		<slot />
 
 		<!-- Music Player - disabled configurations do not emit a client island. -->
-		{musicPlayerConfig.enable && <MusicPlayer client:only="svelte" />}
+		{musicPlayerConfig.enable && <MusicPlayer client:idle />}
 
 		<!-- Pio 看板娘组件 - 仅在进入视口时加载 -->
-		{pioConfig.enable && <Pio client:only="svelte" />}
+		{pioConfig.enable && <Pio client:idle />}
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>

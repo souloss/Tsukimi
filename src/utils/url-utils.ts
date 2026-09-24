@@ -32,7 +32,10 @@ export function getPostUrlBySlug(slug: string): string {
 
 export function getPostUrlByAlias(alias: string): string {
 	// 移除开头的斜杠并确保固定链接在 /posts/ 路径下
-	const cleanAlias = alias.replace(/^\/+/, "");
+	let cleanAlias = alias.replace(/^\/+/, "");
+	if (cleanAlias.startsWith("posts/")) {
+		cleanAlias = cleanAlias.replace(/^posts\//, "");
+	}
 	return url(`/posts/${cleanAlias}/`);
 }
 

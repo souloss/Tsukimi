@@ -89,6 +89,14 @@ export async function compressFonts() {
 						`${baseName}.woff2`,
 					);
 					fs.writeFileSync(compressedFile, compressedBuffer);
+					const distOriginalFile = path.join(
+						distDir,
+						relativePath,
+					);
+					if (fs.existsSync(distOriginalFile)) {
+						fs.rmSync(distOriginalFile);
+						console.log(`✓ Removed unreferenced ${fontFile} from dist`);
+					}
 
 					if (fs.existsSync(compressedFile)) {
 						const compressedSize =

@@ -42,20 +42,20 @@ const iconWebpSrc = hasIconPngFallback
                         hasLogoPngFallback ? (
                             <picture>
                                 <source srcset={logoWebpSrc} type="image/webp" />
-                                <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] max-w-full object-contain" loading="lazy" />
+                                <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] max-w-full object-contain" loading="lazy" decoding="async" />
                             </picture>
                         ) : (
-                            <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] max-w-full object-contain" loading="lazy" />
+                            <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] max-w-full object-contain" loading="lazy" decoding="async" />
                         )
                     ) : (
                         <>
                             {hasIconPngFallback ? (
                                 <picture>
                                     <source srcset={iconWebpSrc} type="image/webp" />
-                                    <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" />
+                                    <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
                                 </picture>
                             ) : (
-                                <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" />
+                                <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
                             )}
                             <span class="dark:text-white text-black">{siteConfig.navbarTitle.text}</span>
                         </>
@@ -79,7 +79,7 @@ const iconWebpSrc = hasIconPngFallback
             <a href={url('/docs/')} class="btn-plain scale-animation rounded-lg h-11 px-4 text-sm font-medium active:scale-90">
                 {siteConfig.lang === 'zh_CN' || siteConfig.lang === 'zh_TW' ? '文档' : 'Docs'}
             </a>
-            <ThemeSwitch client:only="svelte"></ThemeSwitch>
+            <ThemeSwitch client:load></ThemeSwitch>
         </div>
     </div>
 </div>

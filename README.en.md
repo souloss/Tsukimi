@@ -3,8 +3,8 @@
 > A modern, feature-rich static blog template built with [Astro](https://astro.build), featuring advanced functionality and beautiful design.
 
 [![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen)](https://nodejs.org/)
-[![pnpm >= 9](https://img.shields.io/badge/pnpm-%3E%3D9-blue)](https://pnpm.io/)
-[![Astro](https://img.shields.io/badge/Astro-6.3.0-orange)](https://astro.build/)
+[![pnpm >= 10](https://img.shields.io/badge/pnpm-%3E%3D10-blue)](https://pnpm.io/)
+[![Astro](https://img.shields.io/badge/Astro-7.3.1-orange)](https://astro.build/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
@@ -48,8 +48,8 @@
 
 ### Prerequisites
 
-- Node.js >= 22
-- pnpm >= 9
+- Node.js >= 22.12
+- pnpm >= 10.33
 
 ### Installation
 
@@ -374,6 +374,14 @@ Powered by [Expressive Code](https://expressive-code.com/):
 | `pnpm build` | Build production site to `./dist/` |
 | `pnpm preview` | Preview build locally |
 | `pnpm check` | Run Astro error checking |
+| `pnpm test` | Run unit tests |
+| `pnpm check-content` | Validate post frontmatter, assets, and route conflicts |
+| `pnpm check-config` | Validate feature pages, navigation, and sidebar configuration |
+| `pnpm check-images` | Audit image alt text, lazy loading, and formats in the build output |
+| `pnpm check-fonts` | Audit compressed font artifacts and CSS references |
+| `pnpm perf:baseline` | Record static page count, output size, and local asset baseline |
+| `pnpm perf:check` | Check build output changes against the local performance baseline |
+| `pnpm check-docs-render` | Check docs layout, interactions, and search rendering |
 | `pnpm format` | Format with Prettier |
 | `pnpm lint` | Lint and fix with ESLint |
 | `pnpm new-post <filename>` | Create a new post |

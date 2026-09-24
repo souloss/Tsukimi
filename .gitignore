@@ -70,6 +70,10 @@ src/data/friends-circle.json
 
 # MCP
 .mcp.json
+
+# Local AI-agent working memory and iteration notes
+.codex/iteration/
+
 src/plugins/file-icons.json
 src/plugins/folder-map.json
 src/plugins/folder-open-icons.json

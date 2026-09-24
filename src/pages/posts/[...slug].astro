@@ -438,7 +438,7 @@ const jsonLd = {
 									{
 										siteConfig.sharePoster && (
 											<SharePoster
-												client:only="svelte"
+												client:visible
 												title={entry.data.title}
 												author={profileConfig.name}
 												description={entry.data.description || entry.data.title}

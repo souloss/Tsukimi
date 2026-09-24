@@ -18,7 +18,7 @@ const widgetId = `music-sidebar-widget-${Math.random().toString(36).substring(2,
 			style={style}
 			name={i18n(I18nKey.musicPlayer)}
 		>
-			<SidebarMusicClient client:only="svelte" />
+			<SidebarMusicClient client:visible />
 		</WidgetLayout>
 	)
 }

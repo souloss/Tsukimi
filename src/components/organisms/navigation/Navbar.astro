@@ -6,6 +6,7 @@ import {
 	navBarConfig,
 	siteConfig,
 } from "../../../config";
+import { featurePageRoutes } from "../../../config/featureRoutes";
 import { LinkPresets } from "../../../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../../../types/config";
 import { url } from "../../../utils/url-utils";
@@ -26,20 +27,10 @@ const navbarTransparentMode =
 // 检查是否为首页
 const isHomePage = Astro.url.pathname === "/" || Astro.url.pathname === "";
 
-// featurePage URL -> config key mapping
-const featurePageUrlMap: Record<string, string> = {
-	"/anime/": "anime",
-	"/diary/": "diary",
-	"/friends/": "friends",
-	"/projects/": "projects",
-	"/skills/": "skills",
-	"/timeline/": "timeline",
-	"/albums/": "albums",
-	"/devices/": "devices",
-};
-
 function isFeaturePageDisabled(url: string): boolean {
-	const key = featurePageUrlMap[url];
+	const key = Object.entries(featurePageRoutes).find(
+		([, route]) => route === url,
+	)?.[0] as keyof typeof siteConfig.featurePages | undefined;
 	if (
 		key &&
 		!siteConfig.featurePages[key as keyof typeof siteConfig.featurePages]
@@ -114,20 +105,20 @@ const iconWebpSrc = hasIconPngFallback
                         hasLogoPngFallback ? (
                             <picture>
                                 <source srcset={logoWebpSrc} type="image/webp" />
-                                <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] md:h-[3.25rem] md:[.enable-banner_&]:h-[2.5rem] md:[.enable-banner_&]:group-[.scrolled]:h-[3.25rem] max-w-full object-contain transition-all duration-300" loading="lazy" />
+                                <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] md:h-[3.25rem] md:[.enable-banner_&]:h-[2.5rem] md:[.enable-banner_&]:group-[.scrolled]:h-[3.25rem] max-w-full object-contain transition-all duration-300" loading="lazy" decoding="async" />
                             </picture>
                         ) : (
-                            <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] md:h-[3.25rem] md:[.enable-banner_&]:h-[2.5rem] md:[.enable-banner_&]:group-[.scrolled]:h-[3.25rem] max-w-full object-contain transition-all duration-300" loading="lazy" />
+                            <img src={logoSrc} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] md:h-[3.25rem] md:[.enable-banner_&]:h-[2.5rem] md:[.enable-banner_&]:group-[.scrolled]:h-[3.25rem] max-w-full object-contain transition-all duration-300" loading="lazy" decoding="async" />
                         )
                     ) : (
                         <>
                             {hasIconPngFallback ? (
                                 <picture>
                                     <source srcset={iconWebpSrc} type="image/webp" />
-                                    <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" />
+                                    <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
                                 </picture>
                             ) : (
-                                <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" />
+                                <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
                             )}
                             <span class="dark:text-white text-black">{siteConfig.navbarTitle.text}</span>
                         </>
@@ -146,7 +137,7 @@ const iconWebpSrc = hasIconPngFallback
             })}
         </div>
         <div class="flex items-center gap-1">
-            <SearchModal client:only="svelte" variant="icon" />
+            <SearchModal client:load variant="icon" />
             {/* 只在 sidebar 模式下显示移动端 TOC 按钮 */}
 			{siteConfig.toc.enable && siteConfig.toc.mobileTop && <MobileTOC client:media="(max-width: 1279px)"></MobileTOC>}
             {!siteConfig.themeColor.fixed && (
@@ -154,7 +145,7 @@ const iconWebpSrc = hasIconPngFallback
                         <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
                     </button>
             )}
-            <ThemeSwitch client:only="svelte"></ThemeSwitch>
+            <ThemeSwitch client:load></ThemeSwitch>
             <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
                 <Icon name="material-symbols:unfold-more" class="text-[1.25rem]"></Icon>
             </button>

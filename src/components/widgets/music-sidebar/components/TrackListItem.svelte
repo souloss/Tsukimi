@@ -43,6 +43,7 @@ function getAssetPath(path: string): string {
 			src={getAssetPath(song.cover)}
 			alt={song.title}
 			loading="lazy"
+			decoding="async"
 			class="item-cover"
 		/>
 	</div>

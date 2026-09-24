@@ -19,6 +19,7 @@ import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkDirective from "remark-directive";
 import remarkSectionize from "remark-sectionize";
+import { featurePageRoutes } from "./src/config/featureRoutes.ts";
 import {
 	markmapConfig,
 	plantumlConfig,
@@ -57,16 +58,9 @@ import { remarkRelativeLinks } from "./src/plugins/remark-relative-links.mjs";
 import { remarkStaticDiagrams } from "./src/plugins/remark-static-diagrams.js";
 import { remarkVegaLite } from "./src/plugins/remark-vega-lite.js";
 
-const disabledFeatureRoutes = Object.entries({
-	"/albums/": siteConfig.featurePages.albums,
-	"/anime/": siteConfig.featurePages.anime,
-	"/devices/": siteConfig.featurePages.devices,
-	"/projects/": siteConfig.featurePages.projects,
-	"/skills/": siteConfig.featurePages.skills,
-	"/timeline/": siteConfig.featurePages.timeline,
-})
-	.filter(([, enabled]) => !enabled)
-	.map(([route]) => route);
+const disabledFeatureRoutes = Object.entries(featurePageRoutes)
+	.filter(([key]) => !siteConfig.featurePages[key])
+	.map(([, route]) => route);
 
 const isEnabledRoute = (page) => {
 	const pathname = new URL(page).pathname;

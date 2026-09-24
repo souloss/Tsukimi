@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import I18nKey from "../src/i18n/i18nKey";
+import { i18n } from "../src/i18n/translation";
 import {
-	ENCRYPTED_POST_HOME_CONTENT,
 	getPostHomeContent,
 	getPostPublicDescription,
 } from "../src/utils/post-card-content.ts";
+
+const ENCRYPTED_POST_HOME_CONTENT = i18n(I18nKey.postEncryptedMessage);
 
 describe("getPostHomeContent", () => {
 	it("hides post content by default when a password is set", () => {

@@ -1,257 +1,96 @@
 # 性能监控指南
 
-本文档介绍如何在项目中配置和使用性能监控工具。
+本文档记录 Tsukimi 当前可执行的性能检查方式，以及后续接入浏览器实测时的边界。构建体积基线保存在本地 `.codex/iteration/`，不会提交到远程仓库。
 
-## 目录
+## 当前指标
 
-- [概述](#概述)
-- [快速开始](#快速开始)
-- [Lighthouse CI 配置](#lighthouse-ci-配置)
-- [性能基准管理](#性能基准管理)
-- [GitHub Actions 集成](#github-actions-集成)
-- [常见问题](#常见问题)
+| 层级 | 工具 | 用途 |
+|------|------|------|
+| 构建产物 | `performance-baseline.mjs` | 记录页面数量、HTML、JS/CSS、JSON 和字体体积 |
+| 运行时 | `performance-observer.ts` | 可选收集 CLS、LCP、INP 等 Web Vitals |
+| 浏览器实测 | Lighthouse/Playwright（可选） | 需要显式安装浏览器运行器后再接入 |
 
----
+当前仓库不内置 Lighthouse 配置或浏览器依赖，因此文档不会把未安装的命令当作 CI 必需步骤。
 
-## 概述
+## 静态构建基线
 
-项目集成了以下性能监控工具：
-
-| 工具 | 用途 |
-|------|------|
-| Lighthouse CI | 自动化性能测试 |
-| Web Vitals | 运行时性能监控 |
-| Performance Observer | 自定义指标收集 |
-
-### 性能指标目标
-
-| 指标 | 目标值 | 说明 |
-|------|--------|------|
-| Performance Score | ≥ 0.85 | Lighthouse 性能分数 |
-| FCP | ≤ 2000ms | 首次内容绘制 |
-| LCP | ≤ 4000ms | 最大内容绘制 |
-| TTI | ≤ 5000ms | 可交互时间 |
-| CLS | ≤ 0.1 | 累积布局偏移 |
-
----
-
-## 快速开始
-
-### 1. 运行性能测试
+先生成生产构建，再写入本地基线：
 
 ```bash
-# 构建项目
 pnpm build
-
-# 运行 Lighthouse CI（自动启动 preview server）
-pnpm lhci autorun
+pnpm perf:baseline
 ```
 
-### 2. 查看性能报告
+`pnpm perf:baseline` 会检查 `dist/`，采集首页、文章页、文档页和第一个实际生成的特色页，并写入：
 
-测试结果保存在 `.lighthouseci/` 目录：
+```text
+.codex/iteration/performance-baseline.json
+```
+
+检查当前构建是否相对基线增长超过 10%：
 
 ```bash
-# 查看 JSON 格式的详细报告
-cat .lighthouseci/lhr-*.json
-
-# 查看当前性能指标
-node scripts/performance-baseline.js
+pnpm perf:check
 ```
 
-### 3. 更新性能基准
-
-首次使用时，需要建立性能基准：
+也可以通过环境变量指定另一份基线：
 
 ```bash
-node scripts/performance-baseline.js --update
+TSUKIMI_PERFORMANCE_BASELINE=/path/to/baseline.json pnpm perf:check
 ```
 
----
+基线文件包含 `pageCount`、`totalTrackedBytes`、`fileCounts` 和各采样页面的 HTML/JS/CSS 数据。它用于本机和 AI Agent 的持续迭代检查，不作为公开项目配置。
 
-## Lighthouse CI 配置
+## 运行时 Web Vitals
 
-### 配置文件
+`src/utils/performance-observer.ts` 提供 CLS、LCP、FID、INP、FCP、TTFB 等观察器。调用方负责决定是否上报，以及上报到哪个分析服务；默认不产生额外网络请求。
 
-主配置文件：`lighthouserc.json`
+接入新的页面或分析服务时，应确认：
 
-```json
-{
-  "ci": {
-    "collect": {
-      "numberOfRuns": 3,
-      "url": [
-        "http://localhost:4321/",
-        "http://localhost:4321/about/",
-        "http://localhost:4321/anime/"
-      ]
-    },
-    "assert": {
-      "assertions": {
-        "categories:performance": ["warn", { "minScore": 0.85 }],
-        "first-contentful-paint": ["warn", { "maxNumericValue": 2000 }]
-      }
-    }
-  }
-}
-```
+- 页面卸载或 Swup 导航时执行观察器返回的清理函数；
+- 不在每次指标变化时发送高频请求，优先批量或采样；
+- 不把文章内容、用户输入等敏感数据放进指标上报载荷；
+- 指标名称和阈值与 Chrome/Web Vitals 当前定义保持一致。
 
-### 配置说明
+## 浏览器实测（可选）
 
-| 选项 | 说明 |
-|------|------|
-| `numberOfRuns` | 运行次数，结果取平均值 |
-| `url` | 要测试的页面 URL |
-| `minScore` | 最小分数阈值 |
-| `maxNumericValue` | 最大数值阈值（毫秒） |
-
----
-
-## 性能基准管理
-
-### 基准文件
-
-性能基准保存在 `performance-baseline.json`：
-
-```json
-{
-  "baseline": {
-    "homepage": {
-      "url": "http://localhost:4321/",
-      "metrics": {
-        "performance": 0.85,
-        "first-contentful-paint": 1800,
-        "largest-contentful-paint": 3500
-      }
-    }
-  },
-  "thresholds": {
-    "regressionPercent": 10
-  }
-}
-```
-
-### 管理命令
+需要 FCP、LCP、CLS 等真实浏览器数据时，可以在本地单独安装 Lighthouse 或 Playwright，并使用生产预览：
 
 ```bash
-# 查看当前性能指标（不更新基准）
-node scripts/performance-baseline.js
-
-# 更新性能基准
-node scripts/performance-baseline.js --update
-
-# 检查性能回归
-node scripts/performance-check.js
+pnpm build
+pnpm preview
 ```
 
-### 回归检测
+浏览器实测应覆盖 `/`、一篇文章、`/docs/tsukimi/` 和一个实际启用的特色页。测试配置和依赖只有在确定要纳入项目质量门禁后，才添加到仓库及 CI；否则会给贡献者增加浏览器下载和环境配置成本。
 
-当性能指标下降超过 10% 时会报警：
+## CI 约束
 
-```
-⚠️  Performance regressions detected!
-  ❌ first-contentful-paint
-     Current: 2500.00ms
-     Baseline: 1800.00ms
-     Change: +38.9%
-```
+当前 CI 已执行：
 
----
+- `pnpm check`
+- `pnpm type-check`
+- `pnpm test`
+- `pnpm check-content`
+- `pnpm check-config`
+- `pnpm build`
 
-## GitHub Actions 集成
-
-### 自动运行
-
-推送代码后会自动运行 Lighthouse CI 检查：
-
-```yaml
-# .github/workflows/lighthouse.yml
-name: Lighthouse CI
-on: [push, pull_request]
-jobs:
-  lighthouse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - run: pnpm install
-      - run: pnpm build
-      - uses: treosh/lighthouse-ci-action@v11
-        with:
-          configPath: "./lighthouserc.json"
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-```
-
-### 检查结果
-
-CI 检查包括：
-
-- ✅ Astro Check（类型检查）
-- ✅ ESLint（代码规范）
-- ✅ Build（构建测试）
-- ⚠️ Lighthouse（性能测试）
-
----
+CI 不读取本地 `.codex/iteration/performance-baseline.json`，也不强制运行浏览器测试。这样可以保证构建结构和内容契约稳定，同时避免因运行环境差异造成无依据的性能失败。
 
 ## 常见问题
 
-### Q: Lighthouse 测试失败怎么办？
+### 为什么 `pnpm perf:check` 找不到基线？
 
-1. 检查网络连接是否正常
-2. 确认端口 4321 未被占用
-3. 查看详细错误信息：
+先运行 `pnpm build && pnpm perf:baseline`。基线位于被 Git 忽略的 `.codex/iteration/`，只在当前开发工作区可用。
 
-```bash
-npx lhci autorun --verbose
-```
+### 为什么特色页显示为 route not found？
 
-### Q: 如何排除某些检查？
+特色页受 `siteConfig.featurePages` 控制。脚本会在全部特色路由中选择第一个实际生成的页面；如果所有特色页都关闭，才会显示找不到路由。
 
-编辑 `lighthouserc.json`，将不想检查的指标设为 `"off"`：
+### 静态体积增长是否一定是回归？
 
-```json
-"uses-optimized-images": "off",
-"uses-webp-images": "off"
-```
-
-### Q: 如何添加新的测试页面？
-
-编辑 `lighthouserc.json`，在 `url` 数组中添加：
-
-```json
-"url": [
-  "http://localhost:4321/",
-  "http://localhost:4321/about/",
-  "http://localhost:4321/anime/",
-  "http://localhost:4321/new-page/"  // 新页面
-]
-```
-
-### Q: 性能波动大怎么办？
-
-1. 增加运行次数：
-
-```json
-"numberOfRuns": 5
-```
-
-2. 使用中位数而非平均值
-3. 设置更宽松的阈值
-
-### Q: LHCI Server 未配置会怎样？
-
-本地运行时，报告会保存到 `.lighthouseci/` 目录，不会影响测试。但 GitHub Actions 中会报错：
-
-```
-Error: Must provide token for LHCI target
-```
-
-如需完整功能，请配置 [LHCI Server](https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/server.md)。
-
----
+不一定。新增页面、字体或内容都会增加构建产物。超过 10% 时应查看基线中的 `fileCounts` 和采样页面数据，再决定是否更新基线。
 
 ## 相关资源
 
-- [Lighthouse CI 文档](https://github.com/GoogleChrome/lighthouse-ci)
 - [Web Vitals](https://web.dev/vitals/)
 - [Lighthouse 性能评分](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring/)

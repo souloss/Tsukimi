@@ -420,6 +420,8 @@ function portal(node: HTMLElement) {
 						src={posterImage}
 						alt="Poster"
 						class="max-w-full h-auto shadow-lg rounded-lg"
+						loading="lazy"
+						decoding="async"
 					/>
 				{:else}
 					<div class="flex flex-col items-center gap-3">

@@ -96,6 +96,7 @@ export function rehypePlantuml(options = {}) {
 								alt: altText || "PlantUML diagram (dev preview)",
 								style: "max-width:100%;margin-top:0.5em;",
 								loading: "lazy",
+								decoding: "async",
 							})
 						: h(
 								"p",

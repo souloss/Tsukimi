@@ -10,6 +10,12 @@
 		"generate-icons": "node scripts/generate-svelte-icons.mjs",
 		"sync-content": "node scripts/sync-content.js",
 		"check-docs-render": "node scripts/check-docs-render.mjs",
+		"check-content": "node scripts/check-content.mjs",
+		"check-config": "tsx scripts/check-config.mjs",
+		"check-images": "node scripts/check-images.mjs",
+		"check-fonts": "node scripts/check-fonts.mjs",
+		"perf:baseline": "node scripts/performance-baseline.mjs --write",
+		"perf:check": "node scripts/performance-baseline.mjs --check",
 		"init-content": "node scripts/init-content-repo.js",
 		"predev": "node scripts/generate-svelte-icons.mjs && (node scripts/sync-content.js || true)",
 		"prebuild": "node scripts/generate-svelte-icons.mjs && node scripts/generate-file-icons.mjs && node scripts/sync-content.js && node scripts/update-feeds.mjs",
@@ -28,6 +34,7 @@
 		"preview": "astro preview",
 		"astro": "astro",
 		"type-check": "tsc --noEmit",
+		"test": "tsx --test tests/*.test.mjs tests/*.test.ts",
 		"new-post": "node scripts/new-post.js",
 		"format": "biome format --write ./src",
 		"lint": "biome check --write ./src",
@@ -122,8 +129,10 @@
 		"simple-git-hooks": "^2.14.0",
 		"subset-font": "^2.7.0",
 		"svgo": "4.1.0",
+		"tsx": "^4.23.15",
 		"typescript": "^6.0.3",
-		"unified": "^11.0.5"
+		"unified": "^11.0.5",
+		"yaml": "^2.8.3"
 	},
 	"packageManager": "pnpm@10.33.0",
 	"simple-git-hooks": {

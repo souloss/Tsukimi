@@ -101,6 +101,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 				class={imageClass}
 				style={imageStyle}
 				loading={loading}
+				decoding="async"
 				referrerpolicy={referrerPolicy}
 				crossorigin={isBilibiliImage ? "anonymous" : undefined}
 				fetchpriority={fetchpriority}

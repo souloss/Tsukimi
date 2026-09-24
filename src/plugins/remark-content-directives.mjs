@@ -510,7 +510,7 @@ function serializeToHtml(nodes) {
 						escapeHtml(sanitizeUrl(node.url || "")) +
 						'" alt="' +
 						escapeHtml(node.alt || "") +
-						'" loading="lazy" />'
+						'" loading="lazy" decoding="async" />'
 					);
 				case "break":
 					return "<br>";
@@ -1143,7 +1143,7 @@ function _processInlineDirective(node, parent, index, hashtagCounter) {
 							escapeHtml(url) +
 							'" alt="' +
 							escapeHtml(emojiName) +
-							'" loading="lazy" style="height:' +
+							'" loading="lazy" decoding="async" style="height:' +
 							safeHeight +
 							'" />',
 					},
@@ -2887,7 +2887,7 @@ function processBlockDirective(node) {
 									escapeHtml(img.src) +
 									'" alt="' +
 									escapeHtml(img.alt) +
-									'" loading="lazy" /></button>',
+									'" loading="lazy" decoding="async" /></button>',
 							)
 							.join("") +
 						"</div>",
@@ -2982,7 +2982,7 @@ function processCardDirective(node) {
 					'">' +
 					'<div class="md-card-cover"><img src="' +
 					escapeHtml(cardImage) +
-					'" alt="" loading="lazy" /></div>' +
+					'" alt="" loading="lazy" decoding="async" /></div>' +
 					'<div class="md-card-content">' +
 					(cardTitle
 						? `<div class="md-card-title">${escapeHtml(cardTitle)}</div>`
@@ -3103,7 +3103,7 @@ function processMediaDirective(node) {
 				videoHtml =
 					'<img class="md-video-poster-img" src="' +
 					escapeHtml(poster) +
-					'" alt="" loading="lazy" /><video class="md-video-element" id="' +
+					'" alt="" loading="lazy" decoding="async" /><video class="md-video-element" id="' +
 					vUid +
 					'" src="' +
 					escapeHtml(src) +
@@ -3229,7 +3229,12 @@ function processLeafDirective(node) {
 			const iAlt = attrs.alt || "";
 			node.data = {
 				hName: "img",
-				hProperties: { src: iSrc, alt: iAlt, loading: "lazy" },
+				hProperties: {
+					src: iSrc,
+					alt: iAlt,
+					loading: "lazy",
+					decoding: "async",
+				},
 			};
 			if (attrs.width) {
 				node.data.hProperties.width = attrs.width;

@@ -32,7 +32,7 @@ const { home } = Astro.props;
 		</div>
 		<div class="docs-home-hero-art" aria-hidden="true">
 			<div class="docs-home-glow"></div>
-			{home.image && <img src={home.image} alt="" loading="eager" />}
+			{home.image && <img src={home.image} alt="" loading="eager" decoding="async" />}
 		</div>
 	</section>
 

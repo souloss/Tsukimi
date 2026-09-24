@@ -77,7 +77,8 @@ function formatLastUpdate(dateStr: string): string {
 									src={item.avatar}
 									alt={item.author}
 									class="w-8 h-8 object-cover"
-									loading="lazy"
+					loading="lazy"
+					decoding="async"
 									onerror="this.style.display='none'"
 								/>
 							) : (
@@ -85,7 +86,8 @@ function formatLastUpdate(dateStr: string): string {
 									src={`https://icon.bqb.cool/?url=${item.siteUrl ? new URL(item.siteUrl).hostname : (item.link ? new URL(item.link).hostname : "")}`}
 									alt={item.author}
 									class="w-6 h-6 rounded-full"
-									loading="lazy"
+					loading="lazy"
+					decoding="async"
 									onerror={`this.style.display='none'; this.parentElement.innerHTML='<span class="text-xs font-bold text-[var(--primary)]">${item.author.charAt(0)}</span>'`}
 								/>
 							)}

@@ -3,8 +3,8 @@
 > 一个现代化、功能丰富的静态博客模板，基于 [Astro](https://astro.build) 构建，具有先进的功能和精美的设计。
 
 [![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen)](https://nodejs.org/)
-[![pnpm >= 9](https://img.shields.io/badge/pnpm-%3E%3D9-blue)](https://pnpm.io/)
-[![Astro](https://img.shields.io/badge/Astro-6.3.0-orange)](https://astro.build/)
+[![pnpm >= 10](https://img.shields.io/badge/pnpm-%3E%3D10-blue)](https://pnpm.io/)
+[![Astro](https://img.shields.io/badge/Astro-7.3.1-orange)](https://astro.build/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
 
@@ -48,8 +48,8 @@
 
 ### 环境要求
 
-- Node.js >= 22
-- pnpm >= 9
+- Node.js >= 22.12
+- pnpm >= 10.33
 
 ### 安装
 
@@ -374,6 +374,14 @@ $$
 | `pnpm build` | 构建生产站点到 `./dist/` |
 | `pnpm preview` | 本地预览构建结果 |
 | `pnpm check` | Astro 错误检查 |
+| `pnpm test` | 运行单元测试 |
+| `pnpm check-content` | 检查文章 Frontmatter、资源和路径冲突 |
+| `pnpm check-config` | 检查特色页面、导航和侧栏配置一致性 |
+| `pnpm check-images` | 审计构建产物中的图片替代文本、懒加载和格式 |
+| `pnpm check-fonts` | 审计字体压缩产物和 CSS 引用 |
+| `pnpm perf:baseline` | 记录静态页面数量、产物体积和本地资源基线 |
+| `pnpm perf:check` | 检查构建产物相对本地性能基线的变化 |
+| `pnpm check-docs-render` | 检查文档页面布局、交互和搜索渲染 |
 | `pnpm format` | Prettier 格式化 |
 | `pnpm lint` | ESLint 检查与修复 |
 | `pnpm new-post <filename>` | 创建新文章 |
