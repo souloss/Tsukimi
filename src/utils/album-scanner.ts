@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import sharp from "sharp";
 
 import type { AlbumGroup, Photo } from "../types/album";
 
@@ -77,7 +78,7 @@ async function processAlbumFolder(
 		cover = hasWebpCover
 			? `/images/albums/${folderName}/cover.webp`
 			: `/images/albums/${folderName}/cover.jpg`;
-		photos = scanPhotos(folderPath, folderName);
+		photos = await scanPhotos(folderPath, folderName);
 	}
 
 	// 检查是否隐藏相册
@@ -100,8 +101,19 @@ async function processAlbumFolder(
 	};
 }
 
-function scanPhotos(folderPath: string, albumId: string): Photo[] {
-	const photos: Photo[] = [];
+async function getImageDimensions(filePath: string) {
+	try {
+		const metadata = await sharp(filePath, { failOn: "none" }).metadata();
+		return { width: metadata.width, height: metadata.height };
+	} catch {
+		return {};
+	}
+}
+
+async function scanPhotos(
+	folderPath: string,
+	albumId: string,
+): Promise<Photo[]> {
 	const files = fs.readdirSync(folderPath);
 
 	const imageExtensions = [
@@ -137,27 +149,29 @@ function scanPhotos(folderPath: string, albumId: string): Photo[] {
 		}
 	}
 
-	imageFiles.forEach((file, index) => {
-		const filePath = path.join(folderPath, file);
-		const stats = fs.statSync(filePath);
+	return Promise.all(
+		imageFiles.map(async (file, index) => {
+			const filePath = path.join(folderPath, file);
+			const stats = fs.statSync(filePath);
+			const dimensions = await getImageDimensions(filePath);
 
-		const { baseName, tags } = parseFileName(file);
+			const { baseName, tags } = parseFileName(file);
 
-		const src = fileWebpMap.has(file)
-			? `/images/albums/${albumId}/${fileWebpMap.get(file)}`
-			: `/images/albums/${albumId}/${file}`;
+			const src = fileWebpMap.has(file)
+				? `/images/albums/${albumId}/${fileWebpMap.get(file)}`
+				: `/images/albums/${albumId}/${file}`;
 
-		photos.push({
-			id: `${albumId}-photo-${index}`,
-			src,
-			alt: baseName,
-			title: baseName,
-			tags: tags,
-			date: stats.mtime.toISOString().split("T")[0],
-		});
-	});
-
-	return photos;
+			return {
+				id: `${albumId}-photo-${index}`,
+				src,
+				alt: baseName,
+				title: baseName,
+				tags: tags,
+				date: stats.mtime.toISOString().split("T")[0],
+				...dimensions,
+			};
+		}),
+	);
 }
 
 function processExternalPhotos(

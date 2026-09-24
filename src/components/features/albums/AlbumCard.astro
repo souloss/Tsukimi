@@ -20,6 +20,8 @@ const { album } = Astro.props as AlbumCardProps;
 				<img
 					src={album.cover}
 					alt={album.title}
+					width="4"
+					height="3"
 					class="w-full h-full object-cover pointer-events-none transition-transform duration-500 group-hover:scale-105"
 					loading="lazy"
 					decoding="async"

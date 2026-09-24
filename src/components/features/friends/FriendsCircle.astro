@@ -76,6 +76,8 @@ function formatLastUpdate(dateStr: string): string {
 								<img
 									src={item.avatar}
 									alt={item.author}
+									width="32"
+									height="32"
 									class="w-8 h-8 object-cover"
 					loading="lazy"
 					decoding="async"
@@ -85,6 +87,8 @@ function formatLastUpdate(dateStr: string): string {
 								<img
 									src={`https://icon.bqb.cool/?url=${item.siteUrl ? new URL(item.siteUrl).hostname : (item.link ? new URL(item.link).hostname : "")}`}
 									alt={item.author}
+									width="24"
+									height="24"
 									class="w-6 h-6 rounded-full"
 					loading="lazy"
 					decoding="async"

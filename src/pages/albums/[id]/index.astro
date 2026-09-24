@@ -41,10 +41,13 @@ const isEncrypted = !!album.password;
 let encryptedPhotoData = "";
 if (isEncrypted) {
 	const photoHtml = album.photos
-		.map(
-			(photo: Photo) =>
-				`<div class="gallery-masonry-item"><a data-fancybox="album-${album.id}" href="${photo.src}" data-caption="${photo.alt || photo.title || ""}"><img src="${photo.src}" alt="${photo.alt || photo.title || ""}" loading="lazy" decoding="async" class="w-full rounded-lg" /></a></div>`,
-		)
+		.map((photo: Photo) => {
+			const dimensions =
+				photo.width && photo.height
+					? ` width="${photo.width}" height="${photo.height}"`
+					: "";
+			return `<div class="gallery-masonry-item"><a data-fancybox="album-${album.id}" href="${photo.src}" data-caption="${photo.alt || photo.title || ""}"><img src="${photo.src}" alt="${photo.alt || photo.title || ""}"${dimensions} loading="lazy" decoding="async" class="w-full rounded-lg" /></a></div>`;
+		})
 		.join("");
 	const wrappedHtml = `<div class="gallery-masonry">${photoHtml}</div>`;
 	encryptedPhotoData = encryptContent(
@@ -194,6 +197,8 @@ if (isEncrypted) {
 								src={photo.src}
 								alt={photo.alt || photo.title || ""}
 								albumId={album.id}
+								width={photo.width}
+								height={photo.height}
 							/>
 						))}
 					</div>

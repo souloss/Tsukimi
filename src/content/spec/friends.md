@@ -14,7 +14,7 @@ permalink: /spec/friends/
 <div class="flex items-center gap-4 mb-5">
   <div class="relative shrink-0">
     <div class="w-16 h-16 rounded-xl overflow-hidden ring-2 ring-[var(--primary)]/20">
-      <img src="/favicon.png" alt="Tsukimi" class="w-full h-full object-cover" loading="lazy" decoding="async" />
+      <img src="/favicon.png" alt="Tsukimi" width="280" height="280" class="w-full h-full object-cover" loading="lazy" decoding="async" />
     </div>
     <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[var(--primary)] flex items-center justify-center shadow">
       <iconify-icon icon="material-symbols:check" class="text-xs text-white"></iconify-icon>

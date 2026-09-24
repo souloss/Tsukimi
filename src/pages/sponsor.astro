@@ -82,7 +82,9 @@ const showSponsorsList = sponsorConfig.showSponsorsList !== false;
                           <div class="relative w-full max-w-[200px] aspect-square bg-white rounded-lg p-4 shadow-md mb-4">
                             <img
                               src={url(method.qrCode)}
-                              alt={`${method.name}`}
+								alt={`${method.name}`}
+								width="400"
+								height="400"
                               class="w-full h-full object-contain sponsor-qr-img"
 								loading="lazy"
 								decoding="async"

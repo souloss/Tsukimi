@@ -379,9 +379,11 @@ $$
 | `pnpm check-config` | 检查特色页面、导航和侧栏配置一致性 |
 | `pnpm check-images` | 审计构建产物中的图片替代文本、懒加载和格式 |
 | `pnpm check-fonts` | 审计字体压缩产物和 CSS 引用 |
+| `pnpm check-publish` | 执行发布前内容、配置和构建产物门禁 |
 | `pnpm perf:baseline` | 记录静态页面数量、产物体积和本地资源基线 |
 | `pnpm perf:check` | 检查构建产物相对本地性能基线的变化 |
 | `pnpm check-docs-render` | 检查文档页面布局、交互和搜索渲染 |
+| `pnpm preview:drafts` | 启动包含草稿文章的本地预览 |
 | `pnpm format` | Prettier 格式化 |
 | `pnpm lint` | ESLint 检查与修复 |
 | `pnpm new-post <filename>` | 创建新文章 |

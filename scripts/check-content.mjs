@@ -50,6 +50,13 @@ function addError(errors, filePath, field, message) {
 	errors.push(`${formatPath(filePath)}: ${field} ${message}`);
 }
 
+function cleanReference(reference) {
+	return reference
+		.trim()
+		.replace(/^<|>$/g, "")
+		.split(/[?#]/, 1)[0];
+}
+
 async function pathExists(path) {
 	try {
 		await access(path);
@@ -69,6 +76,43 @@ async function checkImagePath(filePath, image) {
 	}
 
 	return pathExists(resolve(dirname(filePath), image));
+}
+
+async function checkLocalReferences(filePath, source, errors) {
+	const prose = source
+		.replace(/(^|\n)(`{3,}|~{3,})[^\n]*\n[\s\S]*?\n\2(?=\n|$)/g, "$1")
+		.split("\n")
+		.filter((line) => !/^(?: {4}|\t)/.test(line))
+		.join("\n");
+	const references = new Set();
+	const markdownPattern = /!?(?:\[[^\]]*\])\((<[^>]+>|[^)\s]+)(?:\s+[^)]*)?\)/g;
+	for (const match of prose.matchAll(markdownPattern)) references.add(match[1]);
+	const directivePattern = /(?:src|image)\s*=\s*["']([^"']+)["']/g;
+	for (const match of prose.matchAll(directivePattern)) references.add(match[1]);
+
+	for (const rawReference of references) {
+		const reference = cleanReference(rawReference);
+		if (
+			!reference ||
+			reference.startsWith("#") ||
+			/^(?:[a-z][a-z\d+.-]*:)?\/\//i.test(reference)
+		) {
+			continue;
+		}
+
+		const isImage = /\.(?:avif|gif|jpe?g|png|svg|webp)(?:$|\/)/i.test(reference);
+		const isMarkdown = /\.(?:md|mdx|markdown)$/i.test(reference);
+		if (!isImage && !isMarkdown && !reference.startsWith("./") && !reference.startsWith("../")) {
+			continue;
+		}
+
+		const exists = isImage
+			? await checkImagePath(filePath, reference)
+			: reference.startsWith("/")
+				? await pathExists(resolve(projectRoot, "src", reference.slice(1)))
+				: await pathExists(resolve(dirname(filePath), reference));
+		if (!exists) addError(errors, filePath, "reference", `file does not exist: ${reference}`);
+	}
 }
 
 function validateFieldTypes(filePath, data, errors) {
@@ -113,12 +157,13 @@ function validateFieldTypes(filePath, data, errors) {
 	}
 }
 
-export async function checkContentFiles({ root = postsRoot } = {}) {
+export async function checkContentFiles({ root = postsRoot, strictPublish = false } = {}) {
 	const files = (await glob("**/*", { cwd: root, absolute: true, nodir: true }))
 		.filter((filePath) => supportedExtensions.has(extname(filePath).toLowerCase()))
 		.sort();
 	const errors = [];
 	const routeOwners = new Map();
+	let draftCount = 0;
 
 	for (const filePath of files) {
 		const source = await readFile(filePath, "utf8");
@@ -141,10 +186,12 @@ export async function checkContentFiles({ root = postsRoot } = {}) {
 		}
 
 		validateFieldTypes(filePath, data, errors);
+		if (data.draft === true) draftCount += 1;
 
 		if (data.image && !(await checkImagePath(filePath, data.image))) {
 			addError(errors, filePath, "image", `file does not exist: ${data.image}`);
 		}
+		if (strictPublish) await checkLocalReferences(filePath, source, errors);
 
 		const routes = [data.permalink, data.alias, data.slug]
 			.map(normalizePath)
@@ -159,7 +206,7 @@ export async function checkContentFiles({ root = postsRoot } = {}) {
 		}
 	}
 
-	return { files, errors };
+	return { files, errors, draftCount };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -169,6 +216,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		for (const error of result.errors) console.error(`  - ${error}`);
 		process.exitCode = 1;
 	} else {
-		console.log(`Content validation passed (${result.files.length} post files).`);
+		console.log(
+			`Content validation passed (${result.files.length} post files; ${result.draftCount} drafts).`,
+		);
 	}
 }

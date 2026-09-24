@@ -36,7 +36,9 @@ const getStatusText = (status: string) => {
 				{hasImage ? (
 					<img
 						src={project.image!}
-						alt={project.title}
+							alt={project.title}
+							width="16"
+							height="9"
 						class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
 						loading="lazy"
 						decoding="async"

@@ -379,9 +379,11 @@ Powered by [Expressive Code](https://expressive-code.com/):
 | `pnpm check-config` | Validate feature pages, navigation, and sidebar configuration |
 | `pnpm check-images` | Audit image alt text, lazy loading, and formats in the build output |
 | `pnpm check-fonts` | Audit compressed font artifacts and CSS references |
+| `pnpm check-publish` | Run pre-publish content, configuration, and artifact gates |
 | `pnpm perf:baseline` | Record static page count, output size, and local asset baseline |
 | `pnpm perf:check` | Check build output changes against the local performance baseline |
 | `pnpm check-docs-render` | Check docs layout, interactions, and search rendering |
+| `pnpm preview:drafts` | Start a local preview that includes draft posts |
 | `pnpm format` | Format with Prettier |
 | `pnpm lint` | Lint and fix with ESLint |
 | `pnpm new-post <filename>` | Create a new post |

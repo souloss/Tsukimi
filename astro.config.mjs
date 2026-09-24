@@ -34,6 +34,7 @@ import {
 	rehypeFileTreeV3 as rehypeFileTree,
 	remarkFileTree,
 } from "./src/plugins/rehype-file-tree.mjs";
+import { rehypeImageDimensions } from "./src/plugins/rehype-image-dimensions.mjs";
 import { rehypeImageWidth } from "./src/plugins/rehype-image-width.mjs";
 import { rehypeLazyImage } from "./src/plugins/rehype-lazy-image.mjs";
 import { rehypeMarkmap } from "./src/plugins/rehype-markmap.mjs";
@@ -255,6 +256,7 @@ export default defineConfig({
 					},
 				],
 				rehypeImageWidth,
+				rehypeImageDimensions,
 				rehypeLazyImage,
 			],
 		}),

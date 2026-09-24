@@ -115,10 +115,10 @@ const iconWebpSrc = hasIconPngFallback
                             {hasIconPngFallback ? (
                                 <picture>
                                     <source srcset={iconWebpSrc} type="image/webp" />
-                                    <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
+									<img src={iconSrc} alt="" width="28" height="28" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
                                 </picture>
                             ) : (
-                                <img src={iconSrc} alt="" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
+								<img src={iconSrc} alt="" width="28" height="28" class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" decoding="async" />
                             )}
                             <span class="dark:text-white text-black">{siteConfig.navbarTitle.text}</span>
                         </>

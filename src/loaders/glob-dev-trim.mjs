@@ -82,6 +82,12 @@ export function devGlob(globOptions) {
 			let trimmed = 0;
 			for (let i = DEV_MAX_RENDERED; i < postsEntries.length; i++) {
 				const [id, entry] = postsEntries[i];
+				if (
+					process.env.DRAFT_PREVIEW === "true" &&
+					entry.data?.draft === true
+				) {
+					continue;
+				}
 				if (entry.rendered || entry.body) {
 					context.store.set({
 						id,

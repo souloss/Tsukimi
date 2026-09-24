@@ -842,6 +842,7 @@ async function checkOverlayWallpaper(client) {
 				const banner = document.querySelector("#wallpaper-wrapper");
 				const rect = wallpaper?.getBoundingClientRect();
 				return {
+					hasOverlayWallpaper: Boolean(wallpaper),
 					wallpaperDisplay: wallpaper ? getComputedStyle(wallpaper).display : "none",
 					wallpaperPosition: wallpaper ? getComputedStyle(wallpaper).position : "static",
 					wallpaperWidth: rect?.width ?? 0,
