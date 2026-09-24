@@ -450,23 +450,19 @@ const isDocsIndexPage = isHomePage && !docSlug;
 
 <script>
 	// @ts-nocheck
-	// Reinitialize TOC after Swup page transitions within docs
+	// Keep the document TOC container in sync with the current Swup page.
 	function refreshDocsTOC() {
-		const tocEl = /** @type {HTMLElement & { regenerateTOC?: () => void }} */ (document.querySelector("docs-table-of-contents"));
-		if (tocEl && typeof tocEl.regenerateTOC === "function") {
-			tocEl.regenerateTOC();
-		}
-
-		// Also update the TOC container visibility based on whether headings exist
 		const tocContainer = document.querySelector(".docs-toc-container");
 		if (tocContainer) {
-			const hasContent = document.querySelector(".docs-markdown, .markdown-content");
-			tocContainer.classList.toggle("hidden", !hasContent);
+			const hasHeadings = document.querySelector(
+				".docs-markdown h1[id], .docs-markdown h2[id], .docs-markdown h3[id], .docs-markdown h4[id], .docs-markdown h5[id], .docs-markdown h6[id]",
+			);
+			tocContainer.classList.toggle("hidden", !hasHeadings);
 		}
 	}
 
 	document.addEventListener("astro:page-load", refreshDocsTOC);
-	document.addEventListener("swup:content:replace", () => setTimeout(refreshDocsTOC, 100));
+	document.addEventListener("swup:content:replace", refreshDocsTOC);
 </script>
 
 <script>

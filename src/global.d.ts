@@ -4,6 +4,11 @@ declare global {
 			init?: () => void;
 			regenerateTOC?: () => void;
 		};
+		"docs-table-of-contents": HTMLElement & {
+			init?: () => void;
+			reinit?: () => void;
+			regenerateTOC?: () => void;
+		};
 	}
 
 	/**

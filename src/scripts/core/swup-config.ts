@@ -34,7 +34,7 @@ export const SWUP_SELECTORS = {
 	navbarWrapper: "#navbar-wrapper",
 
 	// TOC 相关
-	tableOfContents: "table-of-contents",
+	tableOfContents: "table-of-contents, docs-table-of-contents",
 
 	// 其他
 	contentWrapper: "#content-wrapper",

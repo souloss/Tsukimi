@@ -260,6 +260,8 @@ const routes = {
 	docsIndex: `${baseUrl}/docs/`,
 	home: `${baseUrl}/docs/tsukimi/`,
 	intro: `${baseUrl}/docs/tsukimi/guide/intro/`,
+	toc: `${baseUrl}/docs/tsukimi/feature/search/`,
+	tocTarget: `${baseUrl}/docs/tsukimi/feature/display-settings/`,
 	docker: `${baseUrl}/docs/tsukimi/guide/deploy/docker/`,
 	article: `${baseUrl}/posts/markdown-tutorial/`,
 };
@@ -296,6 +298,7 @@ async function checkDocsIndex(client) {
 						lightTheme.background !== darkTheme.background ||
 						lightTheme.color !== darkTheme.color,
 					cards: document.querySelectorAll(".docs-index-card").length,
+					search: !!document.querySelector(".search-modal-pill-btn"),
 					overflow: root.scrollWidth - root.clientWidth,
 				};
 			})()`,
@@ -303,6 +306,7 @@ async function checkDocsIndex(client) {
 		assertCheck("docs index uses docs layout", state.bodyDocs && state.indexPage && state.layout, JSON.stringify(state));
 		assertCheck("docs index does not reserve empty sidebars", state.sidebarDisplay === "none" && state.tocDisplay === "none" && state.paddingLeft === 0 && state.paddingRight === 0, JSON.stringify(state));
 		assertCheck("docs index cards render", state.cards > 0, JSON.stringify(state));
+		assertCheck("docs index search input renders", state.search, JSON.stringify(state));
 		assertCheck("docs index adapts to dark mode", state.themeChanges, JSON.stringify(state));
 		assertCheck("docs index has no horizontal overflow", state.overflow <= 1, JSON.stringify(state));
 	} finally {
@@ -517,6 +521,94 @@ async function checkSearch(client) {
 	}
 }
 
+async function checkDocsTOC(client) {
+	const page = await client.newPage(routes.toc, { width: 1440, height: 900 });
+	try {
+		const state = await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const toc = document.querySelector("docs-table-of-contents");
+				const links = Array.from(toc?.querySelectorAll("a[href^='#']") || []);
+				const headings = Array.from(document.querySelectorAll(".docs-markdown h1[id], .docs-markdown h2[id], .docs-markdown h3[id], .docs-markdown h4[id], .docs-markdown h5[id], .docs-markdown h6[id]"));
+				return {
+					tocDisplay: getComputedStyle(document.querySelector(".docs-toc-container")).display,
+					tocLinks: links.length,
+					headings: headings.length,
+					loaded: toc?.dataset.loaded === "true",
+					validTargets: links.every((link) => document.getElementById(link.getAttribute("href").slice(1))),
+				};
+			})()`,
+		);
+		assertCheck("docs toc renders for headed pages", state.tocDisplay !== "none" && state.loaded && state.tocLinks > 0 && state.headings > 0, JSON.stringify(state));
+		assertCheck("docs toc links target current headings", state.validTargets, JSON.stringify(state));
+
+		const clicked = await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const link = Array.from(document.querySelectorAll("docs-table-of-contents a[href^='#']")).at(-1);
+				if (!(link instanceof HTMLAnchorElement)) return false;
+				link.click();
+				return true;
+			})()`,
+		);
+		await wait(650);
+		const anchorState = await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const link = Array.from(document.querySelectorAll("docs-table-of-contents a[href^='#']")).at(-1);
+				const target = link ? document.getElementById(link.getAttribute("href").slice(1)) : null;
+				return {
+					targetVisible: !!target && target.getBoundingClientRect().top > -100 && target.getBoundingClientRect().top < window.innerHeight,
+				};
+			})()`,
+		);
+		assertCheck("docs toc anchor navigation reaches its heading", clicked && anchorState.targetVisible, JSON.stringify(anchorState));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
+
+async function checkDocsTOCLifecycle(client) {
+	const page = await client.newPage(routes.toc, { width: 1440, height: 900 });
+	try {
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const targetPath = "${new URL(routes.tocTarget).pathname}";
+				const link = document.querySelector('a[href="' + targetPath + '"]');
+				if (!(link instanceof HTMLAnchorElement)) {
+					throw new Error("Could not find the target docs navigation link");
+				}
+				link.click();
+				return true;
+			})()`,
+		);
+		const state = await client.waitFor(
+			page.sessionId,
+			`(() => {
+				const toc = document.querySelector("docs-table-of-contents");
+				const links = Array.from(toc?.querySelectorAll("a[href^='#']") || []);
+				const headings = Array.from(document.querySelectorAll(".docs-markdown h1[id], .docs-markdown h2[id], .docs-markdown h3[id], .docs-markdown h4[id], .docs-markdown h5[id], .docs-markdown h6[id]"));
+				return {
+					path: location.pathname,
+					tocLinks: links.length,
+					headings: headings.length,
+					validTargets: links.length > 0 && links.every((link) => document.getElementById(link.getAttribute("href").slice(1))),
+					targetHeading: !!document.getElementById("功能概览"),
+					search: !!document.querySelector(".search-modal-pill-btn"),
+					tocHidden: document.querySelector(".docs-toc-container")?.classList.contains("hidden") ?? true,
+				};
+			})()`,
+			(value) => value?.path === new URL(routes.tocTarget).pathname && value.targetHeading && value.tocLinks > 0 && value.validTargets,
+			12000,
+		);
+		assertCheck("docs toc rebuilds after an in-doc Swup navigation", state.validTargets && state.tocLinks > 0 && state.headings > 0 && !state.tocHidden, JSON.stringify(state));
+		assertCheck("docs search survives an in-doc Swup navigation", state.search, JSON.stringify(state));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
+
 async function checkDockerPage(client) {
 	const page = await client.newPage(routes.docker, { width: 1440, height: 900 });
 	try {
@@ -611,7 +703,8 @@ async function checkOverlayWallpaper(client) {
 					wallpaperPosition: wallpaper ? getComputedStyle(wallpaper).position : "static",
 					wallpaperWidth: rect?.width ?? 0,
 					wallpaperHeight: rect?.height ?? 0,
-					viewportWidth: window.innerWidth,
+					viewportWidth: document.documentElement.clientWidth,
+					innerWidth: window.innerWidth,
 					viewportHeight: window.innerHeight,
 					fullscreenDisplay: fullscreen ? getComputedStyle(fullscreen).display : "missing",
 					bannerDisplay: banner ? getComputedStyle(banner).display : "missing",
@@ -653,6 +746,10 @@ async function main() {
 		await checkDocsHome(client);
 		logStep("checking intro desktop");
 		await checkIntroDesktop(client);
+		logStep("checking docs toc");
+		await checkDocsTOC(client);
+		logStep("checking docs toc lifecycle");
+		await checkDocsTOCLifecycle(client);
 		logStep("checking intro mobile");
 		await checkIntroMobile(client);
 		logStep("checking docs search");

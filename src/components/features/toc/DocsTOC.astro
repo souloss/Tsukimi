@@ -1,7 +1,7 @@
 ---
 /**
  * DocsTOC - 文档页面专用目录组件
- * 直接渲染 <table-of-contents> Web Component，不使用 WidgetLayout 包裹
+ * 直接渲染 <docs-table-of-contents> Web Component，不使用 WidgetLayout 包裹
  * 配合 docs-toc-wrapper 的 VitePress 风格布局使用
  */
 
@@ -52,6 +52,8 @@ const { class: className } = Astro.props;
 		active: boolean[] = [];
 		activeIndicator: HTMLElement | null = null;
 		navbarHeight = 56;
+		regenerationTimer: number | null = null;
+		initializationTimer: number | null = null;
 
 		constructor() {
 			super();
@@ -197,7 +199,11 @@ const { class: className } = Astro.props;
 
 			const tryInit = () => {
 				if (!initialized) {
+					if (this.initializationTimer !== null) {
+						window.clearTimeout(this.initializationTimer);
+					}
 					initialized = true;
+					this.initializationTimer = null;
 					this.init();
 				}
 			};
@@ -205,15 +211,15 @@ const { class: className } = Astro.props;
 			const element = document.querySelector(".docs-prose") || document.querySelector(".prose");
 			if (element) {
 				element.addEventListener("animationend", tryInit, { once: true });
-				setTimeout(tryInit, 300);
+				this.initializationTimer = window.setTimeout(tryInit, 300);
 			} else {
 				tryInit();
-				setTimeout(tryInit, 300);
+				this.initializationTimer = window.setTimeout(tryInit, 300);
 			}
 		}
 
-		init() {
-			this.regenerateTOC();
+		init(retryCount = 0) {
+			this.regenerateTOC(retryCount);
 			this.tocEl = this;
 			this.scrollContainer =
 				(this.closest(".docs-toc-scroll-container") as HTMLElement | null) ||
@@ -251,7 +257,9 @@ const { class: className } = Astro.props;
 			}
 			this.active = new Array(this.tocEntries.length).fill(false);
 
-			this.sections.forEach((section) => this.observer.observe(section));
+			this.sections.forEach((section) => {
+				if (section) this.observer.observe(section);
+			});
 
 			this.fallback();
 			this.update();
@@ -261,7 +269,10 @@ const { class: className } = Astro.props;
 			const headings = extractHeadings();
 
 			if (headings.length === 0 && retryCount < 3) {
-				setTimeout(() => this.regenerateTOC(retryCount + 1), 120);
+				this.regenerationTimer = window.setTimeout(() => {
+					this.regenerationTimer = null;
+					this.init(retryCount + 1);
+				}, 120);
 				return;
 			}
 			if (headings.length === 0) {
@@ -313,12 +324,43 @@ const { class: className } = Astro.props;
 			this.dataset.loaded = "true";
 		}
 
-		disconnectedCallback() {
-			this.sections.forEach((section) =>
-				this.observer.unobserve(section),
-			);
+		reinit() {
+			this.cleanup();
+			this.innerHTML = "";
+			this.removeAttribute("data-loaded");
+			this.init();
+		}
+
+		cleanup() {
+			if (this.initializationTimer !== null) {
+				window.clearTimeout(this.initializationTimer);
+				this.initializationTimer = null;
+			}
+			if (this.regenerationTimer !== null) {
+				window.clearTimeout(this.regenerationTimer);
+				this.regenerationTimer = null;
+			}
+
+			this.sections.forEach((section) => {
+				if (section) this.observer.unobserve(section);
+			});
 			this.observer.disconnect();
-			this.tocEl?.removeEventListener("click", this.handleAnchorClick);
+			this.tocEl?.removeEventListener("click", this.handleAnchorClick, {
+				capture: true,
+			});
+			this.tocEl = null;
+			this.scrollContainer = null;
+			this.anchorNavTarget = null;
+			this.headingIdxMap.clear();
+			this.headings = [];
+			this.sections = [];
+			this.tocEntries = [];
+			this.active = [];
+			this.activeIndicator = null;
+		}
+
+		disconnectedCallback() {
+			this.cleanup();
 		}
 	}
 

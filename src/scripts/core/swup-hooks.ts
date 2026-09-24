@@ -225,33 +225,27 @@ export class SwupHooksManager {
 	 * 处理 TOC 重新初始化
 	 */
 	private handleTOCReinit(): void {
-		const tocElement = this.getCachedElement(SWUP_SELECTORS.tableOfContents);
-		const isArticlePage = tocElement !== null;
+		const tocElements = Array.from(
+			document.querySelectorAll(SWUP_SELECTORS.tableOfContents),
+		);
+		const hasMobileTOC = typeof (window as any).mobileTOCInit === "function";
 
-		if (isArticlePage) {
-			const tocElement = this.getCachedElement(
-				SWUP_SELECTORS.tableOfContents,
-			);
-			const hasDesktopTOC =
-				tocElement && (typeof (tocElement as any).reinit === "function" || typeof (tocElement as any).init === "function");
-			const hasMobileTOC =
-				typeof (window as any).mobileTOCInit === "function";
-
-			if (hasDesktopTOC || hasMobileTOC) {
-				setTimeout(() => {
-					if (hasDesktopTOC) {
-						if (typeof (tocElement as any).reinit === "function") {
-							(tocElement as any).reinit();
-						} else {
-							(tocElement as any).init();
-						}
-					}
-					if (hasMobileTOC) {
-						(window as any).mobileTOCInit();
-					}
-				}, ANIMATION_CONFIG.tocReadyDelay);
-			}
+		if (tocElements.length === 0 && !hasMobileTOC) {
+			return;
 		}
+
+		setTimeout(() => {
+			for (const tocElement of tocElements) {
+				if (typeof (tocElement as any).reinit === "function") {
+					(tocElement as any).reinit();
+				} else if (typeof (tocElement as any).init === "function") {
+					(tocElement as any).init();
+				}
+			}
+			if (hasMobileTOC) {
+				(window as any).mobileTOCInit();
+			}
+		}, ANIMATION_CONFIG.tocReadyDelay);
 	}
 
 	/**
