@@ -35,30 +35,24 @@ if (!desktopSrc && !mobileSrc) {
 	return null;
 }
 
-const positionStyles: Record<string, string> = {
-	"top-left": "top: 0; left: 0;",
-	"top-right": "top: 0; right: 0;",
-	"bottom-left": "bottom: 0; left: 0;",
-	"bottom-right": "bottom: 0; right: 0;",
-};
-const positionStyle =
-	positionStyles[config.position || "bottom-right"] ||
-	positionStyles["bottom-right"];
-const width = config.size?.width ?? 300;
-const height = config.size?.height ?? 400;
 const opacity = config.opacity ?? 0.9;
 const blur = config.blur ?? 0;
-const borderRadius = config.borderRadius ?? "1rem";
-const margin = config.margin ?? "1rem";
 const zIndex = config.zIndex ?? 10;
-const shadow = config.shadow === false ? "none" : "0 8px 32px rgb(0 0 0 / 0.2)";
+const legacyPositions: Record<string, string> = {
+	"top-left": "left top",
+	"top-right": "right top",
+	"bottom-left": "left bottom",
+	"bottom-right": "right bottom",
+};
+const configuredPosition = config.position ?? "center";
+const position = legacyPositions[configuredPosition] ?? configuredPosition;
 const active = defaultMode === "overlay";
 ---
 
 <div
 	data-overlay-wallpaper
-	class="pointer-events-none overflow-hidden transition-[opacity,filter,transform] duration-300"
-	style={`display: ${active ? "block" : "none"}; position: fixed; ${positionStyle} width: min(${width}px, calc(100vw - 2rem)); height: min(${height}px, calc(100vh - 2rem)); margin: ${margin}; z-index: ${zIndex}; border-radius: ${borderRadius}; box-shadow: ${shadow}; opacity: var(--overlay-opacity, ${opacity}); filter: blur(var(--overlay-blur, ${blur}px));`}
+	class="pointer-events-none fixed inset-0 h-screen w-screen overflow-hidden transition-[opacity,filter] duration-300"
+	style={`display: ${active ? "block" : "none"}; z-index: ${zIndex}; opacity: var(--wallpaper-opacity, ${opacity}); filter: blur(var(--wallpaper-blur, ${blur}px));`}
 >
 	{wallpaperSwitchable && (
 		<script is:inline define:vars={{ defaultMode }}>
@@ -69,12 +63,13 @@ const active = defaultMode === "overlay";
 			})();
 		</script>
 	)}
-	<picture>
+	<picture class="absolute inset-0 block h-full w-full">
 		{desktopSrc && <source media="(min-width: 768px)" srcset={desktopSrc} />}
 		<img
 			src={mobileSrc || desktopSrc}
 			alt=""
 			class="h-full w-full object-cover"
+			style={`object-position: ${position};`}
 			loading={active ? "eager" : "lazy"}
 			fetchpriority={active ? "high" : undefined}
 			decoding="async"

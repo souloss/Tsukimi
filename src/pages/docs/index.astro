@@ -1,7 +1,7 @@
 ---
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
-import MainGridLayout from "@layouts/MainGridLayout.astro";
+import DocsLayout from "@layouts/DocsLayout.astro";
 import { getDocProjectMeta, getDocProjectSlugs } from "@utils/docs-utils";
 import { Icon } from "astro-icon/components";
 
@@ -15,8 +15,12 @@ const docProjects = await Promise.all(
 );
 ---
 
-<MainGridLayout title={i18n(I18nKey.docs)} description="Documentation">
-	<div class="px-4 md:px-8 py-6 docs-index-content">
+<DocsLayout
+	title={i18n(I18nKey.docs)}
+	description="Documentation"
+	isHomePage={true}
+>
+	<div class="docs-index-content">
 		<h1 class="docs-index-title">{i18n(I18nKey.docs)}</h1>
 		<p class="docs-index-subtitle">Browse documentation projects</p>
 
@@ -66,4 +70,4 @@ const docProjects = await Promise.all(
 			))}
 		</div>
 	</div>
-</MainGridLayout>
+</DocsLayout>

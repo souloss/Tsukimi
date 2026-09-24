@@ -37,6 +37,7 @@
 	--docs-brand: var(--primary);
 	--docs-brand-dim: var(--primary-15);
 	--docs-brand-soft: var(--primary-30);
+	--docs-on-brand: var(--deep-text);
 
 	/* Borders & dividers */
 	--docs-divider: var(--line-divider);
@@ -71,19 +72,26 @@
 html.docs-page {
 	background: var(--docs-bg);
 	color: var(--docs-text-100);
+	color-scheme: light;
 }
 
 body.docs-page {
 	background: var(--docs-bg);
+	color: var(--docs-text-100);
+	overflow-x: hidden;
 }
 
-/* /docs/ index page uses MainGridLayout — override its background too */
+html.dark.docs-page {
+	color-scheme: dark;
+}
+
+/* Keep shared page containers on the docs theme. */
 body.docs-page .page-container,
 body.docs-page .main-grid-container {
 	background: var(--docs-bg);
 }
 
-/* /docs/ index page content area — uses MainGridLayout so needs scoped overrides */
+/* The docs project index uses the shared docs theme tokens. */
 .docs-index-content {
 	background: var(--docs-bg);
 }
@@ -162,6 +170,23 @@ body.docs-page #navbar-wrapper .card-base {
 	min-height: calc(100vh - var(--docs-navbar-height));
 	margin-top: var(--docs-navbar-height);
 	background: var(--docs-bg);
+}
+
+/* The project index has no navigation tree, so use the full content width. */
+.docs-layout-container.docs-layout-no-sidebar {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.docs-index-page .docs-sidebar-wrapper,
+.docs-index-page .docs-toc-wrapper,
+.docs-index-page .docs-sidebar-toggle {
+	display: none;
+}
+
+.docs-index-page .docs-content-wrapper #content-wrapper {
+	max-width: 1200px;
+	padding: 2.5rem 2rem 4rem;
 }
 
 /* ================================================================
@@ -894,7 +919,7 @@ body.docs-page .footer {
 
 .docs-home-action-brand {
 	background: var(--docs-brand);
-	color: var(--primary-fg);
+	color: var(--docs-on-brand);
 }
 
 .docs-home-action-brand:hover {
@@ -990,7 +1015,7 @@ body.docs-page .footer {
 	gap: 0.5rem;
 	padding: 0.75rem 1.5rem;
 	background: var(--docs-brand);
-	color: var(--primary-fg);
+	color: var(--docs-on-brand);
 	border-radius: 8px;
 	font-weight: 500;
 	text-decoration: none;
@@ -1035,7 +1060,7 @@ body.docs-page .footer {
 
 /* ================================================================
  * /docs/ index page — dark-mode-safe styles
- * (This page uses MainGridLayout, so we must override blog theme)
+ * (Keep the index page aligned with the docs theme)
  * ================================================================ */
 .docs-index-title {
 	font-size: 1.875rem;

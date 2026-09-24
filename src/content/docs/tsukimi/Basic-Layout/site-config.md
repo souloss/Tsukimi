@@ -400,38 +400,25 @@ export const siteConfig: SiteConfig = {
 ```typescript
 	overlay: {
 		src: "/assets/desktop-banner/1.webp", // 单张图片路径
-		position: "bottom-right", // 壁纸位置："top-left", "top-right", "bottom-left", "bottom-right"
-		size: {
-			width: 300, // 宽度(px)
-			height: 400, // 高度(px)
-		},
+		position: "center top", // 支持 CSS object-position 值
 		opacity: 0.9, // 壁纸透明度，0-1
 		blur: 0, // 背景模糊度，单位 px
 		cardOpacity: 0.9, // 卡片背景透明度，0-1
-		borderRadius: "1rem", // 圆角
-		margin: "1rem", // 外边距
 		zIndex: 0, // 层级
-		shadow: true, // 是否显示阴影
 		switchable: {
 			opacity: true, // 是否允许用户调整壁纸透明度
 			blur: true, // 是否允许用户调整背景模糊度
 			cardOpacity: true, // 是否允许用户调整卡片透明度
 		},
-	},
+},
 ```
-- `overlay`：叠加层壁纸模式配置（可选，小图角落显示）
+- `overlay`：叠加层壁纸模式配置（可选，将图片铺满视口，内容卡片保持半透明）
   - `src`：图片路径（支持单个字符串、数组或 `{ desktop, mobile }` 对象）
-  - `position`：壁纸位置：`"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`
-  - `size`：壁纸尺寸
-    - `width`：宽度(px)
-    - `height`：高度(px)
+  - `position`：图片定位，支持 CSS `object-position` 值，也兼容 `"top-left"` 等旧别名
   - `opacity`：壁纸透明度，0-1 之间
   - `blur`：背景模糊度，单位 px
   - `cardOpacity`：卡片背景透明度，0-1 之间
-  - `borderRadius`：圆角
-  - `margin`：外边距
   - `zIndex`：层级
-  - `shadow`：是否显示阴影
   - `switchable`：用户可调整的选项（支持 `boolean` 或对象形式）
     - `opacity`：是否允许用户调整壁纸透明度
     - `blur`：是否允许用户调整背景模糊度

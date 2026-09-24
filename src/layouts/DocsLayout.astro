@@ -77,12 +77,16 @@ if (title) {
 }
 
 const siteLang = (lang || siteConfig.lang).replace("_", "-");
+const isDocsIndexPage = isHomePage && !docSlug;
 ---
 
 <!doctype html>
 <html
 	lang={siteLang}
-	class="docs-page text-[14px] md:text-[16px]"
+	class:list={[
+		"docs-page text-[14px] md:text-[16px]",
+		{ "docs-index-page": isDocsIndexPage },
+	]}
 	data-overlayscrollbars-initialize
 >
 	<head>
@@ -105,7 +109,10 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 			}}
 		></style>
 	</head>
-	<body class="min-h-screen docs-page" data-overlayscrollbars-initialize>
+	<body
+		class:list={["min-h-screen docs-page", { "docs-index-page": isDocsIndexPage }]}
+		data-overlayscrollbars-initialize
+	>
 		<ConfigCarrier />
 		<PageProgressBar
 			enable={siteConfig.pageProgressBar?.enable ?? false}
@@ -119,7 +126,7 @@ const siteLang = (lang || siteConfig.lang).replace("_", "-");
 		</header>
 
 		<!-- Docs Main Layout: full-screen with fixed sidebar and TOC -->
-		<div class="docs-layout-container">
+		<div class:list={["docs-layout-container", { "docs-layout-no-sidebar": isDocsIndexPage }]}>
 			<!-- Mobile sidebar toggle -->
 			<button
 				class="docs-sidebar-toggle"

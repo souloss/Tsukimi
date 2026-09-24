@@ -1029,23 +1029,10 @@ export function applyOverlayOpacityToDocument(opacity: number): void {
 		return;
 	}
 	const safeOpacity = clampNumber(opacity, 0, 1);
-	// Corner card overlay
-	const wallpaperWrapper = document.getElementById("wallpaper-wrapper");
-	if (wallpaperWrapper) {
-		wallpaperWrapper.style.setProperty(
-			"--overlay-opacity",
-			String(safeOpacity),
-		);
-	}
-	// Full-page background
-	const fullscreenWallpaper = document.querySelector(
-		"[data-fullscreen-wallpaper]",
-	) as HTMLElement | null;
-	if (fullscreenWallpaper) {
-		fullscreenWallpaper.style.setProperty(
-			"--wallpaper-opacity",
-			String(safeOpacity),
-		);
+	for (const wallpaper of document.querySelectorAll<HTMLElement>(
+		"[data-overlay-wallpaper]",
+	)) {
+		wallpaper.style.setProperty("--wallpaper-opacity", String(safeOpacity));
 	}
 }
 
@@ -1054,17 +1041,10 @@ export function applyOverlayBlurToDocument(blur: number): void {
 		return;
 	}
 	const safeBlur = clampNumber(blur, 0, 20);
-	// Corner card overlay
-	const wallpaperWrapper = document.getElementById("wallpaper-wrapper");
-	if (wallpaperWrapper) {
-		wallpaperWrapper.style.setProperty("--overlay-blur", `${safeBlur}px`);
-	}
-	// Full-page background
-	const fullscreenWallpaper = document.querySelector(
-		"[data-fullscreen-wallpaper]",
-	) as HTMLElement | null;
-	if (fullscreenWallpaper) {
-		fullscreenWallpaper.style.setProperty("--wallpaper-blur", `${safeBlur}px`);
+	for (const wallpaper of document.querySelectorAll<HTMLElement>(
+		"[data-overlay-wallpaper]",
+	)) {
+		wallpaper.style.setProperty("--wallpaper-blur", `${safeBlur}px`);
 	}
 }
 

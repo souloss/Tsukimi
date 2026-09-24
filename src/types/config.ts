@@ -813,7 +813,8 @@ export interface BackgroundWallpaperConfig {
 			| string
 			| string[]
 			| { desktop?: string | string[]; mobile?: string | string[] };
-		position?: string; // 壁纸位置："top-left" | "top-right" | "bottom-left" | "bottom-right"
+		position?: string; // 图片定位，支持 CSS object-position 值
+		/** @deprecated Overlay is a full-viewport background; this legacy field is ignored. */
 		size?: {
 			width?: number; // 宽度(px)
 			height?: number; // 高度(px)
@@ -829,9 +830,12 @@ export interface BackgroundWallpaperConfig {
 		opacity?: number; // 壁纸透明度，0-1之间
 		blur?: number; // 背景模糊度，单位px
 		cardOpacity?: number; // 卡片背景透明度，0-1之间
-		borderRadius?: string; // 圆角
-		margin?: string; // 外边距
-		shadow?: boolean; // 是否显示阴影
+		/** @deprecated Overlay is a full-viewport background; this legacy field is ignored. */
+		borderRadius?: string;
+		/** @deprecated Overlay is a full-viewport background; this legacy field is ignored. */
+		margin?: string;
+		/** @deprecated Overlay is a full-viewport background; this legacy field is ignored. */
+		shadow?: boolean;
 	};
 }
 

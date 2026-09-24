@@ -124,20 +124,16 @@ Fullscreen 模式特有配置：
 
 ### 3. Overlay 模式（覆盖层模式）
 
-Overlay 模式在页面角落显示一张装饰性图片。
+Overlay 模式将图片覆盖整个视口作为页面背景，正文卡片会使用半透明效果。
 
 ```typescript
 overlay: {
     src: "/assets/desktop-banner/1.png",
-    position: "bottom-right",  // "top-left" | "top-right" | "bottom-left" | "bottom-right"
-    size: { width: 300, height: 400 },
+    position: "center top",
     opacity: 0.9,
     blur: 0,
     cardOpacity: 0.9,
-    borderRadius: "1rem",
-    margin: "1rem",
     zIndex: 0,
-    shadow: true,
     switchable: {
         opacity: true,
         blur: true,
@@ -150,11 +146,12 @@ Overlay 模式特有配置：
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `size` | `{width, height}` | 图片尺寸(px) |
+| `src` | `string \| string[] \| {desktop?, mobile?}` | 全屏背景图片源 |
+| `position` | `string` | 图片定位，使用 CSS `object-position` 值（兼容 `top-left` 等旧别名） |
+| `zIndex` | `number` | 壁纸背景层级 |
+| `opacity` | `number` | 壁纸透明度，0-1 |
+| `blur` | `number` | 壁纸模糊度(px) |
 | `cardOpacity` | `number` | 卡片区域透明度 |
-| `borderRadius` | `string` | 圆角半径 |
-| `margin` | `string` | 外边距 |
-| `shadow` | `boolean` | 是否显示阴影 |
 | `switchable` | `{opacity?, blur?, cardOpacity?}` | 各属性是否允许用户调整 |
 
 ### 4. None 模式（无壁纸模式）

@@ -257,11 +257,58 @@ class CdpClient {
 }
 
 const routes = {
+	docsIndex: `${baseUrl}/docs/`,
 	home: `${baseUrl}/docs/tsukimi/`,
 	intro: `${baseUrl}/docs/tsukimi/guide/intro/`,
 	docker: `${baseUrl}/docs/tsukimi/guide/deploy/docker/`,
 	article: `${baseUrl}/posts/markdown-tutorial/`,
 };
+
+async function checkDocsIndex(client) {
+	const page = await client.newPage(routes.docsIndex, { width: 1440, height: 900 });
+	try {
+		const state = await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const root = document.documentElement;
+				const layout = document.querySelector(".docs-layout-container");
+				const sidebar = document.querySelector(".docs-sidebar-wrapper");
+				const toc = document.querySelector(".docs-toc-wrapper");
+				const lightTheme = {
+					background: getComputedStyle(document.body).backgroundColor,
+					color: getComputedStyle(document.body).color,
+				};
+				root.classList.add("dark");
+				const darkTheme = {
+					background: getComputedStyle(document.body).backgroundColor,
+					color: getComputedStyle(document.body).color,
+				};
+				root.classList.remove("dark");
+				return {
+					bodyDocs: document.body.classList.contains("docs-page"),
+					indexPage: document.body.classList.contains("docs-index-page"),
+					layout: !!layout,
+					paddingLeft: layout ? parseFloat(getComputedStyle(layout).paddingLeft) : null,
+					paddingRight: layout ? parseFloat(getComputedStyle(layout).paddingRight) : null,
+					sidebarDisplay: sidebar ? getComputedStyle(sidebar).display : "missing",
+					tocDisplay: toc ? getComputedStyle(toc).display : "missing",
+					themeChanges:
+						lightTheme.background !== darkTheme.background ||
+						lightTheme.color !== darkTheme.color,
+					cards: document.querySelectorAll(".docs-index-card").length,
+					overflow: root.scrollWidth - root.clientWidth,
+				};
+			})()`,
+		);
+		assertCheck("docs index uses docs layout", state.bodyDocs && state.indexPage && state.layout, JSON.stringify(state));
+		assertCheck("docs index does not reserve empty sidebars", state.sidebarDisplay === "none" && state.tocDisplay === "none" && state.paddingLeft === 0 && state.paddingRight === 0, JSON.stringify(state));
+		assertCheck("docs index cards render", state.cards > 0, JSON.stringify(state));
+		assertCheck("docs index adapts to dark mode", state.themeChanges, JSON.stringify(state));
+		assertCheck("docs index has no horizontal overflow", state.overflow <= 1, JSON.stringify(state));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
 
 async function checkDocsHome(client) {
 	const page = await client.newPage(routes.home, { width: 1440, height: 900 });
@@ -539,6 +586,46 @@ async function checkNonDocsIsolation(client) {
 	}
 }
 
+async function checkOverlayWallpaper(client) {
+	const page = await client.newPage(routes.article, { width: 1440, height: 900 });
+	try {
+		await client.evaluate(
+			page.sessionId,
+			`(() => {
+				localStorage.setItem("wallpaperMode", "overlay");
+				location.reload();
+				return true;
+			})()`,
+		);
+		await client.waitFor(page.sessionId, `document.readyState !== "loading"`, (value) => value === true, 12000);
+		await wait(500);
+		const state = await client.evaluate(
+			page.sessionId,
+			`(() => {
+				const wallpaper = document.querySelector("[data-overlay-wallpaper]");
+				const fullscreen = document.querySelector("[data-fullscreen-wallpaper]");
+				const banner = document.querySelector("#wallpaper-wrapper");
+				const rect = wallpaper?.getBoundingClientRect();
+				return {
+					wallpaperDisplay: wallpaper ? getComputedStyle(wallpaper).display : "none",
+					wallpaperPosition: wallpaper ? getComputedStyle(wallpaper).position : "static",
+					wallpaperWidth: rect?.width ?? 0,
+					wallpaperHeight: rect?.height ?? 0,
+					viewportWidth: window.innerWidth,
+					viewportHeight: window.innerHeight,
+					fullscreenDisplay: fullscreen ? getComputedStyle(fullscreen).display : "missing",
+					bannerDisplay: banner ? getComputedStyle(banner).display : "missing",
+					transparent: document.body.classList.contains("wallpaper-transparent"),
+				};
+			})()`,
+		);
+		assertCheck("overlay wallpaper fills the viewport", state.wallpaperDisplay === "block" && state.wallpaperPosition === "fixed" && Math.abs(state.wallpaperWidth - state.viewportWidth) <= 1 && Math.abs(state.wallpaperHeight - state.viewportHeight) <= 1, JSON.stringify(state));
+		assertCheck("overlay mode hides other wallpaper layers", state.fullscreenDisplay === "none" && state.bannerDisplay === "none" && state.transparent, JSON.stringify(state));
+	} finally {
+		await client.closePage(page.targetId);
+	}
+}
+
 function printSummary() {
 	for (const check of checks) {
 		const prefix = check.passed ? "ok" : "not ok";
@@ -561,6 +648,8 @@ async function main() {
 		logStep("connecting to chrome");
 		await client.connect();
 		logStep("checking docs home");
+		await checkDocsIndex(client);
+		logStep("checking documentation project home");
 		await checkDocsHome(client);
 		logStep("checking intro desktop");
 		await checkIntroDesktop(client);
@@ -572,6 +661,8 @@ async function main() {
 		await checkDockerPage(client);
 		logStep("checking non-doc isolation");
 		await checkNonDocsIsolation(client);
+		logStep("checking overlay wallpaper");
+		await checkOverlayWallpaper(client);
 	} finally {
 		client.close();
 		await chrome.close();

@@ -85,21 +85,14 @@ const defaults: BackgroundWallpaperConfig = {
 			blur: 10,
 		},
 	},
-	// 叠加层壁纸模式配置（小图角落显示）
+	// 叠加层壁纸模式配置（全屏背景，内容卡片保持半透明）
 	overlay: {
 		src: "/assets/desktop-banner/1.webp",
-		position: "bottom-right", // top-left | top-right | bottom-left | bottom-right
-		size: {
-			width: 300,
-			height: 400,
-		},
+		position: "center top",
 		opacity: 0.9,
 		blur: 0,
 		cardOpacity: 0.9,
-		borderRadius: "1rem",
-		margin: "1rem",
 		zIndex: 0,
-		shadow: true,
 		switchable: {
 			opacity: true,
 			blur: true,
