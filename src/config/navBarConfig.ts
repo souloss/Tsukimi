@@ -27,6 +27,11 @@ const defaults: NavBarConfig = {
 					icon: "material-symbols:list-alt-rounded",
 				},
 				{
+					name: "Knowledge Graph",
+					url: "/knowledge-graph/",
+					icon: "material-symbols:hub-outline",
+				},
+				{
 					name: "Reposts",
 					url: "/reposts/",
 					icon: "material-symbols:content-copy",

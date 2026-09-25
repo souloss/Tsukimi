@@ -430,6 +430,9 @@ export const ja: Translation = {
 	// タグクラウド & カテゴリページ
 	[Key.tagsPage]: "タグクラウド",
 	[Key.tagsPageSubtitle]: "すべてのタグを閲覧",
+	[Key.knowledgeGraph]: "記事ナレッジグラフ",
+	[Key.knowledgeGraphSubtitle]:
+		"内部リンクと共通テーマをたどり、記事同士のつながりを発見します。",
 	[Key.categoriesPage]: "カテゴリ",
 	[Key.categoriesPageSubtitle]: "すべてのカテゴリを閲覧",
 	[Key.tagSearchPlaceholder]: "タグを検索...",

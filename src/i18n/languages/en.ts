@@ -428,6 +428,9 @@ export const en: Translation = {
 	// Tags Cloud & Categories Page
 	[Key.tagsPage]: "Tags",
 	[Key.tagsPageSubtitle]: "Browse all tags",
+	[Key.knowledgeGraph]: "Knowledge Graph",
+	[Key.knowledgeGraphSubtitle]:
+		"Follow internal links and shared topics to discover paths between articles.",
 	[Key.categoriesPage]: "Categories",
 	[Key.categoriesPageSubtitle]: "Browse all categories",
 	[Key.tagSearchPlaceholder]: "Search tags...",

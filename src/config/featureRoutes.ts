@@ -13,4 +13,5 @@ export const featurePageRoutes = {
 	reposts: "/reposts/",
 	guestbook: "/guestbook/",
 	sponsor: "/sponsor/",
+	knowledgeGraph: "/knowledge-graph/",
 } satisfies Record<keyof SiteConfig["featurePages"], string>;

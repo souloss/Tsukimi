@@ -26,6 +26,7 @@ const featurePageFiles = {
 	reposts: "src/pages/reposts.astro",
 	guestbook: "src/pages/guestbook.astro",
 	sponsor: "src/pages/sponsor.astro",
+	knowledgeGraph: "src/pages/knowledge-graph.astro",
 };
 
 const renderedSidebarTypes = new Set([

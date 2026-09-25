@@ -134,6 +134,7 @@ export type SiteConfig = {
 		reposts: boolean; // 转载页面开关
 		guestbook: boolean; // 留言板页面开关
 		sponsor: boolean; // 赞助页面开关
+		knowledgeGraph: boolean; // 知识图谱页面开关
 	};
 
 	// 分类导航栏开关

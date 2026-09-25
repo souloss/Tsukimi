@@ -72,6 +72,9 @@ importers:
       bytefield-svg:
         specifier: 1.11.0
         version: 1.11.0
+      d3-force:
+        specifier: 3.0.0
+        version: 3.0.0
       dayjs:
         specifier: ^1.11.23
         version: 1.11.23
@@ -205,6 +208,9 @@ importers:
       '@iconify-json/vscode-icons':
         specifier: ^1.2.76
         version: 1.2.76
+      '@types/d3-force':
+        specifier: 3.0.10
+        version: 3.0.10
       '@types/hast':
         specifier: ^3.0.5
         version: 3.0.5
@@ -2035,6 +2041,9 @@ packages:
 
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
+
+  '@types/d3-force@3.0.10':
+    resolution: {integrity: sha512-ZYeSaCF3p73RdOKcjj+swRlZfnYpK1EbaDiYICEEp5Q6sUiqFaFQ9qgoshp5CzIyyb/yD09kD9o2zEltCexlgw==}
 
   '@types/debug@4.1.13':
     resolution: {integrity: sha512-KSVgmQmzMwPlmtljOomayoR89W4FynCAi3E8PPs7vmDVPe84hT+vGPKkJfThkmXs0x0jAaa9U8uW8bbfyS2fWw==}
@@ -7782,6 +7791,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@types/d3-force@3.0.10': {}
 
   '@types/debug@4.1.13':
     dependencies:

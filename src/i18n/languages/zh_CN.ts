@@ -412,6 +412,9 @@ export const zh_CN: Translation = {
 	// 标签云 & 分类页面
 	[Key.tagsPage]: "标签云",
 	[Key.tagsPageSubtitle]: "浏览所有标签",
+	[Key.knowledgeGraph]: "文章知识图谱",
+	[Key.knowledgeGraphSubtitle]:
+		"沿着真实内链与共同主题，发现文章之间的隐性路径。",
 	[Key.categoriesPage]: "分类",
 	[Key.categoriesPageSubtitle]: "浏览所有分类",
 	[Key.tagSearchPlaceholder]: "搜索标签...",

@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import KnowledgeGraph from "@components/features/knowledge-graph/KnowledgeGraph.svelte";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { buildKnowledgeGraph } from "@utils/knowledge-graph";
+import { initPostIdMap } from "@utils/permalink-utils";
+import { siteConfig } from "@/config";
+
+if (!siteConfig.featurePages.knowledgeGraph) {
+	return Astro.redirect("/404/");
+}
+
+const posts = (
+	await getCollection("posts", ({ data }) => data.draft !== true)
+).sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+initPostIdMap(posts);
+const graph = await buildKnowledgeGraph(posts);
+const title = i18n(I18nKey.knowledgeGraph);
+const subtitle = i18n(I18nKey.knowledgeGraphSubtitle);
+---
+
+<MainGridLayout title={title} description={subtitle}>
+	<script>
+		import("../scripts/right-sidebar-layout.js");
+	</script>
+	<div class="knowledge-graph-page px-3 py-4 sm:px-5 sm:py-6">
+		<KnowledgeGraph graph={graph} client:load />
+	</div>
+</MainGridLayout>

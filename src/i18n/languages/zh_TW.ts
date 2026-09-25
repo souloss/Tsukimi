@@ -414,6 +414,9 @@ export const zh_TW: Translation = {
 	// 標籤雲 & 分類頁面
 	[Key.tagsPage]: "標籤雲",
 	[Key.tagsPageSubtitle]: "瀏覽所有標籤",
+	[Key.knowledgeGraph]: "文章知識圖譜",
+	[Key.knowledgeGraphSubtitle]:
+		"沿著真實內鏈與共同主題，發現文章之間的隱性路徑。",
 	[Key.categoriesPage]: "分類",
 	[Key.categoriesPageSubtitle]: "瀏覽所有分類",
 	[Key.tagSearchPlaceholder]: "搜尋標籤...",

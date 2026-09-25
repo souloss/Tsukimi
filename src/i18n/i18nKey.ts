@@ -428,6 +428,8 @@ enum I18nKey {
 	// 标签云 & 分类页面
 	tagsPage = "tagsPage",
 	tagsPageSubtitle = "tagsPageSubtitle",
+	knowledgeGraph = "knowledgeGraph",
+	knowledgeGraphSubtitle = "knowledgeGraphSubtitle",
 	categoriesPage = "categoriesPage",
 	categoriesPageSubtitle = "categoriesPageSubtitle",
 	tagSearchPlaceholder = "tagSearchPlaceholder",

@@ -31,6 +31,7 @@ const defaults: SiteConfig = {
 		reposts: true,
 		guestbook: true,
 		sponsor: true,
+		knowledgeGraph: true,
 	},
 
 	navbarTitle: {
