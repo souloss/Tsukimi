@@ -78,7 +78,7 @@ draft: false
 ---
 ```
 
-文章字段、系列、转载、加密和固定链接见[文章 frontmatter](/docs/tsukimi/press/article-types/)。Markdown 扩展见 [Markdown 语法](/docs/tsukimi/press/markdown/)。
+文章字段、系列、转载、加密和固定链接见[文章 frontmatter](/docs/tsukimi/press/article-types/frontmatter/)。Markdown 扩展见 [Markdown 语法](/docs/tsukimi/press/markdown/markdown/) 和[指令参考](/docs/tsukimi/press/markdown/directives/)。
 
 ## 构建与预览
 
@@ -107,4 +107,4 @@ CONTENT_REPO_URL=https://github.com/your-name/your-content.git
 - [站点配置](/docs/tsukimi/basic-layout/site-config/)
 - [配置模块化与覆盖](/docs/tsukimi/basic-layout/config-modularization/)
 - [侧边栏布局](/docs/tsukimi/sidepanel/global/)
-- [部署指南](/docs/tsukimi/guide/deploy/)
+- [GitHub Pages 部署指南](/docs/tsukimi/guide/deploy/github/)

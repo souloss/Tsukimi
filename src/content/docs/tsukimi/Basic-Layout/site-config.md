@@ -91,28 +91,38 @@ featurePages: {
 
 ## 导航栏标题与导航
 
-站点标题和导航菜单由两个模块共同控制：
+顶部品牌区由 `siteConfig.navbarTitle` 控制，菜单链接和下拉菜单由 `src/config/navBarConfig.ts` 控制。`navbarTitle` 同时用于博客页与文档页导航栏；未配置该对象时，导航栏使用 `siteConfig.title` 和默认图标。设置对象后，按 `mode` 选择文字加图标或 Logo 图片。
 
-- `navbarTitle`：旧版标题区域的文字/图标/Logo 组合。
-- `navbar`：当前导航栏的 Logo、标题、宽度、对齐、跟随主题和吸顶行为。
-- `src/config/navBarConfig.ts`：导航链接、下拉菜单和 Pagefind 搜索入口。
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `navbarTitle.mode` | `text-icon \| logo` | `text-icon` 显示文字和图标；`logo` 显示图片。 |
+| `navbarTitle.text` | `string` | 品牌文字；Logo 模式下也用作图片替代文本。 |
+| `navbarTitle.icon` | `string` | `text-icon` 模式使用的图标图片路径。 |
+| `navbarTitle.logo` | `string` | `logo` 模式使用的图片路径。 |
 
 ```ts
-navbar: {
-  stickyNavbar: true,
-  title: "我的博客",
-  logo: {
-    type: "image",
-    value: "assets/home/default-logo.webp",
-    alt: "站点 Logo",
-  },
-  menuAlign: "left",
-  widthFull: false,
-  followTheme: false,
+navbarTitle: {
+  mode: "text-icon",
+  text: "我的博客",
+  icon: "assets/home/home-128.webp",
+  logo: "assets/home/default-logo.webp",
 },
 ```
 
-本地图片通常放在 `src/assets/`（由 Astro 处理）或 `public/`（以 `/...` URL 引用）。详细菜单结构见[导航栏配置](/docs/tsukimi/basic-layout/navbarconfig/)。
+本地图片通常放在 `src/assets/`（由 Astro 处理）或 `public/`（以 `/...` URL 引用）。`siteConfig.navbar.stickyNavbar` 设置访客尚未选择时的吸顶导航默认值；访客可以在显示设置中覆盖，选择保存在浏览器本地。菜单结构和 Pagefind 搜索入口见[导航栏配置](/docs/tsukimi/basic-layout/navbarconfig/)。
+
+## 超宽屏页面缩放
+
+`pageScaling` 仅调整桌面端根字号，避免宽屏下布局显得过小；它不会放大页面。默认在宽度不超过 `1280px`、触屏设备或竖屏时不调整。桌面端按视口宽度与 `targetWidth` 的比例缩小根字号，缩放范围限制为 `85%` 到 `100%`。
+
+```ts
+pageScaling: {
+  enable: true,
+  targetWidth: 2000,
+},
+```
+
+`targetWidth` 是根字号达到 `100%` 的参考宽度，默认 `2000`；例如宽度为 `1600px` 时比例会被限制在 `85%`，宽度达到或超过参考值时使用 `100%`。完整行为和注意事项见[页面自动缩放](/docs/tsukimi/basic-layout/auto-res-algo/)。
 
 ## 首页文章列表
 
@@ -203,7 +213,7 @@ pageProgressBar: {
 },
 ```
 
-目录和分享功能还受文章模板、`shareConfig` 以及评论/赞助页面配置影响。可选的 `outdatedThreshold` 用于控制文章编辑卡片何时显示。
+目录由 `toc` 控制；文章底部的分享海报由 `sharePoster` 控制，赞助按钮由 `sponsorConfig.showButtonInPost` 和赞助特色页开关共同控制。`showLastModified` 控制文章编辑信息卡片是否显示；单篇文章的 `updated` 日期见[Frontmatter 参考](/docs/tsukimi/press/article-types/frontmatter/)。
 
 ## 统计与隐私
 
@@ -233,7 +243,7 @@ thirdPartyAnalytics: {
 },
 ```
 
-第三方脚本会影响隐私与性能。会话回放必须评估遮罩和法律合规；不要把用户输入或敏感页面纳入录制。当前 `analytics.googleAnalyticsId`、`analytics.microsoftClarityId` 和 `analytics.la51Analytics` 只是类型兼容字段，不会被 `AnalyticsScripts.astro` 自动加载。更多字段见[统计分析](/docs/tsukimi/other/analytics/)和 [Umami 配置](/docs/tsukimi/feature/umami-config/)。
+第三方脚本会影响隐私与性能。会话回放必须评估遮罩和法律合规；不要把用户输入或敏感页面纳入录制。更多字段见[统计分析](/docs/tsukimi/other/analytics/)和 [Umami 配置](/docs/tsukimi/feature/umami-config/)。
 
 ### OG 图片与 favicon
 
@@ -242,7 +252,7 @@ generateOgImages: false,
 favicon: [],
 ```
 
-OG 图片按文章路由生成，开启后会增加构建耗时；`favicon` 可提供多个带 `src`、`theme` 和 `sizes` 的图标。图片转换由构建脚本和 Astro 资源管线负责，不要把类型定义中的 `imageOptimization` 当作当前运行时配置。
+OG 图片按文章路由生成，开启后会增加构建耗时；`favicon` 可提供多个带 `src`、`theme` 和 `sizes` 的图标。仓库另有手动静态图片转换脚本，但不会在构建或运行时自动改写文章图片；见[静态图片转换](/docs/tsukimi/basic-layout/image-optimization/)。
 
 ## 番剧与动态
 
@@ -274,13 +284,13 @@ talkingShowComment: true,
 | `backgroundWallpaperConfig` | Banner、全屏、叠加层和无壁纸模式。 |
 | `navBarConfig` | 菜单项、下拉菜单和搜索入口。 |
 | `sidebarLayoutConfig` | 左/右/抽屉侧栏及响应式组件。 |
-| `commentConfig` | 当前渲染 Twikoo、Waline、Giscus；Disqus/Artalk 仅保留遗留类型。 |
+| `commentConfig` | 支持 Twikoo、Waline、Giscus，详见对应评论配置文档。 |
 | `musicPlayerConfig` | 本地或 Meting 播放列表。 |
 | `effectsConfig` | 樱花等视觉特效。 |
 | `fontConfig` | 字体选项与用户端切换。 |
 | `expressiveCodeConfig` | 代码块明暗主题、折叠和语言徽章。 |
 | `relatedPostsConfig` / `randomPostsConfig` | 文章底部推荐。 |
-| `shareConfig` / `sponsorConfig` | 分享与赞助入口。 |
+| `siteConfig.sharePoster` / `sponsorConfig` | 文章分享海报与赞助入口。 |
 | `permalinkConfig` / `licenseConfig` | 全局固定链接与版权声明。 |
 
 完成修改后运行 `pnpm check`；涉及 OG、图表、数据更新或路由时再运行 `pnpm build`，并在 `pnpm preview` 中确认生产结果。

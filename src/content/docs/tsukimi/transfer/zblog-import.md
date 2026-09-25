@@ -85,8 +85,8 @@ SELECT
     log_ID AS id,
     log_Title AS title,
     log_Content AS content,
-    log_PostTime AS pubDate,
-    log_UpdateTime AS updatedDate, -- Z-Blog 可能没有直接的更新时间字段，需要根据实际情况调整
+    log_PostTime AS published,
+    log_UpdateTime AS updated, -- Z-Blog 可能没有直接的更新时间字段，需要根据实际情况调整
     log_Intro AS description,
     log_Tag AS tags,
     log_CateID AS category_id,
@@ -128,8 +128,8 @@ def convert_html_to_markdown(html_content):
 def generate_frontmatter(post_data):
     # 假设 post_data 包含从数据库导出的字段
     title = post_data.get('title', '无标题文章')
-    pub_date = datetime.fromtimestamp(post_data.get('pubDate')).strftime('%Y-%m-%d') if post_data.get('pubDate') else datetime.now().strftime('%Y-%m-%d')
-    updated_date = datetime.fromtimestamp(post_data.get('updatedDate')).strftime('%Y-%m-%d') if post_data.get('updatedDate') else pub_date
+    published = datetime.fromtimestamp(post_data.get('published')).strftime('%Y-%m-%d') if post_data.get('published') else datetime.now().strftime('%Y-%m-%d')
+    updated = datetime.fromtimestamp(post_data.get('updated')).strftime('%Y-%m-%d') if post_data.get('updated') else published
     description = post_data.get('description', '')
     tags = [tag.strip() for tag in post_data.get('tags', '').split(',') if tag.strip()] # Z-Blog 标签可能以逗号分隔
     category = post_data.get('category_name', '未分类') # 需要通过 category_id 关联获取分类名称
@@ -137,8 +137,8 @@ def generate_frontmatter(post_data):
 
     fm = {
         'title': title,
-        'pubDate': pub_date,
-        'updatedDate': updated_date,
+        'published': published,
+        'updated': updated,
         'description': description,
         'tags': tags,
         'category': category,
@@ -164,8 +164,8 @@ def migrate_zblog_posts(db_path, output_dir):
         
         post_data = {
             'title': title,
-            'pubDate': pub_time,
-            'updatedDate': pub_time, # Z-Blog 可能没有直接的更新时间，这里暂时用发布时间
+            'published': pub_time,
+            'updated': pub_time, # Z-Blog 可能没有直接的更新时间，这里暂时用发布时间
             'description': intro,
             'tags': tags_str,
             'category_name': category_map.get(cate_id, '未分类'),

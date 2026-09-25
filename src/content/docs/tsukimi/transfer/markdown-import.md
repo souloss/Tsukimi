@@ -62,12 +62,12 @@ draft: false
 ```markdown
 ---
 title: "我的第一篇文章"
-pubDate: 2024-01-15
-updatedDate: 2024-01-16
+published: 2024-01-15
+updated: 2024-01-16
 description: "这是文章描述"
 tags: ["技术", "教程"]
 category: "技术分享"
-cover: "/images/cover.jpg"
+image: "/images/cover.jpg"
 draft: false
 ---
 
@@ -97,26 +97,26 @@ draft: false
 
 #### 必需字段：
 - `title`: 文章标题
-- `pubDate`: 发布日期 (格式: `YYYY-MM-DD`)
+- `published`: 发布日期 (格式: `YYYY-MM-DD`)
 
 #### 推荐字段：
-- `updatedDate`: 更新日期 (格式: `YYYY-MM-DD`)
+- `updated`: 更新日期 (格式: `YYYY-MM-DD`)
 - `description`: 文章描述或摘要
 - `tags`: 标签列表 (格式: `["标签1", "标签2"]`)
 - `category`: 分类 (格式: `"分类名称"`)
-- `cover`: 文章封面图片路径 (格式: `"/images/cover.jpg"`)
+- `image`: 文章封面图片路径 (格式: `"/images/cover.jpg"`)
 - `draft`: 是否为草稿 (格式: `true` 或 `false`)
 
 #### 示例 Frontmatter：
 ```yaml
 ---
 title: "您的文章标题"
-pubDate: 2024-01-01
-updatedDate: 2024-01-01
+published: 2024-01-01
+updated: 2024-01-01
 description: "您的文章描述或摘要"
 tags: ["标签A", "标签B"]
 category: "分类C"
-cover: "/images/your-cover-image.jpg"
+image: "/images/your-cover-image.jpg"
 draft: false
 ---
 ```
@@ -150,7 +150,7 @@ draft: false
 ## 常见问题
 
 ### Q: 如何批量添加 Frontmatter？
-A: 对于大量文件，可以编写简单的脚本（如 Python 脚本）来读取 Markdown 文件内容，然后在其顶部插入 Frontmatter。脚本需要根据文件名或内容自动生成 `title` 和 `pubDate`，其他字段可能需要手动补充。
+A: 对于大量文件，可以编写简单的脚本（如 Python 脚本）来读取 Markdown 文件内容，然后在其顶部插入 Frontmatter。脚本需要根据文件名或内容自动生成 `title` 和 `published`，其他字段可能需要手动补充。
 
 ### Q: 图片路径如何批量替换？
 A: 可以使用文本编辑器的查找替换功能，或命令行工具（如 `sed`）来批量替换 Markdown 文件中的图片路径。
@@ -158,7 +158,7 @@ A: 可以使用文本编辑器的查找替换功能，或命令行工具（如 `
 ### Q: 导入后文章没有显示？
 A: 检查以下几点：
    - 文件是否放在 `src/content/posts/` 目录下。
-   - Frontmatter 是否正确，特别是 `title` 和 `pubDate` 字段。
+   - Frontmatter 是否正确，特别是 `title` 和 `published` 字段。
    - `draft: true` 的文章不会在生产环境中显示，请确保设置为 `draft: false`。
 
 ## 总结

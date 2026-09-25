@@ -38,5 +38,5 @@ features:
     details: 浅色/深色主题、字体和壁纸切换，并支持多语言翻译
   - title: 可维护文档
     icon: material-symbols:account-tree-rounded
-    details: 137 个文档条目（19 个目录节点、118 个专题页面），侧栏由目录和 order 自动生成
+    details: 132 个 Markdown 文件（18 个目录节点、113 个专题页面，另含 1 个项目首页配置），侧栏由目录和 order 自动生成
 ---

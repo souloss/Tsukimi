@@ -49,8 +49,6 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 | `pluginCollapsible.previewLines` | `number` | 折叠时保留的预览行数，默认 `5`。 |
 | `pluginCollapsible.defaultCollapsed` | `boolean` | 长代码块是否默认折叠，默认 `false`。 |
 
-`pluginLanguageBadge` 的类型已经预留，但当前构建由 `astro.config.mjs` 直接注册语言徽章插件；只有在修改插件装配方式时才需要同步这个字段。
-
 ## 文章中的代码块
 
 使用真实语言名，并可用 Expressive Code 元信息标记标题、重点行和折叠：

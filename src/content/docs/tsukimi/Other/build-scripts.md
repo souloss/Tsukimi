@@ -152,7 +152,7 @@ pnpm update-bilibili
 
 | 脚本 | 说明 |
 |------|------|
-| `convert-images.js` | 图片格式转换（AVIF/WebP） |
+| `convert-images.js` | 手动将指定的 `public/` PNG/JPEG 图片转换为 WebP（质量 85）；不会随 `pnpm build` 自动执行。 |
 | `init-content-repo.js` | 初始化内容仓库 |
 | `load-env.js` | 环境变量加载工具 |
 | `update-feeds.mjs` | 朋友圈 RSS 订阅更新 |
@@ -161,3 +161,5 @@ pnpm update-bilibili
 | `check-config.mjs` | 检查配置 |
 | `check-docs-render.mjs` | 检查文档渲染 |
 | `check-images.mjs` / `check-fonts.mjs` | 检查图片和字体资源 |
+
+运行 `node scripts/convert-images.js` 可执行图片转换。脚本只匹配 `public/assets/home/` 下的 PNG/JPG、`public/sakura.png`、`public/images/albums/` 下的 JPG/JPEG、`public/images/diary/` 下的 JPG、`public/images/device/` 下的 PNG，以及 `public/assets/music/cover/` 下的 JPG；每张图片旁写出同名 `.webp` 文件，原图保留。已有 WebP 文件比源文件更新时会跳过。脚本不会处理其他目录、远程图片或 `.webp` 以外的输出格式，也不会修改 Markdown/MDX 中的引用。完整步骤见[手动图片转换](/docs/tsukimi/basic-layout/image-optimization/)。

@@ -28,8 +28,8 @@ Tsukimi 是一个基于 Astro 7、Svelte 5、Tailwind CSS 4 和 TypeScript 的�
 1. [安装与启动](/docs/tsukimi/guide/get-started/)：准备 Node.js/pnpm，运行开发服务器并完成首次构建。
 2. [站点配置](/docs/tsukimi/basic-layout/site-config/)：先修改站点标题、语言、特色页面和文章列表布局。
 3. [配置模块化](/docs/tsukimi/basic-layout/config-modularization/)：了解 `src/config/index.ts`、配置覆盖和类型定义。
-4. [文章类型](/docs/tsukimi/press/article-types/) 与 [Markdown 扩展](/docs/tsukimi/press/markdown/)：开始写文章并使用主题提供的内容能力。
-5. [部署](/docs/tsukimi/guide/deploy/)：根据目标平台选择 GitHub Pages、Vercel、Netlify、Cloudflare Pages、Docker 或自有服务器。
+4. [文章 Frontmatter](/docs/tsukimi/press/article-types/frontmatter/) 与 [Markdown 语法](/docs/tsukimi/press/markdown/markdown/)：开始写文章并使用主题提供的内容能力。
+5. [GitHub Pages 部署](/docs/tsukimi/guide/deploy/github/)：完成生产部署；也可查看 [Vercel](/docs/tsukimi/guide/deploy/vercel/)、[Netlify](/docs/tsukimi/guide/deploy/netlify/)、[Cloudflare Pages](/docs/tsukimi/guide/deploy/cloudflare/) 或 [自有服务器](/docs/tsukimi/guide/deploy/server/) 的部署说明。
 
 ## 源码与内容
 

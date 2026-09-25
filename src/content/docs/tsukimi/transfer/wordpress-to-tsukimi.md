@@ -89,12 +89,12 @@ draft: false
 ```yaml
 ---
 title: "文章标题"
-pubDate: 2024-01-15  # WordPress 发布日期
-updatedDate: 2024-01-16  # WordPress 最后修改日期
+published: 2024-01-15  # WordPress 发布日期
+updated: 2024-01-16  # WordPress 最后修改日期
 description: "文章摘要或描述"  # 可从 WordPress 摘要获取
 tags: ["标签1", "标签2"]  # WordPress 标签
 category: "分类名称"  # WordPress 主分类
-cover: "/images/cover.jpg"  # 特色图片（如有）
+image: "/images/cover.jpg"  # 特色图片（如有）
 draft: false
 ---
 ```

@@ -94,11 +94,11 @@ draft: false
 
 #### 常见字段映射：
 - `title`: Gridea 的 `title` 直接对应 Tsukimi 的 `title`。
-- `date`: Gridea 的 `date` (例如 `2023-10-26 10:00:00`) 需要转换为 Tsukimi 的 `pubDate` (例如 `2023-10-26`)。如果 Gridea 没有 `updatedDate`，可以使用 `pubDate` 作为 `updatedDate` 的值。
+- `date`: Gridea 的 `date` (例如 `2023-10-26 10:00:00`) 需要转换为 Tsukimi 的 `published` (例如 `2023-10-26`)。如无单独的更新时间，可以不设置 `updated`。
 - `tags`: Gridea 的 `tags` 列表直接对应 Tsukimi 的 `tags` 列表。
 - `categories`: Gridea 的 `categories` 列表通常只有一个元素，对应 Tsukimi 的 `category`。
 - `description`: Gridea 可能没有独立的 `description` 字段，您可以手动添加或从文章内容中提取。
-- `cover`: Gridea 可能没有独立的 `cover` 字段，您可以手动添加。
+- `cover`: 如果 Gridea 提供封面字段，将其映射到 Tsukimi 的 `image`；否则可以手动补充 `image`。
 - `draft`: Gridea 通常通过文章是否发布来判断，Tsukimi 需要 `draft: true` 或 `false`。
 
 #### 批量修改建议：
@@ -135,13 +135,12 @@ def migrate_gridea_frontmatter(file_path):
     
     # 处理日期
     date_str = gridea_fm.get('date', '').split(' ')[0] # 只取日期部分
-    tsukimi_fm['pubDate'] = date_str if date_str else 'YYYY-MM-DD'
-    tsukimi_fm['updatedDate'] = date_str if date_str else 'YYYY-MM-DD'
+    tsukimi_fm['published'] = date_str if date_str else 'YYYY-MM-DD'
 
     tsukimi_fm['description'] = gridea_fm.get('description', '') # Gridea 可能没有，需要手动补充
     tsukimi_fm['tags'] = gridea_fm.get('tags', [])
     tsukimi_fm['category'] = gridea_fm.get('categories', ['未分类'])[0] if gridea_fm.get('categories') else '未分类'
-    tsukimi_fm['cover'] = gridea_fm.get('cover', '') # Gridea 可能没有，需要手动补充
+    tsukimi_fm['image'] = gridea_fm.get('cover', '') # 按需补充封面图片路径
     tsukimi_fm['draft'] = gridea_fm.get('draft', False) # Gridea 可能没有，默认为 False
 
     new_fm_str = yaml.dump(tsukimi_fm, allow_unicode=True, sort_keys=False)

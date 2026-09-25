@@ -77,12 +77,12 @@ draft: false
 
 转换完成后，您需要手动调整以下内容：
 
-- 将 `date` 字段改为 `pubDate`，格式改为 `YYYY-MM-DD`
-- 将 `lastmod` 字段改为 `updatedDate`，格式改为 `YYYY-MM-DD`
+- 将 `date` 字段改为 Tsukimi 的 `published`，格式改为 `YYYY-MM-DD`
+- 将 `lastmod` 字段改为 Tsukimi 的 `updated`，格式改为 `YYYY-MM-DD`
 - 将 `description` 字段保持不变
 - 将 `categories` 数组的第一个元素作为 `category` 字符串
 - 确保 `tags` 为字符串数组格式
-- 将 `images` 字段的第一个元素作为 `cover` 字符串
+- 将 `images` 字段的第一个元素作为 `image` 字符串
 
 ### 4. 静态资源迁移
 

@@ -122,7 +122,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 | `class` | `string` | 否 | 自定义 CSS 类名 |
 | `style` | `string` | 否 | 自定义内联样式 |
 | `animationDelay` | `number` | 否 | 动画延迟时间（毫秒） |
-| `configId` | `string` | 否 | 配置 ID（用于广告组件） |
 | `showOnPostPage` | `boolean` | 否 | 是否在文章详情页显示 |
 | `showOnNonPostPage` | `boolean` | 否 | 是否在非文章页显示 |
 | `responsive` | `object` | 否 | 响应式配置 |
@@ -144,7 +143,6 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 | `site-stats` | 站点统计 |
 | `umami-stats` | Umami 访问统计 |
 | `calendar` | 日历 |
-| `advertisement` | 广告 |
 | `custom` | 自定义组件 |
 
 ## 组件位置配置 (components)

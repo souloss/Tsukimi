@@ -35,6 +35,6 @@ copyright:
 
 ## 图片格式与转换
 
-当前没有 `siteConfig.imageOptimization` 配置，也没有在 Astro 配置中启用文档所述的自动 WebP/AVIF 转换。可按需使用仓库脚本 `scripts/convert-images.js` 转换静态资源；转换前请先备份原图，并检查文章引用路径。
+Live Photo 和普通图片都需要自行提供浏览器可读取的资源。仓库提供的手动 WebP 转换脚本只处理指定的 `public/` 静态资源，不会自动改写文章中的图片引用；使用范围和命令见[手动图片转换](/docs/tsukimi/basic-layout/image-optimization/)。
 
 实现位置：`src/plugins/rehype-lazy-image.mjs`、`src/scripts/handlers/livephoto-handler.ts`、`src/styles/lazy-image.css` 和 `src/styles/livephoto.css`。

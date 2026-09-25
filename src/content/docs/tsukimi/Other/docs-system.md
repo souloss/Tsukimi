@@ -38,7 +38,7 @@ src/content/docs/
     └── Other/
 ```
 
-当前 Tsukimi 文档共 137 个 Markdown/MDX 条目：19 个索引/目录节点和 118 个专题页面。新增目录时添加 _index.md 并设置 order，侧栏会自动出现。
+当前 Tsukimi 文档共有 132 个 Markdown 文件：1 个项目首页配置、18 个目录索引和 113 个专题页面。新增目录时添加 _index.md 并设置 order，侧栏会自动出现。
 
 ## 首页
 

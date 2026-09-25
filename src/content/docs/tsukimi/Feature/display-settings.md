@@ -143,7 +143,7 @@ fontPreset: 'system' | 'literata' | 'lxgw' | '2d';
 | `lxgw` | LXGW 霞鹜文楷 | 中文内容、艺术感 |
 | `2d` | 二次元风格字体 | ACG 相关网站 |
 
-详细字体配置请参考 [字体配置](/docs/tsukimi/basic-layout/font-config/) 文档。
+详细字体配置请参考 [字体配置](/docs/tsukimi/basic-layout/font/) 文档。
 
 ---
 

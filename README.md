@@ -30,7 +30,8 @@ Tsukimi 是一个基于 Astro 的静态博客主题，适合技术文章、生�
 - Pagefind 全文搜索；文章目录、阅读时间、相关文章和随机文章。
 - RSS 与 Atom feed、sitemap、Open Graph 元信息和可选 OG 图片生成。
 - 客户端文章加密、密码提示和内容摘要隐藏。它适合控制页面访问，不等同于服务端密钥管理或机密存储。
-- 响应式文章列表，可切换列表/网格布局；宽表格、图片懒加载、图片尺寸处理和图片格式优化。
+- 响应式文章列表，可切换列表/网格布局；宽表格、图片懒加载和图片尺寸元数据处理。
+- `scripts/convert-images.js` 可将指定的 `public/` 图片批量转换为 WebP；这是手动运行的静态资源脚本，不会自动改写文章中的所有图片。
 
 ### Markdown 扩展
 
@@ -43,6 +44,25 @@ Tsukimi 是一个基于 Astro 的静态博客主题，适合技术文章、生�
 - Expressive Code 代码高亮、行号、行标记、语言徽章、复制按钮和代码块折叠。
 
 完整语法和可复制示例见 [Markdown 指令文档](src/content/docs/tsukimi/press/Markdown/directives.md) 及 src/content/posts/markdown-extended.md。
+
+例如，文章里可以直接写提示块、代码块和图表，不需要在 MDX 中导入组件：
+
+~~~markdown
+:::tip[写作提示]
+用简短段落组织内容，复杂语法可以先在示例文章中预览。
+:::
+
+```ts title="hello.ts" {1}
+const message = "Hello, Tsukimi";
+console.log(message);
+```
+
+```mermaid
+flowchart LR
+  Write[编写 Markdown] --> Build[构建静态站点]
+  Build --> Publish[发布到静态托管]
+```
+~~~
 
 ### 主题与交互
 
@@ -151,7 +171,6 @@ permalink: /custom/path/
 alias: /old/path/
 math:
   inline: false
-  display: false
 encrypted: false
 password: ""
 passwordHint: ""
@@ -167,7 +186,7 @@ copyright: CC BY-NC-SA
 ---
 ~~~
 
-字段以 [src/content.config.ts](./src/content.config.ts) 的 schema 为准。draft: true 的文章在生产构建中不会作为公开文章发布；permalink 优先于 alias 和 slug；series 与 seriesOrder 用于系列导航。copyright 可使用 CC BY、CC BY-SA、CC BY-ND、CC BY-NC、CC BY-NC-SA、CC BY-NC-ND、CC0 或 ARR。
+字段类型和默认值以 [src/content.config.ts](./src/content.config.ts) 为准。完整字段、URL 路由优先级、转载和加密行为见[文章 Frontmatter 参考](src/content/docs/tsukimi/press/article-types/frontmatter.md)；系列、转载和加密文章的专题说明见[系列文档](src/content/docs/tsukimi/press/article-types/series.md)、[转载文档](src/content/docs/tsukimi/press/article-types/reposts.md)和[加密文章文档](src/content/docs/tsukimi/press/article-types/encrypted-posts.md)。
 
 ### 代码与内容分离（可选）
 
@@ -196,34 +215,29 @@ pnpm run sync-content
 
 ## 构建、检查与发布
 
-~~~bash
-# 生产构建，输出 dist/；同时构建 Pagefind、压缩字体和更新 feed
-pnpm build
+常用命令如下，详细脚本定义以 [package.json](./package.json) 为准。标有“写入”的命令会改动工作区文件；运行前先检查未提交的修改。
 
-# 预览已构建的静态站点
-pnpm preview
-
-# Astro、TypeScript、测试
-pnpm check
-pnpm type-check
-pnpm test
-
-# 内容、配置和发布门禁
-pnpm check-content
-pnpm check-config
-pnpm check-publish
-
-# 图片、字体、文档渲染和性能检查
-pnpm check-images
-pnpm check-fonts
-pnpm check-docs-render
-pnpm perf:baseline
-pnpm perf:check
-
-# Biome 格式化与检查（脚本会写回修复结果）
-pnpm format
-pnpm lint
-~~~
+| 命令 | 用途与副作用 |
+| --- | --- |
+| `pnpm dev` | 启动本地开发服务器 `http://localhost:4321/`。 |
+| `pnpm build` | 构建 `dist/`，生成 Pagefind 索引并压缩字体；构建生命周期会按设置同步内容并更新 feed。 |
+| `pnpm preview` | 本地预览 `dist/` 中的生产构建。 |
+| `pnpm check` / `pnpm type-check` | 分别运行 Astro 检查和 TypeScript 类型检查。 |
+| `pnpm test` | 运行单元测试。 |
+| `pnpm new-post <filename>` | **写入：**在 `src/content/posts/` 创建文章模板。 |
+| `pnpm sync-content` | **写入：**按 `.env` 设置同步独立内容仓库；同步可能替换本地内容目录。 |
+| `pnpm check-content` | 检查文章 Frontmatter、资源和路径冲突。 |
+| `pnpm check-config` | 检查特色页面、导航和侧栏配置。 |
+| `pnpm check-publish` | 执行发布前内容、配置和构建产物检查。 |
+| `pnpm check-images` / `pnpm check-fonts` | 检查构建图片和字体产物。 |
+| `pnpm check-docs-render` | 检查文档页面的布局、交互和搜索渲染。 |
+| `pnpm perf:baseline` | **写入：**将当前构建性能数据记录到 `.codex/iteration/performance-baseline.json`。 |
+| `pnpm perf:check` | 将当前构建产物与性能基线比较。 |
+| `pnpm preview:drafts` | 启动包含草稿文章的本地预览。 |
+| `pnpm refresh-data` | **写入：**刷新 feed 和番剧数据；`pnpm build:refresh-data` 会刷新后继续构建。 |
+| `pnpm submit` | 读取 `dist/sitemap-0.xml` 并向 Bing IndexNow 提交 URL，需要配置 `INDEXNOW_KEY` 与 `INDEXNOW_HOST`。 |
+| `pnpm format` | **写入：**使用 Biome 格式化 `src/`。 |
+| `pnpm lint` | **写入：**使用 Biome 检查并自动修复 `src/`。 |
 
 pnpm build 需要能访问构建时使用的外部服务（例如启用的内容仓库、PlantUML 或数据更新接口）。不需要刷新远程数据时使用普通 pnpm build；pnpm build:refresh-data 会先刷新 feed 和番剧数据。部署静态站点时使用：
 
@@ -268,11 +282,26 @@ Markdown 能力应放在 src/plugins/ 并接入 astro.config.mjs；跨页面数�
 
 ## 上游与许可证
 
-Tsukimi 延续并扩展了以下项目的代码、设计或实现思路，请保留相应的上游版权和许可证声明：
+感谢以下项目提供代码基础、设计灵感或实现思路。Tsukimi 延续并扩展了部分上游实现，请保留相应的版权和许可证声明：
 
-- [Fuwari](https://github.com/saicaca/fuwari)：早期模板基础。
-- [Mizuki](https://github.com/LyraVoid/Mizuki)：Tsukimi 的重要上游实现。
-- [Firefly](https://github.com/CuteLeaf/Firefly)：部分双侧栏、布局和交互思路。
-- [Pio](https://github.com/Dreamer-Paul/Pio)：Live2D 看板娘插件来源。
+- [Fuwari](https://github.com/saicaca/fuwari)：原始模板基础，作者 saicaca。
+- [Mizuki](https://github.com/LyraVoid/Mizuki)：Tsukimi 的重要上游实现，作者 LyraVoid。
+- [Yukina](https://github.com/WhitePaper233/yukina)：博客模板与界面设计灵感。
+- [Firefly](https://github.com/CuteLeaf/Firefly)：双侧边栏、文章网格等布局思路。
+- [Twilight](https://github.com/spr-aachen/Twilight)：动态壁纸切换、响应式设计和页面过渡灵感。
+- [Pio](https://github.com/Dreamer-Paul/Pio)：Live2D 看板娘插件。
+- [Astro](https://astro.build/)、[Tailwind CSS](https://tailwindcss.com/)、[Svelte](https://svelte.dev/)、[Swup](https://swup.js.org/)、[Pagefind](https://pagefind.app/) 与 [Iconify](https://iconify.design/)：构成主题的重要技术栈。
 
 仓库提供 [LICENSE](./LICENSE)（Apache License 2.0）和 [LICENSE.MIT](./LICENSE.MIT)（原始模板代码的 MIT 声明）。不同目录、上游代码和第三方依赖可能适用不同许可；分发或修改前请阅读许可证文件及相关版权声明。
+
+## 贡献者
+
+感谢所有提交问题、代码、文档和建议的贡献者。
+
+<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" alt="Tsukimi contributors" />
+</a>
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)

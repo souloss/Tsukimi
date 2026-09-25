@@ -109,8 +109,8 @@ Typecho 的文章内容通常已经是 Markdown 格式，但需要进行以下�
 | Typecho 字段 | Tsukimi 字段 | 说明 |
 |-------------|-------------|------|
 | `title` | `title` | 文章标题 |
-| `created` | `pubDate` | 发布日期（转换为 YYYY-MM-DD 格式） |
-| `modified` | `updatedDate` | 更新日期（转换为 YYYY-MM-DD 格式） |
+| `created` | `published` | 发布日期（转换为 YYYY-MM-DD 格式） |
+| `modified` | `updated` | 更新日期（转换为 YYYY-MM-DD 格式） |
 | `text`前几行 | `description` | 文章描述（手动提取） |
 | 标签查询结果 | `tags` | 标签数组 |
 | 分类查询结果 | `category` | 分类字符串 |
@@ -120,8 +120,8 @@ Typecho 的文章内容通常已经是 Markdown 格式，但需要进行以下�
 ```yaml
 ---
 title: "Typecho 使用技巧"
-pubDate: 2024-01-15
-updatedDate: 2024-01-16
+published: 2024-01-15
+updated: 2024-01-16
 description: "分享一些 Typecho 博客系统的使用技巧和优化方法"
 tags: ["Typecho", "博客", "技巧"]
 category: "技术分享"
@@ -259,14 +259,14 @@ $posts = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($posts as $post) {
     $filename = $post['slug'] ? $post['slug'] : sanitize_filename($post['title']);
-    $pubDate = date('Y-m-d', $post['created']);
-    $updatedDate = date('Y-m-d', $post['modified']);
+    $published = date('Y-m-d', $post['created']);
+    $updated = date('Y-m-d', $post['modified']);
     $tags = $post['tags'] ? explode(',', $post['tags']) : [];
     
     $frontmatter = "---\n";
     $frontmatter .= "title: \"" . addslashes($post['title']) . "\"\n";
-    $frontmatter .= "pubDate: $pubDate\n";
-    $frontmatter .= "updatedDate: $updatedDate\n";
+    $frontmatter .= "published: $published\n";
+    $frontmatter .= "updated: $updated\n";
     $frontmatter .= "description: \"\"\n"; // 需要手动填写
     $frontmatter .= "tags: [\"" . implode('\", \"', $tags) . "\"]\n";
     $frontmatter .= "category: \"\"\n"; // 需要手动填写

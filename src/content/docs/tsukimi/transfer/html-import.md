@@ -49,7 +49,7 @@ Tsukimi 文章的核心是 Markdown 文件，并需要包含特定的 Frontmatte
 ```
 
 ### Tsukimi 格式示例（转换为 Markdown 并添加 Frontmatter）：
-```yaml
+```markdown
 ---
 title: HTML 导入指南
 published: 2025-01-20
@@ -133,14 +133,14 @@ console.log(markdown)
 
 #### 必需字段：
 - `title`: 文章标题
-- `pubDate`: 发布日期 (格式: `YYYY-MM-DD`)
+- `published`: 发布日期 (格式: `YYYY-MM-DD`)
 
 #### 推荐字段：
-- `updatedDate`: 更新日期 (格式: `YYYY-MM-DD`)
+- `updated`: 更新日期 (格式: `YYYY-MM-DD`)
 - `description`: 文章描述或摘要
 - `tags`: 标签列表 (格式: `["标签1", "标签2"]`)
 - `category`: 分类 (格式: `"分类名称"`)
-- `cover`: 文章封面图片路径 (格式: `"/images/cover.jpg"`)
+- `image`: 文章封面图片路径 (格式: `"/images/cover.jpg"`)
 - `draft`: 是否为草稿 (格式: `true` 或 `false`)
 
 #### 示例 Frontmatter：
@@ -196,7 +196,7 @@ A: 可以使用文本编辑器的查找替换功能，或命令行工具（如 `
 ### Q: 导入后文章没有显示？
 A: 检查以下几点：
    - 文件是否放在 `src/content/posts/` 目录下。
-   - Frontmatter 是否正确，特别是 `title` 和 `pubDate` 字段。
+   - Frontmatter 是否正确，特别是 `title` 和 `published` 字段。
    - `draft: true` 的文章不会在生产环境中显示，请确保设置为 `draft: false`。
 
 ## 总结

@@ -71,8 +71,8 @@ draft: false
 
 转换完成后，您需要手动调整以下内容：
 
-- 将 `date` 字段改为 `pubDate`，格式改为 `YYYY-MM-DD`
-- 将 `updated` 字段改为 `updatedDate`，格式改为 `YYYY-MM-DD`
+- 将 `date` 字段改为 Tsukimi 的 `published`，格式改为 `YYYY-MM-DD`
+- 将 `updated` 字段改为 Tsukimi 的 `updated`，格式改为 `YYYY-MM-DD`
 - 将 `excerpt` 字段改为 `description`
 - 将 `categories` 数组的第一个元素作为 `category` 字符串
 - 确保 `tags` 为字符串数组格式

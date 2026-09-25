@@ -11,14 +11,13 @@ copyright:
 ---
 # 直接在posts目录创建文章
 
-这是在Tsukimi博客系统中创建文章的两种方法之一。这种方法适用于简单的文章，不需要管理大量图片资源的情况。
-单文件方案会导致RSS无法正常构建图片的路径(指本地,如果你使用图床那么不会有这个问题),如果你需要使用rss功能请使用文件夹写作方案
+这是在 Tsukimi 中创建文章的两种方法之一，适合正文和资源结构相对简单、希望直接管理 Markdown 文件的场景。根目录文章中的本地图片也可由 RSS 处理；发布前建议检查生成的 `/rss.xml`，确认目标托管路径下的图片 URL 可访问。
 
 ## 创建文章
 
 1. 在`src/content/posts`目录下创建一个新的Markdown文件，文件名应该具有描述性，例如`my-first-post.md`。
 
-2. 在文件中添加frontmatter（前置元数据），这是文章的配置信息，必须包含`title`和`description`字段：
+2. 在文件中添加 Frontmatter（前置元数据）；必须包含 `title` 和 `published`，`description` 可选：
 
 ```markdown
 ---
@@ -32,67 +31,14 @@ licenseName: "Unlicensed"
 author: emn178
 sourceLink: "https://github.com/emn178/markdown"
 draft: false
-date: 2025-01-20
 image: "./cover.png"
-pubDate: 2025-01-20
-permalink: "encrypted-example"
+permalink: "/articles/markdown-tutorial/"
 ---
 ```
 
 ## Frontmatter字段详解
 
-frontmatter支持的字段包括：
-
-### 必需字段
-- `title`：文章标题（必需）
-- `published`：文章发布日期，格式为YYYY-MM-DD
-
-### 发布相关
-- `draft`：是否为草稿，true表示草稿，false表示正式发布
-- `updated`：文章最后更新日期（格式同 published），配合 `siteConfig.showLastModified` 显示"上次编辑"信息
-- `pinned`：是否置顶文章，true表示置顶
-- `priority`：文章排序优先级，数字越大越靠前
-- `permalink`：自定义固定链接，优先级高于 alias
-- `slug`：URL 路径中的简短文本标识，只覆盖文件名部分
-- `alias`：别名路径，用于旧 URL 重定向
-- `redirect`：跳转到外部/静态资源页面
-
-### 内容分类
-- `tags`：文章标签数组，用于标记文章主题
-- `category`：文章分类，用于组织文章
-- `series`：专栏/系列名称
-- `seriesOrder`：在系列中的排序位置，默认 0
-
-### 作者信息
-- `author`：文章作者姓名
-- `licenseName`：文章许可证名称，如"MIT"、"CC BY 4.0"等
-- `licenseUrl`：文章许可证 URL
-- `sourceLink`：文章源链接，通常指向GitHub仓库或原始来源
-- `copyright`：版权许可类型，支持 `"CC BY"`, `"CC BY-SA"`, `"CC BY-ND"`, `"CC BY-NC"`, `"CC BY-NC-SA"`, `"CC BY-NC-ND"`, `"CC0"`, `"ARR"`
-
-### 图片设置
-- `image`：文章封面图片
-- `ogDescription`：自定义 OG 描述文本，覆盖默认生成的 OG 图片描述
-
-### 语言设置
-- `lang`：单篇文章的语言覆盖，如 `"en"`, `"zh_CN"`, `"ja"`
-
-### 评论设置
-- `comment`：是否在文章详情页显示评论区，默认 true
-
-### 加密设置
-- `encrypted`：是否启用文章加密，true 时文章内容需要密码才能查看
-- `password`：加密密码
-- `passwordHint`：密码提示文字
-- `hideHomeContent`：是否在首页隐藏文章内容摘要
-
-### 转载设置
-- `repost`：转载文章配置对象
-  - `repost.originalAuthor`：原作者姓名
-  - `repost.originalUrl`：原文 URL
-  - `repost.originalTitle`：原文标题（可选）
-  - `repost.originalSite`：原站点名称（可选）
-  - `repost.redirect`：是否重定向到原文（可选）
+Frontmatter 字段、默认值、路由优先级、转载、加密、数学公式和版权行为统一见[文章 Frontmatter 参考](/docs/tsukimi/press/article-types/frontmatter/)。`permalink` 指向站点根路径；`slug` 与 `alias` 的行为不同，设置前请先阅读固定链接说明。
 
 3. 在frontmatter下方编写文章内容，可以使用标准的Markdown语法。
 
@@ -118,8 +64,7 @@ frontmatter支持的字段包括：
 建议使用ISO 8601格式（YYYY-MM-DD）来设置日期：
 ```yaml
 published: 2025-01-20
-date: 2025-01-20
-pubDate: 2025-01-20
+updated: 2025-02-01
 ```
 
 ### 标签和分类
@@ -157,9 +102,7 @@ licenseName: "CC BY 4.0"
 author: "张三"
 sourceLink: "https://github.com/zhangsan/vue3-guide"
 draft: false
-date: 2025-01-20
 image: 'https://example.com/vue3-cover.jpg'
-pubDate: 2025-01-20
 ---
 
 # Vue.js 3 组合式API完全指南
@@ -225,6 +168,6 @@ pubDate: 2025-01-20
 
 ## 注意事项
 
-- 文件名将被用作文章的URL路径，所以应该具有描述性且不含特殊字符
-- frontmatter中的`date`字段是可选的，如果不提供，系统会使用文件的创建日期
-- 这种方法适合简单的文章，但如果文章包含大量图片，建议使用子文件夹方案
+- `published` 是必填日期；如需标记最后修改时间，使用可选的 `updated`。`date` 和 `pubDate` 不是当前文章 schema 字段。
+- 默认文章路径根据文件名生成；Frontmatter 中的 `permalink`、`slug` 或 `alias` 会按优先级改变文章 URL。
+- 这种方法适合简单的文章；如果文章包含大量图片，建议使用子文件夹方案。

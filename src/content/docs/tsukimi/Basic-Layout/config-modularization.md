@@ -34,7 +34,6 @@ src/config/
 ├── announcementConfig.ts   # 公告
 ├── friendsConfig.ts         # 友链页面
 ├── sponsorConfig.ts         # 赞助页面
-├── shareConfig.ts           # 分享
 ├── relatedPostsConfig.ts    # 相关文章
 ├── randomPostsConfig.ts     # 随机文章
 ├── permalinkConfig.ts       # 全局固定链接
@@ -85,7 +84,9 @@ export default override;
 
 `withOverride("siteConfig", defaults)` 会在 Vite 构建时读取 `src/overrides/siteConfig.ts`，再与默认对象深度合并。配置覆盖适用于以下模块（括号内是覆盖文件名）：
 
-`siteConfig`、`navBarConfig`、`sidebarConfig`、`profileConfig`、`backgroundWallpaper`、`commentConfig`、`musicConfig`、`effectsConfig`、`fontConfig`、`footerConfig`、`announcementConfig`、`friendsConfig`、`sponsorConfig`、`shareConfig`、`relatedPostsConfig`、`randomPostsConfig`、`permalinkConfig` 和 `pioConfig`。
+`siteConfig`、`navBarConfig`、`sidebarConfig`、`profileConfig`、`backgroundWallpaper`、`commentConfig`、`musicConfig`、`effectsConfig`、`fontConfig`、`footerConfig`、`announcementConfig`、`friendsConfig`、`sponsorConfig`、`relatedPostsConfig`、`randomPostsConfig`、`permalinkConfig` 和 `pioConfig`。
+
+迁移旧项目时请注意：`src/config/shareConfig.ts` 虽仍有兼容导出，但当前没有运行时消费者；不要再用它配置分享 UI。文章海报开关位于 `siteConfig.sharePoster`，赞助按钮由 `sponsorConfig.showButtonInPost` 控制，具体行为见[文章分享海报](/docs/tsukimi/feature/share-card/)。
 
 `licenseConfig`、`expressiveCodeConfig`、`markmapConfig` 和 `plantumlConfig` 当前没有接入 `withOverride`，需要直接编辑对应的默认配置文件，或在后续开发中为它们补充覆盖入口。
 

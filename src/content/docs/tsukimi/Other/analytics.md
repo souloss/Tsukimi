@@ -21,7 +21,7 @@ Tsukimi 的运行时统计入口集中在 `src/layouts/partials/AnalyticsScripts
 - **Microsoft Clarity**：通过 `siteConfig.thirdPartyAnalytics.enable` 与 `clarityId` 加载。
 - **Google Tag Manager**：通过 `siteConfig.thirdPartyAnalytics.gtmId` 加载，并在 `Layout.astro` 中输出 noscript 回退。
 
-Google Analytics、51.la 等名称仍可能出现在 `SiteConfig` 类型的兼容字段中，但不会由 `AnalyticsScripts.astro` 自动加载；如需接入其他服务，应通过自定义集成或组件实现。
+如需接入其他分析服务，需要通过自定义集成或组件实现；本配置页只列出主题当前会加载的 Umami、Clarity 和 GTM。
 
 ## 配置示例
 
