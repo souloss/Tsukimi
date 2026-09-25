@@ -150,7 +150,7 @@ WordPress 短代码需要手动转换为 Markdown 或 HTML：
 A: Tsukimi 只支持单一分类，建议选择最主要的分类作为 `category`，其他分类可以添加到 `tags` 中。
 
 ### Q: WordPress 的评论如何迁移？
-A: Tsukimi 目前只支持 Twikoo 评论系统，WordPress 的评论无法直接迁移，建议导出备份后使用新的评论系统。
+A: Tsukimi 当前接入 Twikoo、Waline 和 Giscus。WordPress 的评论无法直接迁移，建议先导出备份，再配置其中一种评论服务。
 
 ### Q: 如何处理 WordPress 的自定义文章类型？
 A: 自定义文章类型需要根据内容性质决定是否迁移到 Tsukimi 的文章系统，或者创建自定义页面。
@@ -161,7 +161,7 @@ A: 大部分 WordPress 插件功能需要寻找替代方案或手动实现，如
 ## 高级功能迁移
 
 ### 评论系统
-Tsukimi 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
+Tsukimi 当前接入 Twikoo、Waline 和 Giscus。评论数据不会自动迁移，需要在 `src/config/commentConfig.ts` 中选择并配置评论服务。
 
 ### SEO 优化
 - 确保每篇文章都有 `description` 字段

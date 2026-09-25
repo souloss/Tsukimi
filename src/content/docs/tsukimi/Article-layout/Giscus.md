@@ -19,7 +19,7 @@ Giscus 是基于 GitHub Discussions 的评论系统，适合技术博客。配�
 通过 `commentConfig.system` 字段选择评论系统：
 
 ```typescript
-system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
+system: "none" | "twikoo" | "waline" | "giscus"
 ```
 
 | 值 | 说明 |
@@ -28,8 +28,6 @@ system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
 | `"twikoo"` | 使用 Twikoo |
 | `"waline"` | 使用 Waline |
 | `"giscus"` | 使用 Giscus（基于 GitHub Discussions） |
-| `"disqus"` | 使用 Disqus |
-| `"artalk"` | 使用 Artalk |
 
 ## 前置要求
 
@@ -112,8 +110,6 @@ export const commentConfig: CommentConfig = {
 
 - [Twikoo 评论配置](/docs/tsukimi/article-layout/twikoo/)
 - [Waline 评论配置](/docs/tsukimi/article-layout/waline/)
-- [Disqus 评论配置](/docs/tsukimi/article-layout/disqus/)
-- [Artalk 评论配置](/docs/tsukimi/article-layout/artalk/)
 
 ## 注意事项
 

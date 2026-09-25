@@ -1,5 +1,5 @@
 ---
-title: 安装/使用
+title: 安装与使用
 order: 2
 icon: ri:rocket-line
 createTime: 2025/08/16 23:56:17
@@ -10,105 +10,101 @@ copyright:
     url: https://github.com/souloss
 ---
 
-Tsukimi 项目入门指南
+本页给出从源码启动 Tsukimi、写第一篇文章到生成静态站点的最短路径。
 
+## 环境要求
 
+- **Node.js `>=22.12.0`**
+- **pnpm `>=10.33.0 <11`**（仓库通过 `packageManager` 和 `only-allow` 固定 pnpm）
+- Git
 
-## 环境依赖
-
-在开始使用 Tsukimi 之前，您需要确保系统满足以下要求：
-
-- **Node.js >= 22**
-- **pnpm >= 9**
-- **Git**
-
-### 安装 Node.js
-
-访问 [Node.js 官网](https://nodejs.org/) 下载并安装最新版本的 Node.js。建议使用 LTS 版本。
-
-安装完成后，打开终端或命令提示符，运行以下命令验证 Node.js 是否安装成功：
+检查版本：
 
 ```bash
-node -v
-npm -v
-```
-
-如果显示版本号，则表示安装成功。
-
-### 安装 pnpm
-
-如果您尚未安装 pnpm，可以通过 npm 安装：
-
-```bash
-npm install -g pnpm
-```
-
-安装完成后，打开终端或命令提示符，运行以下命令验证 pnpm 是否安装成功：
-
-```bash
-pnpm -v
-```
-
-如果显示版本号，则表示安装成功。
-
-### 安装 Git
-
-访问 [Git 官网](https://git-scm.com/downloads) 下载并安装适合您操作系统的 Git 版本。
-
-安装完成后，打开终端或命令提示符，运行以下命令验证 Git 是否安装成功：
-
-```bash
+node --version
+pnpm --version
 git --version
 ```
 
-如果显示版本号，则表示安装成功。
+建议使用 Node.js LTS。不要用 npm、yarn 或 bun 替代项目的 pnpm 工作流。
 
-## 项目启动步骤
+## 获取源码并启动
 
-### 1. 克隆项目
+:::steps
+1. 克隆仓库
 
-首先，克隆 Tsukimi 项目到本地：
+   ```bash
+   git clone https://github.com/souloss/Tsukimi.git
+   cd Tsukimi
+   ```
 
-```bash
-git clone https://github.com/souloss/Tsukimi.git
-cd Tsukimi
-```
+2. 安装依赖
 
-### 2. 安装依赖
+   ```bash
+   pnpm install
+   ```
 
-使用 pnpm 安装项目依赖：
+3. 修改最小配置
 
-```bash
-pnpm install
-```
+   默认配置分散在 `src/config/*.ts`。第一次运行至少检查 `src/config/siteConfig.ts` 中的 `title`、`siteURL`、`lang` 和 `featurePages`，并按需修改 `src/config/profileConfig.ts` 与 `src/config/navBarConfig.ts`。
 
-### 3. 配置博客
+4. 启动开发服务器
 
-在启动项目之前，您需要根据自己的需求进行配置：
+   ```bash
+   pnpm dev
+   ```
 
-- 编辑 `src/config.ts` 文件来自定义博客设置
-- 更新站点信息、主题颜色、横幅图片和社交链接
-- 配置翻译设置和特殊页面功能
+   打开 <http://localhost:4321/>。`predev` 会生成图标并尝试执行内容同步；未启用内容分离时会继续使用本地内容。
+:::
 
-### 4. 启动开发服务器
+## 创建第一篇文章
 
-运行以下命令启动开发服务器：
-
-```bash
-pnpm dev
-```
-
-启动成功后，您可以在浏览器中访问 `http://localhost:4321` 查看您的博客。
-
-
-### 5. 打包网站
-
-运行以下命令将网站打包成静态文件，生成到 `dist` 目录中：
+推荐使用脚手架：
 
 ```bash
-pnpm build
+pnpm new-post hello-tsukimi
 ```
 
-生成的 `dist` 目录可以部署到您自己的服务器上。
+文章会写入 `src/content/posts/`。最小 frontmatter 如下：
 
+```yaml
+---
+title: Hello Tsukimi
+published: 2026-09-25
+description: 我的第一篇文章
+tags: [Astro, Tsukimi]
+category: 随笔
+draft: false
+---
+```
 
+文章字段、系列、转载、加密和固定链接见[文章 frontmatter](/docs/tsukimi/press/article-types/)。Markdown 扩展见 [Markdown 语法](/docs/tsukimi/press/markdown/)。
+
+## 构建与预览
+
+```bash
+pnpm check       # Astro 内容与类型检查
+pnpm build       # 生成 dist/、Pagefind 索引并压缩字体
+pnpm preview     # 本地预览 dist/
+```
+
+完整构建会依次执行内容同步、数据源更新（由脚本和环境决定）、`astro build`、Pagefind 索引和字体压缩。生产部署应使用 `pnpm build` 生成的 `dist/`，不要把开发服务器暴露到公网。
+
+## 可选：内容仓库分离
+
+默认情况下，文章、特殊页面和数据都在当前仓库。需要独立管理内容时，复制 `.env.example` 为 `.env`，再设置：
+
+```bash
+ENABLE_CONTENT_SYNC=true
+CONTENT_REPO_URL=https://github.com/your-name/your-content.git
+# CONTENT_DIR=./content
+```
+
+同步脚本会将内容仓库中的 `posts/`、`spec/`、`data/` 映射到对应目录，并复制 `overrides/` 到 `src/overrides/`、合并 `assets/` 和 `public/`。私有仓库可使用 SSH URL；不要把 Token 直接提交进 `.env`。详细说明见[内容分离](/docs/tsukimi/other/separation/)。
+
+## 下一步
+
+- [站点配置](/docs/tsukimi/basic-layout/site-config/)
+- [配置模块化与覆盖](/docs/tsukimi/basic-layout/config-modularization/)
+- [侧边栏布局](/docs/tsukimi/sidepanel/global/)
+- [部署指南](/docs/tsukimi/guide/deploy/)

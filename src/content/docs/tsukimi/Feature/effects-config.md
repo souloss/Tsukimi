@@ -177,17 +177,17 @@ zIndex: number;
 - 默认值: 100
 - 确保它高于背景但低于弹窗、导航栏等重要元素
 
-## 与 sakuraConfig 的关系
+## 与 `sakuraConfig` 的关系
 
-`effectsConfig.sakura.config` 的类型是 `Omit<SakuraConfig, "enable">`，即 `SakuraConfig` 去掉 `enable` 字段。`SakuraConfig` 是独立的樱花配置类型（位于 `src/config/` 中的 `sakuraConfig`），两者共享相同的配置结构，但 `enable` 字段在 `effectsConfig` 中位于上层。
+旧版本曾把樱花配置称为 `sakuraConfig`。当前实现只在 `src/config/index.ts` 保留兼容别名，并将它指向 `effectsConfig.sakura`；新项目应统一使用 `effectsConfig.sakura`，不要再创建或导入独立的 `src/config/sakuraConfig.ts`。
 
 ```typescript
-// effectsConfig 中的 enable 在上层
-effectsConfig.sakura.enable = true;
+import { effectsConfig } from "@/config";
 
-// sakuraConfig 中的 enable 在自身
-sakuraConfig.enable = false;
+effectsConfig.sakura.enable = true;
 ```
+
+`effectsConfig.sakura.config` 的类型是 `Omit<SakuraConfig, "enable">`，因此 `enable` 位于 `sakura` 外层，其余动画参数位于 `config` 内。
 
 ## 用户端控制
 

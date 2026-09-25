@@ -15,7 +15,7 @@ copyright:
 
 ## 部署到 GitHub Pages(不在推荐)
 
-如果您希望将博客托管在 GitHub Pages 上，Tsukimi 项目通常会包含一个 GitHub Actions 工作流，可以帮助您自动化部署过程。您需要确保在 `astro.config.mjs` 中配置正确的 `base` 路径。
+如果您希望将博客托管在 GitHub Pages 上，可以使用 GitHub Actions 构建 `dist/` 并发布到 Pages。Tsukimi 当前默认使用根路径（`base: "/"`）和绝对内部链接；优先使用 `username.github.io` 仓库或自定义域名。项目子路径部署需要同时调整 Astro 的 `base`、站点 URL 和所有部署链接，并在生产预览中验证。
 
 ### 部署到 github.io 网址
 在 `astro.config.mjs` 中配置文件设置 `base` 选项。
@@ -24,7 +24,7 @@ copyright:
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
-  base: 'my-repo',
+  base: '/my-repo/',
 })
 ```
 
@@ -32,7 +32,7 @@ export default defineConfig({
 
 **Base**
 
-`base` 的值应该是你的仓库名称，以正斜杠开头，例如 `/my-blog`。这样做是为了让 Astro 理解你的网站根目录是 `/my-repo`，而不是默认的 `/`。
+`base` 的值应该是你的仓库名称路径，例如 `/my-repo/`。但仅修改 `base` 不会自动修正主题中已有的绝对链接；项目子路径部署前请完整检查导航、RSS、Pagefind 和特色页面。
 
 :::warning
 当配置了这个值后，你所有的内部页面链接都必须以你的 base 值作为前缀：
@@ -44,15 +44,15 @@ export default defineConfig({
 
 ## 部署到自定义域名
 
-你需要在`src/config.ts`中配置`site`为你的自定义域名。
+你需要在 `src/config/siteConfig.ts`（或 `src/overrides/siteConfig.ts`）中配置 `siteURL` 为你的自定义域名。
 
-```ts title="src/config.ts"
+```ts title="src/config/siteConfig.ts"
 siteURL: "https://tsukimi.souloss.cn/", 
 ```
 
-**Site**
+**siteURL**
 
-`site` 的值必须是以下之一：
+`siteURL` 的值应是以下之一：
 - 基于你的用户名的以下网址: `https://<username>.github.io`
 - 为 GitHub 组织的私有页面 自动生成的随机网址：`https://<random-string>.pages.github.io/`
 
@@ -68,7 +68,7 @@ siteURL: "https://tsukimi.souloss.cn/",
 sub.mydomain.com
 ```
 
-要配置 Astro 以在 GitHub Pages 上使用自定义域名，请将你的域名设置为 site 的值。不要为 `base` 设置值：
+要配置 Astro 以在 GitHub Pages 上使用自定义域名，请将你的域名设置为 `siteURL` 的值。不要为 `base` 设置仓库子路径：
 
 ```astro.config.mjs
 import { defineConfig } from 'astro/config'
@@ -105,8 +105,8 @@ jobs:
         uses: withastro/action@v3
         # with:
           # path: . # 存储库中 Astro 项目的根位置。（可选）
-          # node-version: 20 # 用于构建站点的特定 Node.js 版本，默认为 20。（可选）
-          # package-manager: pnpm@latest # 应使用哪个 Node.js 包管理器来安装依赖项和构建站点。会根据存储库中的 lockfile 自动检测。（可选）
+          # node-version: 22 # 项目要求 Node.js >= 22.12
+          # package-manager: pnpm # 仓库使用 pnpm 10
   deploy:
     needs: build
     runs-on: ubuntu-latest

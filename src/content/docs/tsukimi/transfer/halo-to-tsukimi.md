@@ -171,9 +171,9 @@ A: Tsukimi 会根据文件名自动生成 slug。建议将 Halo 导出的文件�
 ## 高级功能迁移
 
 ### 评论系统
-Tsukimi 目前只支持 Twikoo 评论系统。如果您在 Halo 中使用了其他评论系统，需要：
+Tsukimi 当前接入 Twikoo、Waline 和 Giscus。Halo 中的评论数据不会自动迁移；如果要继续使用评论功能，需要：
 1. 导出现有评论数据
-2. 配置 Twikoo 评论系统
+2. 在 `src/config/commentConfig.ts` 中配置一种已接入的评论系统
 3. 如有需要，手动导入重要评论
 
 ### 自定义页面

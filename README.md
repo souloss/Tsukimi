@@ -1,420 +1,278 @@
-# 🌸 Tsukimi
+# Tsukimi
 
-> 一个现代化、功能丰富的静态博客模板，基于 [Astro](https://astro.build) 构建，具有先进的功能和精美的设计。
+> 一个以内容为中心的静态博客主题：保留 Astro 的低客户端开销，同时提供完整的写作、展示和个性化配置能力。
 
-[![Node.js >= 22](https://img.shields.io/badge/node.js-%3E%3D22-brightgreen)](https://nodejs.org/)
-[![pnpm >= 10](https://img.shields.io/badge/pnpm-%3E%3D10-blue)](https://pnpm.io/)
-[![Astro](https://img.shields.io/badge/Astro-7.3.1-orange)](https://astro.build/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](https://opensource.org/licenses/Apache-2.0)
+[![Node.js >= 22.12](https://img.shields.io/badge/node.js-%3E%3D22.12-brightgreen)](https://nodejs.org/)
+[![pnpm 10](https://img.shields.io/badge/pnpm-10-blue)](https://pnpm.io/)
+[![Astro 7](https://img.shields.io/badge/Astro-7-orange)](https://astro.build/)
+[![Svelte 5](https://img.shields.io/badge/Svelte-5-ff3e00)](https://svelte.dev/)
+[![TypeScript 6](https://img.shields.io/badge/TypeScript-6.0.3-blue)](https://www.typescriptlang.org/)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?logo=apache)](LICENSE)
 
-🌏 **语言：** [**中文**](./README.md) / [**English**](./README.en.md)
+语言：[中文](./README.md) / [English](./README.en.md)
 
-[**🖥️ 在线预览**](https://tsukimi.souloss.cn/) | [**📝 文档**](https://tsukimi.souloss.cn/docs/tsukimi/) | [**📦 内容仓库模板**](https://github.com/souloss/Tsukimi-Content-Template)
+[在线预览](https://tsukimi.souloss.cn/) · [在线文档](https://tsukimi.souloss.cn/docs/tsukimi/) · [GitHub](https://github.com/souloss/Tsukimi) · [内容仓库模板](https://github.com/souloss/Tsukimi-Content-Template)
 
-## ✨ 功能特性
+## 主题定位
 
-### 🎨 设计与界面
-- ⚡ 基于 [Astro](https://astro.build) 和 [Tailwind CSS](https://tailwindcss.com) 构建，加载极快
-- 🎭 明暗主题切换，支持系统偏好检测与动态主题色
-- 🖼️ 全屏背景图片，支持轮播、透明度和模糊效果
-- 📱 全设备响应式设计，自动分辨率适配
-- 🎬 流畅的页面过渡动画（[Swup](https://swup.js.org/)）
+Tsukimi 是一个基于 Astro 的静态博客主题，适合技术文章、生活记录、系列教程、知识库和个人主页。它将文章、特殊页面和主题代码分开组织；默认内容可以直接运行，也可以把个人内容与配置放到独立仓库中。构建结果是可部署到静态托管平台的 dist/ 目录，不依赖运行时服务器。
 
-### 🔍 内容与搜索
-- 🔎 基于 [Pagefind](https://pagefind.app/) 的搜索，支持高亮与键盘导航
-- 📝 [增强 Markdown](#-markdown-扩展语法)，支持数学公式、代码高亮、GitHub 卡片等
-- 📑 交互式目录，支持自动滚动
-- 📡 RSS / Atom 订阅
-- ⏱️ 阅读时间估算
+项目面向两类使用者：
 
-### 📱 特色页面
-- 🎌 **追番页面** — 追踪动画观看进度和评分
-- 🤝 **友链页面** — 精美卡片展示朋友网站
-- 📔 **日记页面** — 分享生活瞬间
-- 📦 **归档 / 关于 / 相册 / 项目 / 技能 / 时间线 / 设备** 等页面
+- 想直接写作和发布的用户：修改内容与少量配置即可开始。
+- 想持续扩展的开发者：可以使用 Astro/Svelte 组件、Markdown 插件、配置类型和检查脚本，按现有架构添加功能。
 
-### 🛠 技术特性
-- 💬 评论系统（Twikoo / Giscus / Waline）
-- 🔐 文章加密支持
-- 🎵 音乐播放器
-- 🐱 Live2D 看板娘
-- 🌸 樱花特效
-- 📊 SEO 优化、站点地图、OG 图片
+## 能力概览
 
-> 📖 完整配置说明请参考 [Tsukimi 文档](https://tsukimi.souloss.cn/docs/tsukimi/)
+### 写作与阅读
 
-## 🚀 快速开始
+- Markdown 和 MDX 内容集合，支持文章草稿、置顶、标签、分类、系列、转载、别名和自定义永久链接。
+- Pagefind 全文搜索；文章目录、阅读时间、相关文章和随机文章。
+- RSS 与 Atom feed、sitemap、Open Graph 元信息和可选 OG 图片生成。
+- 客户端文章加密、密码提示和内容摘要隐藏。它适合控制页面访问，不等同于服务端密钥管理或机密存储。
+- 响应式文章列表，可切换列表/网格布局；宽表格、图片懒加载、图片尺寸处理和图片格式优化。
+
+### Markdown 扩展
+
+在普通 .md 文件中即可使用扩展语法，无需在文章里导入组件：
+
+- 提示框、折叠块、标签页、时间线、网格、卡片、画廊、视频和对话等容器指令。
+- 行内标记、键盘按键、模糊/密码遮罩、颜色、徽标、缩写和注释。
+- Mermaid、Markmap、PlantUML、Vega/Vega-Lite、WaveDrom 和 Bytefield 等图表或图形代码块。
+- KaTeX 数学公式、GitHub 仓库卡片、相对链接、外部文件嵌入。
+- Expressive Code 代码高亮、行号、行标记、语言徽章、复制按钮和代码块折叠。
+
+完整语法和可复制示例见 [Markdown 指令文档](src/content/docs/tsukimi/press/Markdown/directives.md) 及 src/content/posts/markdown-extended.md。
+
+### 主题与交互
+
+- 浅色/深色主题、系统偏好检测、主题色相和响应式布局。
+- Banner、全屏、覆盖层和无壁纸四种背景模式；图片轮播、水波纹、渐变和页面过渡可独立开关。
+- 双侧边栏、抽屉式移动端布局、目录、日历、标签、分类、站点统计、公告和个人资料组件。
+- Swup 页面过渡与可访问性配置；Svelte 5 用于搜索、设置、音乐播放器等交互组件。
+- 可选评论系统：Twikoo、Waline 和 Giscus（具体服务端参数由用户配置）。
+- 可选本地/外部音乐播放器、Live2D Pio 看板娘、樱花效果和分享海报。
+
+### 特色页面
+
+站点默认包含以下页面，均可通过 siteConfig.featurePages 控制对应特色路由：
+
+| 页面 | 路由 | 用途 |
+| --- | --- | --- |
+| 番剧 | /anime/ | 使用本地数据、Bangumi 或 Bilibili 数据展示追番信息 |
+| 动态 | /talking/ | 展示说说/动态，可接入 Memos API |
+| 友链 | /friends/ | 友链卡片和可选的朋友圈动态 |
+| 项目 / 技能 | /projects/ · /skills/ | 展示项目和技能数据 |
+| 时间线 / 设备 | /timeline/ · /devices/ | 记录经历和设备清单 |
+| 相册 | /albums/ | 本地或外链图片相册及详情页 |
+| 系列 / 转载 | /series/ · /reposts/ | 组织系列文章和转载内容 |
+| 留言板 / 赞助 | /guestbook/ · /sponsor/ | 互动留言和赞助说明 |
+| 知识图谱 | /knowledge-graph/ | 以图形方式浏览文章关系 |
+
+此外还有首页、归档、标签、分类、关于、RSS/Atom 和内置文档页面。禁用特色页面时，应同步移除导航栏中对应链接；pnpm check-config 可检查相关配置一致性。
+
+## 技术栈
+
+- [Astro 7](https://astro.build/) 静态输出（output: "static"）
+- [Svelte 5](https://svelte.dev/) 交互组件
+- [Tailwind CSS 4](https://tailwindcss.com/) 与 Stylus 样式
+- TypeScript、Astro Content Collections、Markdown/MDX
+- Swup 页面过渡、Pagefind 搜索、Expressive Code 代码块
+- remark/rehype 插件、KaTeX、Mermaid、Markmap、PlantUML、Vega-Lite 等内容渲染能力
+
+依赖版本以 [package.json](./package.json) 和锁文件为准；README 不替代框架或第三方服务的官方文档。
+
+## 快速开始
 
 ### 环境要求
 
-- Node.js >= 22.12
-- pnpm >= 10.33
+- Node.js >=22.12.0
+- pnpm >=10.33.0 <11
+- Git
 
-### 安装
+### 安装与开发
 
-```bash
+~~~bash
 git clone https://github.com/souloss/Tsukimi.git
 cd Tsukimi
 pnpm install
-```
-
-### 配置
-
-编辑 `src/config/` 目录下的配置文件自定义博客设置，包括站点信息、主题色彩、横幅图片、社交链接等。
-
-### 启动开发服务器
-
-```bash
 pnpm dev
-```
+~~~
 
-博客将在 `http://localhost:4321` 可用。
+开发服务器默认地址为 http://localhost:4321/。predev 会生成本地 Svelte 图标，并按环境变量决定是否同步独立内容仓库。
 
-### 部署
+### 第一次配置
 
-支持 Vercel、Netlify、GitHub Pages、Cloudflare Pages 等平台。部署前请更新 `src/config/siteConfig.ts` 中的 `siteURL`。
+1. 从 src/config/index.ts 了解统一配置出口，再按职责编辑 src/config/ 下的文件。
+2. 在 src/config/siteConfig.ts 设置站点标题、语言、siteURL、特色页面和首页行为。
+3. 在 src/config/navBarConfig.ts 调整导航；在 src/config/profileConfig.ts 设置头像、简介和社交链接。
+4. 按需配置 backgroundWallpaper.ts、commentConfig.ts、musicConfig.ts、sidebarConfig.ts、pioConfig.ts、effectsConfig.ts、字体和许可证等模块。
+5. 需要环境变量时，复制 [.env.example](./.env.example) 为 .env。不要提交包含令牌、私有仓库地址或第三方服务密钥的 .env。
 
-环境变量配置参照 `.env.example`。不建议将 `.env` 文件提交到 Git。
+配置模块通过 withOverride 支持 src/overrides/<configName>.ts 的深度合并覆盖。该目录通常由内容同步产生并被忽略；没有覆盖文件时使用代码仓库内的默认配置。
 
-## 📦 代码内容分离（可选）
+## 内容组织与文章格式
 
-Tsukimi 支持将代码和内容分为两个独立仓库，适合团队协作和私有内容管理。
+### 目录
 
-```bash
-# 启用内容分离模式
-cp .env.example .env
-# 编辑 .env
-ENABLE_CONTENT_SYNC=true
-CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
+| 目录 | 内容 |
+| --- | --- |
+| src/content/posts/ | 博客文章（.md / .mdx），支持单文件或带资源的目录文章 |
+| src/content/spec/ | 关于、友链等特殊页面内容 |
+| src/content/docs/ | 主题文档内容，渲染到 /docs/tsukimi/ |
+| src/data/ | 番剧、项目、技能、时间线、友链等页面数据 |
+| public/images/、src/assets/ | 公共图片和主题资源 |
 
-# 同步内容
-pnpm run sync-content
-```
+创建文章：
 
-> 📖 详细配置参考 [内容分离指南](https://tsukimi.souloss.cn/docs/tsukimi/)
+~~~bash
+pnpm new-post my-first-post
+~~~
 
-## 📝 文章 Frontmatter
+文章至少需要 title 和 published 两个字段。常用 Frontmatter 如下：
 
-```yaml
+~~~yaml
 ---
 title: 文章标题
-published: 2024-01-01
-description: 文章描述
-image: ./cover.jpg
-tags: [标签1, 标签2]
-category: 分类
+published: 2026-01-01
+description: 用于 SEO、卡片和 feed 的摘要
+tags: [Astro, Tsukimi]
+category: 技术
 draft: false
 pinned: false
-priority: 0
-comment: true
-lang: zh-CN
-updated: 2024-06-01
-slug: custom-slug
-permalink: /custom/path/
-alias: /old-path/
+updated: 2026-01-02
+image: ./cover.webp
 series: 系列名称
 seriesOrder: 1
+comment: true
+lang: zh_CN
+slug: custom-slug
+permalink: /custom/path/
+alias: /old/path/
+math:
+  inline: false
+  display: false
 encrypted: false
 password: ""
 passwordHint: ""
 hideHomeContent: false
-author: ""
+redirect: ""
+sourceLink: ""
 licenseName: ""
 licenseUrl: ""
-sourceLink: ""
-redirect: ""
----
-```
-
-### 基础字段
-
-| 字段 | 类型 | 默认值 | 说明 |
-|:-----|:-----|:-------|:-----|
-| `title` | `string` | — | 文章标题（必需） |
-| `published` | `Date` | — | 发布日期（必需） |
-| `description` | `string` | `""` | 文章描述，用于 SEO、预览和 RSS |
-| `image` | `string` | `""` | 封面图片路径（相对于文章文件） |
-| `tags` | `string[]` | `[]` | 标签数组 |
-| `category` | `string` | `""` | 文章分类 |
-| `draft` | `boolean` | `false` | 设为 `true` 在生产环境隐藏 |
-| `lang` | `string` | `""` | 文章语言（仅与站点默认不同时设置） |
-| `updated` | `Date` | — | 更新日期，显示在文章元信息中 |
-
-### 排序与导航
-
-| 字段 | 类型 | 默认值 | 说明 |
-|:-----|:-----|:-------|:-----|
-| `pinned` | `boolean` | `false` | 设为 `true` 置顶文章 |
-| `priority` | `number` | — | 置顶文章间的排序优先级（越小越靠前） |
-| `slug` | `string` | — | 自定义 URL slug（仅替换文件名部分） |
-| `permalink` | `string` | — | 自定义永久链接（最高优先级，覆盖 slug 和全局配置） |
-| `alias` | `string` | — | 别名路径，低于 permalink 优先级 |
-
-### 系列文章
-
-| 字段 | 类型 | 默认值 | 说明 |
-|:-----|:-----|:-------|:-----|
-| `series` | `string` | — | 系列名称，同系列文章自动显示导航 |
-| `seriesOrder` | `number` | `0` | 系列内排序序号（越小越靠前） |
-
-### 评论与版权
-
-| 字段 | 类型 | 默认值 | 说明 |
-|:-----|:-----|:-------|:-----|
-| `comment` | `boolean` | `true` | 启用 / 禁用评论区 |
-| `author` | `string` | `""` | 覆盖作者名（默认使用 profileConfig） |
-| `licenseName` | `string` | `""` | 覆盖许可证名称 |
-| `licenseUrl` | `string` | `""` | 覆盖许可证链接 |
-| `sourceLink` | `string` | `""` | 覆盖文章来源链接 |
-
-### 加密与访问控制
-
-| 字段 | 类型 | 默认值 | 说明 |
-|:-----|:-----|:-------|:-----|
-| `encrypted` | `boolean` | `false` | 启用文章加密 |
-| `password` | `string` | `""` | 加密密码（需同时启用 encrypted） |
-| `passwordHint` | `string` | `""` | 密码提示文字 |
-| `hideHomeContent` | `boolean` | `false` | 隐藏首页文章摘要 |
-| `redirect` | `string` | — | 外部重定向 URL |
-
-### 转载
-
-```yaml
 repost:
   originalAuthor: 原作者
-  originalUrl: https://example.com/original
-  originalTitle: 原文标题
-  originalSite: 原站名称
-```
-
-`copyright` 支持的值：`CC BY` / `CC BY-SA` / `CC BY-ND` / `CC BY-NC` / `CC BY-NC-SA` / `CC BY-NC-ND` / `CC0` / `ARR`
-
-## 🧩 Markdown 扩展语法
-
-### 📝 文本标记
-
-| 语法 | 效果 | 示例 |
-|:-----|:-----|:-----|
-| `==文本==` | 高亮标记 | `==重点内容==` |
-| `:mark[文本]{color=red}` | 彩色标记 | `:mark[标注]{color=blue}` |
-| `:kbd[Ctrl+C]` | 键盘按键 | Ctrl+C 样式 |
-| `:blur[隐藏内容]` | 模糊遮罩（点击揭示） | 适合剧透内容 |
-| `:psw[密码内容]` | 密码遮罩（点击揭示） | — |
-| `:u[下划线]` | 下划线 | `:u[文字]{color=red}` |
-| `:emp[强调]` | 彩色强调 | `:emp[文字]{color=blue}` |
-| `:wavy[波浪线]` | 波浪下划线 | `:wavy[文字]{color=pink}` |
-| `:del[删除线]` | 删除线 | — |
-| `:sup[上标]` | 上标 | `:sup[n]{color=red}` |
-| `:sub[下标]` | 下标 | `:sub[n]{color=blue}` |
-| `:color[文字]{color=red}` | 自定义颜色文字 | 支持 red/orange/yellow/green/blue/purple/pink/cyan/accent 或十六进制 |
-| `:hashtag[标签]{href=...}` | 哈希标签（自动轮换颜色） | `:hashtag[前端]{href=/tags/frontend}` |
-| `:checkbox[选项]{checked=true}` | 自定义复选框 | `color=` `symbol=` `inline=` |
-| `:radio[选项]{checked=true}` | 自定义单选按钮 | `color=` `inline=` |
-| `:emoji[smile]{source=qq}` | 外部 Emoji 图片 | source: qq/aru/tieba/blobcat/twemoji |
-| `:step-brackets[1]{title=步骤}` | 步骤标记 | — |
-
-### 📦 容器指令
-
-#### 提示框（Callout）
-
-13 种类型：`note` · `info` · `tip` · `warning` · `caution` · `important` · `question` · `quote` · `bug` · `example` · `success` · `failure` · `danger`
-
-```markdown
-:::tip[提示标题]{color=blue}
-提示内容
-:::
-```
-
-也支持 GitHub 风格：`> [!NOTE]` / `> [!TIP]` / `> [!WARNING]` 等
-
-#### 折叠区域
-
-```markdown
-:::folding[标题]{open=true color=blue}
-折叠内容
-:::
-```
-
-#### 标签页
-
-```markdown
-:::tabs{align=center}
-tab:选项卡一{color=red}
-内容一
-tab:选项卡二{color=blue}
-内容二
-:::
-```
-
-#### 时间线
-
-```markdown
-:::timeline
-- 2024-01 | 事件标题 | 事件描述
-- 2024-02 | 事件标题 | 事件描述
-:::
-```
-
-#### 网格布局
-
-```markdown
-:::grid{cols=3 gap=16 minw=240px bg=card}
-单元格一
+  originalUrl: https://example.com/post
+copyright: CC BY-NC-SA
 ---
-单元格二
----
-单元格三
-:::
-```
+~~~
 
-#### 其他容器
+字段以 [src/content.config.ts](./src/content.config.ts) 的 schema 为准。draft: true 的文章在生产构建中不会作为公开文章发布；permalink 优先于 alias 和 slug；series 与 seriesOrder 用于系列导航。copyright 可使用 CC BY、CC BY-SA、CC BY-ND、CC BY-NC、CC BY-NC-SA、CC BY-NC-ND、CC0 或 ARR。
 
-| 指令 | 说明 | 属性 |
-|:-----|:-----|:-----|
-| `:::poetry{title=... author=...}` | 诗歌排版 | `title` `author` `date` `footer` |
-| `:::copy{label=复制内容}` | 一键复制 | `label` |
-| `:::blockquote{icon=user}` | 装饰引用 | `icon` |
-| `:::quot` | 紧凑引用卡片 | — |
-| `:::reel{title=... author=...}` | 卡片容器 | `title` `author` `date` `footer` |
-| `:::paper{title=... style=...}` | 文档/信纸排版 | `title` `author` `date` `footer` `style` |
-| `:::gallery{cols=3 gap=8}` | 图片画廊（点击放大） | `cols` `gap` |
-| `:::folders` | 多层嵌套折叠 | `folder:名称` 分隔 |
-| `:::colors{values=#ff0000,#00ff00}` | 色板展示 | `values` |
-| `:::asciinema{src=url}` | 终端录制播放 | `src` `cols` `rows` |
+### 代码与内容分离（可选）
 
-### 🃏 卡片指令
+默认模式把内容和主题代码放在同一个仓库，直接编辑 src/content/、src/data/ 和资源目录即可。需要私有内容、多人协作或独立版本控制时，可以启用同步模式：
 
-```markdown
-:::link-card{href=... title=... desc=... image=... icon=...}
-:::
+~~~bash
+cp .env.example .env
+~~~
 
-:::card{title=... icon=... href=... color=blue}
-卡片内容
-:::
+~~~dotenv
+ENABLE_CONTENT_SYNC=true
+CONTENT_REPO_URL=https://github.com/your-username/Tsukimi-Content.git
+# 可选，默认是项目根目录下的 ./content
+CONTENT_DIR=./content
+~~~
 
-:::panel
-<!-- label: 左侧 | 右侧 -->
-代码内容...
-:::
-```
+然后执行：
 
-### 🎬 媒体指令
+~~~bash
+pnpm run sync-content
+~~~
 
-```markdown
-:::video{src=video.mp4 poster=cover.jpg ratio=16/9}
-:::
+同步脚本会将独立仓库中的 posts/、spec/、data/、images/ 映射到对应目录，并可处理 overrides/、assets/、public/ 和 wrangler.toml。pnpm dev 与 pnpm build 的生命周期钩子会自动运行同步；私有仓库请使用 SSH 或 CI/CD secret，避免把 Token 写入 URL 并提交到 Git。同步脚本可能替换本地内容目录，首次启用前请备份未提交的修改。
 
-<!-- Bilibili -->
-:::video{bilibili=BVxxxxxx}
+独立内容仓库的推荐结构和迁移步骤见 [内容仓库结构文档](src/content/docs/tsukimi/Other/structure.md)、[内容分离文档](src/content/docs/tsukimi/Other/separation.md) 和 [内容仓库模板](https://github.com/souloss/Tsukimi-Content-Template)。
 
-<!-- YouTube -->
-:::video{youtube=VIDEO_ID}
-```
+## 构建、检查与发布
 
-### 📊 图表
+~~~bash
+# 生产构建，输出 dist/；同时构建 Pagefind、压缩字体和更新 feed
+pnpm build
 
-| 语言 | 说明 |
-|:-----|:-----|
-| ````mermaid` | Mermaid 流程图/时序图/甘特图等，支持明暗主题 |
-| ````markmap` | Markmap 思维导图，支持折叠/缩放 |
-| ````plantuml` | PlantUML 图表，支持明暗主题双渲染 |
+# 预览已构建的静态站点
+pnpm preview
 
-### 🔢 数学公式
+# Astro、TypeScript、测试
+pnpm check
+pnpm type-check
+pnpm test
 
-```markdown
-行内公式：$E = mc^2$
+# 内容、配置和发布门禁
+pnpm check-content
+pnpm check-config
+pnpm check-publish
 
-块级公式：
-$$
-\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
-$$
-```
+# 图片、字体、文档渲染和性能检查
+pnpm check-images
+pnpm check-fonts
+pnpm check-docs-render
+pnpm perf:baseline
+pnpm perf:check
 
-### 💻 代码块增强
+# Biome 格式化与检查（脚本会写回修复结果）
+pnpm format
+pnpm lint
+~~~
 
-基于 [Expressive Code](https://expressive-code.com/)，支持：
+pnpm build 需要能访问构建时使用的外部服务（例如启用的内容仓库、PlantUML 或数据更新接口）。不需要刷新远程数据时使用普通 pnpm build；pnpm build:refresh-data 会先刷新 feed 和番剧数据。部署静态站点时使用：
 
-```markdown
-```js {1,3-5} title="example.js" ins={2} del={4} mark={6}
-// 行高亮、插入、删除、标记
-```
-```
+- 构建命令：pnpm build
+- 发布目录：dist/
 
-- 行号显示、可折叠区域
-- 语言徽章、自定义复制按钮
-- `frame="terminal"` / `frame="code"` 框架模式
+Vercel、Netlify、Cloudflare Pages、GitHub Pages 或自有静态服务器均可使用上述产物；具体平台配置见 [部署文档](src/content/docs/tsukimi/guide/deploy/_index.md)。GitHub Actions 示例位于 [.github/workflows/](./.github/workflows/)。
 
-### 🔗 GitHub 卡片
+## 开发者入口
 
-```markdown
-::github{repo="owner/repo"}
-```
+~~~text
+src/
+├── components/   原子组件、功能组件、布局和侧边栏 widgets
+├── config/       站点、导航、布局、功能和第三方服务配置
+├── content/      posts、spec、docs 三个内容集合
+├── data/         特色页面数据
+├── layouts/      Layout 与 MainGridLayout
+├── pages/        Astro 文件路由和 feed/API/OG 端点
+├── plugins/      remark/rehype、图表和代码块插件
+├── styles/       全局变量和主题样式
+└── utils/        内容处理、导航、目录、布局和性能工具
+~~~
 
-### 🖼️ 图片增强
+扩展时优先复用 src/components/ 的现有组件和 src/utils/ 工具，保持 atoms → features/widgets → layouts/pages 的分层。新增侧边栏 widget 需要同时更新：
 
-- **宽度控制**：`![图片 w-50%](image.png)` — 设置图片宽度百分比
-- **懒加载**：所有图片自动懒加载，带模糊过渡
-- **画廊**：PhotoSwipe 集成，点击图片全屏查看
+1. src/types/config.ts 的 WidgetComponentType；
+2. src/config/（当前配置入口为 src/config/index.ts）的侧边栏布局；
+3. src/components/widgets/sidebar/SideBar.astro 与 src/components/layout/RightSideBar.astro 的组件映射。
 
-### 📋 其他
+Markdown 能力应放在 src/plugins/ 并接入 astro.config.mjs；跨页面数据处理放在 src/utils/。修改共享行为后至少运行 pnpm check、pnpm type-check、pnpm test 和相关的 check-* 脚本。组件架构、CSS、图标和侧边栏约束见 [docs/rule/](./docs/rule/)；更完整的主题文档源码在 [src/content/docs/tsukimi/](./src/content/docs/tsukimi/)。
 
-- **表格自动包裹**：宽表格自动横向滚动
-- **外部链接**：自动添加 `target="_blank"` 和 `rel="nofollow noopener noreferrer"`
-- **相对链接解析**：`./other-post.md` 自动解析为正确的 URL
-- **阅读时间**：自动计算，支持 CJK 优化（400 字/分钟）
-- **摘要分割**：`<!-- more -->` 手动控制摘要截断
+## 贡献
 
-## 🧞 指令
+欢迎提交问题、修复和与主题本身相关的功能改进。提交前请：
 
-| 命令 | 说明 |
-|:-----|:-----|
-| `pnpm install` | 安装依赖 |
-| `pnpm dev` | 启动开发服务器 `localhost:4321` |
-| `pnpm build` | 构建生产站点到 `./dist/` |
-| `pnpm preview` | 本地预览构建结果 |
-| `pnpm check` | Astro 错误检查 |
-| `pnpm test` | 运行单元测试 |
-| `pnpm check-content` | 检查文章 Frontmatter、资源和路径冲突 |
-| `pnpm check-config` | 检查特色页面、导航和侧栏配置一致性 |
-| `pnpm check-images` | 审计构建产物中的图片替代文本、懒加载和格式 |
-| `pnpm check-fonts` | 审计字体压缩产物和 CSS 引用 |
-| `pnpm check-publish` | 执行发布前内容、配置和构建产物门禁 |
-| `pnpm perf:baseline` | 记录静态页面数量、产物体积和本地资源基线 |
-| `pnpm perf:check` | 检查构建产物相对本地性能基线的变化 |
-| `pnpm check-docs-render` | 检查文档页面布局、交互和搜索渲染 |
-| `pnpm preview:drafts` | 启动包含草稿文章的本地预览 |
-| `pnpm format` | Prettier 格式化 |
-| `pnpm lint` | ESLint 检查与修复 |
-| `pnpm new-post <filename>` | 创建新文章 |
+1. 确认修改没有把个人内容、账号标识、统计 ID、私有 URL 或密钥带入模板。
+2. 按现有目录和配置类型组织代码，避免直接复制重复的 UI 逻辑。
+3. 运行与改动相关的检查，至少包括 pnpm check 和 pnpm type-check；内容或配置变更同时运行 pnpm check-content / pnpm check-config。
+4. 在 Pull Request 中说明行为变化、验证命令和必要的截图或复现步骤。
 
-## 🙏 致谢
+请先查看 [Issues](https://github.com/souloss/Tsukimi/issues) 中的现有讨论，再提交新的问题或建议。
 
-### 技术栈
-- [Astro](https://astro.build) · [Tailwind CSS](https://tailwindcss.com) · [Svelte](https://svelte.dev) · [Swup](https://swup.js.org/) · [Pagefind](https://pagefind.app/) · [Iconify](https://iconify.design/)
+## 上游与许可证
 
-### 灵感项目
-- [Fuwari](https://github.com/saicaca/fuwari) — 本项目的原始模板，by saicaca
-- [Mizuki](https://github.com/LyraVoid/Mizuki) — Tsukimi 基于 Mizuki 开发，by LyraVoid
-- [Yukina](https://github.com/WhitePaper233/yukina) — 优雅的博客模板，提供了设计灵感
-- [Firefly](https://github.com/CuteLeaf/Firefly) — 双侧边栏布局、文章双列网格等设计思路
-- [Twilight](https://github.com/spr-aachen/Twilight) — 动态壁纸切换、响应式设计与过渡效果
+Tsukimi 延续并扩展了以下项目的代码、设计或实现思路，请保留相应的上游版权和许可证声明：
 
-### 其他
-- [Pio](https://github.com/Dreamer-Paul/Pio) — Live2D 看板娘插件
+- [Fuwari](https://github.com/saicaca/fuwari)：早期模板基础。
+- [Mizuki](https://github.com/LyraVoid/Mizuki)：Tsukimi 的重要上游实现。
+- [Firefly](https://github.com/CuteLeaf/Firefly)：部分双侧栏、布局和交互思路。
+- [Pio](https://github.com/Dreamer-Paul/Pio)：Live2D 看板娘插件来源。
 
-## 📄 许可证
-
-[Apache License 2.0](LICENSE) | [MIT License (Original)](LICENSE.MIT)
-
-Copyright (c) 2023 saicaca (Fuwari) · Copyright (c) 2024-2026 LyraVoid (Mizuki)
-
-## 🍀 贡献者
-
-<a href="https://github.com/souloss/Tsukimi/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=souloss/Tsukimi" />
-</a>
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=souloss/Tsukimi&type=Date)](https://star-history.com/#souloss/Tsukimi&Date)
+仓库提供 [LICENSE](./LICENSE)（Apache License 2.0）和 [LICENSE.MIT](./LICENSE.MIT)（原始模板代码的 MIT 声明）。不同目录、上游代码和第三方依赖可能适用不同许可；分发或修改前请阅读许可证文件及相关版权声明。

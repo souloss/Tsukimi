@@ -13,8 +13,8 @@ copyright:
     url: https://github.com/souloss
 ---
 
-页面自动缩放配置位于 `src/config.ts` 文件中的 `pageScaling` 对象，控制页面的自动缩放行为。
-```typescript title="src/config.ts"
+页面自动缩放配置位于 `src/config/siteConfig.ts` 文件中的 `siteConfig.pageScaling` 对象，控制页面的自动缩放行为。
+```typescript title="src/config/siteConfig.ts"
 // 页面自动缩放配置
 	pageScaling: {
 		enable: true, // 是否开启自动缩放

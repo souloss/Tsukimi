@@ -196,7 +196,7 @@ Typecho 的独立页面（type='page'）需要单独处理：
 A: 推荐直接查询数据库，可以编写脚本批量生成 Markdown 文件。也可以使用 Typecho 的导出插件。
 
 ### Q: Typecho 的评论如何处理？
-A: Tsukimi 目前只支持 Twikoo 评论系统，Typecho 的评论可以导出备份，但无法直接迁移到新系统。
+A: Tsukimi 当前接入 Twikoo、Waline 和 Giscus。Typecho 的评论可以导出备份，但无法自动迁移到新系统。
 
 ### Q: 如何处理 Typecho 的主题自定义功能？
 A: Typecho 主题的自定义功能需要在 Tsukimi 中重新实现，或寻找类似的替代方案。
@@ -210,7 +210,7 @@ A: Tsukimi 只支持单级分类，如果 Typecho 使用了多级分类，建议
 ## 高级功能迁移
 
 ### 评论系统
-Tsukimi 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
+Tsukimi 当前接入 Twikoo、Waline 和 Giscus。评论数据不会自动迁移，需要在 `src/config/commentConfig.ts` 中选择并配置评论服务。
 
 ### SEO 优化
 - 确保每篇文章都有 `description` 字段

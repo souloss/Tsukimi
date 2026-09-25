@@ -193,7 +193,7 @@ Gridea 通常将图片等静态资源存储在 `[源文件目录]/media/` 或文
 A: Gridea 的主题配置与 Tsukimi 的配置方式不同，无法直接迁移。您需要根据 Tsukimi 的文档重新配置主题。
 
 ### Q: 如何处理 Gridea 的评论？
-A: Tsukimi 不自带评论系统。您可以考虑集成第三方评论系统，如 Disqus、Gitalk、Waline 等，并尝试将 Gridea 的评论数据导入到这些系统中。
+A: Tsukimi 提供 Twikoo、Waline 和 Giscus 接入。您可以根据对应文档配置评论服务，但 Gridea 的评论数据不会自动导入。
 
 ### Q: Gridea 的自定义页面如何迁移？
 A: Gridea 的自定义页面可以作为 Tsukimi 的独立页面进行迁移。将其内容转换为 Markdown，并创建对应的 `.md` 文件在 Tsukimi 的 `src/content/pages/` 目录下。

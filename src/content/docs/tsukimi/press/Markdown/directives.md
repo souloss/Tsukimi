@@ -1037,7 +1037,7 @@ npx create-my-app
 ```
 
 <!-- label: 详细步骤 | 5 分钟 -->
-1. 确保 Node.js >= 18
+1. 按项目要求安装 Node.js（Tsukimi 需要 >= 22.12.0）
 2. 运行 `npx create-my-app`
 3. 按提示选择模板
 
@@ -1066,7 +1066,7 @@ npx create-my-app
 ```
 
 <!-- label: 详细步骤 | 5 分钟 -->
-1. 确保 Node.js >= 18
+1. 按项目要求安装 Node.js（Tsukimi 需要 >= 22.12.0）
 2. 运行 `npx create-my-app`
 
 :::
@@ -1688,7 +1688,7 @@ tab: 演示效果
 
 ::::card-grid
 :::card{title="快速" icon="lucide:zap" color="#22c55e"}
-基于 Astro 6 静态输出，页面加载极快。
+基于 Astro 7 静态输出，页面加载极快。
 :::
 
 :::card{title="现代" icon="lucide:code" color="#3b82f6"}
@@ -1705,7 +1705,7 @@ tab: 示例代码
 `````markdown
 ::::card-grid
 :::card{title="快速" icon="lucide:zap" color="#22c55e"}
-基于 Astro 6 静态输出，页面加载极快。
+基于 Astro 7 静态输出，页面加载极快。
 :::
 
 :::card{title="现代" icon="lucide:code" color="#3b82f6"}
@@ -1917,4 +1917,3 @@ pnpm run dev
 
 - 第一行使用 `日期 | 标题` 格式
 - 后续行支持完整 Markdown 语法（链接、加粗、行内指令等）
-

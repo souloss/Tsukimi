@@ -1,220 +1,117 @@
 ---
 title: 文档系统
-createTime: 2025/08/17 17:21:41
+createTime: 2026/09/25
 permalink: /other/docs-system/
 order: 7
 icon: ri:book-open-line
 badge:
-  type: warning
-  text: 新
+  type: info
+  text: 当前实现
 copyright:
   author:
     name: souloss
     url: https://github.com/souloss
 ---
 
-## 文档系统
+# 文档系统
 
-Tsukimi 内置了一个完整的文档系统，用于编写和展示项目文档。
+Tsukimi 内置一个基于 Astro content collection 的文档系统。文档文件放在 src/content/docs/ 下，路由由 pages/docs/[...slug].astro 生成，侧栏和上一页/下一页链接根据目录自动计算。
 
-### 功能特性
+## 项目结构
 
-- **侧边栏导航** - 自动生成的文档目录导航
-- **目录（TOC）** - 页面内的标题导航
-- **面包屑导航** - 显示当前页面在文档结构中的位置
-- **多语言支持** - 同一文档可以有多种语言版本
-- **上一页/下一页导航** - 文档页面间的顺序导航
-- **搜索功能** - 文档内容搜索
-- **暗色主题** - 支持暗色模式
-- **自定义永久链接** - 可为文档页面设置自定义 URL
+```text
+src/content/docs/
+└── tsukimi/
+    ├── _index.md                # 项目首页配置（isHomepage: true）
+    ├── guide/
+    │   ├── _index.md            # 目录节点，不单独渲染
+    │   └── get-started.md
+    ├── Basic-Layout/
+    ├── Article-layout/
+    ├── Feature/
+    ├── Sidepanel/
+    ├── press/
+    ├── special/
+    ├── transfer/
+    ├── problem/
+    ├── API/
+    └── Other/
+```
 
-### 文档目录结构
+当前 Tsukimi 文档共 137 个 Markdown/MDX 条目：19 个索引/目录节点和 118 个专题页面。新增目录时添加 _index.md 并设置 order，侧栏会自动出现。
 
-文档文件位于 `src/content/docs/` 目录下：
+## 首页
 
-::: file-tree
+项目根 _index.md 不作为普通文章渲染。它的 frontmatter 由 DocsHome.astro 读取：
 
-- src/content/docs/
-  - tsukimi/
-    - index.md
-    - guide/
-      - intro.md
-      - get-started.md
-      - ...
-    - Basic-Layout/
-      - site-config.md
-      - ...
-    - ...
-  - <其他项目文档>/
-    - ...
+| 字段 | 作用 |
+| --- | --- |
+| title | 项目名称。 |
+| tagline | 首页眉题。 |
+| description | 首页说明和 meta description。 |
+| image | 首页装饰图。 |
+| actions | 首页按钮数组，包含 theme、text、link。 |
+| features | 首页能力卡片数组，包含 title、icon、details。 |
+| isHomepage | 必须为 true 才会生成项目首页。 |
 
-:::
+## 页面 frontmatter
 
-每个文档项目是一个独立的子目录。
+普通页面可使用以下字段；均由 src/content.config.ts 的 docs schema 校验：
 
-### 文档页面 Frontmatter
-
-文档页面使用以下 Frontmatter：
-
-```markdown
+```yaml
 ---
 title: 页面标题
-createTime: 2025/08/17 17:21:41
-permalink: /路径/到/页面/
+createTime: 2026/09/25
+permalink: /guide/example/
+order: 3
+icon: material-symbols:article-outline-rounded
+description: 页面摘要
 docSlug: tsukimi
 lang: zh_CN
+collapsed: true
+badge:
+  type: info
+  text: 新
 ---
-
-文档内容...
 ```
 
-#### 字段说明
+- title、description、createTime 控制标题、摘要和页面元信息。
+- permalink 是相对于 /docs/<docSlug>/ 的自定义路径，例如 /guide/example/；省略时按文件路径生成。
+- order 仅影响同级目录排序，数值越小越靠前。
+- icon 使用 Iconify 名称；未知名称会回退到通用图标。
+- collapsed 控制目录节点默认是否展开，当前页面所在目录仍会自动展开。
+- docSlug 默认取文件路径的第一级目录；只有维护多个文档项目时才需要显式设置。
+- lang 用于同一路径的多语言页面；未提供翻译时会回退到默认语言。
 
-| 字段 | 必填 | 说明 |
-|-----|------|-----|
-| `title` | 是 | 页面显示标题 |
-| `createTime` | 否 | 页面创建时间 |
-| `permalink` | 否 | 自定义永久链接（不包含 `/docs/<项目>/` 前缀） |
-| `docSlug` | 否 | 文档项目标识，默认为目录名 |
-| `lang` | 否 | 语言标识，如 `zh_CN`、`en`、`ja` |
+版权信息可以保留为任意 YAML 值，主题只把它作为页面元数据传递；不要把 posts 集合的 published/tags 等字段复制到 docs 页面。
 
-### 侧边栏配置
+## 自动侧栏和链接
 
-侧边栏导航在 `src/data/docs-tsukimi.ts` 中配置：
+侧栏由 src/utils/docs-utils.ts 扫描 docs collection 后构建：
 
-```typescript
-import type { DocsTsukimiSidebarItem } from "./docs-tsukimi";
+1. 读取项目目录中所有 Markdown/MDX 文件。
+2. 识别每级目录的 _index.md，使用其 title、icon、order、collapsed 作为节点配置。
+3. 按 order 对同级页面和目录排序；普通文件使用 title、permalink 或文件路径生成 URL。
+4. 标记当前页面，并据此生成面包屑、上一页/下一页链接。
 
-export const docsTsukimiSidebar: DocsTsukimiSidebarItem[] = [
-  {
-    name: "指南",
-    icon: "material-symbols:menu-book-outline-rounded",
-    items: [
-      { id: "tsukimi/guide/intro", title: "介绍", order: 1 },
-      { id: "tsukimi/guide/get-started", title: "快速开始", order: 2 },
-    ],
-  },
-  {
-    name: "基础配置",
-    icon: "material-symbols:settings-rounded",
-    items: [
-      { id: "tsukimi/Basic-Layout/site-config", title: "站点配置", order: 1 },
-    ],
-  },
-];
-```
+因此不需要维护 src/data/docs-tsukimi.ts，也不要手写侧栏 ID。新页面只要放在正确目录并通过 frontmatter 指定 order 即可。链接建议使用完整路径，例如 /docs/tsukimi/guide/get-started/。
 
-#### 配置项说明
+## 多语言
 
-- `name` - 章节名称
-- `icon` - 章节图标（使用 Iconify 图标）
-- `items` - 该章节下的文档页面列表
-  - `id` - 文档文件路径（不含扩展名）
-  - `title` - 侧边栏显示的标题
-  - `order` - 排序顺序，数字越小越靠前
-  - `collapsed` - （可选）该章节是否默认折叠
+为同一页面增加语言版本时，使用 lang 字段并保持相同的相对文件路径或 permalink。默认语言由项目页面数量统计得出；未找到当前语言页面时，路由会显示默认语言内容并提示回退。
 
-### 多语言文档
+## Markdown 与搜索
 
-为文档添加多语言版本：
+文档页面和文章共用 Markdown pipeline，包括提示框、代码组、代码折叠、相对链接、Mermaid、PlantUML、Markmap、Vega-Lite、图片和媒体指令。新写法应以当前插件和 Markdown 扩展文档为准。
 
-::: file-tree
+生产构建会执行 Pagefind 索引。运行 pnpm build 后，文档搜索按 docSlug:tsukimi 过滤到当前项目；pnpm dev 中没有完整的 Pagefind 索引，搜索验证请使用 pnpm preview。
 
-- src/content/docs/
-  - tsukimi/
-    - guide/
-      - intro.md              # 默认语言
-      - intro.zh_CN.md        # 简体中文
-      - intro.ja.md           # 日语
-      - ...
+## 添加页面
 
-:::
+1. 在 src/content/docs/tsukimi/<section>/ 下创建 .md 或 .mdx。
+2. 写入 title、order，必要时设置 permalink、icon、description 和 badge。
+3. 如果是新目录，创建 _index.md；它只负责目录节点，不写普通文章正文。
+4. 运行 pnpm check 检查 frontmatter 和 Markdown。
+5. 运行 pnpm build && pnpm preview 检查链接、代码块和 Pagefind。
 
-语言文件命名格式：`<文件名>.<语言标识>.md`
-
-#### 语言切换器
-
-文档页面顶部会自动显示语言切换器，列出该页面可用的所有语言版本。
-
-### 文档首页配置
-
-文档项目首页在 `src/data/docs-tsukimi.ts` 中配置：
-
-```typescript
-export const docsTsukimiProject = {
-  slug: "tsukimi",
-  title: "Tsukimi",
-  description: "A beautiful Astro blog theme",
-  defaultLang: "zh_CN",
-};
-
-export const docsTsukimiHome = {
-  id: "tsukimi/guide/intro",
-  title: "文档首页",
-};
-```
-
-### 访问文档
-
-文档系统路由配置：
-
-| URL | 说明 |
-|-----|-----|
-| `/docs/` | 文档项目列表页 |
-| `/docs/tsukimi/` | Tsukimi 文档首页 |
-| `/docs/tsukimi/guide/get-started/` | 具体文档页面 |
-| `/docs/tsukimi/<permalink>/` | 使用自定义 permalink 的页面 |
-
-### 文档搜索
-
-文档系统内置搜索功能，使用 Pagefind 索引。
-
-搜索功能特性：
-- 实时搜索文档标题和内容
-- 高亮搜索关键词
-- 显示结果页面预览
-- 支持中文、英文等多语言搜索
-
-### 图标自动匹配
-
-文档侧边栏图标会根据目录/文件名称自动匹配：
-
-- `guide/` - 书本图标
-- `api/` - API 图标
-- `config/` - 设置图标
-- `deploy/` - 部署图标
-- `question/` - 问题图标
-- `bug/` - Bug 图标
-- 等等...
-
-可以在侧边栏配置中手动指定 `icon` 覆盖自动匹配。
-
-### 面包屑导航
-
-面包屑自动生成，显示当前页面的路径层次：
-
-```
-首页 > 基础配置 > 站点配置
-```
-
-### 上一页/下一页导航
-
-根据侧边栏顺序自动生成上一页和下一页链接，方便用户连续阅读。
-
-### 添加新文档
-
-添加新文档的步骤：
-
-1. 在 `src/content/docs/tsukimi/<目录>/` 下创建 Markdown 文件
-2. 添加 Frontmatter
-3. 在 `src/data/docs-tsukimi.ts` 中添加侧边栏配置
-4. （可选）添加其他语言版本
-
-### 样式定制
-
-文档系统样式在 `src/styles/docs-layout.css` 中定义：
-
-- 响应式布局（移动设备优化）
-- 暗色主题支持
-- 代码高亮样式
-- 侧边栏和目录样式
+文档属于主题源码的一部分；需要与个人内容一起管理时，可将文档保留在代码仓库，不要通过内容同步脚本覆盖 src/content/docs/。

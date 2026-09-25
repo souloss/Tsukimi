@@ -236,7 +236,7 @@ components: {
 
 如果需要更丰富的站点统计功能，可以考虑以下扩展：
 
-1.  **访问量统计**: 集成第三方统计服务（如 Google Analytics、Umami 等）。
+1.  **访问量统计**：使用主题已接入的 Umami、Clarity 或 Google Tag Manager；详见[分析服务配置](/docs/tsukimi/other/analytics/)。
 2.  **评论统计**: 显示评论数量、最新评论等。
 3.  **阅读量统计**: 显示每篇文章的阅读次数。
 4.  **分类/标签排行**: 显示最热门的分类或标签。

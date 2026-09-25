@@ -218,7 +218,7 @@ Z-Blog 文章中的图片通常存储在 `zb_users/upload/` 目录下。您需�
 ## 常见问题
 
 ### Q: 如何处理 Z-Blog 的评论？
-A: Tsukimi 不自带评论系统。您可以考虑集成第三方评论系统，如 Disqus、Gitalk、Waline 等，并尝试将 Z-Blog 的评论数据导入到这些系统中。
+A: Tsukimi 提供 Twikoo、Waline 和 Giscus 接入。您可以根据对应文档配置评论服务，但 Z-Blog 的评论数据不会自动导入。
 
 ### Q: Z-Blog 的自定义字段如何迁移？
 A: 如果您的 Z-Blog 文章使用了自定义字段，您需要根据这些字段的重要性，决定是否将其内容合并到 Markdown 正文，或作为 Frontmatter 的额外字段（如果 Tsukimi 支持）。

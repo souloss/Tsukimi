@@ -13,85 +13,28 @@ copyright:
     url: https://github.com/souloss
 ---
 
-## LivePhoto / Lazy Images
+## 懒加载图片
 
-Tsukimi支持图片懒加载和LivePhoto动图功能，提升页面加载性能和视觉体验。
+文章图片由 `src/plugins/rehype-lazy-image.mjs` 添加浏览器原生 `loading="lazy"`、`decoding="async"` 和 `lazy-image` 样式类；无需额外配置。内联 `data:` 图片会跳过插件处理。
 
----
+## LivePhoto
 
-### Lazy Images 图片懒加载
+主题通过 Apple LivePhotosKit 显示 Live Photo。页面上的 `.live-photo` 或 `[data-live-photo]` 元素需要同时提供静态照片与配套视频地址：
 
-图片懒加载功能默认开启，图片仅在进入视口时加载。
-
-#### 工作原理
-
-- 使用loading="lazy"属性
-- 浏览器原生支持
-- 无需额外配置
-- 提升页面加载速度
-- 减少不必要的带宽消耗
-
-#### 配置
-
-不需要额外配置，所有文章中的图片都默认使用懒加载。
-
----
-
-### LivePhoto 动图功能
-
-LivePhoto功能支持在文章中嵌入短动图，点击时播放。
-
-#### 实现方式
-
-通过`src/plugins/remark-plume-compat.js`等插件处理特定的图片格式。
-
-#### 使用方法
-
-在Markdown中使用标准的图片语法：
-
-```markdown
-![描述](/images/my-photo.webp)
+```html
+<div
+  class="live-photo"
+  data-photo-src="/images/live-photo.jpg"
+  data-video-src="/images/live-photo.mov"
+  data-width="100%"
+  data-height="auto"
+></div>
 ```
 
-如果图片是动态WebP或GIF，会自动处理。
+处理器在存在 Live Photo 元素时，从 jsDelivr 动态加载 LivePhotosKit；因此该功能需要浏览器能够访问 CDN。普通 GIF 或动态 WebP 不会因此自动转换成 Live Photo。
 
----
+## 图片格式与转换
 
-### 图片优化
+当前没有 `siteConfig.imageOptimization` 配置，也没有在 Astro 配置中启用文档所述的自动 WebP/AVIF 转换。可按需使用仓库脚本 `scripts/convert-images.js` 转换静态资源；转换前请先备份原图，并检查文章引用路径。
 
-Tsukimi支持自动图片格式转换和优化，使用Sharp库。
-
-在 `astro.config.mjs` 中配置：
-
-```javascript
-imageOptimization: {
-  formats: ['webp', 'avif'], // 输出图片格式
-  quality: 80, // 压缩质量
-}
-```
-
-#### 配置选项
-
-| 选项 | 说明 |
-|------|------|
-| `formats` | 输出图片格式，支持 `webp`, `avif` 或两者都有 |
-| `quality` | 压缩质量，1-100之间，建议70-85 |
-
----
-
-### 相关代码
-
-- `src/scripts/handlers/lazy-image-handler.ts` - 图片懒加载处理器
-- `src/scripts/handlers/livephoto-handler.ts` - LivePhoto处理器
-- `src/plugins/rehype-lazy-image.mjs` - Rehype懒加载插件
-- `src/styles/lazy-image.css` - 懒加载样式
-- `src/styles/livephoto.css` - LivePhoto样式
-
----
-
-### 使用提示
-
-- 建议使用WebP格式图片，体积更小质量更好
-- LivePhoto图片建议适当压缩
-- 图片尺寸要适当，不要太大影响加载
-- 移动端会自动调整图片
+实现位置：`src/plugins/rehype-lazy-image.mjs`、`src/scripts/handlers/livephoto-handler.ts`、`src/styles/lazy-image.css` 和 `src/styles/livephoto.css`。

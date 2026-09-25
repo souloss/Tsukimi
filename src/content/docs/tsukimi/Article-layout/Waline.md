@@ -22,7 +22,7 @@ Waline 是一个简洁、安全的评论系统，支持 Markdown、邮件通知�
 通过 `commentConfig.system` 字段选择评论系统：
 
 ```typescript
-system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
+system: "none" | "twikoo" | "waline" | "giscus"
 ```
 
 ## 基本配置

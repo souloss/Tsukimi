@@ -19,7 +19,7 @@ Tsukimi 支持多种评论系统，Twikoo 是其中之一。评论系统配置�
 通过 `commentConfig.system` 字段选择评论系统：
 
 ```typescript
-system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
+system: "none" | "twikoo" | "waline" | "giscus"
 ```
 
 | 值 | 说明 |
@@ -28,8 +28,6 @@ system: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk"
 | `"twikoo"` | 使用 Twikoo |
 | `"waline"` | 使用 Waline |
 | `"giscus"` | 使用 Giscus（基于 GitHub Discussions） |
-| `"disqus"` | 使用 Disqus |
-| `"artalk"` | 使用 Artalk |
 
 ## Twikoo 配置
 
@@ -39,7 +37,6 @@ export const commentConfig: CommentConfig = {
   twikoo: {
     envId: "your-env-id",          // 腾讯云环境 ID 或自部署地址
     region: "",                     // 环境地域
-    lang: "zh-CN",                  // 语言
     visitorCount: true,             // 是否启用访客统计
   },
 };
@@ -109,8 +106,6 @@ export const commentConfig: CommentConfig = {
 
 - [Waline 评论配置](/docs/tsukimi/article-layout/waline/)
 - [Giscus 评论配置](/docs/tsukimi/article-layout/giscus/)
-- [Disqus 评论配置](/docs/tsukimi/article-layout/disqus/)
-- [Artalk 评论配置](/docs/tsukimi/article-layout/artalk/)
 
 ## 注意事项
 

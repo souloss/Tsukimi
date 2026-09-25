@@ -19,12 +19,9 @@ Tsukimi 提供多个构建脚本用于自动化部署流程，位于 `scripts/` 
 
 ## 构建流程
 
-完整的构建流程（`pnpm build`）按以下顺序执行：
+完整的构建流程（`pnpm build`）运行 Astro 静态构建、生成 Pagefind 搜索索引并压缩字体。番剧、朋友圈等数据更新脚本需按需单独运行；`prebuild` 会同步内容仓库并更新朋友圈数据。
 
-1. `update-anime.mjs` — 更新番剧数据
-2. `astro build` — Astro 生产构建
-3. `pagefind` — 生成搜索索引
-4. `compress-fonts.js` — 压缩字体文件
+脚本入口定义在根目录 `package.json` 中，构建辅助脚本位于 `scripts/`。
 
 ## 字体压缩脚本
 
@@ -32,7 +29,7 @@ Tsukimi 提供多个构建脚本用于自动化部署流程，位于 `scripts/` 
 pnpm build  # compress-fonts 作为构建流程的一部分自动执行
 ```
 
-脚本文件：`scripts/compress-fonts.js`
+脚本文件：`scripts/compress-fonts/index.js`
 
 ### 功能
 
@@ -160,6 +157,7 @@ pnpm update-bilibili
 | `load-env.js` | 环境变量加载工具 |
 | `update-feeds.mjs` | 朋友圈 RSS 订阅更新 |
 | `benchmark-bugs.mjs` | 性能基准测试 |
-| `check-docs-tsukimi.mjs` | 文档完整性检查 |
-| `sync-docs-tsukimi.mjs` | 文档同步 |
-| `check-docs-render.mjs` | 文档渲染检查 |
+| `check-content.mjs` | 检查文章内容 |
+| `check-config.mjs` | 检查配置 |
+| `check-docs-render.mjs` | 检查文档渲染 |
+| `check-images.mjs` / `check-fonts.mjs` | 检查图片和字体资源 |

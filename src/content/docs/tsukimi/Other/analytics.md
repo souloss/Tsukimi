@@ -1,12 +1,12 @@
 ---
 title: 统计分析配置
-createTime: 2026/05/20 12:00:00
+createTime: 2026/09/25
 permalink: /other/analytics/
 order: 10
 icon: ri:bar-chart-2-line
 badge:
-  type: warning
-  text: 新
+  type: info
+  text: 当前实现
 copyright:
   author:
     name: souloss
@@ -15,118 +15,85 @@ copyright:
 
 # 统计分析配置
 
-Tsukimi 支持多种统计分析服务，包括 Google Analytics、Microsoft Clarity、Umami 和 51la。所有配置位于 `src/config/siteConfig.ts` 中的 `siteConfig.analytics` 对象。
+Tsukimi 的运行时统计入口集中在 `src/layouts/partials/AnalyticsScripts.astro`。当前实现支持：
 
-## 综合分析配置 (analytics)
+- **Umami**：通过 `siteConfig.analytics.umamiAnalytics` 加载脚本。
+- **Microsoft Clarity**：通过 `siteConfig.thirdPartyAnalytics.enable` 与 `clarityId` 加载。
+- **Google Tag Manager**：通过 `siteConfig.thirdPartyAnalytics.gtmId` 加载，并在 `Layout.astro` 中输出 noscript 回退。
 
-```typescript title="src/config/siteConfig.ts"
-siteConfig: {
+Google Analytics、51.la 等名称仍可能出现在 `SiteConfig` 类型的兼容字段中，但不会由 `AnalyticsScripts.astro` 自动加载；如需接入其他服务，应通过自定义集成或组件实现。
+
+## 配置示例
+
+```ts title="src/overrides/siteConfig.ts"
+import type { SiteConfig } from "@/types/config";
+import type { RecursivePartial } from "@/types/utils";
+
+const override: RecursivePartial<SiteConfig> = {
   analytics: {
-    googleAnalyticsId: "G-XXXXXXXXXX",     // Google Analytics ID
-    microsoftClarityId: "xxxxxxxxxxxx",     // Microsoft Clarity ID
     umamiAnalytics: {
-      websiteId: "your-website-id",         // Umami Website ID
-      scriptUrl: "https://analytics.umami.is/umami.js", // Umami JS 地址
-      trackOutboundLinks: true,             // 追踪出站链接点击
-      collectWebVitals: false,              // 自动收集 Core Web Vitals
+      websiteId: "your-website-id",
+      scriptUrl: "https://analytics.example.com/script.js",
+      trackOutboundLinks: true,
+      collectWebVitals: true,
       relpays: {
-        enabled: false,                     // 启用会话回放
-        sampleRate: 0.15,                   // 采样率 (0-1)
-        maskLevel: "moderate",              // 隐私遮罩级别
-        maxDuration: 300000,                // 最大录制时长(ms)
-        blockSelector: "",                  // 排除录制的 CSS 选择器
+        enabled: false,
+        sampleRate: 0.15,
+        maskLevel: "moderate",
+        maxDuration: 300000,
       },
     },
-    la51Analytics: {
-      Id: "your-51la-id",                   // 51la 统计 ID
-      sdkUrl: "//sdk.51.la/js-sdk-pro.min.js", // SDK 地址
-      ck: "",                               // 数据分离标识
-      autoTrack: true,                      // 事件分析功能
-      hashMode: false,                      // Hash 路由模式
-      screenRecord: true,                   // 网站录屏功能
-    },
   },
-}
-```
-
-## 配置项说明
-
-### Google Analytics
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `googleAnalyticsId` | `string` | Google Analytics 追踪 ID，格式为 `G-XXXXXXXXXX` |
-
-### Microsoft Clarity
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `microsoftClarityId` | `string` | Microsoft Clarity 项目 ID |
-
-### Umami Analytics
-
-| 字段 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `websiteId` | `string` | - | Umami 网站 ID |
-| `scriptUrl` | `string` | - | Umami JS 地址，支持自建服务 |
-| `trackOutboundLinks` | `boolean` | `true` | 是否追踪出站链接点击事件 |
-| `collectWebVitals` | `boolean` | `false` | 是否自动收集 Core Web Vitals 指标 |
-
-#### Umami 会话回放 (relpays)
-
-| 字段 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `enabled` | `boolean` | `false` | 是否启用会话回放 |
-| `sampleRate` | `number` | `0.15` | 录制采样率，范围 0-1 |
-| `maskLevel` | `"moderate" \| "strict"` | `"moderate"` | 隐私遮罩级别 |
-| `maxDuration` | `number` | `300000` | 单次录制最大时长（毫秒） |
-| `blockSelector` | `string` | - | 排除录制的元素 CSS 选择器 |
-
-### 51la Analytics
-
-| 字段 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `Id` | `string` | - | 51la 统计 ID |
-| `sdkUrl` | `string` | `"//sdk.51.la/js-sdk-pro.min.js"` | 自定义 SDK 地址，防止 DNS 污染 |
-| `ck` | `string` | 同 Id | 多个统计 ID 的数据分离标识 |
-| `autoTrack` | `boolean` | `true` | 开启事件分析功能 |
-| `hashMode` | `boolean` | `false` | Hash 路由模式（项目使用 History API，不必开启） |
-| `screenRecord` | `boolean` | `true` | 开启网站录屏功能 |
-
-## 第三方统计配置 (thirdPartyAnalytics)
-
-除了 `analytics` 综合配置外，还有独立的第三方统计配置，主要用于 Microsoft Clarity：
-
-```typescript title="src/config/siteConfig.ts"
-thirdPartyAnalytics: {
-  enable: false,        // 是否启用第三方统计，默认关闭
-  clarityId: "",        // Clarity 项目 ID
-},
-```
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `enable` | `boolean` | 是否启用第三方统计（可能影响 Lighthouse 评分） |
-| `clarityId` | `string` | Microsoft Clarity 项目 ID |
-
-## 性能优化
-
-统计脚本采用延迟加载策略，不会阻塞页面首次渲染：
-
-- 脚本仅在用户交互后加载（scroll、mousemove、keydown、touchstart、click）
-- 设置了 10 秒兜底超时，确保统计脚本最终加载
-- `thirdPartyAnalytics.enable` 默认关闭，因为第三方统计可能影响 Lighthouse 评分
-
-## Umami 集成说明
-
-Umami 的部分配置已移至 `astro.config.mjs`：
-
-```javascript title="astro.config.mjs"
-oddmisc({
-  umami: {
-    shareUrl: false,
+  thirdPartyAnalytics: {
+    enable: true,
+    clarityId: "your-clarity-id",
+    gtmId: "GTM-XXXXXXX",
   },
-}),
+};
+
+export default override;
 ```
 
-如需手动插入统计脚本到 `<head>` 中，请编辑 `src/layouts/Layout.astro`。
+### Umami 字段
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `websiteId` | `string` | Umami 后台的网站 ID；与 `scriptUrl` 同时填写才会加载。 |
+| `scriptUrl` | `string` | Umami script URL，可使用云服务或自建地址。 |
+| `trackOutboundLinks` | `boolean` | 是否追踪出站链接，默认 `true`。 |
+| `collectWebVitals` | `boolean` | 是否收集 Core Web Vitals，默认 `false`。 |
+| `relpays.enabled` | `boolean` | 是否启用会话回放，默认 `false`。 |
+| `relpays.sampleRate` | `number` | 回放采样率，范围 `0` 到 `1`。 |
+| `relpays.maskLevel` | `moderate \| strict` | 隐私遮罩级别。 |
+| `relpays.maxDuration` | `number` | 单次回放最大时长，单位毫秒。 |
+| `relpays.blockSelector` | `string` | 可选的排除录制元素 CSS 选择器。 |
+
+### Clarity 与 GTM 字段
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `thirdPartyAnalytics.enable` | `boolean` | 是否允许 Clarity 加载；默认 `false`。 |
+| `thirdPartyAnalytics.clarityId` | `string` | Clarity 项目 ID。 |
+| `thirdPartyAnalytics.gtmId` | `string` | Google Tag Manager 容器 ID；为空时不注入 GTM。 |
+
+## 延迟加载行为
+
+为减少首屏阻塞，脚本不会在页面解析时立即下载：
+
+1. 页面监听 `scroll`、`mousemove`、`keydown`、`touchstart` 和 `click`。
+2. 首次用户交互会执行所有已配置的加载器。
+3. 用户始终没有交互时，10 秒定时器会触发加载。
+4. `window.analyticsLoaded` 变为 `true` 后不会重复加载。
+
+因此测试统计时需要先滚动或点击页面，再检查浏览器 Network 面板。Umami 脚本还会通过 `data-*` 属性接收出站链接、Web Vitals 和回放设置。
+
+## 隐私与性能
+
+第三方分析会将页面信息发送给外部服务，并可能影响 Lighthouse 结果。启用前应：
+
+- 在隐私政策中说明使用的服务和数据类型。
+- 对会话回放设置合理的采样率、遮罩级别和排除选择器。
+- 不要在公开配置中提交访问 Token；统计 ID 通常不是密码，但仍应按服务商建议管理。
+- 在开发环境验证配置后，再在生产站点开启。
+
+修改配置后运行 `pnpm check`，部署前使用 `pnpm build && pnpm preview` 检查页面和网络请求。

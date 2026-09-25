@@ -116,7 +116,7 @@ A: 检查 frontmatter 中的 `tags` 是否为数组格式，`category` 是否为
 ## 高级功能迁移
 
 ### 评论系统
-Tsukimi 目前只支持 Twikoo 评论系统，可以在配置文件中启用。
+Tsukimi 当前接入 Twikoo、Waline 和 Giscus。评论数据不会随文章自动迁移，需要在 `src/config/commentConfig.ts` 中选择并配置评论服务。
 
 ### SEO 优化
 - 确保每篇文章都有 `description` 字段

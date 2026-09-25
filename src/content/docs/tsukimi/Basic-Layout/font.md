@@ -1,180 +1,124 @@
 ---
-title: 自定义字体
-createTime: 2025/11/21 00:42:07
+title: 字体配置
+createTime: 2026/09/25
 permalink: /basic-layout/font/
 order: 12
 icon: ri:font-size-2
 badge:
   type: info
-  text: v3
+  text: 当前实现
 copyright:
   author:
     name: souloss
     url: https://github.com/souloss
 ---
 
-# 自定义字体配置
+# 字体配置
 
-Tsukimi 主题支持自定义字体配置，让您可以自定义站点的字体风格，提升用户体验和品牌识别度。
+字体配置位于 `src/config/fontConfig.ts`，通过 `fontConfig` 导出。它与旧版 asciiFont/cjkFont 结构不同：当前实现用 fonts 数组（或以 ID 为键的对象）描述可切换的字体选项，并由 defaultFont 选择默认项。
 
-## 配置概述
+## 默认结构
 
-自定义字体功能分为两种类型：
-
-- **英文字体 (asciiFont)**：用于显示 ASCII 字符集，优先级最高
-- **中日韩字体 (cjkFont)**：用于显示中文、日文、韩文等字符，作为回退字体
-
-## 字体配置示例
-
-在主题配置中添加以下字体配置：
-
-```typescript title="src/config.ts"
-// 字体配置
-font: {
-	// 注意：自定义字体需要在 src/styles/main.css 中引入字体文件
-	// 注意：字体子集优化功能目前仅支持 TTF 格式字体,开启后需要在生产环境才能看到效果,在Dev环境下显示的是浏览器默认字体!
-	asciiFont: {
-		// 英文字体 - 优先级最高
-		// 指定为英文字体则无论字体包含多大范围，都只会保留 ASCII 字符子集
-		fontFamily: "ZenMaruGothic-Medium",
-		fontWeight: "400",
-		localFonts: ["ZenMaruGothic-Medium.ttf"],
-		enableCompress: true, // 启用字体子集优化，减少字体文件大小
-	},
-	cjkFont: {
-		// 中日韩字体 - 作为回退字体
-		fontFamily: "萝莉体 第二版",
-		fontWeight: "500",
-		localFonts: ["萝莉体 第二版.ttf"],
-		enableCompress: true, // 启用字体子集优化，减少字体文件大小
-	},
-},
-```
-
-## 配置参数详解
-
-### asciiFont (英文字体)
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| fontFamily | string | 字体名称 |
-| fontWeight | string | 字体粗细，如 "400"、"500"、"bold" 等 |
-| localFonts | string[] | 本地字体文件路径列表 |
-| enableCompress | boolean | 是否启用字体子集优化 |
-
-### cjkFont (中日韩字体)
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| fontFamily | string | 字体名称 |
-| fontWeight | string | 字体粗细，如 "400"、"500"、"bold" 等 |
-| localFonts | string[] | 本地字体文件路径列表 |
-| enableCompress | boolean | 是否启用字体子集优化 |
-
-## 使用步骤
-
-### 1. 准备字体文件
-
-将您的字体文件（推荐使用 TTF 格式）放置在项目目录中，例如：
-
-::: file-tree
-
-- Tsukimi
-  - public
-    - fonts
-      - ZenMaruGothic-Medium.ttf
-      - 萝莉体 第二版.ttf
-  - src
-    - styles
-      - main.css
-    - config.ts
-
-:::
-
-### 2. 引入字体文件
-
-在 `src/styles/main.css`（或类似的样式文件）中引入字体：
-
-```css title="src/styles/main.css"
-/* 英文字体 */
-@font-face {
-  font-family: "ZenMaruGothic-Medium";
-  src: url("/fonts/ZenMaruGothic-Medium.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-
-/* 中日韩字体 */
-@font-face {
-  font-family: "萝莉体 第二版";
-  src: url("/fonts/萝莉体 第二版.ttf") format("truetype");
-  font-weight: 500;
-  font-display: swap;
-}
-```
-
-### 3. 配置主题
-
-在 `src/config.ts` 中添加字体配置：
-
-```typescript title="src/config.ts"
-export default 
-  // 其他配置...
-  font: {
-    asciiFont: {
-      fontFamily: "ZenMaruGothic-Medium",
-      fontWeight: "400",
-      localFonts: ["ZenMaruGothic-Medium.ttf"],
-      enableCompress: true,
+```ts title="src/config/fontConfig.ts"
+const defaults: FontConfig = {
+  switchable: true,
+  defaultFont: "lxgw",
+  fonts: [
+    {
+      id: "system",
+      name: "系统默认",
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     },
-    cjkFont: {
-      fontFamily: "萝莉体 第二版",
-      fontWeight: "500",
-      localFonts: ["萝莉体 第二版.ttf"],
-      enableCompress: true,
+    {
+      id: "lxgw",
+      name: "霞鹜文楷",
+      fontFamily: "'LXGW WenKai', serif",
+      cjkFontFamily: "'LXGW WenKai', serif",
+      cdnUrls: [
+        "https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css",
+      ],
     },
-  },
-  // 其他配置...
+  ],
+};
 
+export const fontConfig = withOverride("fontConfig", defaults);
 ```
 
-## 字体子集优化
+生产站点建议放在 `src/overrides/fontConfig.ts`，这样主题升级时不需要改默认文件。
 
-当 `enableCompress` 设置为 `true` 时，系统会对字体进行子集优化，仅保留必要的字符，从而减少字体文件大小，提高加载速度。
+## FontConfig 字段
 
-**注意事项：**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| enable | boolean | 仅为类型预留；当前界面和字体渲染不读取此字段，因此它不会关闭字体功能。 |
+| switchable | boolean | 是否在显示设置中允许访客切换字体。 |
+| defaultFont | string | 默认字体项的 id。 |
+| selected | string 或 string[] | 仅为类型预留；当前默认选择由 `defaultFont` 决定，访客选择保存在浏览器端。 |
+| fonts | FontItem[] 或 Record<string, FontItem> | 字体选项列表。 |
+| fallback | string[] | 仅为类型预留；当前渲染使用内置系统字体回退栈。 |
+| preload | boolean | 仅为类型预留；当前主题不会根据此字段预加载字体。 |
 
-- 字体子集优化功能目前仅支持 TTF 格式字体
-- 该功能需要在生产环境中才能看到效果
-- 在开发环境下可能显示为浏览器默认字体
+## FontItem 字段
 
-## 最佳实践
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| id | string | 唯一标识；`defaultFont` 应与某个字体项的 id 对应。 |
+| name | string | 设置面板中显示的名称。 |
+| i18nKey | string | 可选的翻译键。 |
+| fontFamily / family | string | ASCII 字符使用的 CSS 字体栈。 |
+| cjkFontFamily | string | 可选的中日韩字符回退字体栈。 |
+| src | string | 单个字体文件路径或 URL。 |
+| localFonts | string[] 或 object[] | 本地字体文件列表；对象可声明 family、src、weight、style。 |
+| googleFonts | string | Google Fonts 样式表 URL。 |
+| cdnUrl / cdnUrls | string 或 string[] | 外部字体样式表 URL。 |
+| weight / fontWeight | string 或 number | 字重。 |
+| style | normal、italic 或 oblique | 字体样式。 |
+| display | auto、block、swap、fallback 或 optional | font-display 行为。 |
+| unicodeRange | string | 可选的 Unicode 子集范围。 |
+| format | woff、woff2、truetype 等 | 本地字体格式。 |
+| enableCompress | boolean | 是否允许构建脚本对子集进行处理。 |
 
-1. **字体文件大小**：选择合适大小的字体文件，避免过大的字体文件影响加载速度
-2. **格式选择**：推荐使用 TTF 格式，其他格式可能需要额外配置
-3. **回退方案**：提供系统默认字体作为回退方案，确保在字体加载失败时也能正常显示
-4. **字体授权**：确保您使用的字体有适当的授权许可
+## 添加本地字体
 
-## 常见问题
+将字体放到 public/ 后用绝对路径引用，或按项目资源管线放到 src/assets/：
 
-### Q: 如何同时设置多个字体？
+```ts title="src/overrides/fontConfig.ts"
+import type { FontConfig } from "@/types/config";
+import type { RecursivePartial } from "@/types/utils";
 
-A: 可以在 `fontFamily` 中使用字体栈，例如：
+const override: RecursivePartial<FontConfig> = {
+  defaultFont: "my-font",
+  switchable: true,
+  fonts: [
+    {
+      id: "my-font",
+      name: "我的字体",
+      fontFamily: "'My Font', sans-serif",
+      cjkFontFamily: "'My CJK Font', sans-serif",
+      localFonts: [
+        {
+          family: "My Font",
+          src: "/assets/font/my-font.woff2",
+          weight: 400,
+          style: "normal",
+        },
+      ],
+      display: "swap",
+    },
+  ],
+};
 
-```typescript
-fontFamily: "CustomFont, Helvetica, Arial, sans-serif"
+export default override;
 ```
 
-### Q: 为什么在开发环境中字体没有生效？
+src/config/fontConfig.ts 的默认数组和覆盖文件中的数组是整体替换关系；要保留系统字体项，需要在覆盖数组中一并写出。外部 Google/CDN 字体要评估可访问性、缓存和许可证，不要依赖不可控的临时链接。
 
-A: 字体子集优化功能需要在生产环境中才能正常工作。在开发环境中，可以临时禁用 `enableCompress` 进行测试。
+## 设置面板与验证
 
-### Q: 如何使用 Web 字体？
+当 switchable 为 true 且存在多个字体项时，访客可以在显示设置中切换，选择会保存在浏览器端。检查步骤：
 
-A: 可以从 Google Fonts 或其他 Web 字体服务获取字体，然后按照上述步骤进行配置。
+1. 运行 `pnpm dev`，打开显示设置，确认选项名称和默认字体。
+2. 检查浏览器 Network 是否成功加载 src、cdnUrl 或 localFonts。
+3. 用 `pnpm build && pnpm preview` 验证生产路径；开发环境的字体缓存可能掩盖路径错误。
 
-## 相关链接
-
-- [CSS @font-face 规则](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face)
-- [字体格式转换工具](https://transfonter.org/)
-- [Google Fonts](https://fonts.google.com/)
+如果字体不生效，先检查 id 是否匹配、资源 URL 是否以 / 开头、字体文件是否存在，以及浏览器是否拦截跨域样式表。

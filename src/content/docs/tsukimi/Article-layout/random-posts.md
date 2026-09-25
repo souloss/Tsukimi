@@ -1,11 +1,11 @@
 ---
-title: 随机文章推荐配置
+title: 随机文章推荐
 order: 13
 icon: "ri:shuffle-line"
 badge:
-  type: warning
-  text: 新
-createTime: 2026/05/20 12:00:00
+  type: info
+  text: 文章页
+createTime: 2026/09/25
 permalink: /article-layout/random-posts/
 copyright:
   author:
@@ -13,61 +13,56 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# 随机文章推荐配置
+# 随机文章推荐
 
-Tsukimi 支持在文章底部展示随机推荐文章，帮助读者发现更多内容。
+Tsukimi 可以在文章详情页底部显示随机文章，帮助读者发现与当前文章不一定相关的内容。它与相关文章组件并列渲染，不是侧边栏 Widget。
 
-## 基本配置
+## 配置
 
-随机文章配置是独立的顶层导出，位于 `src/config/`：
+配置位于 `src/config/randomPostsConfig.ts`，通过 `src/config/index.ts` 导出：
 
-```typescript title="src/config/"
-export const randomPostsConfig: RandomPostsConfig = {
-    enable: true,       // 是否启用随机文章推荐
-    maxCount: 5,        // 推荐文章数量
+```ts title="src/config/randomPostsConfig.ts"
+import type { RandomPostsConfig } from "../types/config";
+import { withOverride } from "../utils/config-override";
+
+const defaults: RandomPostsConfig = {
+  enable: true,
+  maxCount: 5,
 };
+
+export const randomPostsConfig = withOverride("randomPostsConfig", defaults);
 ```
 
-## 配置项说明
+推荐使用覆盖文件修改个人站点：
+
+```ts title="src/overrides/randomPostsConfig.ts"
+import type { RandomPostsConfig } from "@/types/config";
+import type { RecursivePartial } from "@/types/utils";
+
+const override: RecursivePartial<RandomPostsConfig> = {
+  enable: true,
+  maxCount: 3,
+};
+
+export default override;
+```
 
 | 字段 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `enable` | `boolean` | `true` | 是否启用随机文章推荐 |
-| `maxCount` | `number` | `5` | 每次展示的推荐文章数量 |
+| --- | --- | --- | --- |
+| `enable` | `boolean` | `true` | 是否在文章底部渲染随机推荐。 |
+| `maxCount` | `number` | `5` | 推荐文章数量。 |
 
-## 工作原理
-
-1. 构建时从所有已发布文章中随机选取指定数量的文章
-2. 排除当前正在阅读的文章和加密文章
-3. 使用 Fisher-Yates 洗牌算法确保随机性
-4. 在文章底部渲染推荐卡片列表
-
-## 侧边栏组件
-
-随机文章也可以作为侧边栏组件使用。在 `sidebarLayoutConfig.components` 中添加：
-
-```typescript
-sidebarLayoutConfig: {
-  components: {
-    right: [
-      // ...
-      {
-        type: "random-posts",
-        enable: true,
-        position: "sticky",
-      },
-    ],
-  },
-},
-```
+文章页 `src/pages/posts/[...slug].astro` 会读取该配置；当前文章和不适合展示的条目会由文章列表逻辑处理。该配置不会改变首页、归档页或侧栏。
 
 ## 与相关文章的区别
 
-| 特性 | 随机文章推荐 | 相关文章 |
-|------|------------|---------|
-| 匹配方式 | 随机选取 | 基于标签和分类匹配 |
-| 发现性 | 高（可能发现不相关但有趣的内容） | 低（只看相关内容） |
-| 配置位置 | `randomPostsConfig`（顶层导出） | `relatedPostsConfig`（顶层导出） |
-| 展示位置 | 文章底部 / 侧边栏 | 文章底部 |
+| 特性 | 随机文章 | 相关文章 |
+| --- | --- | --- |
+| 匹配方式 | 以随机顺序抽取 | 按标签、标题、描述、分类和新鲜度评分 |
+| 目的 | 扩大内容发现范围 | 延续当前主题阅读 |
+| 配置 | `randomPostsConfig` | `relatedPostsConfig` |
+| 位置 | 文章详情页底部 | 文章详情页底部 |
 
-两个功能可以同时启用，互不冲突。
+两者可以同时启用。若只需要一种推荐，把对应配置的 `enable` 设为 `false`。当前 `WidgetComponentType` 没有 `random-posts`，不要把它添加到 `sidebarLayoutConfig.components`。
+
+修改后运行 `pnpm check`，并在文章详情页确认卡片数量和移动端布局。

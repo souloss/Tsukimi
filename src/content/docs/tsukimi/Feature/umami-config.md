@@ -1,5 +1,5 @@
 ---
-title: Umami访问量统计配置说明
+title: Umami 访问量统计配置
 order: 5
 icon: "ri:bar-chart-2-line"
 badge:
@@ -13,11 +13,11 @@ copyright:
     url: https://github.com/souloss
 ---
 
-# Umami 统计配置教程(V3版本)
+# Umami 统计配置
 
 Umami 是一个开源、注重隐私的网站分析工具，可以替代 Google Analytics。本教程将指导您如何在 Tsukimi 主题中配置 Umami 统计功能。  
 
-注意：本教程适用于 Tsukimi 8.2(1dcaa61) 或更高版本。
+本主题包含两项独立的 Umami 集成：`analytics.umamiAnalytics` 用于加载统计脚本，`oddmisc` 的 `shareUrl` 用于侧边栏统计卡片读取公开数据。
 
 ## 什么是 Umami？
 

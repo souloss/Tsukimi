@@ -208,7 +208,7 @@ npm run docs:dev
 
 ### 评论系统
 
-Jekyll 可能使用 Disqus、Gitalk 等评论系统。Tsukimi 也支持多种评论系统，您可以根据 Tsukimi 的文档配置您偏好的评论系统。
+Jekyll 可能使用 Disqus、Gitalk 等评论系统。Tsukimi 当前接入 Twikoo、Waline 和 Giscus；请根据对应文档重新配置，旧系统的评论数据不会自动迁移。
 
 ### SEO 优化
 

@@ -271,7 +271,7 @@ copyright:
 **A:** 侧边栏显示需要满足特定条件：
 
 1. **配置问题**
-   - 检查 `src/config.ts` 和 `astro.config.mjs` 中的配置是否正确
+   - 检查对应的 `src/config/*.ts` 模块和 `astro.config.mjs` 中的配置是否正确
 
 2. **文件路径不匹配**
    ```markdown
@@ -346,7 +346,7 @@ copyright:
 
 1. **配置文件位置**
    - 确保修改了正确的配置文件（通常是 `astro.config.mjs`）
-   - 有些配置可能在 `src/config.ts` 或其他文件中
+   - 有些配置位于 `src/config/*.ts` 模块、`src/overrides/` 或其他功能文件中
 
 2. **开发服务器未重启**
    - 修改某些配置后需要重启开发服务器
