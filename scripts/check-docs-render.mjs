@@ -617,6 +617,11 @@ async function checkDocsTOC(client) {
 			`(() => {
 				const toc = document.querySelector("docs-table-of-contents");
 				const links = Array.from(toc?.querySelectorAll("a[href^='#']") || []);
+				const activeLinks = links.filter((link) => link.classList.contains("visible"));
+				const indicator = toc?.querySelector("#docs-toc-indicator");
+				const indicatorStyle = indicator ? getComputedStyle(indicator) : null;
+				const indicatorRect = indicator?.getBoundingClientRect();
+				const inspectedLinks = activeLinks.length > 0 ? activeLinks : links;
 				const headings = Array.from(document.querySelectorAll(".docs-markdown h1[id], .docs-markdown h2[id], .docs-markdown h3[id], .docs-markdown h4[id], .docs-markdown h5[id], .docs-markdown h6[id]"));
 				return {
 					tocDisplay: getComputedStyle(document.querySelector(".docs-toc-container")).display,
@@ -624,11 +629,20 @@ async function checkDocsTOC(client) {
 					headings: headings.length,
 					loaded: toc?.dataset.loaded === "true",
 					validTargets: links.every((link) => document.getElementById(link.getAttribute("href").slice(1))),
+					indicatorPosition: indicatorStyle?.position ?? "missing",
+					indicatorInsideToc: indicator?.parentElement === toc,
+					indicatorHeight: indicatorRect?.height ?? 0,
+					indicatorOverlapsActiveEntry: inspectedLinks.some((link) => {
+						if (!indicatorRect) return false;
+						const rect = link.getBoundingClientRect();
+						return rect.top < indicatorRect.bottom && rect.bottom > indicatorRect.top;
+					}),
 				};
 			})()`,
 		);
 		assertCheck("docs toc renders for headed pages", state.tocDisplay !== "none" && state.loaded && state.tocLinks > 0 && state.headings > 0, JSON.stringify(state));
 		assertCheck("docs toc links target current headings", state.validTargets, JSON.stringify(state));
+		assertCheck("docs toc indicator overlays active entries", state.indicatorPosition === "absolute" && state.indicatorInsideToc && state.indicatorHeight > 0 && state.indicatorOverlapsActiveEntry, JSON.stringify(state));
 
 		const clicked = await client.evaluate(
 			page.sessionId,

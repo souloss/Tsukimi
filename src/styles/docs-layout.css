@@ -736,6 +736,8 @@ body.docs-page .docs-toc-container {
 
 body.docs-page docs-table-of-contents {
 	font-size: 0.8125rem;
+	position: relative;
+	isolation: isolate;
 }
 
 body.docs-page docs-table-of-contents a {
@@ -744,6 +746,25 @@ body.docs-page docs-table-of-contents a {
 	color: var(--docs-text-50);
 	border-radius: 4px;
 	padding: 4px 8px;
+	position: relative;
+	z-index: 1;
+}
+
+/* The TOC is populated by the web component after Astro renders the page.
+ * Keep its active background in the component's coordinate space instead of
+ * letting it fall through as a normal flex item below the links. */
+body.docs-page docs-table-of-contents .toc-active-indicator {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 0;
+	pointer-events: none;
+	border-radius: 0.5rem;
+	background: var(--docs-brand-dim);
+	box-shadow: 0 6px 18px -14px color-mix(in oklab, var(--docs-brand) 55%, transparent);
+	transition: top 0.18s ease, height 0.18s ease, opacity 0.14s ease;
+	z-index: 0;
 }
 
 body.docs-page docs-table-of-contents a:hover {
