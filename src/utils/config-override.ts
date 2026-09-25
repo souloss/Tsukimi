@@ -7,18 +7,21 @@ import { deepMerge } from "./deep-merge";
  * Override files are loaded eagerly at build time via import.meta.glob.
  */
 export function withOverride<T extends object>(name: string, defaults: T): T {
-	const modules =
-		typeof import.meta.glob === "function"
-			? import.meta.glob<Record<string, RecursivePartial<T>>>(
-					"../overrides/*.ts",
-					{ eager: true },
-				)
-			: {};
+	let modules: Record<string, { default: RecursivePartial<T> }> = {};
+	try {
+		// Vite replaces this call with an eager module map at build time. Node-based
+		// config checks do not provide import.meta.glob, so they use the defaults.
+		modules = import.meta.glob<{ default: RecursivePartial<T> }>(
+			"../overrides/*.ts",
+			{ eager: true },
+		);
+	} catch {
+		// Keep config validation and other non-Vite tooling usable without overrides.
+	}
 	const key = `../overrides/${name}.ts`;
 	const module = modules[key];
 	if (module) {
-		const override = module.default ?? module;
-		return deepMerge(defaults, override) as T;
+		return deepMerge(defaults, module.default) as T;
 	}
 	return defaults;
 }
