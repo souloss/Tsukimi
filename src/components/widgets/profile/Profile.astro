@@ -26,8 +26,10 @@ import TypewriterText from "../../atoms/typewriter-text/TypewriterText.astro";
 			src={profileConfig.avatar || ""}
 			alt="Profile Image of the Author"
 			class="mx-auto lg:w-full h-full lg:mt-0"
-			loading="lazy"
-			fetchpriority="auto"
+			widths={[192, 252, 512]}
+			sizes="(max-width: 768px) 192px, (max-width: 1279px) 252px, 280px"
+			loading="eager"
+			fetchpriority="high"
 		/>
 	</a>
 	<div class="px-2">

@@ -55,6 +55,19 @@ const configuredFonts = Array.isArray(fontConfig.fonts)
 const defaultFont = configuredFonts.find(
 	(font) => font.id === fontConfig.defaultFont,
 );
+const defaultFontOrigins = [
+	...new Set(
+		(defaultFont ? getFontStylesheets(defaultFont) : [])
+			.map(({ href }) => {
+				try {
+					return new URL(href).origin;
+				} catch {
+					return null;
+				}
+			})
+			.filter((origin): origin is string => origin !== null),
+	),
+];
 const fontBootstrapOptions = configuredFonts.map((font) => ({
 	id: font.id,
 	family: getFontFamily(font),
@@ -113,6 +126,8 @@ const defaultFontId = defaultFont?.id ?? configuredFonts[0]?.id ?? "system";
 		/>
 	))
 }
+
+{defaultFontOrigins.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}
 
 <!-- Restore a saved font before paint and load only the selected font resources. -->
 <script is:inline define:vars={{ fontBootstrapOptions, defaultFontId }}>

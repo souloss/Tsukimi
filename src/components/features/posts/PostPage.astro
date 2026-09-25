@@ -213,6 +213,12 @@ const initialLayoutClass = defaultLayout === "grid" ? "grid-mode" : "list-mode";
 		);
 	}
 
+	@media (max-width: 768px) {
+		#post-list-container > :global(*) {
+			transition-property: opacity, transform;
+		}
+	}
+
 	#post-list-container.grid-mode > :global(*) {
 		animation-name: fadeInScale;
 	}

@@ -36,7 +36,7 @@ const defaults: SiteConfig = {
 	navbarTitle: {
 		mode: "text-icon",
 		text: "tsukimi",
-		icon: "assets/home/home.webp",
+		icon: "assets/home/home-128.webp",
 		logo: "assets/home/default-logo.webp",
 	},
 
