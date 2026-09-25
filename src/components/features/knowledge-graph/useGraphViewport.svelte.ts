@@ -36,7 +36,7 @@ export function useGraphViewport(
 		userMoved = true;
 		zoomAt(view.scale * factor, { x: view.width / 2, y: view.height / 2 });
 	}
-	function fit(nodes: LayoutNode[], automatic = false) {
+	function fit(nodes: LayoutNode[], automatic = false, maxScale = 1.6) {
 		if (!nodes.length || (automatic && userMoved)) return;
 		const xs = nodes.map((n) => n.x);
 		const ys = nodes.map((n) => n.y);
@@ -45,7 +45,7 @@ export function useGraphViewport(
 		const minY = Math.min(...ys) - 100;
 		const maxY = Math.max(...ys) + 80;
 		view.scale = Math.min(
-			1.6,
+			maxScale,
 			Math.max(
 				0.08,
 				Math.min(

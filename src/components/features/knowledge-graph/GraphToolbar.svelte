@@ -10,14 +10,12 @@ let {
 	changeMode,
 	relation = $bindable(),
 	query = $bindable(),
-	clickMode = $bindable(),
 	showLabels = $bindable(),
 }: {
 	mode: GroupMode;
 	changeMode: (mode: GroupMode) => void;
 	relation: Relation;
 	query: string;
-	clickMode: "open" | "inspect";
 	showLabels: boolean;
 } = $props();
 </script>
@@ -27,7 +25,6 @@ let {
 	<div class="options">
 		<div class="group-mode" role="group" aria-label="聚类方式"><button type="button" class:active={mode === "category"} aria-pressed={mode === "category"} onclick={() => changeMode("category")}>按分类</button><button type="button" class:active={mode === "domain"} aria-pressed={mode === "domain"} onclick={() => changeMode("domain")}>按标签领域</button></div>
 		<label>连线<select aria-label="关系类型" bind:value={relation}><option value="all">全部关系</option><option value="reference">仅文章引用</option><option value="topic">仅主题关联</option></select></label>
-		<label>点击<select aria-label="点击行为" bind:value={clickMode}><option value="open">打开文章</option><option value="inspect">查看关系</option></select></label>
 		<label class="labels"><input type="checkbox" bind:checked={showLabels} />显示标题</label>
 	</div>
 </div>

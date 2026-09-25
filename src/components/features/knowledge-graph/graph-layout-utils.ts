@@ -21,9 +21,6 @@ export type Cluster = {
 	label: string;
 	color: string;
 	count: number;
-	x: number;
-	y: number;
-	radius: number;
 };
 export type GroupLayout = {
 	groups: Cluster[];
@@ -72,14 +69,9 @@ export function createGroups(
 		grouped.set(id, group);
 	}
 	const entries = [...grouped].sort(([a], [b]) => a.localeCompare(b));
-	const columns = Math.max(1, Math.ceil(Math.sqrt(entries.length)));
-	const radii = entries.map(
-		([, group]) => 50 + Math.sqrt(group.ids.length) * 35,
-	);
-	const spacing = Math.max(260, ...radii.map((r) => r * 2 + 80));
 	const hues: number[] = [];
 	const membership = new Map<string, Cluster>();
-	const groups = entries.map(([id, group], index) => {
+	const groups = entries.map(([id, group]) => {
 		let hue = hash(id) % 360;
 		// Avoid assigning the same hue to neighboring categories; do not recycle six colors.
 		const separation = Math.min(42, 280 / Math.max(1, entries.length));
@@ -100,9 +92,6 @@ export function createGroups(
 			label: group.label,
 			count: group.ids.length,
 			color: `hsl(${hue} 55% 52%)`,
-			x: (index % columns) * spacing,
-			y: Math.floor(index / columns) * spacing * 0.8,
-			radius: radii[index],
 		};
 		for (const nodeId of group.ids) membership.set(nodeId, cluster);
 		return cluster;
@@ -112,21 +101,22 @@ export function createGroups(
 
 export function seedNodes(
 	nodes: KnowledgeGraphNode[],
-	layout: GroupLayout,
+	_layout?: GroupLayout,
 ): LayoutNode[] {
-	const offsets = new Map<string, number>();
+	// Start in a deterministic spiral so the first frame is readable while the
+	// graph forces establish the actual topology. Group membership only affects
+	// color and filtering; it must not dictate node positions.
+	const spacing = 42 + Math.min(24, Math.sqrt(nodes.length) * 2.5);
+	const goldenAngle = Math.PI * (3 - Math.sqrt(5));
 	return [...nodes]
 		.sort((a, b) => a.id.localeCompare(b.id))
-		.map((node) => {
-			const cluster = layout.membership.get(node.id)!;
-			const index = offsets.get(cluster.id) ?? 0;
-			offsets.set(cluster.id, index + 1);
-			const radius = 30 * Math.sqrt(index);
-			const angle = index * 2.399963229728653;
+		.map((node, index) => {
+			const radius = spacing * Math.sqrt(index + 1);
+			const angle = index * goldenAngle;
 			return {
 				...node,
-				x: cluster.x + Math.cos(angle) * radius,
-				y: cluster.y + Math.sin(angle) * radius,
+				x: Math.cos(angle) * radius,
+				y: Math.sin(angle) * radius,
 			};
 		});
 }
@@ -143,24 +133,21 @@ export function matchesRelation(edge: KnowledgeGraphEdge, relation: Relation) {
 export function createGraphSimulation(
 	nodes: LayoutNode[],
 	edges: KnowledgeGraphEdge[],
-	layout: GroupLayout,
+	_layout?: GroupLayout,
 ) {
-	const sameGroup = (edge: KnowledgeGraphEdge) =>
-		layout.membership.get(edge.source)?.id ===
-		layout.membership.get(edge.target)?.id;
 	// D3 mutates link endpoints. Keep immutable article relationships outside the simulation.
-	const links = edges.map((edge) => ({ ...edge, local: sameGroup(edge) }));
+	const links = edges.map((edge) => ({ ...edge }));
 	return forceSimulation(nodes)
 		.force(
 			"link",
 			forceLink<LayoutNode, (typeof links)[number]>(links)
 				.id((node) => node.id)
-				.distance((edge) => (edge.local ? 82 : 290))
-				.strength((edge) => (edge.local ? 0.12 : 0.008)),
+				.distance((edge) => (edge.kind === "reference" ? 118 : 138))
+				.strength((edge) => Math.min(0.3, 0.14 + edge.weight * 0.025)),
 		)
 		.force(
 			"charge",
-			forceManyBody<LayoutNode>().strength(-210).distanceMax(450),
+			forceManyBody<LayoutNode>().strength(-230).distanceMax(650),
 		)
 		.force(
 			"collide",
@@ -168,18 +155,8 @@ export function createGraphSimulation(
 				.radius((node) => node.radius + 30)
 				.iterations(2),
 		)
-		.force(
-			"cluster-x",
-			forceX<LayoutNode>((node) => layout.membership.get(node.id)!.x).strength(
-				0.24,
-			),
-		)
-		.force(
-			"cluster-y",
-			forceY<LayoutNode>((node) => layout.membership.get(node.id)!.y).strength(
-				0.24,
-			),
-		)
+		.force("center-x", forceX<LayoutNode>(0).strength(0.018))
+		.force("center-y", forceY<LayoutNode>(0).strength(0.018))
 		.alphaDecay(0.055)
 		.velocityDecay(0.38)
 		.stop();

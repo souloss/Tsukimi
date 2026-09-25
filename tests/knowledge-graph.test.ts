@@ -74,7 +74,7 @@ describe("knowledge graph grouping", () => {
 			layout.groups,
 		);
 	});
-	it("keeps dense cross-category references from collapsing separate clusters", () => {
+	it("lets dense cross-category references shape one natural layout", () => {
 		const articles = Array.from({ length: 160 }, (_, i) =>
 			post(`n${i}`, `category-${Math.floor(i / 20)}`),
 		);
@@ -90,19 +90,21 @@ describe("knowledge graph grouping", () => {
 		const originalEdges = JSON.stringify(edges);
 		const layout = createGroups(articles, "category");
 		const nodes = seedNodes(articles, layout);
+		const initial = new Map(
+			nodes.map((node) => [node.id, { x: node.x, y: node.y }]),
+		);
 		const simulation = createGraphSimulation(nodes, edges, layout);
 		simulation.tick(180).stop();
-		for (const node of nodes) {
-			assert.ok(Number.isFinite(node.x) && Number.isFinite(node.y));
-			const own = layout.membership.get(node.id)!;
-			const ownDistance = Math.hypot(node.x - own.x, node.y - own.y);
-			const otherDistance = Math.min(
-				...layout.groups
-					.filter((group) => group.id !== own.id)
-					.map((group) => Math.hypot(node.x - group.x, node.y - group.y)),
-			);
-			assert.ok(ownDistance < otherDistance, `${node.id} left its cluster`);
-		}
+		assert.ok(
+			nodes.every((node) => Number.isFinite(node.x) && Number.isFinite(node.y)),
+		);
+		assert.ok(
+			nodes.some((node) => {
+				const start = initial.get(node.id)!;
+				return Math.hypot(node.x - start.x, node.y - start.y) > 10;
+			}),
+			"relationship forces should move nodes from their neutral seed positions",
+		);
 		assert.equal(
 			JSON.stringify(edges),
 			originalEdges,

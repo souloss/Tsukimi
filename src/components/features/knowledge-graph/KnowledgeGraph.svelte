@@ -16,8 +16,8 @@ let mode = $state<GroupMode>("category");
 let relation = $state<Relation>("all");
 let query = $state("");
 let activeGroup = $state<string | null>(null);
+let focusRequest = $state(0);
 let selectedId = $state<string | null>(null);
-let clickMode = $state<"open" | "inspect">("open");
 let showLabels = $state(true);
 const layout = $derived(createGroups(graph.nodes, mode));
 const visibleIds = $derived(
@@ -53,6 +53,7 @@ function changeMode(next: GroupMode) {
 }
 function changeGroup(id: string | null) {
 	activeGroup = activeGroup === id ? null : id;
+	focusRequest += 1;
 	selectedId = null;
 }
 </script>
@@ -62,14 +63,14 @@ function changeGroup(id: string | null) {
 		<div><p class="eyebrow"><Icon icon="material-symbols:hub-outline" /> KNOWLEDGE NETWORK</p><h1>文章知识图谱</h1><p class="intro">让知识彼此连接。沿着一条线索，发现下一篇值得读的文章。</p></div>
 		<div class="stats"><span><strong>{graph.stats.articles}</strong>篇文章</span><span><strong>{graph.stats.references}</strong>条引用</span><span><strong>{graph.stats.topicConnections}</strong>条主题关联</span></div>
 	</header>
-	<GraphToolbar {mode} {changeMode} bind:relation bind:query bind:clickMode bind:showLabels />
+	<GraphToolbar {mode} {changeMode} bind:relation bind:query bind:showLabels />
 	<div class="knowledge-graph-groups" aria-label="分组图例">
 		<button type="button" class:active={activeGroup === null} aria-pressed={activeGroup === null} onclick={() => changeGroup(null)}>全部 <small>{graph.nodes.length}</small></button>
 		{#each layout.groups as group (group.id)}
 			<button type="button" class:active={activeGroup === group.id} aria-pressed={activeGroup === group.id} onclick={() => changeGroup(group.id)}><i style:background={group.color} />{group.label}<small>{group.count}</small></button>
 		{/each}
 	</div>
-	<GraphCanvas {graph} {layout} {edges} {visibleIds} {clickMode} {showLabels} bind:selectedId />
+	<GraphCanvas {graph} {layout} {edges} {visibleIds} {showLabels} focusGroup={activeGroup} {focusRequest} bind:selectedId />
 	<div class="graph-note"><span>{mode === "category" ? "同色节点属于同一分类" : "领域按系列、共享标签自动归组，无标签时使用分类"}</span><span>实线：文章引用 · 虚线：共同分类、标签或系列</span></div>
 	{#if selected}
 		<GraphDetails node={selected} {graph} {layout} onselect={(id) => { selectedId = id; }} onclose={() => { selectedId = null; }} />

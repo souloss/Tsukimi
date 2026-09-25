@@ -18,16 +18,18 @@ let {
 	layout,
 	edges,
 	visibleIds,
-	clickMode,
 	showLabels,
+	focusGroup = null,
+	focusRequest = 0,
 	selectedId = $bindable(null),
 }: {
 	graph: KnowledgeGraphData;
 	layout: GroupLayout;
 	edges: KnowledgeGraphEdge[];
 	visibleIds: Set<string>;
-	clickMode: "open" | "inspect";
 	showLabels: boolean;
+	focusGroup?: string | null;
+	focusRequest?: number;
 	selectedId?: string | null;
 } = $props();
 // D3 owns mutable positions; each tick publishes one snapshot for Svelte.
@@ -59,20 +61,6 @@ const neighbors = $derived.by(() => {
 	return ids;
 });
 const hovered = $derived(hoveredId ? nodesById.get(hoveredId) : undefined);
-const regions = $derived(
-	layout.groups.map((group) => {
-		const members = positions.filter(
-			(node) => layout.membership.get(node.id)?.id === group.id,
-		);
-		const extent = Math.max(
-			55,
-			...members.map(
-				(node) => Math.hypot(node.x - group.x, node.y - group.y) + 32,
-			),
-		);
-		return { ...group, extent };
-	}),
-);
 
 function publish() {
 	positions = simulationNodes.map((node) => ({ ...node }));
@@ -117,8 +105,8 @@ $effect(() => {
 	if (!ready) return;
 	return untrack(() => {
 		simulationNodes = seedNodes(graph.nodes, nextLayout);
-		simulation = createGraphSimulation(simulationNodes, nextEdges, nextLayout);
-		// Warm up before display; labels and group regions are already usable at first paint.
+		simulation = createGraphSimulation(simulationNodes, nextEdges);
+		// Warm up before display so the first frame already reflects the relationships.
 		simulation.tick(reduce ? 140 : 45);
 		publish();
 		viewport.resetInteraction();
@@ -133,21 +121,28 @@ $effect(() => {
 	});
 });
 
+$effect(() => {
+	const request = focusRequest;
+	const groupId = focusGroup;
+	if (!mounted || request === 0) return;
+	const frame = requestAnimationFrame(() => {
+		const target = untrack(() =>
+			simulationNodes.filter(
+				(node) =>
+					visibleIds.has(node.id) &&
+					(groupId === null || layout.membership.get(node.id)?.id === groupId),
+			),
+		);
+		if (target.length) viewport.fit(target, false, groupId ? 2.4 : 1.6);
+	});
+	return () => cancelAnimationFrame(frame);
+});
+
 function nodeClick(event: MouseEvent, node: LayoutNode) {
 	if (viewport.click(event)) return;
 	if (!visibleIds.has(node.id)) {
 		event.preventDefault();
 		return;
-	}
-	if (
-		clickMode === "inspect" &&
-		!event.metaKey &&
-		!event.ctrlKey &&
-		!event.shiftKey &&
-		!event.altKey
-	) {
-		event.preventDefault();
-		selectedId = selectedId === node.id ? null : node.id;
 	}
 }
 function hover(event: PointerEvent, node: LayoutNode) {
@@ -214,7 +209,6 @@ onMount(() => {
 	<div class="canvas-caption" aria-live="polite"><span><i class:settling />{settling ? "正在整理关系" : "探索知识之间的联系"}</span><span>{visibleIds.size} / {graph.nodes.length} 篇文章</span></div>
 	<svg bind:this={graphSvg} viewBox={`0 0 ${viewport.view.width} ${viewport.view.height}`} role="group" aria-label="文章知识网络图" aria-describedby="graph-controls-help" tabindex="0" onpointerdown={(event) => viewport.down(event)} onpointermove={viewport.move} onpointerup={viewport.up} onpointercancel={viewport.up} onlostpointercapture={viewport.up} onkeydown={canvasKey}>
 		<g class="graph-world" transform={`translate(${viewport.view.x} ${viewport.view.y}) scale(${viewport.view.scale})`}>
-			<g class="clusters" aria-hidden="true">{#each regions as group (group.id)}<g style:color={group.color}><circle class="cluster-ring" cx={group.x} cy={group.y} r={group.extent} /><text x={group.x} y={group.y - group.extent - 12}>{group.label}</text></g>{/each}</g>
 			<g class="edges" aria-hidden="true">{#each activeEdges as edge (edge.id)}{@const source = nodesById.get(edge.source)}{@const target = nodesById.get(edge.target)}{#if source && target}<line class:reference={edge.kind === "reference"} class:topic={edge.kind !== "reference"} class:highlighted={edge.source === focusId || edge.target === focusId} class:dimmed={Boolean(focusId && edge.source !== focusId && edge.target !== focusId)} x1={source.x} y1={source.y} x2={target.x} y2={target.y} vector-effect="non-scaling-stroke" />{/if}{/each}</g>
 			<g class="nodes">{#each positions as node (node.id)}
 				{@const group = layout.membership.get(node.id)}
@@ -228,7 +222,7 @@ onMount(() => {
 		</g>
 	</svg>
 	{#if !graph.nodes.length || !visibleIds.size}<div class="empty" role="status"><strong>{graph.nodes.length ? "没有找到匹配的文章" : "知识网络等待第一篇文章"}</strong><span>{graph.nodes.length ? "试试其他关键词，或切换到全部分组。" : "文章发布后会自动出现在这里。"}</span></div>{/if}
-	{#if tooltip && hovered}<div class="tooltip" style:left={`${tooltip.x}px`} style:top={`${tooltip.y}px`}><strong>{hovered.title}</strong><span>{layout.membership.get(hovered.id)?.label} · {hovered.degree} 个连接</span><small>{clickMode === "open" ? "点击阅读文章 · 拖动探索关联" : "点击查看关系 · 空格键查看详情"}</small></div>{/if}
+	{#if tooltip && hovered}<div class="tooltip" style:left={`${tooltip.x}px`} style:top={`${tooltip.y}px`}><strong>{hovered.title}</strong><span>{layout.membership.get(hovered.id)?.label} · {hovered.degree} 个连接</span><small>点击阅读文章 · 拖动探索关联 · 空格键查看详情</small></div>{/if}
 	<div class="canvas-controls"><span class="zoom-level">{Math.round(viewport.view.scale * 100)}%</span><GraphButton label="缩小" icon="material-symbols:remove-rounded" onclick={() => viewport.zoom(1 / 1.25)} /><GraphButton label="放大" icon="material-symbols:add-rounded" onclick={() => viewport.zoom(1.25)} /><GraphButton label="适应视图" icon="material-symbols:fit-screen-rounded" onclick={fit} /></div>
 	<p id="graph-controls-help" class="controls-help">拖动节点 / 空白处平移 · 滚轮 / 双指缩放<span> · 方向键平移，＋ / －缩放，0 复位</span></p>
 </div>
@@ -242,9 +236,6 @@ onMount(() => {
 	.canvas-caption span:first-child { display:flex; align-items:center; gap:.4rem; }
 	.canvas-caption i { width:.4rem; height:.4rem; border-radius:50%; background:var(--primary); opacity:.6; }
 	i.settling { animation:pulse 1s ease-in-out infinite alternate; }
-	.clusters { pointer-events:none; }
-	.cluster-ring { fill:currentColor; fill-opacity:.035; stroke:currentColor; stroke-opacity:.14; stroke-dasharray:3 6; stroke-width:1; }
-	.clusters text { fill:currentColor; font-size:12px; font-weight:600; text-anchor:middle; opacity:.85; }
 	.edges { pointer-events:none; }
 	.edges line { stroke:var(--text-secondary); stroke-width:1.2; opacity:.3; transition:opacity .15s; }
 	.edges .topic { stroke-dasharray:3 5; opacity:.24; }
