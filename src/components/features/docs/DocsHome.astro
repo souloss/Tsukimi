@@ -39,7 +39,9 @@ const { home } = Astro.props;
 	<section class="docs-home-features">
 		{home.features?.map((feature) => (
 			<div class="docs-home-feature">
-				<div class="docs-home-feature-icon">{feature.icon}</div>
+				<div class="docs-home-feature-icon">
+					{feature.icon && <Icon name={feature.icon} class="text-xl" />}
+				</div>
 				<h2>{feature.title}</h2>
 				<p>{feature.details}</p>
 			</div>
