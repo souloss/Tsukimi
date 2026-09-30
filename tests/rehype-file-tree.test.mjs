@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
+import astroConfig from "../astro.config.mjs";
 import { remarkFileTree } from "../src/plugins/rehype-file-tree.mjs";
 
 function listItem(value, children = []) {
@@ -43,4 +44,34 @@ test("renders nested entries when folder names omit a trailing slash", () => {
 		assert.match(html, new RegExp(`>${name}<`));
 	}
 	assert.equal((html.match(/vp-file-tree-info folder/g) || []).length, 3);
+});
+
+test("renders nested entries through the configured Astro Markdown processor", async () => {
+	const renderer = await astroConfig.markdown.processor.createRenderer({
+		syntaxHighlight: false,
+		gfm: true,
+		smartypants: true,
+	});
+	const result = await renderer.render(`::: file-tree
+
+- src
+  - content
+    - posts
+      - my-first-post
+        - index.md
+        - cover.jpg
+
+:::`);
+
+	for (const name of [
+		"src",
+		"content",
+		"posts",
+		"my-first-post",
+		"index.md",
+		"cover.jpg",
+	]) {
+		assert.match(result.code, new RegExp(`>${name}<`));
+	}
+	assert.match(result.code, /vp-file-tree-name folder">src<\/span>/);
 });

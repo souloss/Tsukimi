@@ -30,7 +30,7 @@
 		"update-bilibili": "node scripts/update-bilibili.mjs",
 		"update-feeds": "node scripts/update-feeds.mjs",
 		"refresh-data": "pnpm update-feeds && pnpm update-anime",
-		"build": "node scripts/run-with-mem.js astro build && node scripts/build-pagefind.mjs && node scripts/compress-fonts/index.js",
+		"build": "node scripts/run-with-mem.js astro build --force && node scripts/build-pagefind.mjs && node scripts/compress-fonts/index.js",
 		"build:refresh-data": "pnpm refresh-data && pnpm build",
 		"submit": "node scripts/indexnow-submit.js",
 		"preview": "astro preview",
