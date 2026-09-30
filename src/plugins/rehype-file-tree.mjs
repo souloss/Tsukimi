@@ -145,6 +145,10 @@ function parseMdastListItem(li) {
 	const node = { ...parsed, children: [] };
 
 	if (childList) {
+		// A nested list unambiguously represents a directory. Keep accepting
+		// the explicit trailing slash, but infer the folder kind for the
+		// common tree notation that omits it (for example, `- src`).
+		node.isFolder = true;
 		for (const child of childList.children || []) {
 			if (child.type === "listItem") {
 				node.children.push(parseMdastListItem(child));
