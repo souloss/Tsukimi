@@ -11,13 +11,20 @@ import {
 } from "@constants/constants";
 import { getFontFamily, getFontStylesheets } from "@utils/font-utils";
 import {
+	getStoredMaterialPaletteStyle,
+	type MaterialPaletteStyle,
+	materialColorSchemeStyle,
+} from "@utils/material-theme";
+import {
 	backgroundWallpaperConfig,
 	effectsConfig,
 	expressiveCodeConfig,
 	fontConfig,
 	siteConfig,
 } from "@/config";
+import { isTexturePreset, resolveTextureConfig } from "@/config/textureConfig";
 import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
+import type { TexturePreset } from "@/types/texture";
 
 function isHomePage(pathname: string): boolean {
 	return pathname === "/" || pathname === "";
@@ -89,6 +96,60 @@ export function setHue(hue: number): void {
 		return;
 	}
 	r.style.setProperty("--hue", String(hue));
+	applyMaterialTheme(hue, getStoredMaterialPaletteStyle());
+}
+
+export function setMaterialPaletteStyle(style: MaterialPaletteStyle): void {
+	if (typeof localStorage === "undefined") return;
+	localStorage.setItem("material-theme-style", style);
+	applyMaterialTheme(getHue(), style);
+}
+
+function applyMaterialTheme(hue: number, style: MaterialPaletteStyle): void {
+	const themeStyle = document.getElementById("tsukimi-material-theme");
+	if (!themeStyle) return;
+	themeStyle.textContent = materialColorSchemeStyle(
+		hue,
+		style,
+		siteConfig.themeColor.colorSpec ?? "2025",
+	);
+}
+
+export function getReduceMotion(): boolean {
+	if (typeof localStorage === "undefined") return false;
+	const stored = localStorage.getItem("reduceMotion");
+	return stored === null
+		? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+		: stored === "true";
+}
+
+export function setReduceMotion(enabled: boolean): void {
+	if (typeof document === "undefined" || typeof localStorage === "undefined")
+		return;
+	localStorage.setItem("reduceMotion", String(enabled));
+	document.documentElement.toggleAttribute("data-reduce-motion", enabled);
+}
+
+export function getDefaultTexturePreset(): TexturePreset {
+	return resolveTextureConfig().defaultPreset;
+}
+
+export function getStoredTexturePreset(): TexturePreset {
+	if (typeof localStorage === "undefined") return getDefaultTexturePreset();
+	const stored = localStorage.getItem("texturePreset");
+	return stored && isTexturePreset(stored) ? stored : getDefaultTexturePreset();
+}
+
+export function setTexturePreset(preset: TexturePreset): void {
+	if (typeof localStorage !== "undefined") {
+		localStorage.setItem("texturePreset", preset);
+	}
+	applyTexturePresetToDocument(preset);
+}
+
+export function applyTexturePresetToDocument(preset: TexturePreset): void {
+	if (typeof document === "undefined") return;
+	document.documentElement.setAttribute("data-texture-preset", preset);
 }
 
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {

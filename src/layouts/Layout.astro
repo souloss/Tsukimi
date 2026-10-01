@@ -1,16 +1,20 @@
 ---
+import ContextMenu from "@components/control/ContextMenu.svelte";
 import { PageProgressBar } from "@components/control/PageProgressBar";
 import Pio from "@components/features/pio/Pio.svelte"; // 使用 Svelte 版本的 Pio 组件
+import BackgroundTexture from "@components/misc/BackgroundTexture.astro";
 import ConfigCarrier from "@components/misc/ConfigCarrier.astro";
 import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import {
 	backgroundWallpaperConfig,
+	contextMenuConfig,
 	fontConfig,
 	musicPlayerConfig,
 	pioConfig,
 	profileConfig,
 	siteConfig,
 } from "@/config";
+import { resolveTextureConfig } from "@/config/textureConfig";
 
 const BANNER_HEIGHT = 35;
 const BANNER_HEIGHT_EXTEND = 30;
@@ -34,6 +38,7 @@ import "../styles/expressive-code.css";
 import "../styles/panel-animations.css";
 import "../styles/directives.css";
 import "../styles/visual-diagrams.css";
+import "../styles/textures.css";
 
 // 导入新提取的 Head 组件
 import AnalyticsScripts from "./partials/AnalyticsScripts.astro";
@@ -69,6 +74,7 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
+const textureConfig = resolveTextureConfig();
 
 // 获取导航栏透明模式配置（优先级: banner.navbar > common.navbar > 默认 "none"）
 const navbarTransparentMode =
@@ -206,6 +212,7 @@ if (defaultFontItem) {
 	lang={siteLang}
 	class="bg-[var(--page-bg)] text-[14px] md:text-[16px]"
 	data-wallpaper-mode={defaultWallpaperMode}
+	data-texture-preset={textureConfig.enable ? textureConfig.defaultPreset : "none"}
 	data-overlayscrollbars-initialize
 >
 	<head>
@@ -348,6 +355,7 @@ if (defaultFontItem) {
 		{shouldShowTopHighlight && <div class="top-gradient-highlight" />}
 
 		<ConfigCarrier />
+		<BackgroundTexture />
 		<PageProgressBar
 			enable={siteConfig.pageProgressBar?.enable ?? false}
 			height={siteConfig.pageProgressBar?.height ?? 3}
@@ -360,6 +368,8 @@ if (defaultFontItem) {
 
 		<!-- Pio 看板娘组件 - 仅在进入视口时加载 -->
 		{pioConfig.enable && <Pio client:idle />}
+
+		{contextMenuConfig.enable && <ContextMenu client:idle />}
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>

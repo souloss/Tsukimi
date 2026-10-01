@@ -52,6 +52,18 @@ export const en: Translation = {
 	[Key.postsCount]: "posts",
 
 	[Key.themeColor]: "Theme Color",
+	[Key.themePalette]: "Color palette",
+	[Key.reduceMotion]: "Reduce motion",
+	[Key.contextCopySelection]: "Copy selected text",
+	[Key.contextBackToTop]: "Back to top",
+	[Key.contextCopyLink]: "Copy page link",
+	[Key.texture]: "Background texture",
+	[Key.textureNone]: "None",
+	[Key.textureStarlight]: "Starlight",
+	[Key.textureCyberDots]: "Cyber dots",
+	[Key.textureTopography]: "Topography",
+	[Key.textureGeometric]: "Geometric",
+	[Key.textureSakura]: "Sakura",
 
 	[Key.lightMode]: "Light",
 	[Key.darkMode]: "Dark",

@@ -262,6 +262,9 @@ export default defineConfig({
 		}),
 	},
 	vite: {
+		ssr: {
+			noExternal: ["@material/material-color-utilities"],
+		},
 		customLogger: {
 			info: (msg, options) => console.log(msg),
 			warn: (msg, options) => {

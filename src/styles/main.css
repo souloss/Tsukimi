@@ -74,6 +74,34 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@layer components {
+  .reading-layout .markdown-content {
+    max-width: min(var(--reading-width-wide), 100%);
+    margin-inline: auto;
+  }
+
+  .reading-layout .markdown-content > p,
+  .reading-layout .markdown-content > h1,
+  .reading-layout .markdown-content > h2,
+  .reading-layout .markdown-content > h3,
+  .reading-layout .markdown-content > h4,
+  .reading-layout .markdown-content > ul,
+  .reading-layout .markdown-content > ol,
+  .reading-layout .markdown-content > blockquote {
+    max-width: var(--content-measure);
+    margin-inline: auto;
+  }
+}
+
+html[data-reduce-motion] *,
+html[data-reduce-motion] *::before,
+html[data-reduce-motion] *::after {
+  scroll-behavior: auto;
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+  transition-duration: 0.01ms;
+}
+
 /* Migrate from v3 config */
 @theme {
   --font-sans: "Roboto", "sans-serif", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

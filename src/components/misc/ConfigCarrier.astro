@@ -1,5 +1,8 @@
 ---
 import { expressiveCodeConfig, siteConfig } from "@/config";
+import { resolveTextureConfig } from "@/config/textureConfig";
+
+const texture = resolveTextureConfig();
 ---
 
 <!-- 全局配置载体 -->
@@ -9,6 +12,8 @@ import { expressiveCodeConfig, siteConfig } from "@/config";
 	data-hide-code-blocks-during-transition={expressiveCodeConfig.hideDuringThemeTransition
 		? "true"
 		: "false"}
+	data-texture-preset={texture.enable ? texture.defaultPreset : "none"}
+	data-texture-opacity={texture.defaultOpacity}
 >
 </div>
 

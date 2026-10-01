@@ -1,0 +1,55 @@
+{
+	"version": 1,
+	"entries": [
+		{
+			"id": "admonition",
+			"syntax": "> [!NOTE]",
+			"implementation": "src/plugins/rehype-component-admonition.mjs"
+		},
+		{
+			"id": "github-card",
+			"syntax": "::github{repo=\"owner/name\"}",
+			"implementation": "src/plugins/rehype-component-github-card.mjs"
+		},
+		{
+			"id": "mermaid",
+			"syntax": "```mermaid",
+			"implementation": "src/plugins/remark-mermaid.js"
+		},
+		{
+			"id": "plantuml",
+			"syntax": "```plantuml",
+			"implementation": "src/plugins/remark-plantuml.js"
+		},
+		{
+			"id": "vega-lite",
+			"syntax": "```vega-lite",
+			"implementation": "src/plugins/remark-vega-lite.js"
+		},
+		{
+			"id": "markmap",
+			"syntax": "```markmap",
+			"implementation": "src/plugins/remark-markmap.js"
+		},
+		{
+			"id": "file-tree",
+			"syntax": "```file-tree",
+			"implementation": "src/plugins/rehype-file-tree.mjs"
+		},
+		{
+			"id": "include",
+			"syntax": ":::include",
+			"implementation": "src/plugins/remark-include.mjs"
+		},
+		{
+			"id": "directive-content",
+			"syntax": ":::note",
+			"implementation": "src/plugins/remark-content-directives.mjs"
+		},
+		{
+			"id": "math",
+			"syntax": "$$ x^2 $$",
+			"implementation": "src/plugins/remark-math-conditional.mjs"
+		}
+	]
+}

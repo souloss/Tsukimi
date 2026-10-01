@@ -7,6 +7,7 @@
  */
 
 import { getFontFamily, getFontStylesheets } from "@utils/font-utils";
+import { materialColorSchemeStyle } from "@utils/material-theme";
 import { fontConfig, profileConfig, siteConfig } from "@/config";
 
 import {
@@ -74,10 +75,16 @@ const fontBootstrapOptions = configuredFonts.map((font) => ({
 	stylesheets: getFontStylesheets(font),
 }));
 const defaultFontId = defaultFont?.id ?? configuredFonts[0]?.id ?? "system";
+const materialThemeStyle = materialColorSchemeStyle(
+	configHue,
+	siteConfig.themeColor.paletteStyle ?? "tonalSpot",
+	siteConfig.themeColor.colorSpec ?? "2025",
+);
 ---
 
 <!-- SEO Meta Tags -->
 <title>{title}</title>
+<style id="tsukimi-material-theme" set:html={materialThemeStyle} />
 <meta name="description" content={description || title} />
 {
 	keywords && keywords.length > 0 && (
@@ -178,6 +185,8 @@ const defaultFontId = defaultFont?.id ?? configuredFonts[0]?.id ?? "system";
 		BANNER_HEIGHT_EXTEND: 30,
 		configHue,
 		pageScaling: siteConfig.pageScaling,
+		textureEnabled: siteConfig.texture?.enable ?? false,
+		texturePreset: siteConfig.texture?.defaultPreset ?? "none",
 	}}
 >
 	// Load the theme from local storage
@@ -199,6 +208,31 @@ const defaultFontId = defaultFont?.id ?? configuredFonts[0]?.id ?? "system";
 	// Load the hue from local storage
 	const hue = localStorage.getItem("hue") || configHue;
 	document.documentElement.style.setProperty("--hue", hue);
+	const storedTexture = localStorage.getItem("texturePreset");
+	if (textureEnabled) {
+		const validTextures = [
+			"none",
+			"starlight",
+			"cyber-dots",
+			"topography",
+			"geometric",
+			"sakura",
+		];
+		document.documentElement.setAttribute(
+			"data-texture-preset",
+			validTextures.includes(storedTexture || "")
+				? storedTexture || "none"
+				: texturePreset,
+		);
+	}
+	const reduceMotionPreference = localStorage.getItem("reduceMotion");
+	if (
+		reduceMotionPreference === "true" ||
+		(reduceMotionPreference === null &&
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+	) {
+		document.documentElement.setAttribute("data-reduce-motion", "");
+	}
 
 	// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 	let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
@@ -248,6 +282,32 @@ const defaultFontId = defaultFont?.id ?? configuredFonts[0]?.id ?? "system";
 			window.addEventListener("orientationchange", adjustPageScale);
 		}
 	})();
+</script>
+
+<!-- Only load HCT generation when a visitor has saved a custom palette or hue. -->
+<script>
+	import { siteConfig } from "@/config";
+
+	const storedStyle = localStorage.getItem("material-theme-style");
+	const savedHue = localStorage.getItem("hue");
+	if (storedStyle || savedHue) {
+		import("@utils/material-theme").then(
+			({ isMaterialPaletteStyle, materialColorSchemeStyle }) => {
+				const style = storedStyle && isMaterialPaletteStyle(storedStyle)
+					? storedStyle
+					: siteConfig.themeColor.paletteStyle ?? "tonalSpot";
+				const hue = Number.parseInt(savedHue ?? String(siteConfig.themeColor.hue), 10);
+				if (!Number.isFinite(hue)) return;
+				const materialTheme = document.getElementById("tsukimi-material-theme");
+				if (!materialTheme) return;
+				materialTheme.textContent = materialColorSchemeStyle(
+					hue,
+					style,
+					siteConfig.themeColor.colorSpec ?? "2025",
+				);
+			},
+		);
+	}
 </script>
 
 <!-- Dev mode script - avoid swup replacing head styles -->

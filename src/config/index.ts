@@ -14,9 +14,11 @@ export {
 	backgroundWallpaperConfig as backgroundWallpaper,
 } from "./backgroundWallpaper";
 export { commentConfig } from "./commentConfig";
+export { contextMenuConfig } from "./contextMenuConfig";
 export { effectsConfig } from "./effectsConfig";
 // ─── 代码块 ─────────────────────────────────────────────────
 export { expressiveCodeConfig } from "./expressiveCodeConfig";
+export { fabConfig } from "./fabConfig";
 export { fontConfig } from "./fontConfig";
 // ─── 页脚 ───────────────────────────────────────────────────
 export { footerConfig } from "./footerConfig";
@@ -47,6 +49,7 @@ export { sidebarLayoutConfig } from "./sidebarConfig";
 export { SITE_LANG, siteConfig } from "./siteConfig";
 // ─── 赞助 ───────────────────────────────────────────────────
 export { sponsorConfig } from "./sponsorConfig";
+export { resolveTextureConfig, TEXTURE_PRESETS } from "./textureConfig";
 
 import { effectsConfig as _effects } from "./effectsConfig";
 /** @deprecated 使用 effectsConfig.sakura 代替 */

@@ -52,6 +52,18 @@ export const zh_CN: Translation = {
 	[Key.postsCount]: "篇文章",
 
 	[Key.themeColor]: "主题色",
+	[Key.themePalette]: "配色风格",
+	[Key.reduceMotion]: "减少动效",
+	[Key.contextCopySelection]: "复制选中文本",
+	[Key.contextBackToTop]: "返回顶部",
+	[Key.contextCopyLink]: "复制页面链接",
+	[Key.texture]: "背景纹理",
+	[Key.textureNone]: "无",
+	[Key.textureStarlight]: "星芒",
+	[Key.textureCyberDots]: "点阵",
+	[Key.textureTopography]: "等高线",
+	[Key.textureGeometric]: "几何",
+	[Key.textureSakura]: "落樱",
 
 	[Key.lightMode]: "亮色",
 	[Key.darkMode]: "暗色",

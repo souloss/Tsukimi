@@ -16,6 +16,16 @@ const defaults: SiteConfig = {
 	themeColor: {
 		hue: 360,
 		fixed: false,
+		paletteStyle: "tonalSpot",
+		colorSpec: "2025",
+	},
+
+	texture: {
+		enable: true,
+		switchable: true,
+		defaultPreset: "none",
+		defaultOpacity: 0.12,
+		allowMotion: true,
 	},
 
 	featurePages: {

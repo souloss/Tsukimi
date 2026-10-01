@@ -39,6 +39,18 @@ enum I18nKey {
 	postsCount = "postsCount",
 
 	themeColor = "themeColor",
+	themePalette = "themePalette",
+	reduceMotion = "reduceMotion",
+	contextCopySelection = "contextCopySelection",
+	contextBackToTop = "contextBackToTop",
+	contextCopyLink = "contextCopyLink",
+	texture = "texture",
+	textureNone = "textureNone",
+	textureStarlight = "textureStarlight",
+	textureCyberDots = "textureCyberDots",
+	textureTopography = "textureTopography",
+	textureGeometric = "textureGeometric",
+	textureSakura = "textureSakura",
 
 	lightMode = "lightMode",
 	darkMode = "darkMode",

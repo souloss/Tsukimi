@@ -5,10 +5,13 @@ import { fileURLToPath } from "node:url";
 import { LinkPresets } from "../src/constants/link-presets.ts";
 import { featurePageRoutes } from "../src/config/featureRoutes.ts";
 import {
+	contextMenuConfig,
+	fabConfig,
 	navBarConfig,
 	sidebarLayoutConfig,
 	siteConfig,
 } from "../src/config/index.ts";
+import { isTexturePreset } from "../src/config/textureConfig.ts";
 import { WIDGET_COMPONENT_MAP } from "../src/utils/widget-manager.ts";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -116,6 +119,52 @@ export async function validateConfig({
 				);
 			}
 		}
+	}
+
+	const themeColor = site.themeColor ?? {};
+	if (
+		themeColor.paletteStyle !== undefined &&
+		![
+			"tonalSpot",
+			"vibrant",
+			"expressive",
+			"content",
+			"rainbow",
+			"fruitSalad",
+			"monochrome",
+			"neutral",
+			"fidelity",
+		].includes(themeColor.paletteStyle)
+	) {
+		errors.push(`themeColor.paletteStyle is invalid: ${themeColor.paletteStyle}`);
+	}
+	if (
+		themeColor.colorSpec !== undefined &&
+		!["2021", "2025"].includes(themeColor.colorSpec)
+	) {
+		errors.push(`themeColor.colorSpec is invalid: ${themeColor.colorSpec}`);
+	}
+	for (const [key, item] of Object.entries(fabConfig.items)) {
+		if (!item.devices.length) errors.push(`fab.${key} must target at least one device`);
+	}
+	if (typeof contextMenuConfig.enable !== "boolean") {
+		errors.push("contextMenu.enable must be boolean");
+	}
+	const texture = site.texture ?? {};
+	if (
+		texture.defaultPreset !== undefined &&
+		!isTexturePreset(texture.defaultPreset)
+	) {
+		errors.push(`texture.defaultPreset is invalid: ${texture.defaultPreset}`);
+	}
+	if (
+		texture.defaultOpacity !== undefined &&
+		(typeof texture.defaultOpacity !== "number" ||
+			!Number.isFinite(texture.defaultOpacity) ||
+			texture.defaultOpacity < 0.05 ||
+			texture.defaultOpacity > 0.25)
+	) {
+		errors.push("texture.defaultOpacity must be between 0.05 and 0.25");
 	}
 
 	return errors;

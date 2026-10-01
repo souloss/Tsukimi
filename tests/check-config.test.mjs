@@ -32,3 +32,30 @@ test("reports disabled features that remain in navigation", async () => {
 
 	assert.match(errors.join("\n"), /disabled feature anime/);
 });
+
+test("rejects invalid theme palette configuration", async () => {
+	const errors = await validateConfig({
+		site: {
+			themeColor: { paletteStyle: "unknown" },
+			featurePages: {},
+		},
+		navbar: { links: [] },
+		sidebar: { components: { left: [], right: [], drawer: [] } },
+	});
+
+	assert.match(errors.join("\n"), /themeColor\.paletteStyle is invalid/);
+});
+
+test("rejects invalid texture configuration", async () => {
+	const errors = await validateConfig({
+		site: {
+			texture: { defaultPreset: "unknown", defaultOpacity: 0.4 },
+			featurePages: {},
+		},
+		navbar: { links: [] },
+		sidebar: { components: { left: [], right: [], drawer: [] } },
+	});
+
+	assert.match(errors.join("\n"), /texture\.defaultPreset is invalid/);
+	assert.match(errors.join("\n"), /texture\.defaultOpacity/);
+});

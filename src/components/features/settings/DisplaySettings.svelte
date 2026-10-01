@@ -10,6 +10,11 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import type { WALLPAPER_MODE } from "@types/config";
 import {
+	getStoredMaterialPaletteStyle,
+	MATERIAL_PALETTE_STYLES,
+	type MaterialPaletteStyle,
+} from "@utils/material-theme";
+import {
 	applyFontToDocument,
 	getDefaultBannerCarouselEnabled,
 	getDefaultBannerTitleEnabled,
@@ -24,6 +29,7 @@ import {
 	getDefaultWavesEnabled,
 	getFont,
 	getHue,
+	getReduceMotion,
 	getStoredBannerCarouselEnabled,
 	getStoredBannerTitleEnabled,
 	getStoredFont,
@@ -33,6 +39,7 @@ import {
 	getStoredOverlayOpacity,
 	getStoredSakuraEnabled,
 	getStoredStickyNavbar,
+	getStoredTexturePreset,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
 	setBannerCarouselEnabled,
@@ -40,11 +47,14 @@ import {
 	setFont,
 	setGradientEnabled,
 	setHue,
+	setMaterialPaletteStyle,
 	setOverlayBlur,
 	setOverlayCardOpacity,
 	setOverlayOpacity,
+	setReduceMotion,
 	setSakuraEnabled,
 	setStickyNavbar,
+	setTexturePreset,
 	setWallpaperMode,
 	setWavesEnabled,
 } from "@utils/setting-utils";
@@ -55,7 +65,9 @@ import {
 	effectsConfig,
 	fontConfig,
 	siteConfig,
+	TEXTURE_PRESETS,
 } from "@/config";
+import type { TexturePreset } from "@/types/texture";
 
 type OverlaySliderItem = {
 	key: "opacity" | "blur" | "cardOpacity";
@@ -71,6 +83,11 @@ type OverlaySliderItem = {
 };
 
 let hue = $state(getHue());
+let paletteStyle = $state<MaterialPaletteStyle>(
+	getStoredMaterialPaletteStyle(),
+);
+let reduceMotion = $state(getReduceMotion());
+let texturePreset = $state<TexturePreset>(getStoredTexturePreset());
 const defaultHue = getDefaultHue();
 let wallpaperMode: WALLPAPER_MODE = $state(
 	backgroundWallpaperConfig.mode?.defaultMode,
@@ -127,6 +144,11 @@ const effectiveDefaultLayout = $derived(
 	isMobileWidth ? mobileDefaultLayout : defaultLayout,
 );
 const showThemeColor = !siteConfig.themeColor.fixed;
+const showPaletteStyle = !siteConfig.themeColor.fixed;
+const showReduceMotion = true;
+const isTextureSwitchable =
+	(siteConfig.texture?.enable ?? false) &&
+	(siteConfig.texture?.switchable ?? false);
 // 是否允许用户切换水波纹动画（只看 switchable 配置）
 const isWavesSwitchable = siteConfig.banner.waves?.switchable ?? false;
 // 是否允许用户切换渐变过渡（只看 switchable 配置）
@@ -186,6 +208,9 @@ const bannerSettingsIsDefault = $derived(
 );
 const hasAnyContent =
 	showThemeColor ||
+	showPaletteStyle ||
+	showReduceMotion ||
+	isTextureSwitchable ||
 	isWallpaperSwitchable ||
 	allowLayoutSwitch ||
 	hasBannerSettings ||
@@ -463,6 +488,8 @@ onMount(() => {
 
 	// 从localStorage读取固定导航栏设置
 	stickyNavbarEnabled = getStoredStickyNavbar();
+	reduceMotion = getReduceMotion();
+	texturePreset = getStoredTexturePreset();
 
 	// 监听窗口大小变化
 	window.addEventListener("resize", checkScreenSize);
@@ -530,6 +557,21 @@ $effect(() => {
 		setHue(hue);
 	}
 });
+
+function switchPaletteStyle(style: MaterialPaletteStyle) {
+	paletteStyle = style;
+	setMaterialPaletteStyle(style);
+}
+
+function toggleReduceMotion() {
+	reduceMotion = !reduceMotion;
+	setReduceMotion(reduceMotion);
+}
+
+function switchTexturePreset(preset: TexturePreset) {
+	texturePreset = preset;
+	setTexturePreset(preset);
+}
 
 $effect(() => {
 	if (wallpaperMode === WALLPAPER_OVERLAY) {
@@ -601,6 +643,79 @@ $effect(() => {
 						step="5"
 						style="width: 100%"
 					/>
+				</div>
+			</div>
+		{/if}
+
+		{#if showPaletteStyle}
+			<div class="mt-3 mb-2">
+				<div
+					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
+				>
+					{i18n(I18nKey.themePalette)}
+				</div>
+				<div class="grid grid-cols-3 gap-1.5">
+					{#each MATERIAL_PALETTE_STYLES as style}
+						<button
+							type="button"
+							class="btn-regular rounded-md min-h-9 px-2 text-[0.68rem] capitalize transition"
+							class:bg-[var(--btn-regular-bg-hover)]={paletteStyle === style}
+							class:font-bold={paletteStyle === style}
+							aria-pressed={paletteStyle === style}
+							onclick={() => switchPaletteStyle(style)}
+						>
+							{style === "tonalSpot" ? "Tonal" : style === "fruitSalad" ? "Fruit" : style}
+						</button>
+					{/each}
+				</div>
+			</div>
+		{/if}
+
+		<div class="mt-3 mb-2 flex items-center justify-between gap-3">
+			<label class="text-sm font-medium text-neutral-800 dark:text-neutral-200" for="reduce-motion-toggle">
+				{i18n(I18nKey.reduceMotion)}
+			</label>
+			<input
+				id="reduce-motion-toggle"
+				type="checkbox"
+				class="h-4 w-4 accent-[var(--primary)]"
+				checked={reduceMotion}
+				onchange={toggleReduceMotion}
+			/>
+		</div>
+
+		{#if isTextureSwitchable}
+			<div class="mt-3 mb-2">
+				<div
+					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
+				>
+					{i18n(I18nKey.texture)}
+				</div>
+				<div class="grid grid-cols-3 gap-1.5">
+					{#each TEXTURE_PRESETS as preset}
+						<button
+							type="button"
+							class="btn-regular rounded-md min-h-9 px-2 text-[0.68rem] capitalize transition"
+							class:bg-[var(--btn-regular-bg-hover)]={texturePreset === preset}
+							class:font-bold={texturePreset === preset}
+							aria-pressed={texturePreset === preset}
+							onclick={() => switchTexturePreset(preset)}
+						>
+							{i18n(
+								preset === "none"
+									? I18nKey.textureNone
+									: preset === "cyber-dots"
+										? I18nKey.textureCyberDots
+										: preset === "topography"
+											? I18nKey.textureTopography
+											: preset === "geometric"
+												? I18nKey.textureGeometric
+													: preset === "starlight"
+														? I18nKey.textureStarlight
+															: I18nKey.textureSakura,
+							)}
+						</button>
+					{/each}
 				</div>
 			</div>
 		{/if}

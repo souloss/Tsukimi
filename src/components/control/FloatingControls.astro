@@ -1,7 +1,8 @@
 ---
 import type { MarkdownHeading } from "astro";
 
-import { musicPlayerConfig, siteConfig } from "../../config";
+import { fabConfig, musicPlayerConfig, siteConfig } from "../../config";
+import { fabDeviceClasses } from "../../utils/fab-responsive";
 import FloatingTOC from "../features/toc/FloatingTOC.astro";
 import BackToHome from "./BackToHome.astro";
 import BackToTop from "./BackToTop.astro";
@@ -14,29 +15,59 @@ interface Props {
 const { headings = [] } = Astro.props;
 ---
 
-<div class="floating-controls-container">
+
+<div class="floating-controls-container" data-fab-enabled={fabConfig.enable}>
 	{
-		musicPlayerConfig.enable &&
+		fabConfig.enable &&
+			fabConfig.items.music.enable !== false &&
+			musicPlayerConfig.enable &&
 			musicPlayerConfig.showFloatingPlayer &&
 			(musicPlayerConfig.floatingEntryMode ?? "default") === "fab" && (
-				<div class="floating-control-item" data-control-key="music">
+				<div
+					class:list={[
+						"floating-control-item",
+						fabDeviceClasses(fabConfig.items.music.devices),
+					]}
+					data-control-key="music"
+				>
 					<MusicFabButton client:idle />
 				</div>
 			)
 	}
 	{
-		siteConfig.toc.enable && siteConfig.toc.floating && (
-			<div class="floating-control-item" data-control-key="toc">
+		fabConfig.enable &&
+			fabConfig.items.toc.enable !== false &&
+			siteConfig.toc.enable &&
+			siteConfig.toc.floating && (
+			<div
+				class:list={[
+					"floating-control-item",
+					fabDeviceClasses(fabConfig.items.toc.devices),
+				]}
+				data-control-key="toc"
+			>
 				<FloatingTOC headings={headings} />
 			</div>
 		)
 	}
-	<div class="floating-control-item" data-control-key="home">
+	{fabConfig.enable && fabConfig.items.home.enable !== false && <div
+		class:list={[
+			"floating-control-item",
+			fabDeviceClasses(fabConfig.items.home.devices),
+		]}
+		data-control-key="home"
+	>
 		<BackToHome />
-	</div>
-	<div class="floating-control-item" data-control-key="top">
+	</div>}
+	{fabConfig.enable && fabConfig.items.top.enable !== false && <div
+		class:list={[
+			"floating-control-item",
+			fabDeviceClasses(fabConfig.items.top.devices),
+		]}
+		data-control-key="top"
+	>
 		<BackToTop />
-	</div>
+	</div>}
 </div>
 
 <style>
@@ -62,6 +93,10 @@ const { headings = [] } = Astro.props;
 		transition: bottom 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
+	.floating-controls-container[data-fab-enabled="false"] {
+		display: none;
+	}
+
 	.floating-control-item {
 		display: flex;
 		align-items: center;
@@ -77,6 +112,24 @@ const { headings = [] } = Astro.props;
 			transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
 			margin-top 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 		overflow: visible;
+	}
+
+	@media (max-width: 767px) {
+		.fab-hide-mobile {
+			display: none;
+		}
+	}
+
+	@media (min-width: 768px) and (max-width: 1023px) {
+		.fab-hide-tablet {
+			display: none;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.fab-hide-desktop {
+			display: none;
+		}
 	}
 
 	.floating-control-item.is-stacked {

@@ -7,6 +7,7 @@ import type {
 	WALLPAPER_NONE,
 	WALLPAPER_OVERLAY,
 } from "../constants/constants";
+import type { TextureConfig } from "./texture";
 
 export type SiteConfig = {
 	title: string;
@@ -31,7 +32,20 @@ export type SiteConfig = {
 		hue: number;
 		fixed: boolean;
 		defaultMode?: LIGHT_DARK_MODE; // 默认模式：浅色、深色或跟随系统
+		paletteStyle?:
+			| "tonalSpot"
+			| "vibrant"
+			| "expressive"
+			| "content"
+			| "rainbow"
+			| "fruitSalad"
+			| "monochrome"
+			| "neutral"
+			| "fidelity";
+		colorSpec?: "2021" | "2025";
 	};
+
+	texture?: TextureConfig;
 
 	// 页面整体宽度（单位：rem）
 	pageWidth?: number;

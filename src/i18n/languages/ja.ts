@@ -52,6 +52,18 @@ export const ja: Translation = {
 	[Key.postsCount]: "件の投稿",
 
 	[Key.themeColor]: "テーマの色",
+	[Key.themePalette]: "カラーパレット",
+	[Key.reduceMotion]: "動きを減らす",
+	[Key.contextCopySelection]: "選択したテキストをコピー",
+	[Key.contextBackToTop]: "ページの先頭へ",
+	[Key.contextCopyLink]: "ページリンクをコピー",
+	[Key.texture]: "背景テクスチャ",
+	[Key.textureNone]: "なし",
+	[Key.textureStarlight]: "星明かり",
+	[Key.textureCyberDots]: "ドット",
+	[Key.textureTopography]: "等高線",
+	[Key.textureGeometric]: "幾何学",
+	[Key.textureSakura]: "桜",
 
 	[Key.lightMode]: "ライト",
 	[Key.darkMode]: "ダーク",

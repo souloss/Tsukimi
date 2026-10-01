@@ -1,7 +1,14 @@
 ---
 import type { PhotoCardProps } from "./types";
 
-const { src, alt = "", albumId, width, height } = Astro.props as PhotoCardProps;
+const {
+	src,
+	thumbnail,
+	alt = "",
+	albumId,
+	width,
+	height,
+} = Astro.props as PhotoCardProps;
 ---
 
 <div class="gallery-photo-card break-inside-avoid mb-3">
@@ -12,7 +19,7 @@ const { src, alt = "", albumId, width, height } = Astro.props as PhotoCardProps;
 		class="block rounded-xl overflow-hidden group cursor-pointer"
 	>
 		<img
-			src={src}
+			src={thumbnail ?? src}
 			alt={alt}
 			width={width}
 			height={height}

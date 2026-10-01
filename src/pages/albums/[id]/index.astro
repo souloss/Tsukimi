@@ -46,7 +46,7 @@ if (isEncrypted) {
 				photo.width && photo.height
 					? ` width="${photo.width}" height="${photo.height}"`
 					: "";
-			return `<div class="gallery-masonry-item"><a data-fancybox="album-${album.id}" href="${photo.src}" data-caption="${photo.alt || photo.title || ""}"><img src="${photo.src}" alt="${photo.alt || photo.title || ""}"${dimensions} loading="lazy" decoding="async" class="w-full rounded-lg" /></a></div>`;
+			return `<div class="gallery-masonry-item"><a data-fancybox="album-${album.id}" href="${photo.src}" data-caption="${photo.alt || photo.title || ""}"><img src="${photo.thumbnail || photo.src}" alt="${photo.alt || photo.title || ""}"${dimensions} loading="lazy" decoding="async" class="w-full rounded-lg" /></a></div>`;
 		})
 		.join("");
 	const wrappedHtml = `<div class="gallery-masonry">${photoHtml}</div>`;
@@ -197,6 +197,7 @@ if (isEncrypted) {
 						{album.photos.map((photo: Photo) => (
 							<PhotoCard
 								src={photo.src}
+								thumbnail={photo.thumbnail}
 								alt={photo.alt || photo.title || ""}
 								albumId={album.id}
 								width={photo.width}
