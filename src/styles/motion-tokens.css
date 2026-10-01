@@ -1,0 +1,16 @@
+:root {
+	--motion-duration-fast: 120ms;
+	--motion-duration-normal: 220ms;
+	--motion-duration-slow: 360ms;
+	--motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+	--motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--motion-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--motion-duration-fast: 1ms;
+		--motion-duration-normal: 1ms;
+		--motion-duration-slow: 1ms;
+	}
+}

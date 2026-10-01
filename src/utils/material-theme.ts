@@ -11,6 +11,7 @@ import {
 	SchemeTonalSpot,
 	SchemeVibrant,
 } from "@material/material-color-utilities";
+import { siteConfig } from "@/config/siteConfig";
 
 export const MATERIAL_PALETTE_STYLES = [
 	"tonalSpot",
@@ -138,7 +139,16 @@ export function isMaterialPaletteStyle(
 export function getStoredMaterialPaletteStyle(): MaterialPaletteStyle {
 	if (typeof localStorage === "undefined") return "tonalSpot";
 	const stored = localStorage.getItem("material-theme-style");
-	return stored && isMaterialPaletteStyle(stored) ? stored : "tonalSpot";
+	return stored && isMaterialPaletteStyle(stored)
+		? stored
+		: getDefaultMaterialPaletteStyle();
+}
+
+export function getDefaultMaterialPaletteStyle(): MaterialPaletteStyle {
+	const configured = siteConfig.themeColor.paletteStyle;
+	return configured && isMaterialPaletteStyle(configured)
+		? configured
+		: "tonalSpot";
 }
 
 export function resolveMaterialColorScheme(

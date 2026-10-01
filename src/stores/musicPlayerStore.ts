@@ -9,6 +9,7 @@ import {
 } from "@/components/widgets/music-player/constants";
 import type { RepeatMode, Song } from "@/components/widgets/music-player/types";
 import { musicPlayerConfig } from "@/config";
+import { fetchJson } from "@/utils/request-utils";
 
 export interface MusicPlayerState {
 	currentSong: Song;
@@ -287,11 +288,10 @@ class MusicPlayerStore {
 			.replace(":r", Date.now().toString());
 
 		try {
-			const res = await fetch(apiUrl);
-			if (!res.ok) {
-				throw new Error("meting api error");
-			}
-			const list: any[] = await res.json();
+			const list = await fetchJson<any[]>(apiUrl, {
+				dedupeKey: apiUrl.replace(/([?&])r=\d+/, "$1r=*"),
+				validate: (value): value is any[] => Array.isArray(value),
+			});
 			this.state.playlist = list.map((song) => this.convertMetingSong(song));
 			this.state.isLoading = false;
 

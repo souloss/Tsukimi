@@ -40,7 +40,7 @@ class PanelManager {
 			panel.style.pointerEvents = "none";
 
 			requestAnimationFrame(() => {
-				panel.style.transition = `all ${this.duration}ms ease-out`;
+				panel.style.transition = `opacity ${this.duration}ms var(--motion-ease-out), transform ${this.duration}ms var(--motion-ease-out)`;
 
 				requestAnimationFrame(() => {
 					panel.style.opacity = "1";
@@ -75,7 +75,7 @@ class PanelManager {
 				return;
 			}
 
-			panel.style.transition = `all ${this.duration}ms ease-out`;
+			panel.style.transition = `opacity ${this.duration}ms var(--motion-ease-out), transform ${this.duration}ms var(--motion-ease-out)`;
 			panel.style.pointerEvents = "none";
 			panel.style.opacity = "0";
 			panel.style.transform = "scale(0.95) translateY(-10px)";
@@ -129,6 +129,11 @@ class PanelManager {
 			await this.animateOut(panel);
 			this.activePanels.delete(panelId);
 			this.panelStack = this.panelStack.filter((id) => id !== panelId);
+			document.dispatchEvent(
+				new CustomEvent("tsukimi:panel-closed", {
+					detail: { id: panelId },
+				}),
+			);
 		}
 	}
 

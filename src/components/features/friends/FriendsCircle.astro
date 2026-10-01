@@ -1,4 +1,5 @@
 ---
+import Image from "@components/atoms/Image/Image.astro";
 import { PageHeader } from "@components/features/page-header";
 
 import type { FriendsCircleItem } from "@/data/friends-circle";
@@ -73,15 +74,14 @@ function formatLastUpdate(dateStr: string): string {
 					<div class="flex items-center gap-3 mb-2">
 						<div class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--primary)]/10 flex items-center justify-center overflow-hidden">
 							{item.avatar ? (
-								<img
+								<Image
 									src={item.avatar}
 									alt={item.author}
-									width="32"
-									height="32"
 									class="w-8 h-8 object-cover"
-					loading="lazy"
-					decoding="async"
-									onerror="this.style.display='none'"
+									width={32}
+									height={32}
+									loading="lazy"
+									aspectRatio="1"
 								/>
 							) : (
 								<img

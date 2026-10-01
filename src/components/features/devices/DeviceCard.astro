@@ -1,4 +1,5 @@
 ---
+import Image from "@components/atoms/Image/Image.astro";
 import type { Device } from "../../../data/devices";
 
 interface Props {
@@ -26,14 +27,14 @@ const { device, index, viewDetailsText } = Astro.props;
 				class="absolute inset-0 bg-[var(--primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
 			>
 			</div>
-			<img
+			<Image
 				src={device.image}
 				alt={device.name}
-				width="192"
-				height="192"
-				class="w-auto h-full max-h-full object-contain group-hover:scale-110 transition-all duration-500 drop-shadow-md relative z-10"
+				class="w-auto h-full max-h-full group-hover:scale-110 transition-all duration-500 drop-shadow-md relative z-10"
+				fit="contain"
 				loading="lazy"
-				decoding="async"
+				width={192}
+				height={192}
 			/>
 		</div>
 	</div>

@@ -1,4 +1,5 @@
 ---
+import Image from "@components/atoms/Image/Image.astro";
 import { Icon } from "astro-icon/components";
 
 import I18nKey from "../../../i18n/i18nKey";
@@ -17,14 +18,14 @@ const { album } = Astro.props as AlbumCardProps;
 	<div class="aspect-4/3 relative overflow-hidden">
 		{
 			album.cover ? (
-				<img
+				<Image
 					src={album.cover}
 					alt={album.title}
-					width="4"
-					height="3"
 					class="w-full h-full object-cover pointer-events-none transition-transform duration-500 group-hover:scale-105"
 					loading="lazy"
-					decoding="async"
+					widths={[320, 640, 960]}
+					sizes="(max-width: 768px) 100vw, 33vw"
+					aspectRatio="4 / 3"
 				/>
 			) : (
 				<div class="w-full h-full bg-[var(--btn-regular-bg)] flex items-center justify-center">

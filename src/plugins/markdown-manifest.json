@@ -14,22 +14,35 @@
 		{
 			"id": "mermaid",
 			"syntax": "```mermaid",
-			"implementation": "src/plugins/remark-mermaid.js"
+			"implementation": "src/plugins/remark-mermaid.js",
+			"runtime": { "selector": "[data-tsukimi-diagram]", "loader": "diagram" }
 		},
 		{
 			"id": "plantuml",
 			"syntax": "```plantuml",
-			"implementation": "src/plugins/remark-plantuml.js"
+			"implementation": "src/plugins/remark-plantuml.js",
+			"runtime": {
+				"selector": "[data-tsukimi-diagram='plantuml']",
+				"loader": "diagram"
+			}
 		},
 		{
 			"id": "vega-lite",
 			"syntax": "```vega-lite",
-			"implementation": "src/plugins/remark-vega-lite.js"
+			"implementation": "src/plugins/remark-vega-lite.js",
+			"runtime": {
+				"selector": "[data-tsukimi-diagram='vega-lite']",
+				"loader": "diagram"
+			}
 		},
 		{
 			"id": "markmap",
 			"syntax": "```markmap",
-			"implementation": "src/plugins/remark-markmap.js"
+			"implementation": "src/plugins/remark-markmap.js",
+			"runtime": {
+				"selector": "[data-tsukimi-diagram='markmap']",
+				"loader": "diagram"
+			}
 		},
 		{
 			"id": "file-tree",
@@ -49,7 +62,14 @@
 		{
 			"id": "math",
 			"syntax": "$$ x^2 $$",
-			"implementation": "src/plugins/remark-math-conditional.mjs"
+			"implementation": "src/plugins/remark-math-conditional.mjs",
+			"runtime": { "selector": ".katex", "loader": "katex" }
+		},
+		{
+			"id": "fancybox",
+			"syntax": "![image](image.png)",
+			"implementation": "src/scripts/handlers/fancybox-handler.ts",
+			"runtime": { "selector": "[data-fancybox]", "loader": "fancybox" }
 		}
 	]
 }

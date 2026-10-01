@@ -1,3 +1,4 @@
+import { fetchJson } from "@/utils/request-utils";
 import Key from "../../../../i18n/i18nKey";
 import { i18n } from "../../../../i18n/translation";
 import { LOCAL_PLAYLIST } from "../constants";
@@ -137,11 +138,10 @@ export async function fetchMetingPlaylist(
 		.replace(":r", Date.now().toString());
 
 	try {
-		const res = await fetch(apiUrl);
-		if (!res.ok) {
-			throw new Error("meting api error");
-		}
-		const list: MetingSong[] = await res.json();
+		const list = await fetchJson<MetingSong[]>(apiUrl, {
+			dedupeKey: apiUrl.replace(/([?&])r=\d+/, "$1r=*"),
+			validate: (value): value is MetingSong[] => Array.isArray(value),
+		});
 		state.playlist = list.map(convertMetingSong);
 		onLoadEnd();
 	} catch (_e) {

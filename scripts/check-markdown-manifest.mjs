@@ -20,6 +20,9 @@ for (const entry of manifest.entries ?? []) {
 	}
 	if (ids.has(entry.id)) errors.push(`duplicate markdown entry: ${entry.id}`);
 	ids.add(entry.id);
+	if (entry.runtime && (!entry.runtime.selector || !entry.runtime.loader)) {
+		errors.push(`${entry.id} runtime entries need selector and loader`);
+	}
 	try {
 		await access(resolve(root, entry.implementation));
 	} catch {

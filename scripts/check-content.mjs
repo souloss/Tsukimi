@@ -131,6 +131,12 @@ function validateFieldTypes(filePath, data, errors) {
 	if (data.tags !== undefined && (!Array.isArray(data.tags) || data.tags.some((tag) => typeof tag !== "string"))) {
 		addError(errors, filePath, "tags", "must be an array of strings");
 	}
+	if (
+		Array.isArray(data.tags) &&
+		data.tags.some((tag) => typeof tag === "string" && !tag.trim())
+	) {
+		addError(errors, filePath, "tags", "must not contain empty values");
+	}
 
 	if (data.category !== undefined && data.category !== null && typeof data.category !== "string") {
 		addError(errors, filePath, "category", "must be a string or null");
@@ -145,6 +151,14 @@ function validateFieldTypes(filePath, data, errors) {
 	for (const field of ["priority", "seriesOrder"]) {
 		if (data[field] !== undefined && (typeof data[field] !== "number" || !Number.isFinite(data[field]))) {
 			addError(errors, filePath, field, "must be a finite number");
+		}
+	}
+	if (data.seriesOrder !== undefined && !isNonEmptyString(data.series)) {
+		addError(errors, filePath, "seriesOrder", "requires a non-empty series");
+	}
+	for (const field of ["permalink", "alias"]) {
+		if (data[field] !== undefined && isNonEmptyString(data[field]) && /[?#]/.test(data[field])) {
+			addError(errors, filePath, field, "must not contain query or hash fragments");
 		}
 	}
 

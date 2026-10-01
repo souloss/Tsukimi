@@ -1,6 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
 import { onMount } from "svelte";
+import { fetchJson } from "@/utils/request-utils";
 
 let dateCheckInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -112,8 +113,10 @@ const displayedPosts = $derived(
 // Functions
 async function fetchCalendarData() {
 	try {
-		const res = await fetch("/api/calendar-data.json");
-		const data = await res.json();
+		const data = await fetchJson<unknown>("/api/calendar-data.json", {
+			dedupeKey: "calendar-data",
+			validate: (value): value is CalendarPost[] => Array.isArray(value),
+		});
 		if (Array.isArray(data)) {
 			allPostsData = data;
 			const processed = processPostsData(allPostsData);

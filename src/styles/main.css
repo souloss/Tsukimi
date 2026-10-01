@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./motion-tokens.css";
 
 /* grid-layout-utils.ts dynamically constructs Tailwind arbitrary-value
    classes that the content scanner cannot detect. Define them as real CSS
@@ -145,7 +146,7 @@ html {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0.05) 80%, transparent 100%);
   pointer-events: none;
   z-index: 20;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity var(--motion-duration-normal) var(--motion-ease-standard), background-color var(--motion-duration-normal) var(--motion-ease-standard);
 }
 
 /* 暗色主题下的渐变高光效果 */

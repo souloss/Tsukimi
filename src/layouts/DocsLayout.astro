@@ -471,12 +471,10 @@ const isDocsIndexPage = isHomePage && !docSlug;
 </script>
 
 <script>
-	const loadDiagramLoader = () => {
-		if (!document.querySelector("[data-tsukimi-diagram]")) return;
-		import("../scripts/diagram-loader.js");
-	};
-	loadDiagramLoader();
-	document.addEventListener("astro:page-load", loadDiagramLoader);
+	import { loadMarkdownResources } from "../scripts/markdown-resource-loader";
+
+	loadMarkdownResources();
+	document.addEventListener("astro:page-load", () => loadMarkdownResources());
 </script>
 
 <script>

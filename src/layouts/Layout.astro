@@ -1,10 +1,7 @@
 ---
-import ContextMenu from "@components/control/ContextMenu.svelte";
 import { PageProgressBar } from "@components/control/PageProgressBar";
-import Pio from "@components/features/pio/Pio.svelte"; // 使用 Svelte 版本的 Pio 组件
 import BackgroundTexture from "@components/misc/BackgroundTexture.astro";
 import ConfigCarrier from "@components/misc/ConfigCarrier.astro";
-import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import {
 	backgroundWallpaperConfig,
 	contextMenuConfig,
@@ -92,6 +89,19 @@ const defaultWallpaperMode =
 const wallpaperSwitchable = backgroundWallpaperConfig.mode?.switchable ?? true;
 const shouldRenderWallpaper =
 	wallpaperSwitchable || defaultWallpaperMode !== WALLPAPER_NONE;
+
+// Resolve optional islands only when enabled. Disabled features therefore do
+// not emit an Astro client island or request their browser bundle.
+const MusicPlayer = musicPlayerConfig.enable
+	? (await import("@components/widgets/music-player/MusicPlayer.svelte"))
+			.default
+	: undefined;
+const Pio = pioConfig.enable
+	? (await import("@components/features/pio/Pio.svelte")).default
+	: undefined;
+const ContextMenu = contextMenuConfig.enable
+	? (await import("@components/control/ContextMenu.svelte")).default
+	: undefined;
 
 const getDefaultBanner = (): string => {
 	const src = backgroundWallpaperConfig.banner?.src;
@@ -213,6 +223,7 @@ if (defaultFontItem) {
 	class="bg-[var(--page-bg)] text-[14px] md:text-[16px]"
 	data-wallpaper-mode={defaultWallpaperMode}
 	data-texture-preset={textureConfig.enable ? textureConfig.defaultPreset : "none"}
+	style={`--texture-opacity: ${textureConfig.defaultOpacity}`}
 	data-overlayscrollbars-initialize
 >
 	<head>
@@ -364,12 +375,12 @@ if (defaultFontItem) {
 		<slot />
 
 		<!-- Music Player - disabled configurations do not emit a client island. -->
-		{musicPlayerConfig.enable && <MusicPlayer client:idle />}
+		{MusicPlayer && <MusicPlayer client:idle />}
 
 		<!-- Pio 看板娘组件 - 仅在进入视口时加载 -->
-		{pioConfig.enable && <Pio client:idle />}
+		{Pio && <Pio client:idle />}
 
-		{contextMenuConfig.enable && <ContextMenu client:idle />}
+		{ContextMenu && <ContextMenu client:idle />}
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
@@ -456,12 +467,10 @@ if (defaultFontItem) {
 
 <!-- Markdown 图表统一按视口懒加载 -->
 <script>
-	const loadDiagramLoader = () => {
-		if (!document.querySelector("[data-tsukimi-diagram]")) return;
-		import("../scripts/diagram-loader.js");
-	};
-	loadDiagramLoader();
-	document.addEventListener("astro:page-load", loadDiagramLoader);
+	import { loadMarkdownResources } from "../scripts/markdown-resource-loader";
+
+	loadMarkdownResources();
+	document.addEventListener("astro:page-load", () => loadMarkdownResources());
 </script>
 
 <!-- 代码块折叠功能 - 延迟加载 -->

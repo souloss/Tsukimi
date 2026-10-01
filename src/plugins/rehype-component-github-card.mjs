@@ -60,7 +60,24 @@ export function GithubCardComponent(properties, children) {
 		`script#${cardUuid}-script`,
 		{ type: "text/javascript", defer: true },
 		`
-      fetch('https://api.github.com/repos/${repo}', { referrerPolicy: "no-referrer" }).then(response => response.json()).then(data => {
+      (() => {
+      const controller = new AbortController();
+      const generation = window.__tsukimiRequestGeneration || 0;
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      const onPageGeneration = (event) => {
+        if (event.detail?.generation !== generation) controller.abort();
+      };
+      document.addEventListener("tsukimi:page-generation", onPageGeneration);
+      fetch('https://api.github.com/repos/${repo}', { referrerPolicy: "no-referrer", signal: controller.signal })
+        .then(response => {
+          if (!response.ok) throw new Error("GitHub API HTTP " + response.status);
+          return response.json();
+        })
+        .then(data => {
+        if (generation !== (window.__tsukimiRequestGeneration || 0)) return;
+        if (!data || typeof data !== "object" || !data.owner || typeof data.stargazers_count !== "number") {
+          throw new Error("Invalid GitHub API response");
+        }
         document.getElementById('${cardUuid}-description').innerText = data.description?.replace(/:[a-zA-Z0-9_]+:/g, '') || "Description not set";
         document.getElementById('${cardUuid}-language').innerText = data.language;
         document.getElementById('${cardUuid}-forks').innerText = Intl.NumberFormat('en-us', { notation: "compact", maximumFractionDigits: 1 }).format(data.forks).replaceAll("\u202f", '');
@@ -71,10 +88,15 @@ export function GithubCardComponent(properties, children) {
         document.getElementById('${cardUuid}-license').innerText = data.license?.spdx_id || "no-license";
         document.getElementById('${cardUuid}-card').classList.remove("fetch-waiting");
       }).catch(err => {
+        if (generation !== (window.__tsukimiRequestGeneration || 0)) return;
         const c = document.getElementById('${cardUuid}-card');
         c?.classList.add("fetch-error");
         console.warn("[GITHUB-CARD] (Error) Loading card for ${repo} | ${cardUuid}.")
-      })
+      }).finally(() => {
+        clearTimeout(timeout);
+        document.removeEventListener("tsukimi:page-generation", onPageGeneration);
+      });
+      })();
     `,
 	);
 

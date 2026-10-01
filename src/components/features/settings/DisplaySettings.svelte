@@ -10,6 +10,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import type { WALLPAPER_MODE } from "@types/config";
 import {
+	getDefaultMaterialPaletteStyle,
 	getStoredMaterialPaletteStyle,
 	MATERIAL_PALETTE_STYLES,
 	type MaterialPaletteStyle,
@@ -26,6 +27,8 @@ import {
 	getDefaultOverlayOpacity,
 	getDefaultSakuraEnabled,
 	getDefaultStickyNavbar,
+	getDefaultTextureOpacity,
+	getDefaultTexturePreset,
 	getDefaultWavesEnabled,
 	getFont,
 	getHue,
@@ -39,9 +42,11 @@ import {
 	getStoredOverlayOpacity,
 	getStoredSakuraEnabled,
 	getStoredStickyNavbar,
+	getStoredTextureOpacity,
 	getStoredTexturePreset,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
+	resetReduceMotion,
 	setBannerCarouselEnabled,
 	setBannerTitleEnabled,
 	setFont,
@@ -54,10 +59,12 @@ import {
 	setReduceMotion,
 	setSakuraEnabled,
 	setStickyNavbar,
+	setTextureOpacity,
 	setTexturePreset,
 	setWallpaperMode,
 	setWavesEnabled,
 } from "@utils/setting-utils";
+import { subscribeThemeSettings } from "@utils/theme-state";
 import { onMount } from "svelte";
 
 import {
@@ -88,7 +95,11 @@ let paletteStyle = $state<MaterialPaletteStyle>(
 );
 let reduceMotion = $state(getReduceMotion());
 let texturePreset = $state<TexturePreset>(getStoredTexturePreset());
+let textureOpacity = $state(getStoredTextureOpacity());
 const defaultHue = getDefaultHue();
+const defaultPaletteStyle = getDefaultMaterialPaletteStyle();
+const defaultTexturePreset = getDefaultTexturePreset();
+const defaultTextureOpacity = getDefaultTextureOpacity();
 let wallpaperMode: WALLPAPER_MODE = $state(
 	backgroundWallpaperConfig.mode?.defaultMode,
 );
@@ -149,6 +160,17 @@ const showReduceMotion = true;
 const isTextureSwitchable =
 	(siteConfig.texture?.enable ?? false) &&
 	(siteConfig.texture?.switchable ?? false);
+const palettePreviewHues: Record<MaterialPaletteStyle, number> = {
+	tonalSpot: 330,
+	vibrant: 215,
+	expressive: 285,
+	content: 42,
+	rainbow: 150,
+	fruitSalad: 95,
+	monochrome: 0,
+	neutral: 25,
+	fidelity: 195,
+};
 // 是否允许用户切换水波纹动画（只看 switchable 配置）
 const isWavesSwitchable = siteConfig.banner.waves?.switchable ?? false;
 // 是否允许用户切换渐变过渡（只看 switchable 配置）
@@ -265,6 +287,20 @@ const overlaySliderItems = $derived<OverlaySliderItem[]>([
 
 function resetHue() {
 	hue = getDefaultHue();
+	requestAnimationFrame(refreshAllRangeProgress);
+}
+
+function resetThemeAppearance() {
+	hue = defaultHue;
+	setHue(defaultHue);
+	paletteStyle = defaultPaletteStyle;
+	setMaterialPaletteStyle(defaultPaletteStyle);
+	texturePreset = defaultTexturePreset;
+	setTexturePreset(defaultTexturePreset);
+	textureOpacity = defaultTextureOpacity;
+	setTextureOpacity(defaultTextureOpacity);
+	resetReduceMotion();
+	reduceMotion = getReduceMotion();
 	requestAnimationFrame(refreshAllRangeProgress);
 }
 
@@ -490,6 +526,7 @@ onMount(() => {
 	stickyNavbarEnabled = getStoredStickyNavbar();
 	reduceMotion = getReduceMotion();
 	texturePreset = getStoredTexturePreset();
+	textureOpacity = getStoredTextureOpacity();
 
 	// 监听窗口大小变化
 	window.addEventListener("resize", checkScreenSize);
@@ -498,6 +535,35 @@ onMount(() => {
 		window.removeEventListener("resize", checkScreenSize);
 	};
 });
+
+// Keep this panel synchronized with changes made by the early theme bootstrap
+// or another client island. The storage helpers remain the persistence layer;
+// this event stream is the single client-side state notification path.
+onMount(() =>
+	subscribeThemeSettings(({ key, value }) => {
+		switch (key) {
+			case "hue":
+				if (typeof value === "number") hue = value;
+				break;
+			case "palette":
+				if (typeof value === "string")
+					paletteStyle = value as MaterialPaletteStyle;
+				break;
+			case "texture":
+				if (typeof value === "string") texturePreset = value as TexturePreset;
+				break;
+			case "textureOpacity":
+				if (typeof value === "number") textureOpacity = value;
+				break;
+			case "reduceMotion":
+				if (typeof value === "boolean") reduceMotion = value;
+				break;
+			case "wallpaper":
+				if (typeof value === "string") wallpaperMode = value as WALLPAPER_MODE;
+				break;
+		}
+	}),
+);
 
 // 监听布局变化事件
 onMount(() => {
@@ -573,6 +639,28 @@ function switchTexturePreset(preset: TexturePreset) {
 	setTexturePreset(preset);
 }
 
+function switchTextureOpacity(value: number) {
+	textureOpacity = Math.min(0.25, Math.max(0.05, value));
+	setTextureOpacity(textureOpacity);
+}
+
+function handleOptionKeydown(
+	event: KeyboardEvent,
+	index: number,
+	count: number,
+) {
+	if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+	event.preventDefault();
+	const direction = event.key === "ArrowRight" ? 1 : -1;
+	const nextIndex = (index + direction + count) % count;
+	const buttons = Array.from(
+		(
+			event.currentTarget as HTMLElement
+		).parentElement?.querySelectorAll<HTMLButtonElement>("button") ?? [],
+	);
+	buttons[nextIndex]?.focus();
+}
+
 $effect(() => {
 	if (wallpaperMode === WALLPAPER_OVERLAY) {
 		if (isOverlayOpacitySwitchable) {
@@ -591,10 +679,30 @@ $effect(() => {
 {#if hasAnyContent}
 	<div
 		id="display-setting"
-		class="float-panel float-panel-closed absolute transition-all w-80 right-4 px-4 py-2 transition-opacity"
+		class="float-panel float-panel-closed absolute transition-all w-80 right-4 max-w-[calc(100vw-2rem)] px-4 py-2 transition-opacity"
+		role="dialog"
+		aria-modal="false"
+		aria-labelledby="display-setting-title"
+		tabindex="-1"
+		aria-label={i18n(I18nKey.appearanceSettings)}
 		class:opacity-50={!mounted}
 		class:pointer-events-none={!mounted}
 	>
+		<div class="sticky top-0 z-10 -mx-4 mb-2 flex items-center justify-between gap-3 px-4 pt-1 pb-2 bg-[var(--float-panel-bg)]/95 backdrop-blur-sm">
+			<h2 id="display-setting-title" class="text-base font-bold text-neutral-900 dark:text-neutral-100">
+				{i18n(I18nKey.appearanceSettings)}
+			</h2>
+			<button
+				type="button"
+				class="btn-regular flex h-7 items-center gap-1 rounded-md px-2 text-xs active:scale-95"
+				aria-label={i18n(I18nKey.resetAppearance)}
+				title={i18n(I18nKey.resetAppearance)}
+				onclick={resetThemeAppearance}
+			>
+				<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]" />
+				<span>{i18n(I18nKey.resetAppearance)}</span>
+			</button>
+		</div>
 		<!-- Theme Color Section -->
 		{#if showThemeColor}
 			<div class="mt-2 mb-2">
@@ -654,16 +762,24 @@ $effect(() => {
 				>
 					{i18n(I18nKey.themePalette)}
 				</div>
-				<div class="grid grid-cols-3 gap-1.5">
-					{#each MATERIAL_PALETTE_STYLES as style}
+				<div class="grid grid-cols-3 gap-1.5" role="group" aria-label={i18n(I18nKey.themePalette)}>
+					{#each MATERIAL_PALETTE_STYLES as style, index}
 						<button
 							type="button"
-							class="btn-regular rounded-md min-h-9 px-2 text-[0.68rem] capitalize transition"
+							class="btn-regular flex min-h-10 flex-col items-center justify-center gap-1 rounded-md px-2 text-[0.68rem] capitalize transition"
 							class:bg-[var(--btn-regular-bg-hover)]={paletteStyle === style}
 							class:font-bold={paletteStyle === style}
 							aria-pressed={paletteStyle === style}
+							data-theme-control
+							onkeydown={(event) =>
+								handleOptionKeydown(event, index, MATERIAL_PALETTE_STYLES.length)}
 							onclick={() => switchPaletteStyle(style)}
 						>
+							<span
+								class="theme-preview palette-preview"
+								style={`--preview-hue: ${palettePreviewHues[style]}`}
+								aria-hidden="true"
+							/>
 							{style === "tonalSpot" ? "Tonal" : style === "fruitSalad" ? "Fruit" : style}
 						</button>
 					{/each}
@@ -691,16 +807,24 @@ $effect(() => {
 				>
 					{i18n(I18nKey.texture)}
 				</div>
-				<div class="grid grid-cols-3 gap-1.5">
-					{#each TEXTURE_PRESETS as preset}
+				<div class="grid grid-cols-3 gap-1.5" role="group" aria-label={i18n(I18nKey.texture)}>
+					{#each TEXTURE_PRESETS as preset, index}
 						<button
 							type="button"
-							class="btn-regular rounded-md min-h-9 px-2 text-[0.68rem] capitalize transition"
+							class="btn-regular flex min-h-10 flex-col items-center justify-center gap-1 rounded-md px-2 text-[0.68rem] capitalize transition"
 							class:bg-[var(--btn-regular-bg-hover)]={texturePreset === preset}
 							class:font-bold={texturePreset === preset}
 							aria-pressed={texturePreset === preset}
+							data-theme-control
+							onkeydown={(event) =>
+								handleOptionKeydown(event, index, TEXTURE_PRESETS.length)}
 							onclick={() => switchTexturePreset(preset)}
 						>
+							<span
+								class="theme-preview texture-preview"
+								data-texture-preview={preset}
+								aria-hidden="true"
+							/>
 							{i18n(
 								preset === "none"
 									? I18nKey.textureNone
@@ -717,6 +841,26 @@ $effect(() => {
 						</button>
 					{/each}
 				</div>
+				<div class="mt-3 flex items-center justify-between gap-2">
+					<label class="text-xs text-neutral-700 dark:text-neutral-300" for="texture-opacity-slider">
+						{i18n(I18nKey.textureOpacity)}
+					</label>
+					<span class="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+						{Math.round(textureOpacity * 100)}%
+					</span>
+				</div>
+				<input
+					id="texture-opacity-slider"
+					class="slider mt-1 w-full"
+					type="range"
+					min="5"
+					max="25"
+					step="1"
+					value={Math.round(textureOpacity * 100)}
+					aria-label={i18n(I18nKey.textureOpacity)}
+					oninput={(event) =>
+						switchTextureOpacity(Number((event.currentTarget as HTMLInputElement).value) / 100)}
+				/>
 			</div>
 		{/if}
 
@@ -1251,6 +1395,70 @@ $effect(() => {
 			color-mix(in srgb, var(--primary) 18%, transparent) var(--range-progress, 50%) 100%
 		);
 		transition: background-image 0.15s ease-in-out;
+	}
+
+	#display-setting {
+		max-height: min(42rem, calc(100dvh - 5.75rem));
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in srgb, var(--primary) 45%, transparent) transparent;
+	}
+
+	.theme-preview {
+		display: block;
+		width: 2.25rem;
+		height: 0.9rem;
+		border-radius: 999px;
+		border: 1px solid color-mix(in srgb, var(--text-primary) 15%, transparent);
+		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
+	}
+
+	.palette-preview {
+		background: hsl(var(--preview-hue) 72% 58%);
+	}
+
+	.texture-preview[data-texture-preview="none"] {
+		background: var(--btn-regular-bg);
+	}
+
+	.texture-preview[data-texture-preview="starlight"] {
+		background: radial-gradient(circle at 25% 40%, var(--primary) 0 1px, transparent 2px),
+			radial-gradient(circle at 75% 65%, var(--secondary) 0 1px, transparent 2px),
+			var(--page-bg);
+		background-size: 0.75rem 0.75rem, 1rem 1rem, auto;
+	}
+
+	.texture-preview[data-texture-preview="cyber-dots"] {
+		background-color: var(--page-bg);
+		background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+		background-size: 0.35rem 0.35rem;
+	}
+
+	.texture-preview[data-texture-preview="topography"] {
+		background: repeating-radial-gradient(ellipse at 30% 50%, transparent 0 0.25rem, color-mix(in srgb, var(--secondary) 55%, transparent) 0.3rem 0.34rem, transparent 0.4rem 0.65rem), var(--page-bg);
+	}
+
+	.texture-preview[data-texture-preview="geometric"] {
+		background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 35%, transparent) 25%, transparent 25%), var(--page-bg);
+		background-size: 0.65rem 0.65rem;
+	}
+
+	.texture-preview[data-texture-preview="sakura"] {
+		background: radial-gradient(ellipse 0.18rem 0.3rem at 25% 35%, var(--primary) 0 55%, transparent 60%), radial-gradient(ellipse 0.14rem 0.25rem at 70% 65%, var(--tertiary) 0 55%, transparent 60%), var(--page-bg);
+	}
+
+	#display-setting button:focus-visible,
+	#display-setting input:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
+	}
+
+	@media (max-width: 768px) {
+		#display-setting {
+			right: 0.75rem;
+			max-height: calc(100dvh - 5rem);
+		}
 	}
 
 	#display-setting input[type="range"].overlay-slider {

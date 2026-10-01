@@ -1,6 +1,13 @@
 # build output
 dist
 
+# Image pipeline derivatives (created before dev/build from public originals)
+public/**/*-w*.avif
+public/**/*-w*.webp
+
+# Generated page-level resource inventory
+docs/generated/resource-report.json
+
 # generated types
 .astro/
 demo

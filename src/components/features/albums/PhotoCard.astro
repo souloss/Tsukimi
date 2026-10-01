@@ -1,4 +1,5 @@
 ---
+import Image from "@components/atoms/Image/Image.astro";
 import type { PhotoCardProps } from "./types";
 
 const {
@@ -18,14 +19,15 @@ const {
 		data-type="image"
 		class="block rounded-xl overflow-hidden group cursor-pointer"
 	>
-		<img
+		<Image
 			src={thumbnail ?? src}
 			alt={alt}
 			width={width}
 			height={height}
-			loading="lazy"
-			decoding="async"
 			class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+			loading="lazy"
+			width={width}
+			height={height}
 		/>
 	</div>
 </div>

@@ -4,6 +4,7 @@
  */
 
 import { pathsEqual, url } from "../../utils/url-utils";
+import { advanceRequestGeneration } from "../../utils/request-utils";
 import type { FancyboxHandler } from "../handlers/fancybox-handler";
 import type { ScrollHandler } from "../handlers/scroll-handler";
 import { reinitDirectiveInteractions } from "../directive-interactions.js";
@@ -145,6 +146,7 @@ export class SwupHooksManager {
 	 */
 	private registerVisitStartHook(): void {
 		window.swup!.hooks.on("visit:start", ((visit: VisitObject) => {
+			advanceRequestGeneration();
 			// 清理上一页的 Fancybox
 			this.handlers.cleanupFancybox?.();
 

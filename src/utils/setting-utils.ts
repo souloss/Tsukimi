@@ -25,6 +25,7 @@ import {
 import { isTexturePreset, resolveTextureConfig } from "@/config/textureConfig";
 import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
 import type { TexturePreset } from "@/types/texture";
+import { notifyThemeSetting } from "@/utils/theme-state";
 
 function isHomePage(pathname: string): boolean {
 	return pathname === "/" || pathname === "";
@@ -91,6 +92,7 @@ export function setHue(hue: number): void {
 		return;
 	}
 	localStorage.setItem("hue", String(hue));
+	notifyThemeSetting("hue", hue);
 	const r = document.querySelector(":root") as HTMLElement;
 	if (!r) {
 		return;
@@ -102,7 +104,51 @@ export function setHue(hue: number): void {
 export function setMaterialPaletteStyle(style: MaterialPaletteStyle): void {
 	if (typeof localStorage === "undefined") return;
 	localStorage.setItem("material-theme-style", style);
+	notifyThemeSetting("palette", style);
 	applyMaterialTheme(getHue(), style);
+}
+
+export function getDefaultTextureOpacity(): number {
+	return resolveTextureConfig().defaultOpacity;
+}
+
+export function getStoredTextureOpacity(): number {
+	if (typeof localStorage === "undefined") return getDefaultTextureOpacity();
+	const stored = Number.parseFloat(
+		localStorage.getItem("textureOpacity") ?? "",
+	);
+	return Number.isFinite(stored)
+		? Math.min(0.25, Math.max(0.05, stored))
+		: getDefaultTextureOpacity();
+}
+
+export function setTextureOpacity(opacity: number): void {
+	const normalized = Math.min(0.25, Math.max(0.05, opacity));
+	if (typeof localStorage !== "undefined") {
+		localStorage.setItem("textureOpacity", String(normalized));
+	}
+	if (typeof document !== "undefined") {
+		document.documentElement.style.setProperty(
+			"--texture-opacity",
+			String(normalized),
+		);
+	}
+	notifyThemeSetting("textureOpacity", normalized);
+}
+
+export function resetReduceMotion(): void {
+	if (typeof localStorage !== "undefined") {
+		localStorage.removeItem("reduceMotion");
+	}
+	if (typeof document !== "undefined") {
+		const prefersReduced =
+			typeof window !== "undefined" &&
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		document.documentElement.toggleAttribute(
+			"data-reduce-motion",
+			prefersReduced,
+		);
+	}
 }
 
 function applyMaterialTheme(hue: number, style: MaterialPaletteStyle): void {
@@ -127,6 +173,7 @@ export function setReduceMotion(enabled: boolean): void {
 	if (typeof document === "undefined" || typeof localStorage === "undefined")
 		return;
 	localStorage.setItem("reduceMotion", String(enabled));
+	notifyThemeSetting("reduceMotion", enabled);
 	document.documentElement.toggleAttribute("data-reduce-motion", enabled);
 }
 
@@ -144,6 +191,7 @@ export function setTexturePreset(preset: TexturePreset): void {
 	if (typeof localStorage !== "undefined") {
 		localStorage.setItem("texturePreset", preset);
 	}
+	notifyThemeSetting("texture", preset);
 	applyTexturePresetToDocument(preset);
 }
 
@@ -975,6 +1023,7 @@ export function setWallpaperMode(mode: WALLPAPER_MODE): void {
 		return;
 	}
 	localStorage.setItem("wallpaperMode", mode);
+	notifyThemeSetting("wallpaper", mode);
 	applyWallpaperModeToDocument(mode);
 	if (typeof window !== "undefined") {
 		window.dispatchEvent(

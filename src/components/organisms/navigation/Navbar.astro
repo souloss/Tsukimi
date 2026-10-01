@@ -8,6 +8,8 @@ import {
 } from "../../../config";
 import { featurePageRoutes } from "../../../config/featureRoutes";
 import { LinkPresets } from "../../../constants/link-presets";
+import I18nKey from "../../../i18n/i18nKey";
+import { i18n } from "../../../i18n/translation";
 import { LinkPreset, type NavBarLink } from "../../../types/config";
 import { url } from "../../../utils/url-utils";
 import ThemeSwitch from "../../control/ThemeSwitch.svelte";
@@ -141,7 +143,7 @@ const iconWebpSrc = hasIconPngFallback
             {/* 只在 sidebar 模式下显示移动端 TOC 按钮 */}
 			{siteConfig.toc.enable && siteConfig.toc.mobileTop && <MobileTOC client:media="(max-width: 1279px)"></MobileTOC>}
             {!siteConfig.themeColor.fixed && (
-                    <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
+                    <button aria-label={i18n(I18nKey.appearanceSettings)} aria-controls="display-setting" aria-expanded="false" title={i18n(I18nKey.appearanceSettings)} class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
                         <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
                     </button>
             )}
@@ -155,16 +157,62 @@ const iconWebpSrc = hasIconPngFallback
 </div>
 
 <script>
-	async function loadButtonScript() {
+async function loadButtonScript() {
     const settingBtn = document.getElementById("display-settings-switch");
     const menuBtn = document.getElementById("nav-menu-switch");
+	const previousCleanup = (window as any).__tsukimiThemePanelCleanup;
+	previousCleanup?.();
 
     try {
         const { panelManager } = await import('../../../utils/panel-manager.js');
 
+        const focusableSelector = 'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
+        const getFocusable = () => Array.from(document.querySelectorAll<HTMLElement>(`#display-setting ${focusableSelector}`));
+        const focusPanel = () => {
+            const panel = document.getElementById("display-setting");
+            const first = panel?.querySelector<HTMLElement>("[data-theme-control], button, input");
+            (first || panel)?.focus();
+        };
+        const handleKeydown = async (event: KeyboardEvent) => {
+            const panel = document.getElementById("display-setting");
+            if (!panel || panel.classList.contains("float-panel-closed")) return;
+            if (event.key === "Escape") {
+                event.preventDefault();
+                await panelManager.closePanel("display-setting");
+                settingBtn?.setAttribute("aria-expanded", "false");
+                settingBtn?.focus();
+                return;
+            }
+            if (event.key !== "Tab") return;
+            const focusable = getFocusable();
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+        document.addEventListener("keydown", handleKeydown);
+        const handlePanelClosed = (event: Event) => {
+            const panelEvent = event as CustomEvent<{ id?: string }>;
+            if (panelEvent.detail?.id === "display-setting") settingBtn?.setAttribute("aria-expanded", "false");
+        };
+        document.addEventListener("tsukimi:panel-closed", handlePanelClosed);
+		(window as any).__tsukimiThemePanelCleanup = () => {
+			document.removeEventListener("keydown", handleKeydown);
+			document.removeEventListener("tsukimi:panel-closed", handlePanelClosed);
+		};
+
         if (settingBtn) {
             settingBtn.onclick = async function () {
-                await panelManager.togglePanel('display-setting');
+                const isOpen = await panelManager.togglePanel('display-setting');
+                settingBtn.setAttribute('aria-expanded', String(isOpen));
+                if (isOpen) focusPanel();
+                else settingBtn.focus();
             };
         }
 
@@ -181,6 +229,10 @@ const iconWebpSrc = hasIconPngFallback
                 const settingPanel = document.getElementById("display-setting");
                 if (settingPanel) {
                     settingPanel.classList.toggle("float-panel-closed");
+                    settingBtn.setAttribute(
+                        'aria-expanded',
+                        String(!settingPanel.classList.contains("float-panel-closed")),
+                    );
                 }
             };
         }
