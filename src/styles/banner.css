@@ -120,6 +120,11 @@ body.no-banner-mode .absolute.w-full.z-30 {
   body.enable-banner .absolute.w-full.z-30 {
     top: 35vh !important;
   }
+
+  /* Non-home banner pages use the same full image height as the home hero. */
+  body.enable-banner:not(.lg\:is-home) .absolute.w-full.z-30 {
+    top: 65vh !important;
+  }
 }
 
 /* ==========================================================================

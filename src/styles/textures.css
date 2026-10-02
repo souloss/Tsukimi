@@ -1,12 +1,12 @@
 :root {
-	--texture-opacity: 0.25;
+	--texture-opacity: 0.34;
 }
 
 #texture-canvas {
 	position: fixed;
 	inset: 0;
-	/* Keep the texture above the page background and below every layout layer. */
-	z-index: 0;
+	/* Keep the texture above wallpaper art and below navigation/content layers. */
+	z-index: 12;
 	pointer-events: none;
 	opacity: var(--texture-opacity);
 	background-color: transparent;
@@ -22,29 +22,19 @@ html[data-texture-preset="none"] #texture-canvas {
 	display: none;
 }
 
-/* Texture is a background treatment for the wallpaper-free layout. Keeping it
-   out of image-backed modes prevents it from competing with the configured art. */
-html:not([data-wallpaper-mode="none"]) #texture-canvas {
-	display: none;
-}
-
-/* Sakura is a background effect too; keep it out of image-backed modes. */
-html:not([data-wallpaper-mode="none"]) #canvas_sakura {
-	display: none;
-}
-
+/* Texture remains available in every wallpaper mode as a light visual layer. */
 html[data-texture-preset="starlight"] #texture-canvas {
 	background-image:
-		radial-gradient(circle at 18% 24%, color-mix(in srgb, var(--primary) 88%, transparent) 0 1.5px, transparent 3px),
-		radial-gradient(circle at 78% 68%, color-mix(in srgb, var(--secondary) 82%, transparent) 0 2.5px, transparent 4px),
-		radial-gradient(circle at 58% 12%, color-mix(in srgb, var(--tertiary) 78%, transparent) 0 1.5px, transparent 3px);
+		radial-gradient(circle at 18% 24%, color-mix(in srgb, var(--primary) 96%, transparent) 0 1.8px, transparent 3px),
+		radial-gradient(circle at 78% 68%, color-mix(in srgb, var(--secondary) 92%, transparent) 0 2.8px, transparent 4px),
+		radial-gradient(circle at 58% 12%, color-mix(in srgb, var(--tertiary) 88%, transparent) 0 1.8px, transparent 3px);
 	background-size: 140px 140px, 180px 180px, 220px 220px;
 	animation: texture-drift 18s ease-in-out infinite alternate;
 }
 
 html[data-texture-preset="cyber-dots"] #texture-canvas {
 	background-image: radial-gradient(
-		color-mix(in srgb, var(--primary) 62%, transparent) 1.35px,
+		color-mix(in srgb, var(--primary) 78%, transparent) 1.45px,
 		transparent 1.8px
 	);
 	background-size: 24px 24px;
@@ -53,16 +43,16 @@ html[data-texture-preset="cyber-dots"] #texture-canvas {
 
 html[data-texture-preset="topography"] #texture-canvas {
 	background-image:
-		repeating-radial-gradient(ellipse at 20% 30%, transparent 0 24px, color-mix(in srgb, var(--secondary) 58%, transparent) 25px 27px, transparent 28px 50px),
-		repeating-radial-gradient(ellipse at 80% 70%, transparent 0 34px, color-mix(in srgb, var(--tertiary) 50%, transparent) 35px 37px, transparent 38px 72px);
+		repeating-radial-gradient(ellipse at 20% 30%, transparent 0 24px, color-mix(in srgb, var(--secondary) 72%, transparent) 25px 28px, transparent 29px 50px),
+		repeating-radial-gradient(ellipse at 80% 70%, transparent 0 34px, color-mix(in srgb, var(--tertiary) 64%, transparent) 35px 38px, transparent 39px 72px);
 	background-size: 420px 320px, 560px 420px;
 	animation: texture-drift 22s linear infinite;
 }
 
 html[data-texture-preset="geometric"] #texture-canvas {
 	background-image:
-		linear-gradient(135deg, color-mix(in srgb, var(--primary) 54%, transparent) 25%, transparent 25%),
-		linear-gradient(315deg, color-mix(in srgb, var(--tertiary) 48%, transparent) 25%, transparent 25%);
+		linear-gradient(135deg, color-mix(in srgb, var(--primary) 68%, transparent) 25%, transparent 25%),
+		linear-gradient(315deg, color-mix(in srgb, var(--tertiary) 62%, transparent) 25%, transparent 25%);
 	background-position: 0 0, 24px 24px;
 	background-size: 48px 48px;
 	animation: texture-grid 16s linear infinite;
@@ -70,9 +60,9 @@ html[data-texture-preset="geometric"] #texture-canvas {
 
 html[data-texture-preset="sakura"] #texture-canvas {
 	background-image:
-		radial-gradient(ellipse 5px 9px at 18% 20%, color-mix(in srgb, var(--primary) 72%, transparent) 0 55%, transparent 60%),
-		radial-gradient(ellipse 4px 7px at 74% 62%, color-mix(in srgb, var(--tertiary) 64%, transparent) 0 55%, transparent 60%),
-		radial-gradient(ellipse 3px 6px at 42% 82%, color-mix(in srgb, var(--secondary) 60%, transparent) 0 55%, transparent 60%);
+		radial-gradient(ellipse 5px 9px at 18% 20%, color-mix(in srgb, var(--primary) 84%, transparent) 0 55%, transparent 60%),
+		radial-gradient(ellipse 4px 7px at 74% 62%, color-mix(in srgb, var(--tertiary) 76%, transparent) 0 55%, transparent 60%),
+		radial-gradient(ellipse 3px 6px at 42% 82%, color-mix(in srgb, var(--secondary) 72%, transparent) 0 55%, transparent 60%);
 	background-size: 180px 180px, 220px 220px, 260px 260px;
 	animation: texture-fall 20s linear infinite;
 }

@@ -14,7 +14,7 @@ const FALLBACK_TEXTURE: Required<TextureConfig> = {
 	enable: false,
 	switchable: false,
 	defaultPreset: "none",
-	defaultOpacity: 0.25,
+	defaultOpacity: 0.34,
 	allowMotion: false,
 };
 
@@ -36,6 +36,6 @@ export function resolveTextureConfig(
 		defaultPreset: isTexturePreset(merged.defaultPreset)
 			? merged.defaultPreset
 			: "none",
-		defaultOpacity: Math.min(0.25, Math.max(0.05, opacity)),
+		defaultOpacity: Math.min(0.4, Math.max(0.05, opacity)),
 	};
 }

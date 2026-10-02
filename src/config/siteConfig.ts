@@ -24,7 +24,7 @@ const defaults: SiteConfig = {
 		enable: true,
 		switchable: true,
 		defaultPreset: "none",
-		defaultOpacity: 0.25,
+		defaultOpacity: 0.34,
 		allowMotion: true,
 	},
 

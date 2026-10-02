@@ -118,12 +118,12 @@ export function getStoredTextureOpacity(): number {
 		localStorage.getItem("textureOpacity") ?? "",
 	);
 	return Number.isFinite(stored)
-		? Math.min(0.25, Math.max(0.05, stored))
+		? Math.min(0.4, Math.max(0.05, stored))
 		: getDefaultTextureOpacity();
 }
 
 export function setTextureOpacity(opacity: number): void {
-	const normalized = Math.min(0.25, Math.max(0.05, opacity));
+	const normalized = Math.min(0.4, Math.max(0.05, opacity));
 	if (typeof localStorage !== "undefined") {
 		localStorage.setItem("textureOpacity", String(normalized));
 	}

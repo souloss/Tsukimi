@@ -684,7 +684,7 @@ function switchTexturePreset(preset: TexturePreset) {
 }
 
 function switchTextureOpacity(value: number) {
-	textureOpacity = Math.min(0.25, Math.max(0.05, value));
+	textureOpacity = Math.min(0.4, Math.max(0.05, value));
 	setTextureOpacity(textureOpacity);
 }
 
@@ -831,7 +831,7 @@ $effect(() => {
 								handleOptionKeydown(event, index, MATERIAL_PALETTE_STYLES.length)}
 							onclick={() => switchPaletteStyle(preview.style)}
 						>
-							<span class="theme-option__dots" aria-hidden="true">
+							<span class="m3-style-cell__dots" aria-hidden="true">
 								<span class="m3-style-cell__dot" style={`background: ${preview.colors.primary}`} />
 								<span class="m3-style-cell__dot" style={`background: ${preview.colors.secondary}`} />
 								<span class="m3-style-cell__dot" style={`background: ${preview.colors.tertiary}`} />
@@ -944,7 +944,7 @@ $effect(() => {
 		{/if}
 
 
-		{#if isTextureSwitchable && wallpaperMode === WALLPAPER_NONE}
+		{#if isTextureSwitchable}
 			<div class="settings-section mt-3 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
@@ -955,7 +955,7 @@ $effect(() => {
 					{#each TEXTURE_PRESETS as preset, index}
 						<button
 							type="button"
-							class="theme-option"
+							class="theme-option m3-style-cell"
 							class:selected={texturePreset === preset}
 							role="radio"
 							aria-checked={texturePreset === preset}
@@ -967,8 +967,8 @@ $effect(() => {
 								handleOptionKeydown(event, index, TEXTURE_PRESETS.length)}
 							onclick={() => switchTexturePreset(preset)}
 						>
-							<Icon icon={textureIcons[preset]} class="theme-option__icon" aria-hidden="true" />
-							<span class="theme-option__label">{i18n(
+							<Icon icon={textureIcons[preset]} class="m3-style-cell__icon" aria-hidden="true" />
+							<span class="m3-style-cell__name">{i18n(
 								preset === "none"
 									? I18nKey.textureNone
 									: preset === "cyber-dots"
@@ -997,7 +997,7 @@ $effect(() => {
 					class="slider mt-1 w-full"
 					type="range"
 					min="5"
-					max="25"
+					max="40"
 					step="1"
 					value={Math.round(textureOpacity * 100)}
 					aria-label={i18n(I18nKey.textureOpacity)}
@@ -1094,10 +1094,11 @@ $effect(() => {
 				class="motion-toggle"
 				role="switch"
 				aria-checked={reduceMotion}
+				aria-label={i18n(I18nKey.reduceMotion)}
 				onclick={toggleReduceMotion}
 			>
 				<span class="motion-toggle__icon" aria-hidden="true">
-					<Icon icon="material-symbols:motion-photos-off" />
+					<Icon icon={reduceMotion ? "material-symbols:motion-photos-off" : "material-symbols:motion-mode"} />
 				</span>
 				<span class="motion-toggle__label">{i18n(I18nKey.reduceMotion)}</span>
 				<span class="setting-switch" class:active={reduceMotion} aria-hidden="true">
@@ -1530,46 +1531,53 @@ $effect(() => {
 		gap: 0.25rem;
 	}
 
-	.theme-option {
+	.theme-option,
+	.m3-style-cell {
 		min-width: 0;
-		min-height: 3.5rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.3rem;
-		padding: 0.55rem 0.35rem;
+		gap: 0.25rem;
+		min-height: 3.5rem;
+		padding: 0.5rem 0.25rem;
 		border: 0;
-		border-radius: 0.65rem;
+		border-radius: 0.7rem;
 		background: transparent;
 		color: var(--text-secondary);
-		font-size: 0.72rem;
+		font-size: 0.7rem;
 		cursor: pointer;
 		user-select: none;
 		transition: background 150ms ease, color 150ms ease, transform 150ms ease;
 	}
 
-	.theme-option:hover {
+	.theme-option:hover,
+	.m3-style-cell:hover {
 		background: color-mix(in srgb, var(--text-primary) 8%, transparent);
 		color: var(--text-primary);
 	}
 
-	.theme-option:active {
+	.theme-option:active,
+	.m3-style-cell:active {
 		transform: scale(0.97);
 	}
 
-	.theme-option.selected {
+	.theme-option.selected,
+	.m3-style-cell.selected {
 		background: var(--mc-secondary-container, var(--btn-regular-bg));
 		box-shadow: none;
 		color: var(--mc-on-secondary-container, var(--btn-content));
+		font-weight: 600;
 	}
 
-	.theme-option__icon {
+	.theme-option__icon,
+	.m3-style-cell__icon {
 		font-size: 1.25rem;
 		line-height: 1;
 	}
 
-	.theme-option__dots {
+	.theme-option__dots,
+	.m3-style-cell__dots {
 		display: flex;
 		gap: 0.25rem;
 	}
@@ -1581,14 +1589,21 @@ $effect(() => {
 		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 20%, transparent);
 	}
 
-	.theme-option__label {
+	.theme-option__label,
+	.m3-style-cell__name {
 		max-width: 100%;
+		min-width: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		font-size: 0.65rem;
-		line-height: 1;
+		line-height: 1.15;
 		text-transform: capitalize;
+	}
+
+	.m3-style-cell:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
 	}
 
 	.motion-toggle {
