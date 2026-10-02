@@ -76,7 +76,14 @@ if (isLocal) {
 	}
 }
 
-const imageClass = `relative z-10 block w-full h-full object-${fit}`;
+// A parent with an intrinsic aspect ratio can still have an unresolved
+// height while Astro lays out a sidebar. Let callers that explicitly use
+// `h-auto` keep the image's intrinsic height instead of forcing `h-full`.
+const imageHeightClass = className?.split(/\s+/).includes("h-auto")
+	? "h-auto"
+	: "h-full";
+const imageWrapperClass = `relative z-10 block ${imageHeightClass} w-full`;
+const imageClass = `relative z-10 block w-full ${imageHeightClass} object-${fit}`;
 const imageStyle = `object-position: ${position}`;
 const responsiveWidths = widths ?? [320, 640, 960, 1280];
 const responsiveSizes = sizes ?? "100vw";
@@ -128,7 +135,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 	</div>
 	{
 		isLocal && img && canConvert ? (
-			<div class="relative z-10 block h-full w-full">
+			<div class={imageWrapperClass}>
 				<Picture
 					src={img}
 					alt={alt || ""}
@@ -158,7 +165,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 				sizes={responsiveSizes}
 			/>
 		) : isPublic && publicImage ? (
-			<picture class="relative z-10 block h-full w-full">
+			<picture class={imageWrapperClass}>
 				<source type="image/avif" srcset={publicSrcSet("avif")} sizes={responsiveSizes} />
 				<source type="image/webp" srcset={publicSrcSet("webp")} sizes={responsiveSizes} />
 				<img

@@ -176,17 +176,14 @@ const palettePreviews = $derived(
 		),
 	})),
 );
-const paletteIcons: Record<MaterialPaletteStyle, string> = {
-	tonalSpot: "material-symbols:palette-outline-rounded",
-	vibrant: "material-symbols:flare-rounded",
-	expressive: "material-symbols:auto-awesome-rounded",
-	content: "material-symbols:image-outline-rounded",
-	rainbow: "material-symbols:gradient-rounded",
-	fruitSalad: "material-symbols:nutrition-rounded",
-	monochrome: "material-symbols:contrast-rounded",
-	neutral: "material-symbols:tonality-rounded",
-	fidelity: "material-symbols:tune-rounded",
-};
+const currentPaletteColor = $derived(
+	resolveMaterialColorScheme(
+		hue,
+		dark,
+		paletteStyle,
+		siteConfig.themeColor.colorSpec ?? "2025",
+	).primary,
+);
 const textureIcons: Record<TexturePreset, string> = {
 	none: "material-symbols:block-rounded",
 	starlight: "material-symbols:auto-awesome-outline-rounded",
@@ -195,6 +192,21 @@ const textureIcons: Record<TexturePreset, string> = {
 	geometric: "material-symbols:category-outline-rounded",
 	sakura: "material-symbols:local-florist-outline-rounded",
 };
+
+function paletteLabelKey(style: MaterialPaletteStyle): I18nKey {
+	const labels: Record<MaterialPaletteStyle, I18nKey> = {
+		tonalSpot: I18nKey.styleTonalSpot,
+		vibrant: I18nKey.styleVibrant,
+		expressive: I18nKey.styleExpressive,
+		content: I18nKey.styleContent,
+		rainbow: I18nKey.styleRainbow,
+		fruitSalad: I18nKey.styleFruitSalad,
+		monochrome: I18nKey.styleMonochrome,
+		neutral: I18nKey.styleNeutral,
+		fidelity: I18nKey.styleFidelity,
+	};
+	return labels[style];
+}
 // 是否允许用户切换水波纹动画（只看 switchable 配置）
 const isWavesSwitchable = siteConfig.banner.waves?.switchable ?? false;
 // 是否允许用户切换渐变过渡（只看 switchable 配置）
@@ -735,6 +747,10 @@ $effect(() => {
 				<span>{i18n(I18nKey.resetAppearance)}</span>
 			</button>
 		</div>
+		<section class="settings-group settings-group--theme">
+			<div class="settings-group__header">
+				<span>{i18n(I18nKey.settingsTheme)}</span>
+			</div>
 		<!-- Theme Color Section -->
 		{#if showThemeColor}
 			<div class="settings-section mt-2 mb-2">
@@ -760,13 +776,18 @@ $effect(() => {
 							</div>
 						</button>
 					</div>
-					<div class="flex gap-1">
+					<div class="flex items-center gap-2">
 						<div
 							id="hueValue"
 							class="transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center font-bold text-sm items-center text-[var(--btn-content)]"
 						>
 							{hue}
 						</div>
+						<div
+							class="h-7 w-7 rounded-full"
+							style={`background: ${currentPaletteColor}; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 20%, transparent)`}
+							aria-hidden="true"
+						></div>
 					</div>
 				</div>
 				<div
@@ -803,117 +824,33 @@ $effect(() => {
 							role="radio"
 							aria-checked={paletteStyle === preview.style}
 							aria-pressed={paletteStyle === preview.style}
-							aria-label={preview.style}
-							title={preview.style}
+							aria-label={i18n(paletteLabelKey(preview.style))}
+							title={i18n(paletteLabelKey(preview.style))}
 							data-theme-control
 							onkeydown={(event) =>
 								handleOptionKeydown(event, index, MATERIAL_PALETTE_STYLES.length)}
 							onclick={() => switchPaletteStyle(preview.style)}
 						>
-							<Icon
-								icon={paletteIcons[preview.style]}
-								class="theme-option__icon"
-								aria-hidden="true"
-							/>
 							<span class="theme-option__dots" aria-hidden="true">
 								<span class="m3-style-cell__dot" style={`background: ${preview.colors.primary}`} />
 								<span class="m3-style-cell__dot" style={`background: ${preview.colors.secondary}`} />
 								<span class="m3-style-cell__dot" style={`background: ${preview.colors.tertiary}`} />
 							</span>
-							<span class="theme-option__label m3-style-cell__name">{preview.style === "tonalSpot" ? "Tonal" : preview.style === "fruitSalad" ? "Fruit" : preview.style}</span>
+							<span class="theme-option__label m3-style-cell__name">{i18n(paletteLabelKey(preview.style))}</span>
 						</button>
 					{/each}
 				</div>
 			</div>
 		{/if}
 
-		<div class="settings-section mt-3 mb-2">
-			<button
-				type="button"
-				id="reduce-motion-toggle"
-				class="motion-toggle"
-				role="switch"
-				aria-checked={reduceMotion}
-				onclick={toggleReduceMotion}
-			>
-				<span class="motion-toggle__icon" aria-hidden="true">
-					<Icon icon="material-symbols:motion-photos-off" />
-				</span>
-				<span class="motion-toggle__label">{i18n(I18nKey.reduceMotion)}</span>
-				<span class="setting-switch" class:active={reduceMotion} aria-hidden="true">
-					<span class="setting-switch__thumb" />
-				</span>
-			</button>
-		</div>
 
-		{#if isTextureSwitchable && wallpaperMode === WALLPAPER_NONE}
-			<div class="settings-section mt-3 mb-2">
-				<div
-					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
-				>
-					{i18n(I18nKey.texture)}
-				</div>
-				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.texture)}>
-					{#each TEXTURE_PRESETS as preset, index}
-						<button
-							type="button"
-							class="theme-option"
-							class:selected={texturePreset === preset}
-							role="radio"
-							aria-checked={texturePreset === preset}
-							aria-pressed={texturePreset === preset}
-							aria-label={preset}
-							title={preset}
-							data-theme-control
-							onkeydown={(event) =>
-								handleOptionKeydown(event, index, TEXTURE_PRESETS.length)}
-							onclick={() => switchTexturePreset(preset)}
-						>
-							<Icon icon={textureIcons[preset]} class="theme-option__icon" aria-hidden="true" />
-							<span
-								class="theme-option__texture texture-preview"
-								data-texture-preview={preset}
-								aria-hidden="true"
-							/>
-							<span class="theme-option__label">{i18n(
-								preset === "none"
-									? I18nKey.textureNone
-									: preset === "cyber-dots"
-										? I18nKey.textureCyberDots
-										: preset === "topography"
-											? I18nKey.textureTopography
-											: preset === "geometric"
-												? I18nKey.textureGeometric
-													: preset === "starlight"
-														? I18nKey.textureStarlight
-															: I18nKey.textureSakura,
-							)}</span>
-						</button>
-					{/each}
-				</div>
-				<div class="mt-3 flex items-center justify-between gap-2">
-					<label class="text-xs text-neutral-700 dark:text-neutral-300" for="texture-opacity-slider">
-						{i18n(I18nKey.textureOpacity)}
-					</label>
-					<span class="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
-						{Math.round(textureOpacity * 100)}%
-					</span>
-				</div>
-				<input
-					id="texture-opacity-slider"
-					class="slider mt-1 w-full"
-					type="range"
-					min="5"
-					max="25"
-					step="1"
-					value={Math.round(textureOpacity * 100)}
-					aria-label={i18n(I18nKey.textureOpacity)}
-					oninput={(event) =>
-						switchTextureOpacity(Number((event.currentTarget as HTMLInputElement).value) / 100)}
-				/>
+
+		</section>
+
+		<section class="settings-group settings-group--interface">
+			<div class="settings-group__header">
+				<span>{i18n(I18nKey.settingsWallpaper)}</span>
 			</div>
-		{/if}
-
 		<!-- Wallpaper Mode Section -->
 		{#if showWallpaperModeSwitch}
 			<div class="settings-section mt-2 mb-2">
@@ -1006,6 +943,168 @@ $effect(() => {
 			</div>
 		{/if}
 
+
+		{#if isTextureSwitchable && wallpaperMode === WALLPAPER_NONE}
+			<div class="settings-section mt-3 mb-2">
+				<div
+					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
+				>
+					{i18n(I18nKey.texture)}
+				</div>
+				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.texture)}>
+					{#each TEXTURE_PRESETS as preset, index}
+						<button
+							type="button"
+							class="theme-option"
+							class:selected={texturePreset === preset}
+							role="radio"
+							aria-checked={texturePreset === preset}
+							aria-pressed={texturePreset === preset}
+							aria-label={preset}
+							title={preset}
+							data-theme-control
+							onkeydown={(event) =>
+								handleOptionKeydown(event, index, TEXTURE_PRESETS.length)}
+							onclick={() => switchTexturePreset(preset)}
+						>
+							<Icon icon={textureIcons[preset]} class="theme-option__icon" aria-hidden="true" />
+							<span class="theme-option__label">{i18n(
+								preset === "none"
+									? I18nKey.textureNone
+									: preset === "cyber-dots"
+										? I18nKey.textureCyberDots
+										: preset === "topography"
+											? I18nKey.textureTopography
+											: preset === "geometric"
+												? I18nKey.textureGeometric
+													: preset === "starlight"
+														? I18nKey.textureStarlight
+															: I18nKey.textureSakura,
+							)}</span>
+						</button>
+					{/each}
+				</div>
+				<div class="mt-3 flex items-center justify-between gap-2">
+					<label class="text-xs text-neutral-700 dark:text-neutral-300" for="texture-opacity-slider">
+						{i18n(I18nKey.textureOpacity)}
+					</label>
+					<span class="text-xs tabular-nums text-neutral-600 dark:text-neutral-400">
+						{Math.round(textureOpacity * 100)}%
+					</span>
+				</div>
+				<input
+					id="texture-opacity-slider"
+					class="slider mt-1 w-full"
+					type="range"
+					min="5"
+					max="25"
+					step="1"
+					value={Math.round(textureOpacity * 100)}
+					aria-label={i18n(I18nKey.textureOpacity)}
+					oninput={(event) =>
+						switchTextureOpacity(Number((event.currentTarget as HTMLInputElement).value) / 100)}
+				/>
+			</div>
+		{/if}
+
+
+		<!-- Layout Switch Section -->
+		{#if allowLayoutSwitch}
+			<div class="settings-section mt-2 mb-2">
+				<div
+					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
+				>
+					{i18n(I18nKey.postListLayout)}
+					<button
+						aria-label="Reset to Default"
+						class="btn-regular w-7 h-7 rounded-md active:scale-95"
+						class:opacity-0={currentLayout ===
+							effectiveDefaultLayout}
+						class:pointer-events-none={currentLayout ===
+							effectiveDefaultLayout}
+						onclick={resetLayout}
+					>
+						<div class="text-[var(--btn-content)]">
+							<Icon
+								icon="fa7-solid:arrow-rotate-left"
+								class="text-[0.875rem]"
+							/>
+						</div>
+					</button>
+				</div>
+				<div class="flex gap-2">
+					<button
+						aria-label={i18n(I18nKey.postListLayoutList)}
+						class="flex-1 btn-regular rounded-md py-2 px-3 flex items-center justify-center gap-2 active:scale-95 transition-all relative overflow-hidden"
+						class:opacity-60={currentLayout !== "list"}
+						class:bg-[var(--btn-regular-bg-hover)]={currentLayout ===
+							"list"}
+						disabled={isSwitching}
+						onclick={switchLayout}
+						title={i18n(I18nKey.postListLayoutList)}
+					>
+						<svg
+							class="w-4 h-4"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+						</svg>
+						<span class="text-xs font-medium"
+							>{i18n(I18nKey.postListLayoutList)}</span
+						>
+					</button>
+					<button
+						aria-label={i18n(I18nKey.postListLayoutGrid)}
+						class="flex-1 btn-regular rounded-md py-2 px-3 flex items-center justify-center gap-2 active:scale-95 transition-all relative overflow-hidden"
+						class:opacity-60={currentLayout !== "grid"}
+						class:bg-[var(--btn-regular-bg-hover)]={currentLayout ===
+							"grid"}
+						disabled={isSwitching}
+						onclick={switchLayout}
+						title={i18n(I18nKey.postListLayoutGrid)}
+					>
+						<svg
+							class="w-4 h-4"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"
+							/>
+						</svg>
+						<span class="text-xs font-medium"
+							>{i18n(I18nKey.postListLayoutGrid)}</span
+						>
+					</button>
+				</div>
+			</div>
+		{/if}
+		</section>
+
+		<section class="settings-group settings-group--effects">
+			<div class="settings-group__header">
+				<span>{i18n(I18nKey.settingsEffects)}</span>
+			</div>
+
+		<div class="settings-section mt-3 mb-2">
+			<button
+				type="button"
+				id="reduce-motion-toggle"
+				class="motion-toggle"
+				role="switch"
+				aria-checked={reduceMotion}
+				onclick={toggleReduceMotion}
+			>
+				<span class="motion-toggle__icon" aria-hidden="true">
+					<Icon icon="material-symbols:motion-photos-off" />
+				</span>
+				<span class="motion-toggle__label">{i18n(I18nKey.reduceMotion)}</span>
+				<span class="setting-switch" class:active={reduceMotion} aria-hidden="true">
+					<span class="setting-switch__thumb" />
+				</span>
+			</button>
+		</div>
 		<!-- Overlay Settings Section -->
 		{#if wallpaperMode === WALLPAPER_OVERLAY && hasOverlaySettings}
 			<div class="settings-section mt-2 mb-2">
@@ -1206,7 +1305,7 @@ $effect(() => {
 		{/if}
 
 		<!-- Effects Settings Section -->
-		{#if isSakuraSwitchable}
+		{#if isSakuraSwitchable && wallpaperMode === WALLPAPER_NONE}
 			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
@@ -1359,78 +1458,7 @@ $effect(() => {
 			</div>
 		{/if}
 
-		<!-- Layout Switch Section -->
-		{#if allowLayoutSwitch}
-			<div class="settings-section mt-2 mb-2">
-				<div
-					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
-				>
-					{i18n(I18nKey.postListLayout)}
-					<button
-						aria-label="Reset to Default"
-						class="btn-regular w-7 h-7 rounded-md active:scale-95"
-						class:opacity-0={currentLayout ===
-							effectiveDefaultLayout}
-						class:pointer-events-none={currentLayout ===
-							effectiveDefaultLayout}
-						onclick={resetLayout}
-					>
-						<div class="text-[var(--btn-content)]">
-							<Icon
-								icon="fa7-solid:arrow-rotate-left"
-								class="text-[0.875rem]"
-							/>
-						</div>
-					</button>
-				</div>
-				<div class="flex gap-2">
-					<button
-						aria-label={i18n(I18nKey.postListLayoutList)}
-						class="flex-1 btn-regular rounded-md py-2 px-3 flex items-center justify-center gap-2 active:scale-95 transition-all relative overflow-hidden"
-						class:opacity-60={currentLayout !== "list"}
-						class:bg-[var(--btn-regular-bg-hover)]={currentLayout ===
-							"list"}
-						disabled={isSwitching}
-						onclick={switchLayout}
-						title={i18n(I18nKey.postListLayoutList)}
-					>
-						<svg
-							class="w-4 h-4"
-							fill="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
-						</svg>
-						<span class="text-xs font-medium"
-							>{i18n(I18nKey.postListLayoutList)}</span
-						>
-					</button>
-					<button
-						aria-label={i18n(I18nKey.postListLayoutGrid)}
-						class="flex-1 btn-regular rounded-md py-2 px-3 flex items-center justify-center gap-2 active:scale-95 transition-all relative overflow-hidden"
-						class:opacity-60={currentLayout !== "grid"}
-						class:bg-[var(--btn-regular-bg-hover)]={currentLayout ===
-							"grid"}
-						disabled={isSwitching}
-						onclick={switchLayout}
-						title={i18n(I18nKey.postListLayoutGrid)}
-					>
-						<svg
-							class="w-4 h-4"
-							fill="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"
-							/>
-						</svg>
-						<span class="text-xs font-medium"
-							>{i18n(I18nKey.postListLayoutGrid)}</span
-						>
-					</button>
-				</div>
-			</div>
-		{/if}
+		</section>
 	</div>
 {/if}
 
@@ -1456,36 +1484,68 @@ $effect(() => {
 	}
 
 	.settings-section {
-		padding: 0.65rem 0.7rem 0.75rem;
+		padding: 0.4rem 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.settings-section + .settings-section {
+		margin-top: 0.35rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid color-mix(in srgb, var(--text-primary) 9%, transparent);
+	}
+
+	.settings-group {
+		margin-top: 0.65rem;
+		padding: 0.65rem 0.75rem 0.75rem;
 		border-radius: 0.9rem;
 		background: color-mix(in srgb, var(--card-bg) 82%, var(--page-bg));
 		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 8%, transparent);
 	}
 
-	.settings-section + .settings-section {
-		margin-top: 0.65rem;
+	.settings-group__header {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.15rem 0.25rem 0.5rem;
+		color: var(--text-secondary);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.settings-group__header::before {
+		content: "";
+		width: 0.2rem;
+		height: 0.9rem;
+		border-radius: 999px;
+		background: var(--primary);
 	}
 
 	.theme-option-grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 0.5rem;
+		gap: 0.25rem;
 	}
 
 	.theme-option {
 		min-width: 0;
-		min-height: 3.65rem;
+		min-height: 3.5rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.35rem;
-		padding: 0.5rem 0.35rem;
+		gap: 0.3rem;
+		padding: 0.55rem 0.35rem;
 		border: 0;
 		border-radius: 0.65rem;
 		background: transparent;
 		color: var(--text-secondary);
 		font-size: 0.72rem;
+		cursor: pointer;
+		user-select: none;
 		transition: background 150ms ease, color 150ms ease, transform 150ms ease;
 	}
 
@@ -1505,29 +1565,13 @@ $effect(() => {
 	}
 
 	.theme-option__icon {
-		font-size: 1.35rem;
+		font-size: 1.25rem;
 		line-height: 1;
 	}
 
 	.theme-option__dots {
 		display: flex;
 		gap: 0.25rem;
-	}
-
-	.theme-option__dot {
-		width: 0.42rem;
-		height: 0.42rem;
-		border-radius: 999px;
-		background: hsl(var(--preview-hue) 72% 58%);
-		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
-	}
-
-	.theme-option__dot--soft {
-		opacity: 0.72;
-	}
-
-	.theme-option__dot--deep {
-		opacity: 0.45;
 	}
 
 	.m3-style-cell__dot {
@@ -1547,32 +1591,22 @@ $effect(() => {
 		text-transform: capitalize;
 	}
 
-	.theme-option__texture {
-		display: block;
-		width: 3.2rem;
-		height: 1.05rem;
-		border-radius: 0.35rem;
-		border: 1px solid color-mix(in srgb, var(--text-primary) 15%, transparent);
-		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
-	}
-
 	.motion-toggle {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		gap: 0.65rem;
-		padding: 0.55rem 0.65rem;
-		border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
+		padding: 0.4rem 0.25rem;
+		border: 0;
 		border-radius: 0.55rem;
-		background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+		background: transparent;
 		color: var(--text-primary);
 		text-align: left;
 		transition: border-color 150ms ease, background 150ms ease;
 	}
 
 	.motion-toggle:hover {
-		border-color: color-mix(in srgb, var(--primary) 55%, transparent);
-		background: var(--btn-regular-bg-hover);
+		background: color-mix(in srgb, var(--text-primary) 7%, transparent);
 	}
 
 	.motion-toggle__icon {
@@ -1620,36 +1654,6 @@ $effect(() => {
 
 	.setting-switch.active .setting-switch__thumb {
 		transform: translateX(1rem);
-	}
-
-	.texture-preview[data-texture-preview="none"] {
-		background: var(--btn-regular-bg);
-	}
-
-	.texture-preview[data-texture-preview="starlight"] {
-		background: radial-gradient(circle at 25% 40%, var(--primary) 0 1px, transparent 2px),
-			radial-gradient(circle at 75% 65%, var(--secondary) 0 1px, transparent 2px),
-			var(--page-bg);
-		background-size: 0.75rem 0.75rem, 1rem 1rem, auto;
-	}
-
-	.texture-preview[data-texture-preview="cyber-dots"] {
-		background-color: var(--page-bg);
-		background-image: radial-gradient(var(--primary) 1px, transparent 1px);
-		background-size: 0.35rem 0.35rem;
-	}
-
-	.texture-preview[data-texture-preview="topography"] {
-		background: repeating-radial-gradient(ellipse at 30% 50%, transparent 0 0.25rem, color-mix(in srgb, var(--secondary) 55%, transparent) 0.3rem 0.34rem, transparent 0.4rem 0.65rem), var(--page-bg);
-	}
-
-	.texture-preview[data-texture-preview="geometric"] {
-		background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 35%, transparent) 25%, transparent 25%), var(--page-bg);
-		background-size: 0.65rem 0.65rem;
-	}
-
-	.texture-preview[data-texture-preview="sakura"] {
-		background: radial-gradient(ellipse 0.18rem 0.3rem at 25% 35%, var(--primary) 0 55%, transparent 60%), radial-gradient(ellipse 0.14rem 0.25rem at 70% 65%, var(--tertiary) 0 55%, transparent 60%), var(--page-bg);
 	}
 
 	#display-setting button:focus-visible,
