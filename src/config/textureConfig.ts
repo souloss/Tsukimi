@@ -14,7 +14,7 @@ const FALLBACK_TEXTURE: Required<TextureConfig> = {
 	enable: false,
 	switchable: false,
 	defaultPreset: "none",
-	defaultOpacity: 0.12,
+	defaultOpacity: 0.18,
 	allowMotion: false,
 };
 

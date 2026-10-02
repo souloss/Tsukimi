@@ -75,7 +75,7 @@ const defaults: BackgroundWallpaperConfig = {
 		gradient: {
 			enable: true,
 			colors: [
-				{ color: "var(--color-bg)", stop: 0.3 },
+				{ color: "var(--page-bg)", stop: 0.3 },
 				{ color: "transparent", stop: 0.8 },
 			],
 		},

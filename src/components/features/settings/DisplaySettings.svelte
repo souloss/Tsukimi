@@ -14,6 +14,7 @@ import {
 	getStoredMaterialPaletteStyle,
 	MATERIAL_PALETTE_STYLES,
 	type MaterialPaletteStyle,
+	resolveMaterialColorScheme,
 } from "@utils/material-theme";
 import {
 	applyFontToDocument,
@@ -93,6 +94,10 @@ let hue = $state(getHue());
 let paletteStyle = $state<MaterialPaletteStyle>(
 	getStoredMaterialPaletteStyle(),
 );
+let dark = $state(
+	typeof document !== "undefined" &&
+		document.documentElement.classList.contains("dark"),
+);
 let reduceMotion = $state(getReduceMotion());
 let texturePreset = $state<TexturePreset>(getStoredTexturePreset());
 let textureOpacity = $state(getStoredTextureOpacity());
@@ -160,17 +165,17 @@ const showReduceMotion = true;
 const isTextureSwitchable =
 	(siteConfig.texture?.enable ?? false) &&
 	(siteConfig.texture?.switchable ?? false);
-const palettePreviewHues: Record<MaterialPaletteStyle, number> = {
-	tonalSpot: 330,
-	vibrant: 215,
-	expressive: 285,
-	content: 42,
-	rainbow: 150,
-	fruitSalad: 95,
-	monochrome: 0,
-	neutral: 25,
-	fidelity: 195,
-};
+const palettePreviews = $derived(
+	MATERIAL_PALETTE_STYLES.map((style) => ({
+		style,
+		colors: resolveMaterialColorScheme(
+			hue,
+			dark,
+			style,
+			siteConfig.themeColor.colorSpec ?? "2025",
+		),
+	})),
+);
 const paletteIcons: Record<MaterialPaletteStyle, string> = {
 	tonalSpot: "material-symbols:palette-outline-rounded",
 	vibrant: "material-symbols:flare-rounded",
@@ -504,6 +509,13 @@ function switchFont(newFont: string) {
 onMount(() => {
 	mounted = true;
 	checkScreenSize();
+	const themeObserver = new MutationObserver(() => {
+		dark = document.documentElement.classList.contains("dark");
+	});
+	themeObserver.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class"],
+	});
 
 	// 从localStorage读取保存的壁纸模式
 	wallpaperMode = getStoredWallpaperMode();
@@ -552,6 +564,7 @@ onMount(() => {
 
 	return () => {
 		window.removeEventListener("resize", checkScreenSize);
+		themeObserver.disconnect();
 	};
 });
 
@@ -698,7 +711,7 @@ $effect(() => {
 {#if hasAnyContent}
 	<div
 		id="display-setting"
-		class="float-panel float-panel-closed absolute transition-all w-80 right-4 max-w-[calc(100vw-2rem)] px-4 py-2 transition-opacity"
+		class="float-panel float-panel-closed absolute transition-all w-80 max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain right-4 max-w-[calc(100vw-2rem)] px-4 py-2 transition-opacity"
 		role="dialog"
 		aria-modal="false"
 		aria-labelledby="display-setting-title"
@@ -724,7 +737,7 @@ $effect(() => {
 		</div>
 		<!-- Theme Color Section -->
 		{#if showThemeColor}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex flex-row gap-2 mb-2 items-center justify-between"
 				>
@@ -775,42 +788,46 @@ $effect(() => {
 		{/if}
 
 		{#if showPaletteStyle}
-			<div class="mt-3 mb-2">
+			<div class="settings-section mt-3 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
 					{i18n(I18nKey.themePalette)}
 				</div>
 				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.themePalette)}>
-					{#each MATERIAL_PALETTE_STYLES as style, index}
+					{#each palettePreviews as preview, index (preview.style)}
 						<button
 							type="button"
-							class="theme-option"
-							class:selected={paletteStyle === style}
+							class="theme-option m3-style-cell"
+							class:selected={paletteStyle === preview.style}
 							role="radio"
-							aria-checked={paletteStyle === style}
-							aria-pressed={paletteStyle === style}
-							aria-label={style}
-							title={style}
+							aria-checked={paletteStyle === preview.style}
+							aria-pressed={paletteStyle === preview.style}
+							aria-label={preview.style}
+							title={preview.style}
 							data-theme-control
 							onkeydown={(event) =>
 								handleOptionKeydown(event, index, MATERIAL_PALETTE_STYLES.length)}
-							onclick={() => switchPaletteStyle(style)}
+							onclick={() => switchPaletteStyle(preview.style)}
 						>
-							<Icon icon={paletteIcons[style]} class="theme-option__icon" aria-hidden="true" />
+							<Icon
+								icon={paletteIcons[preview.style]}
+								class="theme-option__icon"
+								aria-hidden="true"
+							/>
 							<span class="theme-option__dots" aria-hidden="true">
-								<span class="theme-option__dot" style={`--preview-hue: ${palettePreviewHues[style]}`} />
-								<span class="theme-option__dot theme-option__dot--soft" style={`--preview-hue: ${(palettePreviewHues[style] + 45) % 360}`} />
-								<span class="theme-option__dot theme-option__dot--deep" style={`--preview-hue: ${(palettePreviewHues[style] + 300) % 360}`} />
+								<span class="m3-style-cell__dot" style={`background: ${preview.colors.primary}`} />
+								<span class="m3-style-cell__dot" style={`background: ${preview.colors.secondary}`} />
+								<span class="m3-style-cell__dot" style={`background: ${preview.colors.tertiary}`} />
 							</span>
-							<span class="theme-option__label">{style === "tonalSpot" ? "Tonal" : style === "fruitSalad" ? "Fruit" : style}</span>
+							<span class="theme-option__label m3-style-cell__name">{preview.style === "tonalSpot" ? "Tonal" : preview.style === "fruitSalad" ? "Fruit" : preview.style}</span>
 						</button>
 					{/each}
 				</div>
 			</div>
 		{/if}
 
-		<div class="mt-3 mb-2">
+		<div class="settings-section mt-3 mb-2">
 			<button
 				type="button"
 				id="reduce-motion-toggle"
@@ -820,7 +837,7 @@ $effect(() => {
 				onclick={toggleReduceMotion}
 			>
 				<span class="motion-toggle__icon" aria-hidden="true">
-					<Icon icon="material-symbols:motion-mode-rounded" />
+					<Icon icon="material-symbols:motion-photos-off" />
 				</span>
 				<span class="motion-toggle__label">{i18n(I18nKey.reduceMotion)}</span>
 				<span class="setting-switch" class:active={reduceMotion} aria-hidden="true">
@@ -829,8 +846,8 @@ $effect(() => {
 			</button>
 		</div>
 
-		{#if isTextureSwitchable}
-			<div class="mt-3 mb-2">
+		{#if isTextureSwitchable && wallpaperMode === WALLPAPER_NONE}
+			<div class="settings-section mt-3 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -899,7 +916,7 @@ $effect(() => {
 
 		<!-- Wallpaper Mode Section -->
 		{#if showWallpaperModeSwitch}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -991,7 +1008,7 @@ $effect(() => {
 
 		<!-- Overlay Settings Section -->
 		{#if wallpaperMode === WALLPAPER_OVERLAY && hasOverlaySettings}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -1055,7 +1072,7 @@ $effect(() => {
 
 		<!-- Banner Settings Section -->
 		{#if (wallpaperMode === WALLPAPER_BANNER || wallpaperMode === WALLPAPER_FULLSCREEN) && hasBannerSettings}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -1190,7 +1207,7 @@ $effect(() => {
 
 		<!-- Effects Settings Section -->
 		{#if isSakuraSwitchable}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -1244,7 +1261,7 @@ $effect(() => {
 		{/if}
 
 		<!-- Sticky Navbar Section -->
-		<div class="mt-2 mb-2">
+		<div class="settings-section mt-2 mb-2">
 			<div
 				class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 			>
@@ -1299,7 +1316,7 @@ $effect(() => {
 
 		<!-- Font Selector Section -->
 		{#if isFontSwitchable && fontConfig?.fonts}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -1344,7 +1361,7 @@ $effect(() => {
 
 		<!-- Layout Switch Section -->
 		{#if allowLayoutSwitch}
-			<div class="mt-2 mb-2">
+			<div class="settings-section mt-2 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
 				>
@@ -1438,6 +1455,17 @@ $effect(() => {
 		scrollbar-color: color-mix(in srgb, var(--primary) 45%, transparent) transparent;
 	}
 
+	.settings-section {
+		padding: 0.65rem 0.7rem 0.75rem;
+		border-radius: 0.9rem;
+		background: color-mix(in srgb, var(--card-bg) 82%, var(--page-bg));
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 8%, transparent);
+	}
+
+	.settings-section + .settings-section {
+		margin-top: 0.65rem;
+	}
+
 	.theme-option-grid {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1446,23 +1474,24 @@ $effect(() => {
 
 	.theme-option {
 		min-width: 0;
-		min-height: 4.6rem;
+		min-height: 3.65rem;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.28rem;
-		padding: 0.45rem 0.3rem;
-		border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
-		border-radius: 0.55rem;
-		background: color-mix(in srgb, var(--card-bg) 82%, transparent);
-		color: var(--text-primary);
-		transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+		gap: 0.35rem;
+		padding: 0.5rem 0.35rem;
+		border: 0;
+		border-radius: 0.65rem;
+		background: transparent;
+		color: var(--text-secondary);
+		font-size: 0.72rem;
+		transition: background 150ms ease, color 150ms ease, transform 150ms ease;
 	}
 
 	.theme-option:hover {
-		border-color: color-mix(in srgb, var(--primary) 55%, transparent);
-		background: var(--btn-regular-bg-hover);
+		background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+		color: var(--text-primary);
 	}
 
 	.theme-option:active {
@@ -1470,10 +1499,9 @@ $effect(() => {
 	}
 
 	.theme-option.selected {
-		border-color: var(--primary);
-		background: color-mix(in srgb, var(--primary) 13%, var(--card-bg));
-		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 28%, transparent);
-		color: var(--primary);
+		background: var(--mc-secondary-container, var(--btn-regular-bg));
+		box-shadow: none;
+		color: var(--mc-on-secondary-container, var(--btn-content));
 	}
 
 	.theme-option__icon {
@@ -1483,7 +1511,7 @@ $effect(() => {
 
 	.theme-option__dots {
 		display: flex;
-		gap: 0.2rem;
+		gap: 0.25rem;
 	}
 
 	.theme-option__dot {
@@ -1502,6 +1530,13 @@ $effect(() => {
 		opacity: 0.45;
 	}
 
+	.m3-style-cell__dot {
+		width: 0.625rem;
+		height: 0.625rem;
+		border-radius: 999px;
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 20%, transparent);
+	}
+
 	.theme-option__label {
 		max-width: 100%;
 		overflow: hidden;
@@ -1514,9 +1549,9 @@ $effect(() => {
 
 	.theme-option__texture {
 		display: block;
-		width: 2rem;
-		height: 0.7rem;
-		border-radius: 999px;
+		width: 3.2rem;
+		height: 1.05rem;
+		border-radius: 0.35rem;
 		border: 1px solid color-mix(in srgb, var(--text-primary) 15%, transparent);
 		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
 	}

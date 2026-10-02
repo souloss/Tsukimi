@@ -905,6 +905,11 @@ body.no-banner-mode .absolute.w-full.z-30 {
 }
 
 /* Gradient toggle: hide when user disabled via settings */
+[data-wallpaper-layer="banner"] #wallpaper-gradient,
+[data-wallpaper-layer="fullscreen"] #wallpaper-gradient {
+  opacity: 0.42;
+}
+
 [data-gradient-enabled="false"] #wallpaper-gradient {
   display: none !important;
 }

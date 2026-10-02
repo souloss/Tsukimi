@@ -74,7 +74,7 @@ const hasBannerLink = !!siteConfig.banner.credit?.url;
 const gradientConfig = siteConfig.banner.gradient;
 const isGradientEnabled = gradientConfig?.enable ?? true;
 const gradientColors = gradientConfig?.colors ?? [
-	{ color: "var(--color-bg)", stop: 0.2 },
+	{ color: "var(--page-bg)", stop: 0.2 },
 	{ color: "transparent", stop: 0.7 },
 ];
 const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.color} ${c.stop * 100}%`).join(", ")})`;

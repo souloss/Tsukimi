@@ -24,7 +24,7 @@ const defaults: SiteConfig = {
 		enable: true,
 		switchable: true,
 		defaultPreset: "none",
-		defaultOpacity: 0.12,
+		defaultOpacity: 0.18,
 		allowMotion: true,
 	},
 
@@ -110,7 +110,7 @@ const defaults: SiteConfig = {
 			enable: true,
 			switchable: true,
 			colors: [
-				{ color: "var(--color-bg)", stop: 0.2 },
+				{ color: "var(--page-bg)", stop: 0.2 },
 				{ color: "transparent", stop: 0.7 },
 			],
 		},
