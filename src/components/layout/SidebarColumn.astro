@@ -1,13 +1,14 @@
 ---
 import { SidebarTOC } from "@components/features/toc";
 import type { MarkdownHeading } from "astro";
-import { musicPlayerConfig } from "@/config";
 import { widgetManager } from "@/utils/widget-manager";
 import { buildComponentProps } from "@/utils/widget-renderer";
 import Announcement from "../widgets/announcement/Announcement.astro";
 import Calendar from "../widgets/calendar/Calendar.astro";
 import { CardTOC } from "../widgets/card-toc";
 import Categories from "../widgets/categories/Categories.astro";
+import MusicPlayer from "../widgets/music-player/MusicPlayer.svelte";
+import { MusicSidebarWidget } from "../widgets/music-sidebar";
 import Profile from "../widgets/profile/Profile.astro";
 import SiteStats from "../widgets/site-stats/SiteStats.astro";
 import Tags from "../widgets/tags/Tags.astro";
@@ -39,13 +40,6 @@ const {
 	showDesktop = true,
 } = Astro.props;
 
-const MusicPlayer = musicPlayerConfig.enable
-	? (await import("../widgets/music-player/MusicPlayer.svelte")).default
-	: undefined;
-const MusicSidebarWidget = musicPlayerConfig.enable
-	? (await import("../widgets/music-sidebar/MusicSidebarWidget.astro")).default
-	: undefined;
-
 const componentMap: Record<string, unknown> = {
 	profile: Profile,
 	announcement: Announcement,
@@ -53,8 +47,8 @@ const componentMap: Record<string, unknown> = {
 	tags: Tags,
 	toc: SidebarTOC,
 	"card-toc": CardTOC,
-	...(MusicPlayer ? { "music-player": MusicPlayer } : {}),
-	...(MusicSidebarWidget ? { "music-sidebar": MusicSidebarWidget } : {}),
+	"music-player": MusicPlayer,
+	"music-sidebar": MusicSidebarWidget,
 	"site-stats": SiteStats,
 	"umami-stats": UmamiStats,
 	calendar: Calendar,
