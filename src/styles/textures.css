@@ -22,7 +22,12 @@ html[data-texture-preset="none"] #texture-canvas {
 	display: none;
 }
 
-/* Texture remains available in every wallpaper mode as a light visual layer. */
+/* Texture is a background treatment for the wallpaper-free layout. */
+html:not([data-wallpaper-mode="none"]) #texture-canvas,
+html:not([data-wallpaper-mode="none"]) #canvas_sakura {
+	display: none;
+}
+
 html[data-texture-preset="starlight"] #texture-canvas {
 	background-image:
 		radial-gradient(circle at 18% 24%, color-mix(in srgb, var(--primary) 96%, transparent) 0 1.8px, transparent 3px),

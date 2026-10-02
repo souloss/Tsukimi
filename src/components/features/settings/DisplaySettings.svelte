@@ -944,7 +944,7 @@ $effect(() => {
 		{/if}
 
 
-		{#if isTextureSwitchable}
+		{#if isTextureSwitchable && wallpaperMode === WALLPAPER_NONE}
 			<div class="settings-section mt-3 mb-2">
 				<div
 					class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2 before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)] before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
