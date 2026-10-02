@@ -25,7 +25,8 @@ import TypewriterText from "../../atoms/typewriter-text/TypewriterText.astro";
 		<Image
 			src={profileConfig.avatar || ""}
 			alt="Profile Image of the Author"
-			class="mx-auto lg:w-full h-full lg:mt-0"
+			class="mx-auto aspect-square lg:w-full h-full lg:mt-0"
+			aspectRatio="1"
 			widths={[192, 252, 512]}
 			sizes="(max-width: 768px) 192px, (max-width: 1279px) 252px, 280px"
 			loading="eager"

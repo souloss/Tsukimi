@@ -1,16 +1,32 @@
 import { collectBuildMetrics } from "./performance-baseline.mjs";
 
+const metrics = await collectBuildMetrics();
+// Content-repository builds add one static HTML page per article. Keep the
+// original cap for normal builds, then reserve a bounded amount per page.
+const baseTrackedBytes = 45 * 1024 * 1024;
+const basePageCount = 150;
+const additionalPageAllowance = 256 * 1024;
+const configuredMaxTrackedBytes = Number(
+	process.env.TSUKIMI_PERFORMANCE_MAX_TRACKED_BYTES,
+);
+const maxTrackedBytes =
+	Number.isFinite(configuredMaxTrackedBytes) && configuredMaxTrackedBytes > 0
+		? configuredMaxTrackedBytes
+		: baseTrackedBytes +
+			Math.max(0, metrics.pageCount - basePageCount) * additionalPageAllowance;
+
 const budget = {
-	maxTrackedBytes: 45 * 1024 * 1024,
+	maxTrackedBytes,
 	maxPageHtmlBytes: 1024 * 1024,
 	maxPageJsCssBytes: 1024 * 1024,
 	maxPageJsCssReferences: 32,
 };
-const metrics = await collectBuildMetrics();
 const errors = [];
 
 if (metrics.totalTrackedBytes > budget.maxTrackedBytes) {
-	errors.push(`tracked output exceeds ${budget.maxTrackedBytes} bytes`);
+	errors.push(
+		`tracked output is ${metrics.totalTrackedBytes} bytes, exceeding ${budget.maxTrackedBytes} bytes`,
+	);
 }
 for (const [route, page] of Object.entries(metrics.pages)) {
 	if (!page) continue;
@@ -32,5 +48,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-	`Performance budget passed (${metrics.pageCount} pages, ${(metrics.totalTrackedBytes / 1024 / 1024).toFixed(1)} MiB tracked).`,
+	`Performance budget passed (${metrics.pageCount} pages, ${(metrics.totalTrackedBytes / 1024 / 1024).toFixed(1)} MiB tracked, ${(budget.maxTrackedBytes / 1024 / 1024).toFixed(1)} MiB budget).`,
 );

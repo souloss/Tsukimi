@@ -104,6 +104,7 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 	]}
 	style={`display: ${defaultMode === "fullscreen" ? "block" : "none"}; z-index: ${zIndex}; opacity: var(--wallpaper-opacity, ${opacity}); transform: translateZ(0); perspective: 1000px;`}
 	data-fullscreen-wallpaper
+	data-wallpaper-layer="fullscreen"
 >
 	{wallpaperSwitchable && (
 		<script is:inline define:vars={{ defaultMode }}>

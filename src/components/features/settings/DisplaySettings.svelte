@@ -171,6 +171,25 @@ const palettePreviewHues: Record<MaterialPaletteStyle, number> = {
 	neutral: 25,
 	fidelity: 195,
 };
+const paletteIcons: Record<MaterialPaletteStyle, string> = {
+	tonalSpot: "material-symbols:palette-outline-rounded",
+	vibrant: "material-symbols:flare-rounded",
+	expressive: "material-symbols:auto-awesome-rounded",
+	content: "material-symbols:image-outline-rounded",
+	rainbow: "material-symbols:gradient-rounded",
+	fruitSalad: "material-symbols:nutrition-rounded",
+	monochrome: "material-symbols:contrast-rounded",
+	neutral: "material-symbols:tonality-rounded",
+	fidelity: "material-symbols:tune-rounded",
+};
+const textureIcons: Record<TexturePreset, string> = {
+	none: "material-symbols:block-rounded",
+	starlight: "material-symbols:auto-awesome-outline-rounded",
+	"cyber-dots": "material-symbols:grid-view-rounded",
+	topography: "material-symbols:waves-rounded",
+	geometric: "material-symbols:category-outline-rounded",
+	sakura: "material-symbols:local-florist-outline-rounded",
+};
 // 是否允许用户切换水波纹动画（只看 switchable 配置）
 const isWavesSwitchable = siteConfig.banner.waves?.switchable ?? false;
 // 是否允许用户切换渐变过渡（只看 switchable 配置）
@@ -762,42 +781,52 @@ $effect(() => {
 				>
 					{i18n(I18nKey.themePalette)}
 				</div>
-				<div class="grid grid-cols-3 gap-1.5" role="group" aria-label={i18n(I18nKey.themePalette)}>
+				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.themePalette)}>
 					{#each MATERIAL_PALETTE_STYLES as style, index}
 						<button
 							type="button"
-							class="btn-regular flex min-h-10 flex-col items-center justify-center gap-1 rounded-md px-2 text-[0.68rem] capitalize transition"
-							class:bg-[var(--btn-regular-bg-hover)]={paletteStyle === style}
-							class:font-bold={paletteStyle === style}
+							class="theme-option"
+							class:selected={paletteStyle === style}
+							role="radio"
+							aria-checked={paletteStyle === style}
 							aria-pressed={paletteStyle === style}
+							aria-label={style}
+							title={style}
 							data-theme-control
 							onkeydown={(event) =>
 								handleOptionKeydown(event, index, MATERIAL_PALETTE_STYLES.length)}
 							onclick={() => switchPaletteStyle(style)}
 						>
-							<span
-								class="theme-preview palette-preview"
-								style={`--preview-hue: ${palettePreviewHues[style]}`}
-								aria-hidden="true"
-							/>
-							{style === "tonalSpot" ? "Tonal" : style === "fruitSalad" ? "Fruit" : style}
+							<Icon icon={paletteIcons[style]} class="theme-option__icon" aria-hidden="true" />
+							<span class="theme-option__dots" aria-hidden="true">
+								<span class="theme-option__dot" style={`--preview-hue: ${palettePreviewHues[style]}`} />
+								<span class="theme-option__dot theme-option__dot--soft" style={`--preview-hue: ${(palettePreviewHues[style] + 45) % 360}`} />
+								<span class="theme-option__dot theme-option__dot--deep" style={`--preview-hue: ${(palettePreviewHues[style] + 300) % 360}`} />
+							</span>
+							<span class="theme-option__label">{style === "tonalSpot" ? "Tonal" : style === "fruitSalad" ? "Fruit" : style}</span>
 						</button>
 					{/each}
 				</div>
 			</div>
 		{/if}
 
-		<div class="mt-3 mb-2 flex items-center justify-between gap-3">
-			<label class="text-sm font-medium text-neutral-800 dark:text-neutral-200" for="reduce-motion-toggle">
-				{i18n(I18nKey.reduceMotion)}
-			</label>
-			<input
+		<div class="mt-3 mb-2">
+			<button
+				type="button"
 				id="reduce-motion-toggle"
-				type="checkbox"
-				class="h-4 w-4 accent-[var(--primary)]"
-				checked={reduceMotion}
-				onchange={toggleReduceMotion}
-			/>
+				class="motion-toggle"
+				role="switch"
+				aria-checked={reduceMotion}
+				onclick={toggleReduceMotion}
+			>
+				<span class="motion-toggle__icon" aria-hidden="true">
+					<Icon icon="material-symbols:motion-mode-rounded" />
+				</span>
+				<span class="motion-toggle__label">{i18n(I18nKey.reduceMotion)}</span>
+				<span class="setting-switch" class:active={reduceMotion} aria-hidden="true">
+					<span class="setting-switch__thumb" />
+				</span>
+			</button>
 		</div>
 
 		{#if isTextureSwitchable}
@@ -807,25 +836,29 @@ $effect(() => {
 				>
 					{i18n(I18nKey.texture)}
 				</div>
-				<div class="grid grid-cols-3 gap-1.5" role="group" aria-label={i18n(I18nKey.texture)}>
+				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.texture)}>
 					{#each TEXTURE_PRESETS as preset, index}
 						<button
 							type="button"
-							class="btn-regular flex min-h-10 flex-col items-center justify-center gap-1 rounded-md px-2 text-[0.68rem] capitalize transition"
-							class:bg-[var(--btn-regular-bg-hover)]={texturePreset === preset}
-							class:font-bold={texturePreset === preset}
+							class="theme-option"
+							class:selected={texturePreset === preset}
+							role="radio"
+							aria-checked={texturePreset === preset}
 							aria-pressed={texturePreset === preset}
+							aria-label={preset}
+							title={preset}
 							data-theme-control
 							onkeydown={(event) =>
 								handleOptionKeydown(event, index, TEXTURE_PRESETS.length)}
 							onclick={() => switchTexturePreset(preset)}
 						>
+							<Icon icon={textureIcons[preset]} class="theme-option__icon" aria-hidden="true" />
 							<span
-								class="theme-preview texture-preview"
+								class="theme-option__texture texture-preview"
 								data-texture-preview={preset}
 								aria-hidden="true"
 							/>
-							{i18n(
+							<span class="theme-option__label">{i18n(
 								preset === "none"
 									? I18nKey.textureNone
 									: preset === "cyber-dots"
@@ -837,7 +870,7 @@ $effect(() => {
 													: preset === "starlight"
 														? I18nKey.textureStarlight
 															: I18nKey.textureSakura,
-							)}
+							)}</span>
 						</button>
 					{/each}
 				</div>
@@ -1405,17 +1438,153 @@ $effect(() => {
 		scrollbar-color: color-mix(in srgb, var(--primary) 45%, transparent) transparent;
 	}
 
-	.theme-preview {
+	.theme-option-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.5rem;
+	}
+
+	.theme-option {
+		min-width: 0;
+		min-height: 4.6rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.28rem;
+		padding: 0.45rem 0.3rem;
+		border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
+		border-radius: 0.55rem;
+		background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+		color: var(--text-primary);
+		transition: border-color 150ms ease, background 150ms ease, transform 150ms ease;
+	}
+
+	.theme-option:hover {
+		border-color: color-mix(in srgb, var(--primary) 55%, transparent);
+		background: var(--btn-regular-bg-hover);
+	}
+
+	.theme-option:active {
+		transform: scale(0.97);
+	}
+
+	.theme-option.selected {
+		border-color: var(--primary);
+		background: color-mix(in srgb, var(--primary) 13%, var(--card-bg));
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 28%, transparent);
+		color: var(--primary);
+	}
+
+	.theme-option__icon {
+		font-size: 1.35rem;
+		line-height: 1;
+	}
+
+	.theme-option__dots {
+		display: flex;
+		gap: 0.2rem;
+	}
+
+	.theme-option__dot {
+		width: 0.42rem;
+		height: 0.42rem;
+		border-radius: 999px;
+		background: hsl(var(--preview-hue) 72% 58%);
+		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+	}
+
+	.theme-option__dot--soft {
+		opacity: 0.72;
+	}
+
+	.theme-option__dot--deep {
+		opacity: 0.45;
+	}
+
+	.theme-option__label {
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 0.65rem;
+		line-height: 1;
+		text-transform: capitalize;
+	}
+
+	.theme-option__texture {
 		display: block;
-		width: 2.25rem;
-		height: 0.9rem;
+		width: 2rem;
+		height: 0.7rem;
 		border-radius: 999px;
 		border: 1px solid color-mix(in srgb, var(--text-primary) 15%, transparent);
 		box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22);
 	}
 
-	.palette-preview {
-		background: hsl(var(--preview-hue) 72% 58%);
+	.motion-toggle {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		padding: 0.55rem 0.65rem;
+		border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
+		border-radius: 0.55rem;
+		background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+		color: var(--text-primary);
+		text-align: left;
+		transition: border-color 150ms ease, background 150ms ease;
+	}
+
+	.motion-toggle:hover {
+		border-color: color-mix(in srgb, var(--primary) 55%, transparent);
+		background: var(--btn-regular-bg-hover);
+	}
+
+	.motion-toggle__icon {
+		display: grid;
+		place-items: center;
+		width: 1.75rem;
+		height: 1.75rem;
+		border-radius: 0.45rem;
+		background: color-mix(in srgb, var(--primary) 14%, transparent);
+		color: var(--primary);
+		font-size: 1.1rem;
+	}
+
+	.motion-toggle__label {
+		flex: 1;
+		font-size: 0.82rem;
+		font-weight: 600;
+	}
+
+	.setting-switch {
+		position: relative;
+		width: 2.25rem;
+		height: 1.25rem;
+		flex: 0 0 auto;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--text-primary) 22%, transparent);
+		transition: background 150ms ease;
+	}
+
+	.setting-switch.active {
+		background: var(--primary);
+	}
+
+	.setting-switch__thumb {
+		position: absolute;
+		top: 0.2rem;
+		left: 0.2rem;
+		width: 0.85rem;
+		height: 0.85rem;
+		border-radius: 50%;
+		background: var(--card-bg);
+		box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+		transition: transform 150ms ease;
+	}
+
+	.setting-switch.active .setting-switch__thumb {
+		transform: translateX(1rem);
 	}
 
 	.texture-preview[data-texture-preview="none"] {

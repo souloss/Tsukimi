@@ -143,20 +143,25 @@ const {
 	// 根据壁纸模式动态设置 banner 和全屏壁纸的显示
 	function applyWallpaperMode() {
 		const wallpaperMode = wallpaperSwitchable
-				? localStorage.getItem("wallpaperMode") || defaultWallpaperMode
-				: defaultWallpaperMode;
+			? localStorage.getItem("wallpaperMode") || defaultWallpaperMode
+			: defaultWallpaperMode;
 		const bannerWrapper = document.getElementById("wallpaper-wrapper");
-			const fullscreenWallpaper = document.querySelector(
-				"[data-fullscreen-wallpaper]",
-			);
-			const overlayWallpaper = document.querySelector(
-				"[data-overlay-wallpaper]",
-			);
+		const fullscreenWallpaper = document.querySelector(
+			"[data-fullscreen-wallpaper]",
+		);
+		const overlayWallpaper = document.querySelector(
+			"[data-overlay-wallpaper]",
+		);
 		const navbar = document.getElementById("navbar");
 		const body = document.body;
 		const mainContent = document.querySelector(
 			".absolute.w-full.z-30.pointer-events-none",
 		);
+		const setWallpaperLayer = (element, visible) => {
+			if (!element) return;
+			element.style.display = visible ? "block" : "none";
+			element.setAttribute("aria-hidden", String(!visible));
+		};
 
 		// 强制重排以确保样式正确应用
 		const forceReflow = function () {
@@ -164,21 +169,21 @@ const {
 		};
 
 		// Remove all wallpaper body classes first, then add back only what's needed
-		body.classList.remove("enable-banner", "wallpaper-transparent", "no-banner-mode", "no-banner-layout", "fullscreen-banner");
+		body.classList.remove(
+			"enable-banner",
+			"wallpaper-transparent",
+			"no-banner-mode",
+			"no-banner-layout",
+			"fullscreen-banner",
+		);
 		forceReflow();
 
 		switch (wallpaperMode) {
-				case "banner":
+			case "banner":
 				// 显示 banner，隐藏全屏壁纸
-				if (bannerWrapper) {
-					bannerWrapper.style.display = "block";
-				}
-					if (fullscreenWallpaper) {
-						fullscreenWallpaper.style.display = "none";
-					}
-					if (overlayWallpaper) {
-						overlayWallpaper.style.display = "none";
-					}
+				setWallpaperLayer(bannerWrapper, true);
+				setWallpaperLayer(fullscreenWallpaper, false);
+				setWallpaperLayer(overlayWallpaper, false);
 				if (mainContent) {
 					mainContent.style.removeProperty("top");
 				}
@@ -201,17 +206,11 @@ const {
 				forceReflow();
 				break;
 
-				case "fullscreen":
-					// 全屏壁纸模式：显示全屏壁纸，隐藏 Banner 和叠加卡片
-					if (bannerWrapper) {
-						bannerWrapper.style.display = "none";
-					}
-					if (fullscreenWallpaper) {
-						fullscreenWallpaper.style.display = "block";
-					}
-					if (overlayWallpaper) {
-						overlayWallpaper.style.display = "none";
-				}
+			case "fullscreen":
+				// 全屏壁纸模式：显示全屏壁纸，隐藏 Banner 和叠加卡片
+				setWallpaperLayer(bannerWrapper, false);
+				setWallpaperLayer(fullscreenWallpaper, true);
+				setWallpaperLayer(overlayWallpaper, false);
 				if (mainContent) {
 					const isHome = document.body.classList.contains("lg:is-home");
 					mainContent.style.top = isHome ? "100vh" : "5.5rem";
@@ -230,17 +229,11 @@ const {
 				forceReflow();
 				break;
 
-				case "overlay":
-					// 叠加模式使用独立的角落卡片
-					if (bannerWrapper) {
-						bannerWrapper.style.display = "none";
-					}
-					if (fullscreenWallpaper) {
-						fullscreenWallpaper.style.display = "none";
-					}
-					if (overlayWallpaper) {
-						overlayWallpaper.style.display = "block";
-				}
+			case "overlay":
+				// 叠加模式使用独立的角落卡片
+				setWallpaperLayer(bannerWrapper, false);
+				setWallpaperLayer(fullscreenWallpaper, false);
+				setWallpaperLayer(overlayWallpaper, true);
 				if (mainContent) {
 					mainContent.style.removeProperty("top");
 				}
@@ -255,17 +248,11 @@ const {
 				forceReflow();
 				break;
 
-				case "none":
+			case "none":
 				// 隐藏所有壁纸
-				if (bannerWrapper) {
-					bannerWrapper.style.display = "none";
-				}
-					if (fullscreenWallpaper) {
-						fullscreenWallpaper.style.display = "none";
-					}
-					if (overlayWallpaper) {
-						overlayWallpaper.style.display = "none";
-					}
+				setWallpaperLayer(bannerWrapper, false);
+				setWallpaperLayer(fullscreenWallpaper, false);
+				setWallpaperLayer(overlayWallpaper, false);
 				if (mainContent) {
 					mainContent.style.removeProperty("top");
 				}

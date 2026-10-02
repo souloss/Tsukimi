@@ -51,6 +51,7 @@ const active = defaultMode === "overlay";
 
 <div
 	data-overlay-wallpaper
+	data-wallpaper-layer="overlay"
 	class="pointer-events-none fixed inset-0 h-screen w-screen overflow-hidden transition-[opacity,filter] duration-300"
 	style={`display: ${active ? "block" : "none"}; z-index: ${zIndex}; opacity: var(--wallpaper-opacity, ${opacity}); filter: blur(var(--wallpaper-blur, ${blur}px));`}
 >

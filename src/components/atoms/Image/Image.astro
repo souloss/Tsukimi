@@ -155,10 +155,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 				widths={responsiveWidths}
 				sizes={responsiveSizes}
 			/>
-		) : null
-	}
-	{
-		isPublic && publicImage ? (
+		) : isPublic && publicImage ? (
 			<picture>
 				<source type="image/avif" srcset={publicSrcSet("avif")} sizes={responsiveSizes} />
 				<source type="image/webp" srcset={publicSrcSet("webp")} sizes={responsiveSizes} />
@@ -178,7 +175,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 					fetchpriority={fetchpriority}
 				/>
 			</picture>
-		) : (
+		) : !isLocal || !img ? (
 			<img
 				src={isPublic ? url(src) : src}
 				alt={alt || ""}
@@ -192,6 +189,6 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 				width={width}
 				height={height}
 			/>
-		)
+		) : null
 	}
 </div>
