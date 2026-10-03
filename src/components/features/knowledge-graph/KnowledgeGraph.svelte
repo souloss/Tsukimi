@@ -10,6 +10,7 @@ import {
 } from "@components/features/knowledge-graph/graph-layout-utils";
 import Icon from "@iconify/svelte";
 import type { KnowledgeGraphData } from "@utils/knowledge-graph";
+import { onMount } from "svelte";
 
 let { graph }: { graph: KnowledgeGraphData } = $props();
 let mode = $state<GroupMode>("category");
@@ -19,6 +20,11 @@ let activeGroup = $state<string | null>(null);
 let focusRequest = $state(0);
 let selectedId = $state<string | null>(null);
 let showLabels = $state(true);
+let graphRoot: HTMLElement;
+let nativeFullscreen = $state(false);
+let fallbackFullscreen = $state(false);
+let previousBodyOverflow: string | null = null;
+const isFullscreen = $derived(nativeFullscreen || fallbackFullscreen);
 const layout = $derived(createGroups(graph.nodes, mode));
 const visibleIds = $derived(
 	new Set(
@@ -56,9 +62,73 @@ function changeGroup(id: string | null) {
 	focusRequest += 1;
 	selectedId = null;
 }
+
+function setFallbackFullscreen(next: boolean) {
+	if (next === fallbackFullscreen) return;
+	if (next) {
+		previousBodyOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+	} else {
+		document.body.style.overflow = previousBodyOverflow ?? "";
+		previousBodyOverflow = null;
+	}
+	fallbackFullscreen = next;
+}
+
+function syncFullscreen() {
+	nativeFullscreen = document.fullscreenElement === graphRoot;
+	if (nativeFullscreen && fallbackFullscreen) setFallbackFullscreen(false);
+}
+
+async function toggleFullscreen() {
+	if (fallbackFullscreen) {
+		setFallbackFullscreen(false);
+		return;
+	}
+	if (document.fullscreenElement === graphRoot) {
+		await document.exitFullscreen();
+		return;
+	}
+	try {
+		if (graphRoot.requestFullscreen) {
+			await Promise.race([
+				graphRoot.requestFullscreen(),
+				new Promise<void>((resolve) => setTimeout(resolve, 500)),
+			]);
+			// Some embedded and headless browsers resolve the request without
+			// changing fullscreenElement. Keep the feature usable in that case.
+			if (document.fullscreenElement !== graphRoot) setFallbackFullscreen(true);
+		} else {
+			setFallbackFullscreen(true);
+		}
+	} catch {
+		setFallbackFullscreen(true);
+	}
+}
+
+onMount(() => {
+	const onFullscreenChange = () => syncFullscreen();
+	const onKeydown = (event: KeyboardEvent) => {
+		if (event.key !== "Escape") return;
+		if (fallbackFullscreen) {
+			event.preventDefault();
+			setFallbackFullscreen(false);
+		} else if (document.fullscreenElement === graphRoot) {
+			event.preventDefault();
+			void document.exitFullscreen();
+		}
+	};
+	document.addEventListener("fullscreenchange", onFullscreenChange);
+	document.addEventListener("keydown", onKeydown);
+	return () => {
+		document.removeEventListener("fullscreenchange", onFullscreenChange);
+		document.removeEventListener("keydown", onKeydown);
+		if (fallbackFullscreen) setFallbackFullscreen(false);
+	};
+});
 </script>
 
-<section class="knowledge-graph" aria-label="文章知识图谱">
+<section bind:this={graphRoot} class:fullscreen={isFullscreen} class="knowledge-graph" aria-label="文章知识图谱">
 	<header>
 		<div><p class="eyebrow"><Icon icon="material-symbols:hub-outline" /> KNOWLEDGE NETWORK</p><h1>文章知识图谱</h1><p class="intro">让知识彼此连接。沿着一条线索，发现下一篇值得读的文章。</p></div>
 		<div class="stats"><span><strong>{graph.stats.articles}</strong>篇文章</span><span><strong>{graph.stats.references}</strong>条引用</span><span><strong>{graph.stats.topicConnections}</strong>条主题关联</span></div>
@@ -70,7 +140,7 @@ function changeGroup(id: string | null) {
 			<button type="button" class:active={activeGroup === group.id} aria-pressed={activeGroup === group.id} onclick={() => changeGroup(group.id)}><i style:background={group.color} />{group.label}<small>{group.count}</small></button>
 		{/each}
 	</div>
-	<GraphCanvas {graph} {layout} {edges} {visibleIds} {showLabels} focusGroup={activeGroup} {focusRequest} bind:selectedId />
+	<GraphCanvas {graph} {layout} {edges} {visibleIds} {showLabels} {isFullscreen} {toggleFullscreen} focusGroup={activeGroup} {focusRequest} bind:selectedId />
 	<div class="graph-note"><span>{mode === "category" ? "同色节点属于同一分类" : "领域按系列、共享标签自动归组，无标签时使用分类"}</span><span>实线：文章引用 · 虚线：共同分类、标签或系列</span></div>
 	{#if selected}
 		<GraphDetails node={selected} {graph} {layout} onselect={(id) => { selectedId = id; }} onclose={() => { selectedId = null; }} />
@@ -80,6 +150,9 @@ function changeGroup(id: string | null) {
 
 <style>
 	.knowledge-graph { color:var(--text-primary); min-width:0; }
+	.knowledge-graph.fullscreen, .knowledge-graph:fullscreen { position:fixed; inset:0; z-index:1000; box-sizing:border-box; display:flex; flex-direction:column; min-height:100dvh; overflow:auto; padding:clamp(1rem, 3vw, 2rem); background:var(--page-bg); }
+	.knowledge-graph.fullscreen header, .knowledge-graph:fullscreen header, .knowledge-graph.fullscreen .knowledge-graph-groups, .knowledge-graph:fullscreen .knowledge-graph-groups, .knowledge-graph.fullscreen .graph-note, .knowledge-graph:fullscreen .graph-note { flex:none; }
+	.knowledge-graph.fullscreen :global(.canvas-wrap), .knowledge-graph:fullscreen :global(.canvas-wrap) { flex:1 1 auto; height:auto; min-height:20rem; }
 	header { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1.2rem; padding:.5rem 0 1.6rem; }
 	.eyebrow { display:flex; gap:.5rem; align-items:center; margin:0 0 .6rem; font-size:.7rem; color:var(--primary); letter-spacing:.15em; font-weight:700; }
 	h1 { font-size:clamp(1.8rem,3vw,2.6rem); margin:0; line-height:1.2; }
@@ -94,5 +167,5 @@ function changeGroup(id: string | null) {
 	.knowledge-graph-groups i { width:.55rem; height:.55rem; border-radius:50%; flex:none; }
 	small { font-size:.65rem; opacity:.7; }
 	.graph-note { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; margin:.85rem .15rem; color:var(--text-secondary); font-size:.7rem; line-height:1.6; }
-	@media (max-width:600px) { header { padding-bottom:1rem; } .stats { gap:1.8rem; } .stats strong { font-size:1.25rem; } .intro { font-size:.8rem; } }
+	@media (max-width:600px) { header { padding-bottom:1rem; } .stats { gap:1.8rem; } .stats strong { font-size:1.25rem; } .intro { font-size:.8rem; } .knowledge-graph.fullscreen { padding:.75rem; } }
 </style>

@@ -19,6 +19,8 @@ let {
 	edges,
 	visibleIds,
 	showLabels,
+	isFullscreen = false,
+	toggleFullscreen,
 	focusGroup = null,
 	focusRequest = 0,
 	selectedId = $bindable(null),
@@ -28,6 +30,8 @@ let {
 	edges: KnowledgeGraphEdge[];
 	visibleIds: Set<string>;
 	showLabels: boolean;
+	isFullscreen?: boolean;
+	toggleFullscreen: () => void;
 	focusGroup?: string | null;
 	focusRequest?: number;
 	selectedId?: string | null;
@@ -205,7 +209,7 @@ onMount(() => {
 });
 </script>
 
-<div class="canvas-wrap" bind:this={graphViewport} data-ready={mounted}>
+	<div class:fullscreen={isFullscreen} class="canvas-wrap" bind:this={graphViewport} data-ready={mounted}>
 	<div class="canvas-caption" aria-live="polite"><span><i class:settling />{settling ? "正在整理关系" : "探索知识之间的联系"}</span><span>{visibleIds.size} / {graph.nodes.length} 篇文章</span></div>
 	<svg bind:this={graphSvg} viewBox={`0 0 ${viewport.view.width} ${viewport.view.height}`} role="group" aria-label="文章知识网络图" aria-describedby="graph-controls-help" tabindex="0" onpointerdown={(event) => viewport.down(event)} onpointermove={viewport.move} onpointerup={viewport.up} onpointercancel={viewport.up} onlostpointercapture={viewport.up} onkeydown={canvasKey}>
 		<g class="graph-world" transform={`translate(${viewport.view.x} ${viewport.view.y}) scale(${viewport.view.scale})`}>
@@ -223,12 +227,13 @@ onMount(() => {
 	</svg>
 	{#if !graph.nodes.length || !visibleIds.size}<div class="empty" role="status"><strong>{graph.nodes.length ? "没有找到匹配的文章" : "知识网络等待第一篇文章"}</strong><span>{graph.nodes.length ? "试试其他关键词，或切换到全部分组。" : "文章发布后会自动出现在这里。"}</span></div>{/if}
 	{#if tooltip && hovered}<div class="tooltip" style:left={`${tooltip.x}px`} style:top={`${tooltip.y}px`}><strong>{hovered.title}</strong><span>{layout.membership.get(hovered.id)?.label} · {hovered.degree} 个连接</span><small>点击阅读文章 · 拖动探索关联 · 空格键查看详情</small></div>{/if}
-	<div class="canvas-controls"><span class="zoom-level">{Math.round(viewport.view.scale * 100)}%</span><GraphButton label="缩小" icon="material-symbols:remove-rounded" onclick={() => viewport.zoom(1 / 1.25)} /><GraphButton label="放大" icon="material-symbols:add-rounded" onclick={() => viewport.zoom(1.25)} /><GraphButton label="适应视图" icon="material-symbols:fit-screen-rounded" onclick={fit} /></div>
+	<div class="canvas-controls"><span class="zoom-level">{Math.round(viewport.view.scale * 100)}%</span><GraphButton label="缩小" icon="material-symbols:remove-rounded" onclick={() => viewport.zoom(1 / 1.25)} /><GraphButton label="放大" icon="material-symbols:add-rounded" onclick={() => viewport.zoom(1.25)} /><GraphButton label="适应视图" icon="material-symbols:fit-screen-rounded" onclick={fit} /><GraphButton label={isFullscreen ? "退出全屏" : "进入全屏"} icon={isFullscreen ? "material-symbols:fullscreen-exit-rounded" : "material-symbols:fullscreen-rounded"} onclick={toggleFullscreen} /></div>
 	<p id="graph-controls-help" class="controls-help">拖动节点 / 空白处平移 · 滚轮 / 双指缩放<span> · 方向键平移，＋ / －缩放，0 复位</span></p>
 </div>
 
 <style>
 	.canvas-wrap { position:relative; height:36rem; min-width:0; overflow:hidden; border:1px solid var(--line-divider); border-radius:.9rem; background:color-mix(in srgb,var(--card-bg) 65%,var(--bg-muted)); }
+	.canvas-wrap.fullscreen { height:auto; }
 	svg { display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
 	svg:active { cursor:grabbing; }
 	svg:focus-visible { outline:2px solid var(--primary); outline-offset:-4px; }
