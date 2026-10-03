@@ -1,7 +1,10 @@
 ---
+import ContextMenu from "@components/control/ContextMenu.svelte";
 import { PageProgressBar } from "@components/control/PageProgressBar";
+import Pio from "@components/features/pio/Pio.svelte";
 import BackgroundTexture from "@components/misc/BackgroundTexture.astro";
 import ConfigCarrier from "@components/misc/ConfigCarrier.astro";
+import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import {
 	backgroundWallpaperConfig,
 	contextMenuConfig,
@@ -72,20 +75,6 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
 const textureConfig = resolveTextureConfig();
-
-// Optional interactive islands are loaded only when their feature is enabled.
-// Keeping the import behind the config gate prevents disabled features from
-// entering the persistent shell's client module graph.
-const MusicPlayer = musicPlayerConfig.enable
-	? (await import("@components/widgets/music-player/MusicPlayer.svelte"))
-			.default
-	: null;
-const Pio = pioConfig.enable
-	? (await import("@components/features/pio/Pio.svelte")).default
-	: null;
-const ContextMenu = contextMenuConfig.enable
-	? (await import("@components/control/ContextMenu.svelte")).default
-	: null;
 
 // 获取导航栏透明模式配置（优先级: banner.navbar > common.navbar > 默认 "none"）
 const navbarTransparentMode =
@@ -376,12 +365,12 @@ if (defaultFontItem) {
 		<slot />
 
 		<!-- Music Player - disabled configurations do not emit a client island. -->
-		{MusicPlayer && <MusicPlayer client:idle />}
+		{musicPlayerConfig.enable && <MusicPlayer client:idle />}
 
 		<!-- Pio 看板娘组件 - 仅在进入视口时加载 -->
-		{Pio && <Pio client:idle />}
+		{pioConfig.enable && <Pio client:idle />}
 
-		{ContextMenu && <ContextMenu client:idle />}
+		{contextMenuConfig.enable && <ContextMenu client:idle />}
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
