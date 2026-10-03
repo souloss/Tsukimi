@@ -5,7 +5,10 @@ const metrics = await collectBuildMetrics();
 // original cap for normal builds, then reserve a bounded amount per page.
 const baseTrackedBytes = 45 * 1024 * 1024;
 const basePageCount = 150;
-const additionalPageAllowance = 256 * 1024;
+// A content-repository build can emit both the canonical and legacy permalink
+// page for an article. Those pages contain the rendered article HTML, so the
+// allowance must cover a full content page rather than only the shared shell.
+const additionalPageAllowance = 512 * 1024;
 const configuredMaxTrackedBytes = Number(
 	process.env.TSUKIMI_PERFORMANCE_MAX_TRACKED_BYTES,
 );
