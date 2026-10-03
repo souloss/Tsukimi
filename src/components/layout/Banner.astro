@@ -243,8 +243,10 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				// Random starting index is retained during Swup navigation and reset on reload.
 				if (typeof window.__bannerRandomIndex === 'undefined') {
 					window.__bannerRandomIndex = {
-						mobile: mobileCount > 1 ? Math.floor(Math.random() * mobileCount) : 0,
-						desktop: desktopCount > 1 ? Math.floor(Math.random() * desktopCount) : 0
+						// Keep the first paint deterministic for visual regression and
+						// avoid starting with an image that has not been decoded yet.
+						mobile: 0,
+						desktop: 0,
 					};
 				}
 
