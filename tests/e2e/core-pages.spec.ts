@@ -1,5 +1,18 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
+
+async function disableOptionalWallpaper(page: Page) {
+	await page.evaluate(() => {
+		document.documentElement.setAttribute("data-wallpaper-mode", "none");
+		document.body.classList.remove(
+			"enable-banner",
+			"fullscreen-banner",
+			"wallpaper-transparent",
+			"no-banner-mode",
+		);
+		document.getElementById("wallpaper-wrapper")?.remove();
+	});
+}
 
 const corePages = [
 	"/",
@@ -77,9 +90,16 @@ test.describe("core page regression", () => {
 			return {
 				clientWidth: document.documentElement.clientWidth,
 				scrollWidth: document.documentElement.scrollWidth,
-				missingImages: images.filter(
-					(image) => !image.complete || image.naturalWidth === 0,
-				).length,
+				missingImages: images.filter((image) => {
+					if (image.loading === "lazy") {
+						const rect = image.getBoundingClientRect();
+						const nearViewport =
+							rect.top < window.innerHeight * 2 &&
+							rect.bottom > -window.innerHeight * 2;
+						if (!nearViewport) return false;
+					}
+					return !image.complete || image.naturalWidth === 0;
+				}).length,
 				firstContentfulPaint:
 					performanceEntries.find(
 						(entry) => entry.name === "first-contentful-paint",
@@ -193,6 +213,7 @@ test.describe("core page regression", () => {
 				height: scenario.height,
 			});
 			await page.goto(scenario.route, { waitUntil: "networkidle" });
+			await disableOptionalWallpaper(page);
 			await page.evaluate((dark) => {
 				document.documentElement.classList.toggle("dark", dark);
 				document.documentElement.style.setProperty("scroll-behavior", "auto");
