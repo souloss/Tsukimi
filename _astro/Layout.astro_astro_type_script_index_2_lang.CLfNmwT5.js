@@ -1,0 +1,1 @@
+import{t as e}from"./preload-helper.BKYioxU4.js";window.siteConfig?.collapsible?.enable!==!1&&("requestIdleCallback"in window?requestIdleCallback(()=>{e(()=>import("./code-collapse.9Teb-1iJ.js"),[])},{timeout:5e3}):setTimeout(()=>{e(()=>import("./code-collapse.9Teb-1iJ.js"),[])},2e3));

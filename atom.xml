@@ -1,0 +1,3322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>tsukimi</title>
+  <subtitle>tsukimi 示例博客</subtitle>
+  <link href="https://tsukimi.souloss.cn/" rel="alternate" type="text/html"/>
+  <link href="https://tsukimi.souloss.cn/atom.xml" rel="self" type="application/atom+xml"/>
+  <id>https://tsukimi.souloss.cn/</id>
+  <updated>2026-10-03T20:57:33.699Z</updated>
+  <entry>
+    <title>Markdown 教程</title>
+    <link href="https://tsukimi.souloss.cn/posts/markdown-tutorial/" rel="alternate" type="text/html"/>
+    <id>https://tsukimi.souloss.cn/posts/markdown-tutorial/</id>
+    <published>2025-01-20T00:00:00.000Z</published>
+    <updated>2025-01-20T00:00:00.000Z</updated>
+    <summary>A simple example of a Markdown blog post.</summary>
+    <content type="html"><![CDATA[<h1>Markdown 教程</h1>
+<p>这是一个 Markdown 示例，展示如何编写 Markdown 文件。本文档整合了核心语法和扩展语法（GFM）。</p>
+<ul>
+<li><a href="#%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0">块级元素</a>
+<ul>
+<li><a href="#%E6%AE%B5%E8%90%BD%E4%B8%8E%E6%8D%A2%E8%A1%8C">段落与换行</a></li>
+<li><a href="#%E6%A0%87%E9%A2%98">标题</a></li>
+<li><a href="#%E5%BC%95%E7%94%A8">引用</a></li>
+<li><a href="#%E5%88%97%E8%A1%A8">列表</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E5%9D%97">代码块</a></li>
+<li><a href="#%E5%88%86%E9%9A%94%E7%BA%BF">分隔线</a></li>
+<li><a href="#%E8%A1%A8%E6%A0%BC">表格</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0">行内元素</a>
+<ul>
+<li><a href="#%E9%93%BE%E6%8E%A5">链接</a></li>
+<li><a href="#%E5%BC%BA%E8%B0%83">强调</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81">代码</a></li>
+<li><a href="#%E5%9B%BE%E7%89%87">图片</a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E7%BA%BF">删除线</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%B6%E4%BB%96">其他</a>
+<ul>
+<li><a href="#%E8%87%AA%E5%8A%A8%E9%93%BE%E6%8E%A5">自动链接</a></li>
+<li><a href="#%E5%8F%8D%E6%96%9C%E6%9D%A0%E8%BD%AC%E4%B9%89">反斜杠转义</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A1%8C%E5%86%85-html">行内 HTML</a></li>
+</ul>
+<h2>块级元素</h2>
+<h3>段落与换行</h3>
+<h4>段落</h4>
+<p>HTML 标签：<code>&lt;p&gt;</code></p>
+<p>一个或多个空行即可分隔段落。（空行是指只包含<strong>空格</strong>或<strong>制表符</strong>的行。）</p>
+<p>代码：</p>
+<pre><code>This will be
+inline.
+
+This is second paragraph.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>This will be
+inline.</p>
+<p>This is second paragraph.</p>
+<hr />
+<h4>换行</h4>
+<p>HTML 标签：<code>&lt;br /&gt;</code></p>
+<p>在行尾添加<strong>两个或更多空格</strong>即可换行。</p>
+<p>代码：</p>
+<pre><code>This will be not
+inline.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>This will be not<br />
+inline.</p>
+<hr />
+<h3>标题</h3>
+<p>Markdown 支持两种风格的标题：Setext 和 atx。</p>
+<h4>Setext 风格</h4>
+<p>HTML 标签：<code>&lt;h1&gt;</code>、<code>&lt;h2&gt;</code></p>
+<p>使用**等号（=）<strong>作为 <code>&lt;h1&gt;</code> 的下划线，使用</strong>连字符（-）**作为 <code>&lt;h2&gt;</code> 的下划线，数量不限。</p>
+<p>代码：</p>
+<pre><code>This is an H1
+=============
+This is an H2
+-------------
+</code></pre>
+<p>预览：</p>
+<hr />
+<h1>This is an H1</h1>
+<h2>This is an H2</h2>
+<hr />
+<h4>atx 风格</h4>
+<p>HTML 标签：<code>&lt;h1&gt;</code>、<code>&lt;h2&gt;</code>、<code>&lt;h3&gt;</code>、<code>&lt;h4&gt;</code>、<code>&lt;h5&gt;</code>、<code>&lt;h6&gt;</code></p>
+<p>在行首使用 1-6 个<strong>井号（#）</strong>，分别对应 <code>&lt;h1&gt;</code> 到 <code>&lt;h6&gt;</code>。</p>
+<p>代码：</p>
+<pre><code># This is an H1
+## This is an H2
+###### This is an H6
+</code></pre>
+<p>预览：</p>
+<hr />
+<h1>This is an H1</h1>
+<h2>This is an H2</h2>
+<h6>This is an H6</h6>
+<hr />
+<p>你也可以选择性地"闭合" atx 风格的标题。闭合的井号<strong>不需要</strong>与开头的井号数量匹配。</p>
+<p>代码：</p>
+<pre><code># This is an H1 #
+## This is an H2 ##
+### This is an H3 ######
+</code></pre>
+<p>预览：</p>
+<hr />
+<h1>This is an H1</h1>
+<h2>This is an H2</h2>
+<h3>This is an H3</h3>
+<hr />
+<h3>引用</h3>
+<p>HTML 标签：<code>&lt;blockquote&gt;</code></p>
+<p>Markdown 使用邮件风格的 <strong>&gt;</strong> 字符来表示引用。建议在每行前都加上 &gt;，效果最佳。</p>
+<p>代码：</p>
+<pre><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+&gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+&gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+&gt;
+&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+&gt; id sem consectetuer libero luctus adipiscing.
+</code></pre>
+<p>预览：</p>
+<hr />
+<blockquote>
+<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
+<p>Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.</p>
+</blockquote>
+<hr />
+<p>Markdown 也允许你偷懒，只在硬换行段落的第一行前加 &gt;。</p>
+<p>代码：</p>
+<pre><code>&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+&gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.
+</code></pre>
+<p>预览：</p>
+<hr />
+<blockquote>
+<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
+</blockquote>
+<blockquote>
+<p>Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.</p>
+</blockquote>
+<hr />
+<p>引用可以嵌套（即引用中的引用），只需添加额外的 &gt; 层级即可。</p>
+<p>代码：</p>
+<pre><code>&gt; This is the first level of quoting.
+&gt;
+&gt; &gt; This is nested blockquote.
+&gt;
+&gt; Back to the first level.
+</code></pre>
+<p>预览：</p>
+<hr />
+<blockquote>
+<p>This is the first level of quoting.</p>
+<blockquote>
+<p>This is nested blockquote.</p>
+</blockquote>
+<p>Back to the first level.</p>
+</blockquote>
+<hr />
+<p>引用中可以包含其他 Markdown 元素，包括标题、列表和代码块。</p>
+<p>代码：</p>
+<pre><code>&gt; ## This is a header.
+&gt;
+&gt; 1.   This is the first list item.
+&gt; 2.   This is the second list item.
+&gt;
+&gt; Here's some example code:
+&gt;
+&gt;     return shell_exec("echo $input | $markdown_script");
+</code></pre>
+<p>预览：</p>
+<hr />
+<blockquote>
+<h2>This is a header.</h2>
+<ol>
+<li>This is the first list item.</li>
+<li>This is the second list item.</li>
+</ol>
+<p>Here's some example code:</p>
+<pre><code>return shell_exec("echo $input | $markdown_script");
+</code></pre>
+</blockquote>
+<hr />
+<h3>列表</h3>
+<p>Markdown 支持有序（编号）列表和无序（项目符号）列表。</p>
+<h4>无序列表</h4>
+<p>HTML 标签：<code>&lt;ul&gt;</code></p>
+<p>无序列表使用<strong>星号（*）</strong>、**加号（+）<strong>和</strong>连字符（-）**作为标记。</p>
+<p>代码：</p>
+<pre><code>*   Red
+*   Green
+*   Blue
+</code></pre>
+<p>预览：</p>
+<hr />
+<ul>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ul>
+<hr />
+<p>等同于：</p>
+<p>代码：</p>
+<pre><code>+   Red
++   Green
++   Blue
+</code></pre>
+<p>以及：</p>
+<p>代码：</p>
+<pre><code>-   Red
+-   Green
+-   Blue
+</code></pre>
+<h4>有序列表</h4>
+<p>HTML 标签：<code>&lt;ol&gt;</code></p>
+<p>有序列表使用数字后接句点：</p>
+<p>代码：</p>
+<pre><code>1.  Bird
+2.  McHale
+3.  Parish
+</code></pre>
+<p>预览：</p>
+<hr />
+<ol>
+<li>Bird</li>
+<li>McHale</li>
+<li>Parish</li>
+</ol>
+<hr />
+<p>有时可能会意外触发有序列表，例如这样写：</p>
+<p>代码：</p>
+<pre><code>1986. What a great season.
+</code></pre>
+<p>预览：</p>
+<hr />
+<ol>
+<li>What a great season.</li>
+</ol>
+<hr />
+<p>你可以使用**反斜杠转义（\）**句点：</p>
+<p>代码：</p>
+<pre><code>1986\. What a great season.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>1986. What a great season.</p>
+<hr />
+<h4>缩进</h4>
+<h5>引用</h5>
+<p>要在列表项中放入引用，引用的 &gt; 分隔符需要缩进：</p>
+<p>代码：</p>
+<pre><code>*   A list item with a blockquote:
+
+    &gt; This is a blockquote
+    &gt; inside a list item.
+</code></pre>
+<p>预览：</p>
+<hr />
+<ul>
+<li>
+<p>A list item with a blockquote:</p>
+<blockquote>
+<p>This is a blockquote
+inside a list item.</p>
+</blockquote>
+</li>
+</ul>
+<hr />
+<h5>代码块</h5>
+<p>要在列表项中放入代码块，代码块需要缩进两次——即 <strong>8 个空格</strong>或 <strong>2 个制表符</strong>：</p>
+<p>代码：</p>
+<pre><code>*   A list item with a code block:
+
+        &lt;code goes here&gt;
+</code></pre>
+<p>预览：</p>
+<hr />
+<ul>
+<li>
+<p>A list item with a code block:</p>
+<pre><code>&lt;code goes here&gt;
+</code></pre>
+</li>
+</ul>
+<hr />
+<h5>嵌套列表</h5>
+<p>代码：</p>
+<pre><code>* A
+  * A1
+  * A2
+* B
+* C
+</code></pre>
+<p>预览：</p>
+<hr />
+<ul>
+<li>A
+<ul>
+<li>A1</li>
+<li>A2</li>
+</ul>
+</li>
+<li>B</li>
+<li>C</li>
+</ul>
+<hr />
+<h3>代码块</h3>
+<p>HTML 标签：<code>&lt;pre&gt;</code></p>
+<p>将代码块的每一行缩进至少 <strong>4 个空格</strong>或 <strong>1 个制表符</strong>。</p>
+<p>代码：</p>
+<pre><code>This is a normal paragraph:
+
+    This is a code block.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>This is a normal paragraph:</p>
+<pre><code>This is a code block.
+</code></pre>
+<hr />
+<p>代码块会持续到遇到未缩进的行（或文章末尾）为止。</p>
+<p>在代码块中，**&amp; 符号（&amp;）<strong>和</strong>尖括号（&lt; 和 &gt;）**会自动转换为 HTML 实体。</p>
+<p>代码：</p>
+<pre><code>    &lt;div class="footer"&gt;
+        &amp;copy; 2004 Foo Corporation
+    &lt;/div&gt;
+</code></pre>
+<p>预览：</p>
+<hr />
+<pre><code>&lt;div class="footer"&gt;
+    &amp;copy; 2004 Foo Corporation
+&lt;/div&gt;
+</code></pre>
+<hr />
+<p>下面的围栏代码块和语法高亮属于扩展语法，你可以用另一种方式来编写代码块。</p>
+<h4>围栏代码块</h4>
+<p>只需用 <code>```</code> 包裹代码（如下所示），就无需缩进四个空格。</p>
+<p>代码：</p>
+<pre><code>Here's an example:
+
+```
+function test() {
+  console.log("notice the blank line before this function?");
+}
+```
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>Here's an example:</p>
+<pre><code>function test() {
+  console.log("notice the blank line before this function?");
+}
+</code></pre>
+<hr />
+<h4>语法高亮</h4>
+<p>在围栏代码块中，添加可选的语言标识符，即可启用语法高亮（<a href="https://github.com/github/linguist/blob/master/lib/linguist/languages.yml">支持的语言</a>）。</p>
+<p>代码：</p>
+<pre><code>```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
+</code></pre>
+<p>预览：</p>
+<hr />
+<pre><code>require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+</code></pre>
+<hr />
+<h3>分隔线</h3>
+<p>HTML 标签：<code>&lt;hr /&gt;</code></p>
+<p>在一行中单独放置**三个或更多连字符（-）、星号（*）或下划线（_）**即可。连字符或星号之间可以加空格。</p>
+<p>代码：</p>
+<pre><code>* * *
+***
+*****
+- - -
+---------------------------------------
+___
+</code></pre>
+<p>预览：</p>
+<hr />
+<hr />
+<hr />
+<hr />
+<hr />
+<hr />
+<hr />
+<hr />
+<h3>表格</h3>
+<p>HTML 标签：<code>&lt;table&gt;</code></p>
+<p>这是扩展语法。</p>
+<p>使用**管道符（|）<strong>分隔列，使用</strong>连字符（-）<strong>分隔表头，使用</strong>冒号（:）**设置对齐方式。</p>
+<p>外侧的**管道符（|）**和对齐方式是可选的。表头与内容之间的分隔行每列至少需要 <strong>3 个分隔符</strong>。</p>
+<p>代码：</p>
+<pre><code>| Left | Center | Right |
+|:-----|:------:|------:|
+|aaa   |bbb     |ccc    |
+|ddd   |eee     |fff    |
+
+ A | B
+---|---
+123|456
+
+
+A |B
+--|--
+12|45
+</code></pre>
+<p>预览：</p>
+<hr />
+<table>
+<thead>
+<tr>
+<th>Left</th>
+<th>Center</th>
+<th>Right</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aaa</td>
+<td>bbb</td>
+<td>ccc</td>
+</tr>
+<tr>
+<td>ddd</td>
+<td>eee</td>
+<td>fff</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>123</td>
+<td>456</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12</td>
+<td>45</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>行内元素</h2>
+<h3>链接</h3>
+<p>HTML 标签：<code>&lt;a&gt;</code></p>
+<p>Markdown 支持两种链接风格：行内式和引用式。</p>
+<h4>行内式</h4>
+<p>行内链接格式如下：<code>[链接文本](URL "标题")</code></p>
+<p>标题是可选的。</p>
+<p>代码：</p>
+<pre><code>This is [an example](http://example.com/ "Title") inline link.
+
+[This link](http://example.net/) has no title attribute.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>This is <a href="http://example.com/">an example</a> inline link.</p>
+<p><a href="http://example.net/">This link</a> has no title attribute.</p>
+<hr />
+<p>如果你引用的是同一服务器上的本地资源，可以使用相对路径：</p>
+<p>代码：</p>
+<pre><code>See my [About](/about/) page for details.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>See my <a href="/about/">About</a> page for details.</p>
+<hr />
+<h4>引用式</h4>
+<p>你可以预先定义链接引用。格式如下：<code>[id]: URL "标题"</code></p>
+<p>标题也是可选的。然后在正文中引用链接，格式如下：<code>[链接文本][id]</code></p>
+<p>代码：</p>
+<pre><code>[id]: http://example.com/  "Optional Title Here"
+This is [an example][id] reference-style link.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>This is <a href="http://example.com/">an example</a> reference-style link.</p>
+<hr />
+<p>具体规则为：</p>
+<ul>
+<li>方括号中包含链接标识符（<strong>不区分大小写</strong>，左侧最多可缩进三个空格）；</li>
+<li>后跟一个冒号；</li>
+<li>后跟一个或多个空格（或制表符）；</li>
+<li>后跟链接的 URL；</li>
+<li>链接 URL 可以选择用尖括号包围；</li>
+<li>可选地后跟链接的标题属性，用双引号、单引号或圆括号包围。</li>
+</ul>
+<p>以下三种链接定义是等价的：</p>
+<p>代码：</p>
+<pre><code>[foo]: http://example.com/  "Optional Title Here"
+[foo]: http://example.com/  'Optional Title Here'
+[foo]: http://example.com/  (Optional Title Here)
+[foo]: &lt;http://example.com/&gt;  "Optional Title Here"
+</code></pre>
+<p>使用空的方括号时，链接文本本身将作为名称。</p>
+<p>代码：</p>
+<pre><code>[Google]: http://google.com/
+[Google][]
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><a href="http://google.com/">Google</a></p>
+<hr />
+<h3>强调</h3>
+<p>HTML 标签：<code>&lt;em&gt;</code>、<code>&lt;strong&gt;</code></p>
+<p>Markdown 使用**星号（*）<strong>和</strong>下划线（_）**作为强调标记。<strong>单个</strong>标记表示 <code>&lt;em&gt;</code>；<strong>双个</strong>标记表示 <code>&lt;strong&gt;</code>。</p>
+<p>代码：</p>
+<pre><code>*single asterisks*
+
+_single underscores_
+
+**double asterisks**
+
+__double underscores__
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><em>single asterisks</em></p>
+<p><em>single underscores</em></p>
+<p><strong>double asterisks</strong></p>
+<p><strong>double underscores</strong></p>
+<hr />
+<p>但如果你在 * 或 _ 两侧加上空格，它将被视为字面的星号或下划线。</p>
+<p>你可以使用反斜杠转义：</p>
+<p>代码：</p>
+<pre><code>\*this text is surrounded by literal asterisks\*
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>*this text is surrounded by literal asterisks*</p>
+<hr />
+<h3>代码</h3>
+<p>HTML 标签：<code>&lt;code&gt;</code></p>
+<p>用**反引号（`）**包裹。</p>
+<p>代码：</p>
+<pre><code>Use the `printf()` function.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>Use the <code>printf()</code> function.</p>
+<hr />
+<p>要在代码片段中包含字面反引号字符，可以使用<strong>多个反引号</strong>作为开头和结尾的分隔符：</p>
+<p>代码：</p>
+<pre><code>``There is a literal backtick (`) here.``
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><code>There is a literal backtick (`) here.</code></p>
+<hr />
+<p>代码片段两端的反引号分隔符中可以包含空格——开头后一个，结尾前一个。这样你就可以在代码片段的开头或结尾放置字面反引号字符：</p>
+<p>代码：</p>
+<pre><code>A single backtick in a code span: `` ` ``
+
+A backtick-delimited string in a code span: `` `foo` ``
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>A single backtick in a code span: <code>`</code></p>
+<p>A backtick-delimited string in a code span: <code>`foo`</code></p>
+<hr />
+<h3>图片</h3>
+<p>HTML 标签：<code>&lt;img /&gt;</code></p>
+<p>Markdown 的图片语法与链接语法类似，同样支持两种风格：行内式和引用式。</p>
+<h4>行内式</h4>
+<p>行内图片语法如下：<code>![替代文本](URL "标题")</code></p>
+<p>标题是可选的。</p>
+<p>代码：</p>
+<pre><code>![Alt text](/path/to/img.jpg)
+
+![Alt text](/path/to/img.jpg "Optional title")
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><img src="https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp" alt="Alt text" /></p>
+<p><img src="https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp" alt="Alt text" title="Optional title" /></p>
+<hr />
+<p>具体规则为：</p>
+<ul>
+<li>一个感叹号：!；</li>
+<li>后跟一对方括号，包含图片的替代属性文本；</li>
+<li>后跟一对圆括号，包含图片的 URL 或路径，以及可选的用双引号或单引号包围的标题属性。</li>
+</ul>
+<h4>引用式</h4>
+<p>引用式图片语法如下：<code>![替代文本][id]</code></p>
+<p>代码：</p>
+<pre><code>[img id]: https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp  "Optional title attribute"
+![Alt text][img id]
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><img src="https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp" alt="Alt text" title="Optional title attribute" /></p>
+<hr />
+<h3>删除线</h3>
+<p>HTML 标签：<code>&lt;del&gt;</code></p>
+<p>这是扩展语法。</p>
+<p>GFM 添加了删除线文本的语法。</p>
+<p>代码：</p>
+<pre><code>~~Mistaken text.~~
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><s>Mistaken text.</s></p>
+<hr />
+<h2>其他</h2>
+<h3>自动链接</h3>
+<p>Markdown 支持为 URL 和电子邮件地址创建"自动"链接的快捷方式：只需用尖括号包围 URL 或电子邮件地址即可。</p>
+<p>代码：</p>
+<pre><code>&lt;http://example.com/&gt;
+
+&lt;address@example.com&gt;
+</code></pre>
+<p>预览：</p>
+<hr />
+<p><a href="http://example.com/">http://example.com/</a></p>
+<p><a href="mailto:address@example.com">address@example.com</a></p>
+<hr />
+<p>GFM 会自动链接标准 URL。</p>
+<p>代码：</p>
+<pre><code>https://github.com/emn178/markdown
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>https://github.com/emn178/markdown</p>
+<hr />
+<h3>反斜杠转义</h3>
+<p>Markdown 允许你使用反斜杠转义来生成字面字符，否则这些字符在 Markdown 格式语法中具有特殊含义。</p>
+<p>代码：</p>
+<pre><code>\*literal asterisks\*
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>*literal asterisks*</p>
+<hr />
+<p>Markdown 为以下字符提供反斜杠转义：</p>
+<p>代码：</p>
+<pre><code>\   backslash
+`   backtick
+*   asterisk
+_   underscore
+{}  curly braces
+[]  square brackets
+()  parentheses
+#   hash mark
++   plus sign
+-   minus sign (hyphen)
+.   dot
+!   exclamation mark
+</code></pre>
+<h2>行内 HTML</h2>
+<p>对于 Markdown 语法未涵盖的任何标记，你可以直接使用 HTML。无需在前面添加前缀或分隔符来表明你正在从 Markdown 切换到 HTML；直接使用标签即可。</p>
+<p>代码：</p>
+<pre><code>This is a regular paragraph.
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Foo&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+This is another regular paragraph.
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>This is a regular paragraph.</p>
+<p>&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;Foo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;</p>
+<p>This is another regular paragraph.</p>
+<hr />
+<p>请注意，Markdown 格式语法<strong>不会在块级 HTML 标签内</strong>进行处理。</p>
+<p>与块级 HTML 标签不同，Markdown 语法<strong>会在行内标签内</strong>进行处理。</p>
+<p>代码：</p>
+<pre><code>&lt;span&gt;**Work**&lt;/span&gt;
+
+&lt;div&gt;
+    **No Work**
+&lt;/div&gt;
+</code></pre>
+<p>预览：</p>
+<hr />
+<p>&lt;span&gt;<strong>Work</strong>&lt;/span&gt;</p>
+<p>&lt;div&gt;
+<strong>No Work</strong>
+&lt;/div&gt;</p>
+<hr />
+]]></content>
+    <author>
+      <name>Tsukimi</name>
+    </author>
+    <category term="Examples"></category>
+  </entry>
+  <entry>
+    <title>LLM 实际上是如何工作的</title>
+    <link href="https://tsukimi.souloss.cn/posts/how-llms-work/part-1/" rel="alternate" type="text/html"/>
+    <id>https://tsukimi.souloss.cn/posts/how-llms-work/part-1/</id>
+    <published>2026-04-01T00:00:00.000Z</published>
+    <updated>2026-04-01T00:00:00.000Z</updated>
+    <summary>一份可视化、交互式的指南，介绍大语言模型是如何构建的——从原始互联网文本到对话助手。基于 Andrej Karpathy 的技术深度解析。</summary>
+    <content type="html"><![CDATA[<p>本文转载自 <strong>ynarwal</strong> 的 <a href="https://ynarwal.github.io/how-llms-work/">How LLMs Actually Work</a>，基于 Andrej Karpathy 的《Intro to Large Language Models》。</p>
+<p>原始交互式文章可通过以下链接访问：</p>
+<ul>
+<li><a href="/reposts/how-llms-work/part-1/index-zh.html">阅读中文版</a></li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong> 交互式内容将在独立页面中打开，以获得最佳浏览体验。</p>
+</blockquote>
+]]></content>
+    <author>
+      <name>Tsukimi</name>
+    </author>
+    <category term="AI"></category>
+  </entry>
+  <entry>
+    <title>Markdown 扩展特性</title>
+    <link href="https://tsukimi.souloss.cn/posts/markdown-extended/" rel="alternate" type="text/html"/>
+    <id>https://tsukimi.souloss.cn/posts/markdown-extended/</id>
+    <published>2024-05-01T00:00:00.000Z</published>
+    <updated>2026-09-04T00:00:00.000Z</updated>
+    <summary>Tsukimi 支持的 Markdown 扩展语法一览</summary>
+    <content type="html"><![CDATA[<p>本文档展示 Tsukimi 支持的所有 Markdown 扩展指令。在普通 <code>.md</code> 文件中直接使用 <code>:::</code> 和 <code>:</code> 语法，无需 import，无需 MDX。</p>
+<hr />
+<h2>GitHub 仓库卡片(::github)</h2>
+<p>通过 GitHub API 自动拉取仓库信息，生成动态卡片。</p>
+<p>效果：</p>
+<p>::github{repo="souloss/Tsukimi"}</p>
+<p>源码：</p>
+<pre><code>::github{repo="用户名/仓库名"}
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>repo</code></td>
+<td>GitHub 仓库路径，格式 <code>用户名/仓库名</code></td>
+<td>✅</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>提示框(:::callout/:::note 等)</h2>
+<p>支持通用 <code>:::callout</code> 和 13 种预设类型，也兼容 GitHub 的 <code>[!TYPE]</code> 提示框语法。</p>
+<p>效果：</p>
+<p>:::note
+即使快速浏览也应注意的信息。
+:::</p>
+<p>:::tip
+帮助用户更高效完成操作的可选信息。
+:::</p>
+<p>:::important
+用户成功完成操作必需的关键信息。
+:::</p>
+<p>:::warning
+存在潜在风险，需立即关注的重要内容。
+:::</p>
+<p>:::caution
+某操作可能导致的负面后果。
+:::</p>
+<p>通用写法可以通过 <code>type</code>、<code>title</code> 和 <code>color</code> 自定义：</p>
+<p>:::callout{type="question" title="为什么要使用指令？"}
+通用容器适合表达预设类型之外的提示。
+:::</p>
+<p>:::note{title="自定义颜色" color="#0ea5e9"}
+<code>note</code> 类型可覆盖默认主题色。
+:::</p>
+<p>源码：</p>
+<pre><code>:::note
+即使快速浏览也应注意的信息。
+:::
+
+:::tip
+帮助用户更高效完成操作的可选信息。
+:::
+
+:::important
+用户成功完成操作必需的关键信息。
+:::
+
+:::warning
+存在潜在风险，需立即关注的重要内容。
+:::
+
+:::caution
+某操作可能导致的负面后果。
+:::
+
+:::callout{type="question" title="为什么要使用指令？"}
+通用容器适合表达预设类型之外的提示。
+:::
+
+:::note{title="自定义颜色" color="#0ea5e9"}
+`note` 类型可覆盖默认主题色。
+:::
+</code></pre>
+<p>类型说明：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>note</code></td>
+<td>需要注意的信息</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td>一般信息</td>
+</tr>
+<tr>
+<td><code>tip</code></td>
+<td>有用的可选建议</td>
+</tr>
+<tr>
+<td><code>important</code></td>
+<td>成功必需的关键信息</td>
+</tr>
+<tr>
+<td><code>warning</code></td>
+<td>潜在风险警告</td>
+</tr>
+<tr>
+<td><code>caution</code></td>
+<td>可能导致负面后果的警告</td>
+</tr>
+<tr>
+<td><code>question</code></td>
+<td>问题或思考</td>
+</tr>
+<tr>
+<td><code>quote</code></td>
+<td>引用内容</td>
+</tr>
+<tr>
+<td><code>bug</code></td>
+<td>已知问题</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>示例内容</td>
+</tr>
+<tr>
+<td><code>success</code></td>
+<td>成功状态</td>
+</tr>
+<tr>
+<td><code>failure</code></td>
+<td>失败状态</td>
+</tr>
+<tr>
+<td><code>danger</code></td>
+<td>高风险警告</td>
+</tr>
+</tbody>
+</table>
+<p><code>:::callout{type="warn"}</code> 也可作为 <code>warning</code> 的别名。<code>title</code> 设置标题；<code>note</code> 类型可用 <code>color</code> 覆盖主题色。GitHub 风格语法会自动转换为对应的提示框：</p>
+<pre><code>&gt; [!NOTE]
+&gt; 这段内容会被转换为 `:::note`。
+</code></pre>
+<hr />
+<h2>代码分组(:::code-group)</h2>
+<p>专用于代码块的选项卡容器，标签自动从代码块语言或 <code>[标签名]</code> 派生。</p>
+<p>效果：</p>
+<p>:::code-group</p>
+<pre><code>npm install
+</code></pre>
+<pre><code>yarn add
+</code></pre>
+<pre><code>pnpm add
+</code></pre>
+<p>:::</p>
+<p>源码：</p>
+<pre><code>:::code-group
+```js [npm]
+npm install
+```
+
+```js [yarn]
+yarn add
+```
+
+```js [pnpm]
+pnpm add
+```
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[标签名]</code></td>
+<td>代码块元信息中指定标签名，如 <code>[pnpm]</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>:active</code></td>
+<td>在代码块元信息中设置默认激活项</td>
+<td>第一个代码块</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>字段文档(:::field/:::field-group)</h2>
+<p>用于 API 或配置项的结构化文档展示。支持 <code>@type</code>、<code>@required</code>、<code>@optional</code>、<code>@deprecated</code>、<code>@default</code>、<code>@description</code> 标签。</p>
+<h3>单个字段</h3>
+<p>使用 <code>:::field{名称}</code> 展示单个字段的类型、约束和描述。</p>
+<p>:::field{name}</p>
+<p>@type string</p>
+<p>@required</p>
+<p>@description 资源的唯一标识符</p>
+<p>:::</p>
+<h3>字段组</h3>
+<p>使用 <code>::::field-group</code> 将多个字段排列在一起，自动添加分隔线。</p>
+<p>::::field-group
+:::field{port}</p>
+<p>@type number</p>
+<p>@default 3000</p>
+<p>@description 监听的端口号</p>
+<p>:::</p>
+<p>:::field{host}</p>
+<p>@type string</p>
+<p>@default "localhost"</p>
+<p>@deprecated</p>
+<p>@description 绑定的主机名（请使用 <code>address</code> 替代）</p>
+<p>:::</p>
+<p>:::field{debug}</p>
+<p>@type boolean</p>
+<p>@optional</p>
+<p>@description 启用调试日志</p>
+<p>:::
+::::</p>
+<p>源码：</p>
+<pre><code>:::field{name}
+
+@type string
+
+@required
+
+@description 资源的唯一标识符
+
+:::
+
+::::field-group
+:::field{port}
+
+@type number
+
+@default 3000
+
+@description 监听的端口号
+
+:::
+
+:::field{host}
+
+@type string
+
+@default "localhost"
+
+@deprecated
+
+@description 绑定的主机名（请使用 `address` 替代）
+
+:::
+::::
+</code></pre>
+<p>标签说明：</p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@type</code></td>
+<td>字段类型</td>
+</tr>
+<tr>
+<td><code>@required</code></td>
+<td>标记为必填（绿色标签）</td>
+</tr>
+<tr>
+<td><code>@optional</code></td>
+<td>标记为可选（灰色标签）</td>
+</tr>
+<tr>
+<td><code>@deprecated</code></td>
+<td>标记为已废弃（红色标签，字段名加删除线）</td>
+</tr>
+<tr>
+<td><code>@default</code></td>
+<td>默认值</td>
+</tr>
+<tr>
+<td><code>@description</code></td>
+<td>字段描述</td>
+</tr>
+</tbody>
+</table>
+<p>指令说明：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:::field{名称}</code></td>
+<td>单个字段</td>
+</tr>
+<tr>
+<td><code>::::field-group</code></td>
+<td>字段组容器，字段间自动添加分隔线</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>代码树(:::code-tree)</h2>
+<p>左侧文件树 + 右侧代码面板的组合视图。点击文件名切换代码，点击文件夹展开/收起。</p>
+<p>效果：</p>
+<p>:::code-tree{title="My Project" entry="src/main.ts"}</p>
+<pre><code>import { app } from './app'
+
+app.listen(3000, () =&gt; {
+  console.log('Server running on port 3000')
+})
+</code></pre>
+<pre><code>import express from 'express'
+
+export const app = express()
+
+app.get('/', (req, res) =&gt; {
+  res.json({ hello: 'world' })
+})
+</code></pre>
+<p>:::</p>
+<p>源码：</p>
+<pre><code>:::code-tree{title="My Project" entry="src/main.ts"}
+```ts title="src/main.ts" :active
+import { app } from './app'
+
+app.listen(3000, () =&gt; {
+  console.log('Server running on port 3000')
+})
+```
+
+```ts title="src/app.ts"
+import express from 'express'
+
+export const app = express()
+
+app.get('/', (req, res) =&gt; {
+  res.json({ hello: 'world' })
+})
+```
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>代码树标题</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>entry</code></td>
+<td>默认激活的文件路径</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>代码树容器高度</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>dir</code></td>
+<td>导入目录路径，自动扫描文件构建代码树</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>:active</code></td>
+<td>代码块元信息，标记默认激活文件</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>代码块的 <code>title</code> 属性用于构建文件树路径，以 <code>/</code> 分隔会自动创建文件夹层级。</p>
+<h3>从目录导入</h3>
+<p>使用 <code>dir</code> 属性可以导入整个目录作为代码树，自动扫描目录下所有文件：</p>
+<p>:::code-tree{dir="public/demos/sample-web-project" title="示例 Web 项目" entry="src/main.ts"}
+:::</p>
+<hr />
+<h2>折叠块(:::details/:::folders)</h2>
+<h3>基础折叠</h3>
+<p>使用 <code>:::details</code> 创建可展开/收起的内容区域。</p>
+<p>效果：</p>
+<p>:::details{title="点击展开" open="true"}
+这个内容默认展开。<code>folding</code>、<code>collapse</code>、<code>details</code> 三个指令名称效果完全相同。
+:::</p>
+<p>源码：</p>
+<pre><code>:::details{title="点击展开" open="true"}
+这个内容默认展开。`folding`、`collapse`、`details` 三个指令名称效果完全相同。
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>折叠块标题</td>
+<td>✅</td>
+<td><code>"Details"</code></td>
+</tr>
+<tr>
+<td><code>open="true"</code></td>
+<td>默认展开</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>主题色</td>
+<td>❌</td>
+<td><code>accent</code></td>
+</tr>
+</tbody>
+</table>
+<h3>多级折叠</h3>
+<p>使用 <code>:::folders</code> 创建多个独立折叠面板，面板间自动添加分隔线。</p>
+<p>效果：</p>
+<p>:::folders
+folder: 第一章：基础概念</p>
+<p>Astro 是一个<strong>内容优先</strong>的静态站点生成器。核心特点：</p>
+<ol>
+<li>零 JS 默认输出</li>
+<li>群岛架构</li>
+<li>支持 React / Vue / Svelte</li>
+</ol>
+<p>folder: 第二章：组件系统</p>
+<p>Astro 组件使用 <code>.astro</code> 后缀，语法类似 HTML + JS：</p>
+<pre><code>---
+const name = 'Astro';
+---
+&lt;h1&gt;Hello {name}&lt;/h1&gt;
+</code></pre>
+<p>folder: 第三章：内容集合</p>
+<p>使用 <a href="https://docs.astro.build/zh-cn/guides/content-collections/">Content Collections</a> 管理类型安全的内容。
+:::</p>
+<p>源码：</p>
+<pre><code>:::folders
+folder: 第一章：基础概念
+
+Astro 是一个**内容优先**的静态站点生成器。核心特点：
+
+1. 零 JS 默认输出
+2. 群岛架构
+3. 支持 React / Vue / Svelte
+
+folder: 第二章：组件系统
+
+Astro 组件使用 `.astro` 后缀，语法类似 HTML + JS：
+
+```astro
+---
+const name = 'Astro';
+---
+&lt;h1&gt;Hello {name}&lt;/h1&gt;
+```
+
+folder: 第三章：内容集合
+
+使用 [Content Collections](https://docs.astro.build/zh-cn/guides/content-collections/) 管理类型安全的内容。
+:::
+</code></pre>
+<h3>手风琴模式</h3>
+<p>添加 <code>accordion</code> 属性，同一时间只能展开一个面板。</p>
+<p>效果：</p>
+<p>:::folders{accordion}
+folder: 安装</p>
+<p>运行 <code>npm install</code> 安装依赖。</p>
+<p>folder: 配置</p>
+<p>编辑 <code>config.json</code> 设置偏好。</p>
+<p>folder: 部署</p>
+<p>运行 <code>npm run build &amp;&amp; npm run deploy</code>。
+:::</p>
+<p>源码：</p>
+<pre><code>:::folders{accordion}
+folder: 安装
+
+运行 `npm install` 安装依赖。
+
+folder: 配置
+
+编辑 `config.json` 设置偏好。
+
+folder: 部署
+
+运行 `npm run build &amp;&amp; npm run deploy`。
+:::
+</code></pre>
+<p>指令说明：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:::details{title="标题"}</code></td>
+<td>单个折叠块</td>
+</tr>
+<tr>
+<td><code>:::folders</code></td>
+<td>多个折叠面板</td>
+</tr>
+<tr>
+<td><code>:::folders{accordion}</code></td>
+<td>手风琴模式，同时只展开一个</td>
+</tr>
+<tr>
+<td><code>folder: 标题</code></td>
+<td>面板标题行，后跟内容</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>卡片网格(::::card-grid)</h2>
+<p>使用 <code>::::card-grid</code> 将多个 <code>:::card</code> 以响应式网格布局排列。</p>
+<p>效果：</p>
+<p>::::card-grid
+:::card{title="快速" icon="lucide:zap" color="#22c55e"}
+基于 Astro 6 静态输出，页面加载极快。
+:::</p>
+<p>:::card{title="现代" icon="lucide:code" color="#3b82f6"}
+Svelte 5 runes 模式、Tailwind CSS 4、TypeScript。
+:::</p>
+<p>:::card{title="丰富" icon="lucide:bookmark" color="#a855f7"}
+扩展 Markdown 指令 80+，图表、交互组件一应俱全。
+:::
+::::</p>
+<p>源码：</p>
+<pre><code>::::card-grid
+:::card{title="快速" icon="lucide:zap" color="#22c55e"}
+基于 Astro 6 静态输出，页面加载极快。
+:::
+
+:::card{title="现代" icon="lucide:code" color="#3b82f6"}
+Svelte 5 runes 模式、Tailwind CSS 4、TypeScript。
+:::
+
+:::card{title="丰富" icon="lucide:bookmark" color="#a855f7"}
+扩展 Markdown 指令 80+，图表、交互组件一应俱全。
+:::
+::::
+</code></pre>
+<p>指令说明：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>::::card-grid</code></td>
+<td>卡片网格容器</td>
+</tr>
+<tr>
+<td><code>:::card{title="..."}</code></td>
+<td>单个卡片</td>
+</tr>
+</tbody>
+</table>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>卡片标题</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td>卡片图标，支持 <code>lucide:名称</code> 格式</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>图标和主题色</td>
+<td>❌</td>
+<td><code>accent</code></td>
+</tr>
+<tr>
+<td><code>href</code></td>
+<td>点击跳转链接</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>代码块标注(del/ins/聚焦)</h2>
+<p>Expressive Code 内置支持行标注，通过代码块元信息指定行号。支持三种标注类型：</p>
+<ul>
+<li><strong>删除行</strong> <code>del={行号}</code> — 红色高亮，表示被删除的代码</li>
+<li><strong>新增行</strong> <code>ins={行号}</code> — 绿色高亮，表示新增的代码</li>
+<li><strong>聚焦行</strong> <code>{行号}</code> — 蓝色高亮，表示需要关注的行</li>
+</ul>
+<p>支持行号范围，如 <code>del={2}</code>、<code>ins={3-4}</code>、<code>{5-7}</code>。</p>
+<h3>行标注示例</h3>
+<pre><code>function getUser(id: string) {
+  const user = db.findUser(id)
+  const user = db.findById(id)
+  if (!user) {
+    throw new Error('Not found')
+  }
+  return user
+}
+</code></pre>
+<p>源码：</p>
+<pre><code>```typescript del={2} ins={3} {5}
+function getUser(id: string) {
+  const user = db.findUser(id)
+  const user = db.findById(id)
+  if (!user) {
+    throw new Error('Not found')
+  }
+  return user
+}
+```
+</code></pre>
+<h3>diff 语法</h3>
+<p>使用 <code>diff</code> 语言标识符，通过 <code>+</code>/<code>-</code> 前缀标注行，同时保留语法高亮：</p>
+<pre><code>- const user = db.findUser(id)
++ const user = db.findById(id)
+  if (!user) {
+    throw new Error('Not found')
+  }
+</code></pre>
+<p>源码：</p>
+<pre><code>```diff lang="ts"
+- const user = db.findUser(id)
++ const user = db.findById(id)
+  if (!user) {
+    throw new Error('Not found')
+  }
+```
+</code></pre>
+<h3>参数说明</h3>
+<table>
+<thead>
+<tr>
+<th>标注</th>
+<th>语法</th>
+<th>说明</th>
+<th>颜色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>删除行</td>
+<td><code>del={行号}</code></td>
+<td>标记为删除的代码行</td>
+<td>🔴 红色</td>
+</tr>
+<tr>
+<td>新增行</td>
+<td><code>ins={行号}</code></td>
+<td>标记为新增的代码行</td>
+<td>🟢 绿色</td>
+</tr>
+<tr>
+<td>聚焦行</td>
+<td><code>{行号}</code></td>
+<td>需要关注的代码行</td>
+<td>🔵 蓝色</td>
+</tr>
+<tr>
+<td>diff 语法</td>
+<td><code>diff lang="语言"</code></td>
+<td>使用 <code>+</code>/<code>-</code> 前缀标注</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<p>行号支持范围写法：<code>del={2-5}</code> 表示第 2-5 行，多个范围用空格分隔：<code>ins={3-4} ins={8-10}</code>。</p>
+<p>代码行末还支持 Expressive Code 标记：<code>// [!code ++]</code>（新增）、<code>// [!code --]</code>（删除）、<code>// [!code focus]</code>（聚焦）、<code>// [!code error]</code>（错误）和 <code>// [!code warning]</code>（警告）。</p>
+<pre><code>```ts
+const oldValue = getValue() // [!code --]
+const newValue = getValueV2() // [!code ++]
+throw new Error("failed") // [!code error]
+```
+</code></pre>
+<hr />
+<h2>代码块折叠</h2>
+<p>代码块支持两种折叠方式：<strong>自动折叠</strong>（超过行数阈值自动添加折叠按钮）和<strong>强制折叠</strong>（通过 <code>collapse</code> 标记手动指定）。</p>
+<h3>自动折叠</h3>
+<p>当代码块行数超过配置的阈值（默认 10 行）时，自动添加折叠按钮。折叠后显示前 5 行预览，底部渐变遮罩提示可展开。</p>
+<pre><code>interface UserProfile {
+  id: string
+  name: string
+  email: string
+  avatar: string
+  bio: string
+  createdAt: Date
+  updatedAt: Date
+  settings: {
+    theme: 'light' | 'dark' | 'system'
+    language: string
+    notifications: boolean
+  }
+}
+
+function formatUserProfile(user: UserProfile): string {
+  const { name, email, bio } = user
+  return `${name} &lt;${email}&gt; — ${bio}`
+}
+</code></pre>
+<h3>强制折叠</h3>
+<p>在代码块语言标识后添加 <code>collapse</code>，强制代码块默认折叠，无论行数多少：</p>
+<pre><code>package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+</code></pre>
+<p>源码：</p>
+<pre><code>```go collapse
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+```
+</code></pre>
+<h3>配置项</h3>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enable</code></td>
+<td>是否启用代码块折叠功能</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>lineThreshold</code></td>
+<td>触发自动折叠的行数阈值</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>previewLines</code></td>
+<td>折叠时显示的预览行数</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>defaultCollapsed</code></td>
+<td>超过阈值时是否默认折叠</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>配置位于 <code>src/config/expressiveCodeConfig.ts</code> 的 <code>pluginCollapsible</code> 字段。</p>
+<hr />
+<h2>视频播放器(:::video)</h2>
+<p>支持本地视频、Bilibili 和 YouTube 三种视频源。</p>
+<h3>本地视频（带封面）</h3>
+<p>通过 <code>src</code> 属性指定视频地址，<code>poster</code> 设置封面图。</p>
+<p>:::video{src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" poster="https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&amp;q=80" ratio="16/9"}
+:::</p>
+<h3>Bilibili 视频</h3>
+<p>通过 <code>bilibili</code> 属性指定 BV 号即可嵌入。</p>
+<p>:::video{bilibili=BV1uT4y1P7CX ratio="16/9"}
+:::</p>
+<h3>YouTube 视频</h3>
+<p>通过 <code>youtube</code> 属性指定视频 ID 即可嵌入。</p>
+<p>:::video{youtube=dQw4w9WgXcQ ratio="16/9"}
+:::</p>
+<p>源码：</p>
+<pre><code>&lt;!-- 本地视频（带封面） --&gt;
+:::video{src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" poster="https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&amp;q=80" ratio="16/9"}
+:::
+
+&lt;!-- Bilibili --&gt;
+:::video{bilibili=BV1uT4y1P7CX ratio="16/9"}
+:::
+
+&lt;!-- YouTube --&gt;
+:::video{youtube=dQw4w9WgXcQ ratio="16/9"}
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src</code></td>
+<td>本地视频 URL</td>
+<td>三选一</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>bilibili</code></td>
+<td>Bilibili BV 号（可省略 <code>BV</code> 前缀）</td>
+<td>三选一</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>youtube</code></td>
+<td>YouTube 视频 ID</td>
+<td>三选一</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>poster</code></td>
+<td>封面图片 URL（仅 <code>src</code> 模式）</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>ratio</code></td>
+<td>宽高比</td>
+<td>❌</td>
+<td><code>16/9</code></td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td>视频宽度</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>align</code></td>
+<td>视频对齐位置，可使用 CSS 对齐值</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>autoplay</code></td>
+<td>自动播放（需同时静音）</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>pip</code></td>
+<td>画中画模式</td>
+<td>❌</td>
+<td><code>auto</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>选项卡(:::tabs)</h2>
+<p>使用 <code>:::tabs</code> 创建选项卡内容，支持跨组同步切换。</p>
+<h3>基础选项卡</h3>
+<p>使用 <code>[标签名]</code> 或 <code>tab: 标签名</code> 语法定义每个选项卡。<code>tab:</code> 语法还支持为标签设置颜色。</p>
+<p>:::tabs
+[pnpm] pnpm add astro</p>
+<p>[yarn] yarn add astro</p>
+<p>[npm] npm install astro
+:::</p>
+<p>:::tabs{align="right"}
+tab: 稳定版{color="#22c55e"}</p>
+<p>推荐用于生产环境。</p>
+<p>tab: 实验版{color="#f97316"}</p>
+<p>用于体验最新功能。
+:::</p>
+<h3>同步选项卡</h3>
+<p>多个选项卡组可通过 <code>sync</code> 属性联动切换：</p>
+<p>:::tabs{sync="pkg"}
+[pnpm] <code>pnpm add @astrojs/svelte</code></p>
+<p>[yarn] <code>yarn add @astrojs/svelte</code></p>
+<p>[npm] <code>npm install @astrojs/svelte</code>
+:::</p>
+<p>:::tabs{sync="pkg"}
+[pnpm] <code>pnpm add svelte</code></p>
+<p>[yarn] <code>yarn add svelte</code></p>
+<p>[npm] <code>npm install svelte</code>
+:::</p>
+<p>:::tabs{align="center"}
+tab: pnpm</p>
+<p><code>pnpm add astro</code></p>
+<p>tab: npm</p>
+<p><code>npm install astro</code>
+:::</p>
+<p>源码：</p>
+<pre><code>&lt;!-- 基础选项卡 --&gt;
+:::tabs
+[pnpm] pnpm add astro
+
+[yarn] yarn add astro
+
+[npm] npm install astro
+:::
+
+&lt;!-- 同步选项卡 --&gt;
+:::tabs{sync="pkg"}
+[pnpm] `pnpm add @astrojs/svelte`
+
+[yarn] `yarn add @astrojs/svelte`
+
+[npm] `npm install @astrojs/svelte`
+:::
+
+&lt;!-- 对齐与 tab: 语法 --&gt;
+:::tabs{align="center"}
+tab: pnpm{color="#3b82f6"}
+
+`pnpm add astro`
+
+tab: npm
+
+`npm install astro`
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[标签名]</code> / <code>tab: 标签名</code></td>
+<td>选项卡标签文本</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>sync</code></td>
+<td>同步组名，相同组名的选项卡联动切换</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>align</code></td>
+<td>标签栏对齐方式</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>tab:</code> 标签的激活色</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>时间线(:::timeline)</h2>
+<p>使用 <code>:::timeline</code> 创建时间轴视图，展示事件序列。</p>
+<p>效果：</p>
+<p>:::timeline</p>
+<ul>
+<li>2024-01 项目启动，完成基础架构</li>
+<li>2024-03 首个公开版本发布</li>
+<li>2024-06 支持自定义主题和国际化</li>
+<li>2024-09 新增音乐播放器和 Live2D 看板娘</li>
+<li>2025-01 迁移至 Astro 6 + Svelte 5
+:::</li>
+</ul>
+<p>源码：</p>
+<pre><code>:::timeline
+- 2024-01 项目启动，完成基础架构
+- 2024-03 首个公开版本发布
+- 2024-06 支持自定义主题和国际化
+- 2024-09 新增音乐播放器和 Live2D 看板娘
+- 2025-01 迁移至 Astro 6 + Svelte 5
+:::
+</code></pre>
+<p>格式说明：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>- 日期 描述</code></td>
+<td>时间线条目，日期与标题以空格分隔</td>
+</tr>
+<tr>
+<td><code>- 日期 | 标题 | 描述</code></td>
+<td>使用竖线分别指定日期、标题和描述</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>步骤(:::steps)</h2>
+<p>使用 <code>:::steps</code> 创建带编号的步骤指引。</p>
+<p>效果：</p>
+<p>:::steps</p>
+<ol>
+<li>
+<p>安装依赖</p>
+<p>运行 <code>pnpm install</code> 安装项目依赖。</p>
+</li>
+<li>
+<p>配置环境</p>
+<p>复制 <code>.env.example</code> 为 <code>.env</code> 并填写配置。</p>
+</li>
+<li>
+<p>启动开发服务器</p>
+<pre><code>pnpm dev
+</code></pre>
+</li>
+<li>
+<p>构建生产版本</p>
+<pre><code>pnpm build
+</code></pre>
+</li>
+</ol>
+<p>:::</p>
+<p>源码：</p>
+<pre><code>:::steps
+1. 安装依赖
+
+   运行 `pnpm install` 安装项目依赖。
+
+2. 配置环境
+
+   复制 `.env.example` 为 `.env` 并填写配置。
+
+3. 启动开发服务器
+
+   ```bash
+   pnpm dev
+   ```
+
+4. 构建生产版本
+
+   ```bash
+   pnpm build
+   ```
+:::
+</code></pre>
+<hr />
+<h2>诗歌(:::poetry)</h2>
+<p>使用 <code>:::poetry</code> 排版诗歌或歌词，自动保留换行和缩进。</p>
+<p>效果：</p>
+<p>:::poetry{title="水调歌头" author="苏轼"}
+明月几时有？把酒问青天。
+不知天上宫阙，今夕是何年。
+我欲乘风归去，又恐琼楼玉宇，高处不胜寒。
+起舞弄清影，何似在人间。
+:::</p>
+<p>源码：</p>
+<pre><code>:::poetry{title="水调歌头" author="苏轼"}
+明月几时有？把酒问青天。
+不知天上宫阙，今夕是何年。
+我欲乘风归去，又恐琼楼玉宇，高处不胜寒。
+起舞弄清影，何似在人间。
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>诗歌标题</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>作者</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>日期或创作时间</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>底部落款或补充信息</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>胶卷(:::reel)</h2>
+<p>使用 <code>:::reel</code> 创建水平滚动的卡片容器。</p>
+<p>效果：</p>
+<p>::::reel
+:::card{title="Astro" icon="lucide:rocket" color="#ff5d01"}
+内容优先的 Web 框架。
+:::</p>
+<p>:::card{title="Svelte" icon="lucide:component" color="#ff3e00"}
+编译型前端框架，无虚拟 DOM。
+:::</p>
+<p>:::card{title="Tailwind" icon="lucide:paintbrush" color="#06b6d4"}
+原子化 CSS 框架。
+:::</p>
+<p>:::card{title="TypeScript" icon="lucide:file-code" color="#3178c6"}
+类型安全的 JavaScript 超集。
+:::
+::::</p>
+<p>源码：</p>
+<pre><code>::::reel
+:::card{title="Astro" icon="lucide:rocket" color="#ff5d01"}
+内容优先的 Web 框架。
+:::
+
+:::card{title="Svelte" icon="lucide:component" color="#ff3e00"}
+编译型前端框架，无虚拟 DOM。
+:::
+
+:::card{title="Tailwind" icon="lucide:paintbrush" color="#06b6d4"}
+原子化 CSS 框架。
+:::
+
+:::card{title="TypeScript" icon="lucide:file-code" color="#3178c6"}
+类型安全的 JavaScript 超集。
+:::
+::::
+</code></pre>
+<p>可选属性 <code>title</code>、<code>author</code>、<code>date</code> 和 <code>footer</code> 分别设置标题、作者、日期和底部说明。</p>
+<hr />
+<h2>纸张(:::paper)</h2>
+<p>使用 <code>:::paper</code> 创建纸张风格的容器，适合展示信件或文档。</p>
+<p>效果：</p>
+<p>:::paper
+致未来的自己：</p>
+<p>当你看到这段文字时，希望一切安好。技术日新月异，但创造的初心不变。</p>
+<p>—— 来自 2024 年的开发者
+:::</p>
+<p>源码：</p>
+<pre><code>:::paper
+致未来的自己：
+
+当你看到这段文字时，希望一切安好。技术日新月异，但创造的初心不变。
+
+—— 来自 2024 年的开发者
+:::
+</code></pre>
+<p>可选属性：<code>style</code> 设置纸张样式，<code>title</code>、<code>author</code>、<code>date</code> 和 <code>footer</code> 设置页眉页脚信息。纸张内部还可使用 <code>&lt;!-- section: 标题 --&gt;</code>、<code>&lt;!-- line: left|right --&gt;</code> 注释划分内容。</p>
+<hr />
+<h2>引用(:::blockquote/:::quot)</h2>
+<p><code>:::blockquote</code> 创建带装饰引号的引用块；<code>:::quot</code> 创建带图标的紧凑引用卡片。</p>
+<h3>装饰引用</h3>
+<p>:::blockquote
+设计应服务于内容，而不是遮挡内容。
+:::</p>
+<h3>紧凑引用</h3>
+<p>:::quot{icon="lucide:quote"}
+Talk is cheap. Show me the code.
+:::</p>
+<p>源码：</p>
+<pre><code>:::blockquote
+设计应服务于内容，而不是遮挡内容。
+:::
+
+:::quot{icon="lucide:quote"}
+Talk is cheap. Show me the code.
+:::
+</code></pre>
+<p><code>:::quot</code> 的 <code>icon</code> 可填写 <code>lucide:名称</code>、<code>fa7-solid:名称</code>、图标名称或图片 URL；省略时使用默认引号图标。引用作者和来源不会由该指令单独渲染，需写入正文。</p>
+<hr />
+<h2>网格(:::grid)</h2>
+<p>使用 <code>:::grid</code> 创建响应式网格布局。</p>
+<p>效果：</p>
+<p>::::grid{cols="2"}
+:::card{title="左侧" icon="lucide:arrow-left"}
+网格的第一列内容。
+:::</p>
+<p>:::card{title="右侧" icon="lucide:arrow-right"}
+网格的第二列内容。
+:::
+::::</p>
+<p>源码：</p>
+<pre><code>::::grid{cols="2"}
+:::card{title="左侧" icon="lucide:arrow-left"}
+网格的第一列内容。
+:::
+
+:::card{title="右侧" icon="lucide:arrow-right"}
+网格的第二列内容。
+:::
+::::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cols</code></td>
+<td>列数</td>
+<td>❌</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>间距</td>
+<td>❌</td>
+<td><code>16</code>（px）</td>
+</tr>
+<tr>
+<td><code>minw</code></td>
+<td>最小列宽（自动列数时）</td>
+<td>❌</td>
+<td><code>240px</code></td>
+</tr>
+<tr>
+<td><code>bg</code></td>
+<td>背景样式</td>
+<td>❌</td>
+<td><code>card</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>对齐容器(:::left/:::center/:::right/:::justify)</h2>
+<p>使用四种对齐容器调整其中内容的文本对齐方式。</p>
+<p>:::center
+这段内容居中显示。
+:::</p>
+<p>源码：</p>
+<pre><code>:::left
+左对齐内容。
+:::
+
+:::center
+居中内容。
+:::
+
+:::right
+右对齐内容。
+:::
+
+:::justify
+两端对齐内容。
+:::
+</code></pre>
+<hr />
+<h2>弹性布局(:::flex)</h2>
+<p>使用 <code>:::flex</code> 创建弹性容器，支持方向、对齐等参数。</p>
+<p>效果：</p>
+<p>::::flex{justify="center" align="center" gap="2rem"}
+:::card{title="A" icon="lucide:box"}
+项目 A
+:::</p>
+<p>:::card{title="B" icon="lucide:box"}
+项目 B
+:::</p>
+<p>:::card{title="C" icon="lucide:box"}
+项目 C
+:::
+::::</p>
+<p>源码：</p>
+<pre><code>::::flex{justify="center" align="center" gap="2rem"}
+:::card{title="A" icon="lucide:box"}
+项目 A
+:::
+
+:::card{title="B" icon="lucide:box"}
+项目 B
+:::
+
+:::card{title="C" icon="lucide:box"}
+项目 C
+:::
+::::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>可选值</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>column</code></td>
+<td>纵向排列</td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>justify</code> / <code>main</code></td>
+<td>主轴对齐</td>
+<td><code>start</code> / <code>center</code> / <code>end</code> / <code>between</code> / <code>around</code> / <code>evenly</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>align</code> / <code>cross</code></td>
+<td>交叉轴对齐</td>
+<td><code>start</code> / <code>center</code> / <code>end</code> / <code>stretch</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>间距</td>
+<td>CSS 值，如 <code>1rem</code></td>
+<td><code>1rem</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>复制(:::copy)</h2>
+<p>使用 <code>:::copy</code> 创建可复制的内容区域。</p>
+<p>效果：</p>
+<p>:::copy{title="安装命令"}</p>
+<pre><code>pnpm add @astrojs/svelte
+</code></pre>
+<p>:::</p>
+<p>源码：</p>
+<pre><code>:::copy{title="安装命令"}
+```bash
+pnpm add @astrojs/svelte
+```
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>label</code> / <code>title</code></td>
+<td>复制区标题</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>画廊(:::gallery)</h2>
+<p>使用 <code>:::gallery</code> 创建图片画廊，点击可查看大图。</p>
+<p>效果：</p>
+<p>:::gallery
+<img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&amp;q=80" alt="风景" /></p>
+<p><img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&amp;q=80" alt="城市" /></p>
+<p><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&amp;q=80" alt="自然" />
+:::</p>
+<p>源码：</p>
+<pre><code>:::gallery
+![风景](https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&amp;q=80)
+
+![城市](https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&amp;q=80)
+
+![自然](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&amp;q=80)
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cols</code></td>
+<td>画廊列数</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>图片间距（px）</td>
+<td><code>8</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>图片指令(::image)</h2>
+<p>使用 <code>::image</code> 直接生成图片元素，可显式指定替代文本、尺寸和加载策略。</p>
+<p>效果：</p>
+<p>::image{src="/images/albums/AcgExample/cover.webp" alt="示例图片" width="480" height="270"}</p>
+<p>源码：</p>
+<pre><code>::image{src="/images/albums/AcgExample/cover.webp" alt="示例图片" width="480" height="270"}
+</code></pre>
+<p><code>src</code> 和 <code>alt</code> 是常用属性，<code>width</code>、<code>height</code> 可传递给 <code>&lt;img&gt;</code>；图片默认使用原生懒加载。</p>
+<hr />
+<h2>终端录制(:::asciinema)</h2>
+<p>使用 <code>:::asciinema</code> 嵌入终端录制回放。</p>
+<p>效果：</p>
+<p>:::asciinema{src="/demos/demo.cast"}
+:::</p>
+<p>源码：</p>
+<pre><code>:::asciinema{src="/demos/demo.cast"}
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src</code></td>
+<td>asciinema 录制文件 URL（<code>.cast</code> 格式）</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>cols</code></td>
+<td>终端列数</td>
+<td>❌</td>
+<td><code>80</code></td>
+</tr>
+<tr>
+<td><code>rows</code></td>
+<td>终端行数</td>
+<td>❌</td>
+<td><code>24</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>色板(:::colors)</h2>
+<p>使用 <code>:::colors</code> 展示调色板或颜色列表。</p>
+<p>效果：</p>
+<p>:::colors{values="#3b82f6,#22c55e,#ef4444,#f59e0b,#8b5cf6"}
+:::</p>
+<p>源码：</p>
+<pre><code>:::colors{values="#3b82f6,#22c55e,#ef4444,#f59e0b,#8b5cf6"}
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>values</code></td>
+<td>颜色值列表，逗号分隔</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>对话(:::chat)</h2>
+<p>使用 <code>:::chat</code> 创建对话气泡视图，支持标题、日期分隔符和多种发送者标识。</p>
+<p>效果：</p>
+<p>:::chat{title="Tsukimi 功能咨询"}
+{:2025-06-17 14:30}</p>
+<p>{.} 你好！Tsukimi 支持哪些功能？</p>
+<p>{对方} 它支持 Markdown 扩展指令、音乐播放器、Live2D 看板娘等丰富功能。</p>
+<p>{.} 太棒了，怎么开始使用？</p>
+<p>{对方} 查看文档即可快速上手！
+:::</p>
+<p>源码：</p>
+<pre><code>:::chat{title="Tsukimi 功能咨询"}
+{:2025-06-17 14:30}
+
+{.} 你好！Tsukimi 支持哪些功能？
+
+{对方} 它支持 Markdown 扩展指令、音乐播放器、Live2D 看板娘等丰富功能。
+
+{.} 太棒了，怎么开始使用？
+
+{对方} 查看文档即可快速上手！
+:::
+</code></pre>
+<p>标识说明：</p>
+<table>
+<thead>
+<tr>
+<th>标识</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{.}</code> 或 <code>[自己]</code></td>
+<td>右侧气泡，主色调</td>
+</tr>
+<tr>
+<td><code>{用户名}</code> 或 <code>[用户名]</code></td>
+<td>左侧气泡，显示用户名</td>
+</tr>
+<tr>
+<td><code>{:日期时间}</code></td>
+<td>居中日期分隔线</td>
+</tr>
+<tr>
+<td><code>title="标题"</code></td>
+<td>对话框标题</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>npm 包(:::npm-to)</h2>
+<p>使用 <code>:::npm-to</code> 展示 npm 包信息和安装命令。</p>
+<p>效果：</p>
+<p>:::npm-to{package="astro"}
+:::</p>
+<p>源码：</p>
+<pre><code>:::npm-to{package="包名"}
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>package</code></td>
+<td>npm 包名</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tabs</code></td>
+<td>显示的包管理器</td>
+<td>❌</td>
+<td><code>npm,pnpm,yarn,bun</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>卡片(:::card)</h2>
+<p>使用 <code>:::card</code> 创建独立卡片，可添加标题、图标和链接。</p>
+<p>效果：</p>
+<p>:::card{title="Tsukimi" icon="lucide:moon" color="#a855f7" href="https://github.com/souloss/Tsukimi"}
+一个功能丰富的 Astro 博客模板，支持丰富的 Markdown 扩展指令。
+:::</p>
+<p>源码：</p>
+<pre><code>:::card{title="Tsukimi" icon="lucide:moon" color="#a855f7" href="https://github.com/souloss/Tsukimi"}
+一个功能丰富的 Astro 博客模板，支持丰富的 Markdown 扩展指令。
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>卡片标题</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td>图标，支持 <code>lucide:名称</code></td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>图标和主题色</td>
+<td>❌</td>
+<td><code>accent</code></td>
+</tr>
+<tr>
+<td><code>href</code></td>
+<td>点击跳转链接</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>image</code> / <code>cover</code></td>
+<td>链接卡片的预览图片</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>desc</code> / <code>description</code></td>
+<td>链接卡片的描述文字</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>链接卡片样式(:::card with image)</h2>
+<p>使用 <code>:::card</code> 指定 <code>image</code> 和 <code>href</code> 属性即可生成链接预览样式的卡片。</p>
+<p>效果：</p>
+<p>:::card{href="https://astro.build" title="Astro 官网" image="https://astro.build/assets/press/astro-icon-light.png" desc="内容优先的现代 Web 框架。"}
+:::</p>
+<p>源码：</p>
+<pre><code>:::card{href="https://astro.build" title="Astro 官网" image="https://astro.build/assets/press/astro-icon-light.png" desc="内容优先的现代 Web 框架。"}
+:::
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>href</code></td>
+<td>链接地址</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>卡片标题</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>image</code> / <code>cover</code></td>
+<td>预览图片</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>desc</code> / <code>description</code></td>
+<td>描述文字</td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>内联指令(:指令[内容]{参数})</h2>
+<p>以下指令使用行内语法 <code>:指令[内容]{参数}</code> 在段落中直接使用。</p>
+<h3>文本标记(:mark)</h3>
+<p>使用 <code>:mark[文本]</code> 高亮文本，类似荧光笔效果。</p>
+<p>这段文字中有:mark[高亮标记]和普通文本。</p>
+<p>也可以使用标准扩展语法 <code>==文本==</code> 快速高亮：==重点内容==。</p>
+<p>源码：</p>
+<pre><code>这段文字中有:mark[高亮标记]和普通文本。
+也可以使用标准扩展语法 `==文本==` 快速高亮：==重点内容==。
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td>高亮颜色，支持 CSS 颜色名 / hex</td>
+<td>❌</td>
+<td><code>yellow</code></td>
+</tr>
+</tbody>
+</table>
+<h3>键盘按键(:kbd)</h3>
+<p>使用 <code>:kbd[按键]</code> 显示键盘按键样式。</p>
+<p>按下 :kbd[Ctrl] + :kbd[C] 复制，:kbd[Ctrl] + :kbd[V] 粘贴。</p>
+<p>源码：</p>
+<pre><code>按下 :kbd[Ctrl] + :kbd[C] 复制，:kbd[Ctrl] + :kbd[V] 粘贴。
+</code></pre>
+<h3>下划线(:u)</h3>
+<p>使用 <code>:u[文本]</code> 添加下划线。</p>
+<p>这是:u[带下划线的文本]。</p>
+<p>源码：</p>
+<pre><code>这是:u[带下划线的文本]。
+</code></pre>
+<p><code>color</code> 可设置下划线颜色，默认使用主题强调色。</p>
+<h3>着重号(:emp)</h3>
+<p>使用 <code>:emp[文本]</code> 添加着重号（CJK 专用），类似日文傍点。</p>
+<p>这是:emp[重点内容]需要关注。</p>
+<p>源码：</p>
+<pre><code>这是:emp[重点内容]需要关注。
+</code></pre>
+<p><code>color</code> 可设置着重号颜色，默认使用主题强调色。</p>
+<h3>波浪线(:wavy)</h3>
+<p>使用 <code>:wavy[文本]</code> 添加波浪下划线。</p>
+<p>这是:wavy[波浪线标注的文本]。</p>
+<p>源码：</p>
+<pre><code>这是:wavy[波浪线标注的文本]。
+</code></pre>
+<p><code>color</code> 可设置波浪线颜色，默认使用主题强调色。</p>
+<h3>删除线(:del)</h3>
+<p>使用 <code>:del[文本]</code> 添加删除线（比 <code>~~~~</code> 更灵活）。</p>
+<p>原价 :del[¥99]，现价 ¥49。</p>
+<p>源码：</p>
+<pre><code>原价 :del[¥99]，现价 ¥49。
+</code></pre>
+<h3>上标与下标(:sup/:sub)</h3>
+<p>使用 <code>:sup[文本]</code> 和 <code>:sub[文本]</code> 添加上标和下标。</p>
+<p>E = mc:sup[2]，H:sub[2]O。</p>
+<p>源码：</p>
+<pre><code>E = mc:sup[2]，H:sub[2]O。
+</code></pre>
+<p><code>:sup</code> 和 <code>:sub</code> 都支持 <code>color</code> 属性，默认使用主题强调色。</p>
+<h3>彩色文字(:color)</h3>
+<p>使用 <code>:color[文本]{color="#hex"}</code> 设置文字颜色。</p>
+<p>这是:color[红色文字]{color="#ef4444"}和:color[蓝色文字]{color="#3b82f6"}。</p>
+<p>源码：</p>
+<pre><code>这是:color[红色文字]{color="#ef4444"}和:color[蓝色文字]{color="#3b82f6"}。
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td>文字颜色，支持 hex / CSS 颜色名</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>密码揭示与模糊遮罩(:psw/:blur)</h3>
+<p>使用 <code>:psw[文本]</code> 创建密码遮罩，使用 <code>:blur[文本]</code> 创建模糊遮罩。点击即可揭示。</p>
+<ul>
+<li>密码遮罩：密码是 :psw[s3cret]，点击显示</li>
+<li>模糊遮罩：:blur[hidden content]，点击揭示</li>
+</ul>
+<p>源码：</p>
+<pre><code>- 密码遮罩：密码是 :psw[s3cret]，点击显示
+- 模糊遮罩：:blur[hidden content]，点击揭示
+</code></pre>
+<h3>复选框(:checkbox)</h3>
+<p>使用 <code>:checkbox[状态]</code> 创建行内复选框。</p>
+<ul>
+<li>:checkbox[checked] 已完成任务</li>
+<li>:checkbox[unchecked] 待办事项</li>
+<li>:checkbox[checked] 另一项已完成</li>
+</ul>
+<p>源码：</p>
+<pre><code>- :checkbox[checked] 已完成任务
+- :checkbox[unchecked] 待办事项
+- :checkbox[checked] 另一项已完成
+</code></pre>
+<p>也可把文本放在指令内容中，通过 <code>checked="true"</code> 指定状态；<code>color</code> 设置颜色，<code>symbol</code> 设置符号样式，<code>inline="true"</code> 使用行内布局。</p>
+<h3>单选框(:radio)</h3>
+<p>使用 <code>:radio[状态]</code> 创建行内单选框。</p>
+<ul>
+<li>:radio[selected] 已选中选项</li>
+<li>:radio[unselected] 未选中选项</li>
+</ul>
+<p>源码：</p>
+<pre><code>- :radio[selected] 已选中选项
+- :radio[unselected] 未选中选项
+</code></pre>
+<p>也可使用 <code>checked="true"</code> 指定选中状态；<code>color</code> 设置颜色，<code>inline="true"</code> 使用行内布局。</p>
+<h3>标签(:hashtag)</h3>
+<p>使用 <code>:hashtag[标签名]</code> 创建标签样式的行内元素。</p>
+<p>这篇文章的标签是 :hashtag[TypeScript] :hashtag[Astro] :hashtag[前端]。</p>
+<p>源码：</p>
+<pre><code>这篇文章的标签是 :hashtag[TypeScript] :hashtag[Astro] :hashtag[前端]。
+</code></pre>
+<p><code>href</code> 可设置点击链接，<code>color</code> 可设置标签颜色；未指定颜色时会按预设色板循环。</p>
+<h3>徽章(:badge)</h3>
+<p>使用 <code>:badge[文本]{type="类型"}</code> 创建行内徽章。</p>
+<p>状态：:badge[稳定]{type="tip"} :badge[实验性]{type="warning"} :badge[已废弃]{type="danger"}</p>
+<p>源码：</p>
+<pre><code>状态：:badge[稳定]{type="tip"} :badge[实验性]{type="warning"} :badge[已废弃]{type="danger"}
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>徽章类型，同下表</td>
+<td>❌</td>
+<td><code>blue</code></td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>自定义颜色，覆盖 <code>type</code></td>
+<td>❌</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>类型说明：</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>说明</th>
+<th>颜色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tip</code></td>
+<td>提示</td>
+<td>绿色</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td>信息</td>
+<td>蓝色</td>
+</tr>
+<tr>
+<td><code>warning</code></td>
+<td>警告</td>
+<td>橙色</td>
+</tr>
+<tr>
+<td><code>danger</code></td>
+<td>危险</td>
+<td>红色</td>
+</tr>
+</tbody>
+</table>
+<h3>注释(:anno)</h3>
+<p>使用 <code>:anno[文本](提示内容)</code> 创建带悬浮提示的注释文本。</p>
+<p>这个:anno<a href="%E8%BF%99%E9%87%8C%E6%98%AF%E6%9C%AF%E8%AF%AD%E7%9A%84%E8%A7%A3%E9%87%8A">术语</a>需要解释。</p>
+<p>源码：</p>
+<pre><code>这个:anno[术语](这里是术语的解释)需要解释。
+</code></pre>
+<h3>缩写(:abbr)</h3>
+<p>使用 <code>:abbr[缩写](全称)</code> 创建带悬浮提示的缩写。</p>
+<p>使用 :abbr[HTML](HyperText Markup Language) 构建 :abbr[UI](User Interface)。</p>
+<p>源码：</p>
+<pre><code>使用 :abbr[HTML](HyperText Markup Language) 构建 :abbr[UI](User Interface)。
+</code></pre>
+<h3>表情符号(:emoji)</h3>
+<p>使用 <code>:emoji[名称]</code> 插入 emoji 表情。</p>
+<p>我喜欢 :emoji[heart] 编程 :emoji[rocket]。</p>
+<p>源码：</p>
+<pre><code>我喜欢 :emoji[heart] 编程 :emoji[rocket]。
+</code></pre>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>必填</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>height</code></td>
+<td>emoji 高度</td>
+<td>❌</td>
+<td><code>1.75em</code></td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>emoji 来源，可用 <code>twemoji</code>、<code>qq</code>、<code>aru</code>、<code>tieba</code>、<code>blobcat</code> 或带 <code>{name}</code> 的 URL 模板</td>
+<td>❌</td>
+<td><code>twemoji</code></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>表情资源名称；省略时使用指令文本</td>
+<td>❌</td>
+<td>指令文本</td>
+</tr>
+</tbody>
+</table>
+<h3>步骤括号(:step-brackets)</h3>
+<p>使用 <code>:step-brackets[数字]</code> 创建带括号的步骤编号。</p>
+<p>:step-brackets[1] 安装 → :step-brackets[2] 配置 → :step-brackets[3] 部署</p>
+<p>源码：</p>
+<pre><code>:step-brackets[1] 安装 → :step-brackets[2] 配置 → :step-brackets[3] 部署
+</code></pre>
+<p>使用 <code>title</code> 属性可在编号右侧显示步骤标题。</p>
+<hr />
+<h2>文件树(:::file-tree)</h2>
+<p>使用 <code>:::file-tree</code> 创建带图标的文件树视图，支持文件夹折叠和差异标记。</p>
+<p>:::file-tree</p>
+<ul>
+<li>src/
+<ul>
+<li>components/
+<ul>
+<li>Header.astro</li>
+<li>Footer.astro</li>
+</ul>
+</li>
+<li>pages/
+<ul>
+<li>index.astro</li>
+</ul>
+</li>
+<li>config.ts</li>
+</ul>
+</li>
+<li>public/
+<ul>
+<li>favicon.svg</li>
+</ul>
+</li>
+<li>package.json</li>
+<li>++ README.md</li>
+<li>-- CHANGELOG.md
+:::</li>
+</ul>
+<p>源码：</p>
+<pre><code>:::file-tree
+- src/
+  - components/
+    - Header.astro
+    - Footer.astro
+  - pages/
+    - index.astro
+  - config.ts
+- public/
+  - favicon.svg
+- package.json
+- ++ README.md
+- -- CHANGELOG.md
+:::
+</code></pre>
+<p>语法说明：</p>
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>- 名称/</code></td>
+<td>文件夹，以 <code>/</code> 结尾</td>
+</tr>
+<tr>
+<td><code>- 文件名.扩展名</code></td>
+<td>文件</td>
+</tr>
+<tr>
+<td><code>- ++ 新增文件</code></td>
+<td>差异标记：新增</td>
+</tr>
+<tr>
+<td><code>- -- 删除文件</code></td>
+<td>差异标记：删除</td>
+</tr>
+<tr>
+<td><code>- ...</code></td>
+<td>省略号</td>
+</tr>
+<tr>
+<td><code>- 名称 # 注释</code></td>
+<td>行末注释</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>图表与数学公式</h2>
+<h3>Mermaid 图表</h3>
+<p>使用小写 <code>mermaid</code> 代码块绘制流程图、时序图等。图表在浏览器端渲染，并随主题切换。</p>
+<pre><code>flowchart LR
+  A[Markdown] --&gt; B[Remark]
+  B --&gt; C[HTML]
+  C --&gt; D[浏览器渲染]
+</code></pre>
+<p>源码：</p>
+<pre><code>```mermaid
+flowchart LR
+  A[Markdown] --&gt; B[Remark]
+  B --&gt; C[HTML]
+  C --&gt; D[浏览器渲染]
+```
+</code></pre>
+<p>代码块第一行指定图表类型（例如 <code>flowchart LR</code>），后续使用 Mermaid 标准语法描述节点、连线和样式。</p>
+<h3>PlantUML 图表</h3>
+<p>使用 <code>plantuml</code> 代码块绘制 UML 图。构建时会根据 <code>src/config/plantumlConfig.ts</code> 的服务器和主题配置生成图像，页面端支持主题切换、缩放、拖拽和全屏。</p>
+<pre><code>@startuml
+Alice -&gt; Bob: Hello
+Bob --&gt; Alice: Hi!
+@enduml
+</code></pre>
+<p>源码：</p>
+<pre><code>```plantuml
+@startuml
+Alice -&gt; Bob: Hello
+Bob --&gt; Alice: Hi!
+@enduml
+```
+</code></pre>
+<p>始终使用 <code>@startuml</code> 和 <code>@enduml</code> 包住 PlantUML 内容；服务器地址、主题和渲染方式由 <code>src/config/plantumlConfig.ts</code> 控制。</p>
+<h3>Markmap 思维导图</h3>
+<p>使用 <code>markmap</code> 代码块，以 Markdown 标题层级生成可缩放、可拖拽的思维导图。</p>
+<pre><code># Tsukimi
+## Markdown
+### 指令
+### 图表
+## 主题
+### 亮暗色切换
+</code></pre>
+<p>源码：</p>
+<pre><code>```markmap
+# Tsukimi
+## Markdown
+### 指令
+### 图表
+## 主题
+### 亮暗色切换
+```
+</code></pre>
+<p>使用 <code>#</code>、<code>##</code>、<code>###</code> 等 Markdown 标题表示层级；标题文本会成为思维导图节点。</p>
+<h3>WaveDrom 时序图</h3>
+<p>使用 <code>wavedrom</code>（或别名 <code>wave</code>）代码块编写 WaveJSON。它在构建时生成内联 SVG，适合时钟、总线和握手信号等硬件时序说明。</p>
+<pre><code>{ signal: [
+  { name: "clk",  wave: "p......" },
+  { name: "bus",  wave: "x.345x.", data: "head body tail" },
+  { name: "ready", wave: "0.1..0." }
+] }
+</code></pre>
+<p>源码：</p>
+<pre><code>```wavedrom
+{ signal: [
+  { name: "clk",  wave: "p......" },
+  { name: "bus",  wave: "x.345x.", data: "head body tail" },
+  { name: "ready", wave: "0.1..0." }
+] }
+```
+</code></pre>
+<p><code>signal</code> 是信号数组；每个信号用 <code>name</code> 设置名称、用 <code>wave</code> 描述每个时间槽的电平，<code>data</code> 为总线波形提供标签。也可以使用别名 <code>wave</code> 作为代码块语言。</p>
+<h3>Bytefield 协议字段图</h3>
+<p>使用 <code>bytefield</code>（或 <code>bytefield-svg</code>）代码块，以 bytefield-svg 的 EDN/Clojure DSL 描述网络协议、文件格式和寄存器布局。图表同样在构建时生成内联 SVG，不依赖浏览器脚本。</p>
+<pre><code>(def column-labels (mapv #(number-as-hex % 2) (range 32)))
+(def boxes-per-row 32)
+(draw-column-headers)
+(draw-box "Source port" {:span 16})
+(draw-box "Destination port" {:span 16})
+(draw-box "Length" {:span 16})
+(draw-box "Checksum" {:span 16})
+</code></pre>
+<p>源码：</p>
+<pre><code>```bytefield
+(def column-labels (mapv #(number-as-hex % 2) (range 32)))
+(def boxes-per-row 32)
+(draw-column-headers)
+(draw-box "Source port" {:span 16})
+(draw-box "Destination port" {:span 16})
+(draw-box "Length" {:span 16})
+(draw-box "Checksum" {:span 16})
+```
+</code></pre>
+<p><code>boxes-per-row</code> 决定每行的 bit 数，<code>draw-column-headers</code> 绘制列标题，<code>draw-box</code> 使用 <code>:span</code> 指定字段占用的 bit 数。<code>bytefield-svg</code> 的其他 EDN/Clojure 绘图函数也可以直接使用。</p>
+<h3>Vega-Lite 数据可视化</h3>
+<p>使用 <code>vega-lite</code>（别名 <code>vegalite</code>、<code>vl</code>）代码块编写 JSON 规范。图表会在接近视口时才加载引擎，支持 SVG 导出、工具提示和响应式宽度；未进入视口的图表不会下载运行时。</p>
+<pre><code>{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Monthly notes",
+  "data": { "values": [
+    { "month": "Jan", "notes": 12 },
+    { "month": "Feb", "notes": 19 },
+    { "month": "Mar", "notes": 15 }
+  ] },
+  "mark": { "type": "bar", "cornerRadiusEnd": 3 },
+  "encoding": {
+    "x": { "field": "month", "type": "nominal", "title": null },
+    "y": { "field": "notes", "type": "quantitative", "title": "Notes" }
+  }
+}
+</code></pre>
+<p>源码：</p>
+<pre><code>```vega-lite
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Monthly notes",
+  "data": { "values": [
+    { "month": "Jan", "notes": 12 },
+    { "month": "Feb", "notes": 19 },
+    { "month": "Mar", "notes": 15 }
+  ] },
+  "mark": { "type": "bar", "cornerRadiusEnd": 3 },
+  "encoding": {
+    "x": { "field": "month", "type": "nominal", "title": null },
+    "y": { "field": "notes", "type": "quantitative", "title": "Notes" }
+  }
+}
+```
+</code></pre>
+<p><code>data.values</code> 可直接嵌入小型数据集，也可以改为 <code>data.url</code> 引用 JSON/CSV；<code>mark</code> 指定图元类型，<code>encoding</code> 将字段映射到坐标轴、颜色或大小。代码块语言也支持 <code>vegalite</code> 和 <code>vl</code>。</p>
+<p>PlantUML、Markmap 和 Vega-Lite 的运行时引擎由统一 loader 按需加载；PlantUML 和 Markmap 仍可在各自配置中关闭，关闭后会退化为普通代码块。WaveDrom 和 Bytefield 是构建期渲染器，不会增加页面运行时脚本。</p>
+<h3>BMP 位图指令</h3>
+<p><code>:::bitmap</code> 适合绘制像素图、协议字段示意和小型图标。<code>.</code> 或空格表示透明，其余字符表示像素；<code>palette</code> 按字符首次出现的顺序分配颜色。位图在构建时转换为内联 SVG，不加载外部脚本。</p>
+<p>:::bitmap{scale="12" palette="#0f172a #38bdf8" title="Tsukimi 像素月亮"}</p>
+<pre><code>....##....
+...#oo#...
+..#oooo#..
+.#oooooo#.
+#oooooooo#
+#oooooooo#
+.#oooooo#.
+..#oooo#..
+....##....
+</code></pre>
+<p>:::</p>
+<p>源码：</p>
+<pre><code>:::bitmap{scale="12" palette="#0f172a #38bdf8" title="Tsukimi 像素月亮"}
+```text
+....##....
+...#oo#...
+..#oooo#..
+.#oooooo#.
+#oooooooo#
+#oooooooo#
+.#oooooo#.
+..#oooo#..
+....##....
+```
+:::
+</code></pre>
+<p>常用参数：<code>scale</code>（1–32，默认 8）控制单个像素尺寸；<code>palette</code> 使用空格或逗号分隔颜色；<code>color</code> 设置未列入调色板字符的回退颜色；<code>background</code> 添加背景色；<code>title</code> 或 <code>alt</code> 提供无障碍文本。</p>
+<h3>数学公式</h3>
+<p>块级公式使用双美元符号：</p>
+<p>$$
+E = mc^2
+$$</p>
+<p>本文章通过 frontmatter 开启了行内公式，因此 <code>$a^2 + b^2 = c^2$</code> 会渲染为公式。其他文章默认只处理块级公式；如需开启行内公式，在 frontmatter 中加入：</p>
+<pre><code>math:
+  inline: true
+</code></pre>
+<p>公式由 KaTeX 渲染。</p>
+<hr />
+<h2>Markdown 处理增强</h2>
+<h3>文件包含</h3>
+<p>使用 HTML 注释在构建时插入相对当前 Markdown 文件的内容。Markdown 文件会再次解析，其他文件按原始 HTML 插入：</p>
+<pre><code>&lt;!-- @include: ./snippet.md --&gt;
+&lt;!-- @include: ./snippet.md{5-10} --&gt;
+&lt;!-- @include: ./snippet.md{5-} --&gt;
+&lt;!-- @include: ./snippet.md{-10} --&gt;
+&lt;!-- @include: ./snippet.md#region --&gt;
+</code></pre>
+<p>花括号表示行号范围，<code>#region</code> 表示提取代码区域；找不到文件时会保留错误注释，不会中断构建。</p>
+<h3>图片宽度与懒加载</h3>
+<p>图片替代文本中加入 <code>w-百分比</code> 可设置居中宽度，标题会作为图注：</p>
+<pre><code>![示例图片 w-50%](image.png "图片说明")
+</code></pre>
+<p>文章中的普通图片和 <code>::image</code> 图片都会自动使用 <code>loading="lazy"</code> 与 <code>lazy-image</code> 类；<code>data:</code> 图片会跳过处理。</p>
+<h3>链接与表格</h3>
+<ul>
+<li><code>./article.md</code>、<code>../article.md#section</code> 形式的相对 Markdown 链接在生产构建时会解析为文章最终 URL，开发环境保持原样。</li>
+<li>Markdown 表格会包裹在 <code>.table-wrapper</code> 中，以便在窄屏横向滚动。</li>
+<li>外部链接自动添加新窗口打开以及 <code>nofollow</code>、<code>noopener</code>、<code>noreferrer</code> 属性。</li>
+</ul>
+<h3>缩写定义</h3>
+<p>除了前文的 <code>:abbr</code> 指令，也支持先在文末定义缩写，再自动标注正文中的完整单词：</p>
+<pre><code>HTML 和 CSS 是 Web 开发的基础。
+
+*[HTML]: Hyper Text Markup Language
+*[CSS]: Cascading Style Sheets
+</code></pre>
+<h3>代码块显示增强</h3>
+<p>代码块默认启用自动换行，并提供行号、语言徽章和复制按钮；其中 <code>shellsession</code> 按项目配置隐藏行号。常见文件名还可直接作为语言标识并自动转换，例如 <code>astro.config.mjs</code>、<code>deploy.yml</code>、<code>CNAME</code> 和 <code>env</code>；也可以在代码块元信息中使用 <code>title="文件名"</code> 明确设置标题。</p>
+<h3>摘要与阅读统计</h3>
+<p>在文章中插入 <code>&lt;!-- more --&gt;</code> 会将其前的内容作为摘要；未插入时使用第一段文字作为摘要。构建时还会按中日韩字符和英文单词分别计算字数与预计阅读分钟数。</p>
+]]></content>
+    <author>
+      <name>Tsukimi</name>
+    </author>
+    <category term="Examples"></category>
+  </entry>
+  <entry>
+    <title>Tsukimi 简易指南</title>
+    <link href="https://tsukimi.souloss.cn/posts/guide/" rel="alternate" type="text/html"/>
+    <id>https://tsukimi.souloss.cn/posts/guide/</id>
+    <published>2024-04-01T00:00:00.000Z</published>
+    <updated>2024-04-01T00:00:00.000Z</updated>
+    <summary>如何使用本博客模板。</summary>
+    <content type="html"><![CDATA[<p>本博客模板基于 <a href="https://astro.build/">Astro</a> 构建。本指南中未提及的内容，你可以在 <a href="https://docs.astro.build/">Astro 文档</a> 中找到答案。</p>
+<h2>文章 Front-matter</h2>
+<pre><code>---
+title: My First Blog Post
+published: 2023-09-09
+description: This is the first post of my new Astro blog.
+image: ./cover.jpg
+tags: [Foo, Bar]
+category: Front-end
+draft: false
+---
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>文章标题。</td>
+</tr>
+<tr>
+<td><code>published</code></td>
+<td>文章发布日期。</td>
+</tr>
+<tr>
+<td><code>pinned</code></td>
+<td>是否将文章置顶到文章列表顶部。</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>置顶文章的优先级。数值越小优先级越高（0, 1, 2...）。</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>文章的简短描述，显示在首页。</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>文章封面图片路径。&lt;br/&gt;1. 以 <code>http://</code> 或 <code>https://</code> 开头：使用网络图片&lt;br/&gt;2. 以 <code>/</code> 开头：使用 <code>public</code> 目录中的图片&lt;br/&gt;3. 无前缀：相对于 Markdown 文件的路径</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>文章标签。</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>文章分类。</td>
+</tr>
+<tr>
+<td><code>licenseName</code></td>
+<td>文章内容的许可证名称。</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>文章作者。</td>
+</tr>
+<tr>
+<td><code>sourceLink</code></td>
+<td>文章内容的来源链接或引用。</td>
+</tr>
+<tr>
+<td><code>draft</code></td>
+<td>文章是否仍为草稿，草稿不会显示。</td>
+</tr>
+</tbody>
+</table>
+<h2>文章文件放置位置</h2>
+<p>文章文件应放置在 <code>src/content/posts/</code> 目录下。你也可以创建子目录来更好地组织文章和资源。</p>
+<p>::: file-tree</p>
+<ul>
+<li>src/content/posts/
+<ul>
+<li>post-1.md</li>
+<li>post-2/
+<ul>
+<li>cover.webp</li>
+<li>index.md</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>:::</p>
+]]></content>
+    <author>
+      <name>Tsukimi</name>
+    </author>
+    <category term="Guides"></category>
+  </entry>
+  <entry>
+    <title>Markdown Mermaid 图表</title>
+    <link href="https://tsukimi.souloss.cn/posts/markdown-mermaid/" rel="alternate" type="text/html"/>
+    <id>https://tsukimi.souloss.cn/posts/markdown-mermaid/</id>
+    <published>2023-10-01T00:00:00.000Z</published>
+    <updated>2023-10-01T00:00:00.000Z</updated>
+    <summary>一个使用 Mermaid 的 Markdown 博客文章简单示例。</summary>
+    <content type="html"><![CDATA[<h1>Markdown Mermaid 图表完全指南</h1>
+<p>本文演示了如何在 Markdown 文档中使用 Mermaid 创建各种复杂图表，包括流程图、时序图、甘特图、类图和状态图。</p>
+<h2>流程图示例</h2>
+<p>流程图非常适合用来表示流程或算法步骤。</p>
+<pre><code>graph TD
+    A[Start] --&gt; B{Condition Check}
+    B --&gt;|Yes| C[Process Step 1]
+    B --&gt;|No| D[Process Step 2]
+    C --&gt; E[Subprocess]
+    D --&gt; E
+    subgraph E [Subprocess Details]
+        E1[Substep 1] --&gt; E2[Substep 2]
+        E2 --&gt; E3[Substep 3]
+    end
+    E --&gt; F{Another Decision}
+    F --&gt;|Option 1| G[Result 1]
+    F --&gt;|Option 2| H[Result 2]
+    F --&gt;|Option 3| I[Result 3]
+    G --&gt; J[End]
+    H --&gt; J
+    I --&gt; J
+</code></pre>
+<h2>时序图示例</h2>
+<p>时序图展示了对象之间随时间推移的交互过程。</p>
+<pre><code>sequenceDiagram
+    participant User
+    participant WebApp
+    participant Server
+    participant Database
+
+    User-&gt;&gt;WebApp: Submit Login Request
+    WebApp-&gt;&gt;Server: Send Auth Request
+    Server-&gt;&gt;Database: Query User Credentials
+    Database--&gt;&gt;Server: Return User Data
+    Server--&gt;&gt;WebApp: Return Auth Result
+    
+    alt Auth Successful
+        WebApp-&gt;&gt;User: Show Welcome Page
+        WebApp-&gt;&gt;Server: Request User Data
+        Server-&gt;&gt;Database: Get User Preferences
+        Database--&gt;&gt;Server: Return Preferences
+        Server--&gt;&gt;WebApp: Return User Data
+        WebApp-&gt;&gt;User: Load Personalized Interface
+    else Auth Failed
+        WebApp-&gt;&gt;User: Show Error Message
+        WebApp-&gt;&gt;User: Prompt Re-entry
+    end
+</code></pre>
+<h2>甘特图示例</h2>
+<p>甘特图非常适合用于展示项目排期和时间线。</p>
+<pre><code>gantt
+    title Website Development Project Timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %m/%d
+    
+    section Design Phase
+    Requirements Analysis      :a1, 2023-10-01, 7d
+    UI Design                 :a2, after a1, 10d
+    Prototype Creation        :a3, after a2, 5d
+    
+    section Development Phase
+    Frontend Development      :b1, 2023-10-20, 15d
+    Backend Development       :b2, after a2, 18d
+    Database Design           :b3, after a1, 12d
+    
+    section Testing Phase
+    Unit Testing              :c1, after b1, 8d
+    Integration Testing       :c2, after b2, 10d
+    User Acceptance Testing   :c3, after c2, 7d
+    
+    section Deployment
+    Production Deployment     :d1, after c3, 3d
+    Launch                    :milestone, after d1, 0d
+</code></pre>
+<h2>类图示例</h2>
+<p>类图展示了系统的静态结构，包括类、属性、方法及其相互关系。</p>
+<pre><code>classDiagram
+    class User {
+        +String username
+        +String password
+        +String email
+        +Boolean active
+        +login()
+        +logout()
+        +updateProfile()
+    }
+    
+    class Article {
+        +String title
+        +String content
+        +Date publishDate
+        +Boolean published
+        +publish()
+        +edit()
+        +delete()
+    }
+    
+    class Comment {
+        +String content
+        +Date commentDate
+        +addComment()
+        +deleteComment()
+    }
+    
+    class Category {
+        +String name
+        +String description
+        +addArticle()
+        +removeArticle()
+    }
+    
+    User "1" -- "*" Article : writes
+    User "1" -- "*" Comment : posts
+    Article "1" -- "*" Comment : has
+    Article "1" -- "*" Category : belongs to
+</code></pre>
+<h2>状态图示例</h2>
+<p>状态图展示了对象在其生命周期中所经历的状态序列。</p>
+<pre><code>stateDiagram-v2
+    [*] --&gt; Draft
+    
+    Draft --&gt; UnderReview : submit
+    UnderReview --&gt; Draft : reject
+    UnderReview --&gt; Approved : approve
+    Approved --&gt; Published : publish
+    Published --&gt; Archived : archive
+    Published --&gt; Draft : retract
+    
+    state Published {
+        [*] --&gt; Active
+        Active --&gt; Hidden : temporarily hide
+        Hidden --&gt; Active : restore
+        Active --&gt; [*]
+        Hidden --&gt; [*]
+    }
+    
+    Archived --&gt; [*]
+</code></pre>
+<h2>饼图示例</h2>
+<p>饼图非常适合用于展示比例和百分比数据。</p>
+<pre><code>pie title Website Traffic Sources Analysis
+    "Search Engines" : 45.6
+    "Direct Access" : 30.1
+    "Social Media" : 15.3
+    "Referral Links" : 6.4
+    "Other Sources" : 2.6
+</code></pre>
+<h2>总结</h2>
+<p>Mermaid 是一个强大的工具，可以在 Markdown 文档中创建各种类型的图表。本文演示了如何使用流程图、时序图、甘特图、类图、状态图和饼图。这些图表可以帮助你更清晰地表达复杂的概念、流程和数据结构。</p>
+<p>使用 Mermaid 非常简单，只需在代码块中指定 mermaid 语言，然后用简洁的文本语法描述图表，Mermaid 就会自动将这些描述转换为美观的可视化图表。</p>
+<p>在你的下一篇技术博客或项目文档中尝试使用 Mermaid 图表吧——它们会让你的内容更加专业、更易于理解！</p>
+]]></content>
+    <author>
+      <name>Tsukimi</name>
+    </author>
+    <category term="Examples"></category>
+  </entry>
+  <entry>
+    <title>在文章中嵌入视频</title>
+    <link href="https://tsukimi.souloss.cn/posts/video/" rel="alternate" type="text/html"/>
+    <id>https://tsukimi.souloss.cn/posts/video/</id>
+    <published>2022-08-01T00:00:00.000Z</published>
+    <updated>2022-08-01T00:00:00.000Z</updated>
+    <summary>本文演示如何在博客文章中嵌入视频。</summary>
+    <content type="html"><![CDATA[<p>只需从 YouTube 或其他平台复制嵌入代码，然后粘贴到 Markdown 文件中即可。</p>
+<pre><code>---
+title: Include Video in the Post
+published: 2023-10-19
+// ...
+---
+
+&lt;iframe width="100%" height="468" src="https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_" title="YouTube video player" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+</code></pre>
+<h2>YouTube</h2>
+<p>&lt;iframe width="100%" height="468" src="https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen&gt;&lt;/iframe&gt;</p>
+<h2>Bilibili</h2>
+<p>&lt;iframe width="100%" height="468" src="//player.bilibili.com/player.html?bvid=BV1fK4y1s7Qf&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" &amp;autoplay=0&gt; &lt;/iframe&gt;</p>
+]]></content>
+    <author>
+      <name>Tsukimi</name>
+    </author>
+    <category term="Examples"></category>
+  </entry>
+</feed>

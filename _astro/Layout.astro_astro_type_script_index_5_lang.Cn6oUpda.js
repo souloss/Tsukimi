@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["_astro/theme-optimizer.uPwcSAqZ.js","_astro/rolldown-runtime.CXHxssQy.js"])))=>i.map(i=>d[i]);
+import{t}from"./preload-helper.BKYioxU4.js";"requestIdleCallback"in window?requestIdleCallback(()=>{t(()=>import("./theme-optimizer.uPwcSAqZ.js").then(e=>e.t),__vite__mapDeps([0,1]))},{timeout:3e3}):setTimeout(()=>{t(()=>import("./theme-optimizer.uPwcSAqZ.js").then(e=>e.t),__vite__mapDeps([0,1]))},1e3);

@@ -1,0 +1,3236 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>tsukimi</title><description>tsukimi 示例博客</description><link>https://tsukimi.souloss.cn/</link><language>zh_CN</language><item><title>Markdown 教程</title><link>https://tsukimi.souloss.cn/posts/markdown-tutorial/</link><guid isPermaLink="true">https://tsukimi.souloss.cn/posts/markdown-tutorial/</guid><description>A simple example of a Markdown blog post.</description><pubDate>Mon, 20 Jan 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Markdown 教程&lt;/h1&gt;
+&lt;p&gt;这是一个 Markdown 示例，展示如何编写 Markdown 文件。本文档整合了核心语法和扩展语法（GFM）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0&quot;&gt;块级元素&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%AE%B5%E8%90%BD%E4%B8%8E%E6%8D%A2%E8%A1%8C&quot;&gt;段落与换行&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E6%A0%87%E9%A2%98&quot;&gt;标题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%BC%95%E7%94%A8&quot;&gt;引用&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%88%97%E8%A1%A8&quot;&gt;列表&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E4%BB%A3%E7%A0%81%E5%9D%97&quot;&gt;代码块&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%88%86%E9%9A%94%E7%BA%BF&quot;&gt;分隔线&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%A1%A8%E6%A0%BC&quot;&gt;表格&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0&quot;&gt;行内元素&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E9%93%BE%E6%8E%A5&quot;&gt;链接&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%BC%BA%E8%B0%83&quot;&gt;强调&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E4%BB%A3%E7%A0%81&quot;&gt;代码&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%9B%BE%E7%89%87&quot;&gt;图片&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%88%A0%E9%99%A4%E7%BA%BF&quot;&gt;删除线&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%85%B6%E4%BB%96&quot;&gt;其他&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%87%AA%E5%8A%A8%E9%93%BE%E6%8E%A5&quot;&gt;自动链接&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E5%8F%8D%E6%96%9C%E6%9D%A0%E8%BD%AC%E4%B9%89&quot;&gt;反斜杠转义&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%E8%A1%8C%E5%86%85-html&quot;&gt;行内 HTML&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;块级元素&lt;/h2&gt;
+&lt;h3&gt;段落与换行&lt;/h3&gt;
+&lt;h4&gt;段落&lt;/h4&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;一个或多个空行即可分隔段落。（空行是指只包含&lt;strong&gt;空格&lt;/strong&gt;或&lt;strong&gt;制表符&lt;/strong&gt;的行。）&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This will be
+inline.
+
+This is second paragraph.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;This will be
+inline.&lt;/p&gt;
+&lt;p&gt;This is second paragraph.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h4&gt;换行&lt;/h4&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;br /&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在行尾添加&lt;strong&gt;两个或更多空格&lt;/strong&gt;即可换行。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This will be not
+inline.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;This will be not&lt;br /&gt;
+inline.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;标题&lt;/h3&gt;
+&lt;p&gt;Markdown 支持两种风格的标题：Setext 和 atx。&lt;/p&gt;
+&lt;h4&gt;Setext 风格&lt;/h4&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;使用**等号（=）&lt;strong&gt;作为 &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; 的下划线，使用&lt;/strong&gt;连字符（-）**作为 &lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt; 的下划线，数量不限。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This is an H1
+=============
+This is an H2
+-------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h1&gt;This is an H1&lt;/h1&gt;
+&lt;h2&gt;This is an H2&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h4&gt;atx 风格&lt;/h4&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;h3&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;h4&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;h5&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在行首使用 1-6 个&lt;strong&gt;井号（#）&lt;/strong&gt;，分别对应 &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; 到 &lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# This is an H1
+## This is an H2
+###### This is an H6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h1&gt;This is an H1&lt;/h1&gt;
+&lt;h2&gt;This is an H2&lt;/h2&gt;
+&lt;h6&gt;This is an H6&lt;/h6&gt;
+&lt;hr /&gt;
+&lt;p&gt;你也可以选择性地&quot;闭合&quot; atx 风格的标题。闭合的井号&lt;strong&gt;不需要&lt;/strong&gt;与开头的井号数量匹配。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# This is an H1 #
+## This is an H2 ##
+### This is an H3 ######
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h1&gt;This is an H1&lt;/h1&gt;
+&lt;h2&gt;This is an H2&lt;/h2&gt;
+&lt;h3&gt;This is an H3&lt;/h3&gt;
+&lt;hr /&gt;
+&lt;h3&gt;引用&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;blockquote&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Markdown 使用邮件风格的 &lt;strong&gt;&amp;gt;&lt;/strong&gt; 字符来表示引用。建议在每行前都加上 &amp;gt;，效果最佳。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+&amp;gt; consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+&amp;gt; Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+&amp;gt;
+&amp;gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+&amp;gt; id sem consectetuer libero luctus adipiscing.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.&lt;/p&gt;
+&lt;p&gt;Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;p&gt;Markdown 也允许你偷懒，只在硬换行段落的第一行前加 &amp;gt;。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+&amp;gt; Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+id sem consectetuer libero luctus adipiscing.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;p&gt;引用可以嵌套（即引用中的引用），只需添加额外的 &amp;gt; 层级即可。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; This is the first level of quoting.
+&amp;gt;
+&amp;gt; &amp;gt; This is nested blockquote.
+&amp;gt;
+&amp;gt; Back to the first level.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is the first level of quoting.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is nested blockquote.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Back to the first level.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;p&gt;引用中可以包含其他 Markdown 元素，包括标题、列表和代码块。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; ## This is a header.
+&amp;gt;
+&amp;gt; 1.   This is the first list item.
+&amp;gt; 2.   This is the second list item.
+&amp;gt;
+&amp;gt; Here&apos;s some example code:
+&amp;gt;
+&amp;gt;     return shell_exec(&quot;echo $input | $markdown_script&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;blockquote&gt;
+&lt;h2&gt;This is a header.&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;This is the first list item.&lt;/li&gt;
+&lt;li&gt;This is the second list item.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here&apos;s some example code:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;return shell_exec(&quot;echo $input | $markdown_script&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;h3&gt;列表&lt;/h3&gt;
+&lt;p&gt;Markdown 支持有序（编号）列表和无序（项目符号）列表。&lt;/p&gt;
+&lt;h4&gt;无序列表&lt;/h4&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;无序列表使用&lt;strong&gt;星号（*）&lt;/strong&gt;、**加号（+）&lt;strong&gt;和&lt;/strong&gt;连字符（-）**作为标记。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;*   Red
+*   Green
+*   Blue
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ul&gt;
+&lt;li&gt;Red&lt;/li&gt;
+&lt;li&gt;Green&lt;/li&gt;
+&lt;li&gt;Blue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;等同于：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;+   Red
++   Green
++   Blue
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以及：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-   Red
+-   Green
+-   Blue
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;有序列表&lt;/h4&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;有序列表使用数字后接句点：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1.  Bird
+2.  McHale
+3.  Parish
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li&gt;Bird&lt;/li&gt;
+&lt;li&gt;McHale&lt;/li&gt;
+&lt;li&gt;Parish&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr /&gt;
+&lt;p&gt;有时可能会意外触发有序列表，例如这样写：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1986. What a great season.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li&gt;What a great season.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr /&gt;
+&lt;p&gt;你可以使用**反斜杠转义（\）**句点：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1986\. What a great season.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;1986. What a great season.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h4&gt;缩进&lt;/h4&gt;
+&lt;h5&gt;引用&lt;/h5&gt;
+&lt;p&gt;要在列表项中放入引用，引用的 &amp;gt; 分隔符需要缩进：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;*   A list item with a blockquote:
+
+    &amp;gt; This is a blockquote
+    &amp;gt; inside a list item.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;A list item with a blockquote:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote
+inside a list item.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;h5&gt;代码块&lt;/h5&gt;
+&lt;p&gt;要在列表项中放入代码块，代码块需要缩进两次——即 &lt;strong&gt;8 个空格&lt;/strong&gt;或 &lt;strong&gt;2 个制表符&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;*   A list item with a code block:
+
+        &amp;lt;code goes here&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;A list item with a code block:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;code goes here&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;h5&gt;嵌套列表&lt;/h5&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* A
+  * A1
+  * A2
+* B
+* C
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;ul&gt;
+&lt;li&gt;A
+&lt;ul&gt;
+&lt;li&gt;A1&lt;/li&gt;
+&lt;li&gt;A2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;B&lt;/li&gt;
+&lt;li&gt;C&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;h3&gt;代码块&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;将代码块的每一行缩进至少 &lt;strong&gt;4 个空格&lt;/strong&gt;或 &lt;strong&gt;1 个制表符&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This is a normal paragraph:
+
+    This is a code block.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;This is a normal paragraph:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This is a code block.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;p&gt;代码块会持续到遇到未缩进的行（或文章末尾）为止。&lt;/p&gt;
+&lt;p&gt;在代码块中，**&amp;amp; 符号（&amp;amp;）&lt;strong&gt;和&lt;/strong&gt;尖括号（&amp;lt; 和 &amp;gt;）**会自动转换为 HTML 实体。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    &amp;lt;div class=&quot;footer&quot;&amp;gt;
+        &amp;amp;copy; 2004 Foo Corporation
+    &amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;div class=&quot;footer&quot;&amp;gt;
+    &amp;amp;copy; 2004 Foo Corporation
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;p&gt;下面的围栏代码块和语法高亮属于扩展语法，你可以用另一种方式来编写代码块。&lt;/p&gt;
+&lt;h4&gt;围栏代码块&lt;/h4&gt;
+&lt;p&gt;只需用 &lt;code&gt;```&lt;/code&gt; 包裹代码（如下所示），就无需缩进四个空格。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Here&apos;s an example:
+
+```
+function test() {
+  console.log(&quot;notice the blank line before this function?&quot;);
+}
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Here&apos;s an example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;function test() {
+  console.log(&quot;notice the blank line before this function?&quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;h4&gt;语法高亮&lt;/h4&gt;
+&lt;p&gt;在围栏代码块中，添加可选的语言标识符，即可启用语法高亮（&lt;a href=&quot;https://github.com/github/linguist/blob/master/lib/linguist/languages.yml&quot;&gt;支持的语言&lt;/a&gt;）。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```ruby
+require &apos;redcarpet&apos;
+markdown = Redcarpet.new(&quot;Hello World!&quot;)
+puts markdown.to_html
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;pre&gt;&lt;code&gt;require &apos;redcarpet&apos;
+markdown = Redcarpet.new(&quot;Hello World!&quot;)
+puts markdown.to_html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;h3&gt;分隔线&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;hr /&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;在一行中单独放置**三个或更多连字符（-）、星号（*）或下划线（_）**即可。连字符或星号之间可以加空格。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;* * *
+***
+*****
+- - -
+---------------------------------------
+___
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;hr /&gt;
+&lt;h3&gt;表格&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;table&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这是扩展语法。&lt;/p&gt;
+&lt;p&gt;使用**管道符（|）&lt;strong&gt;分隔列，使用&lt;/strong&gt;连字符（-）&lt;strong&gt;分隔表头，使用&lt;/strong&gt;冒号（:）**设置对齐方式。&lt;/p&gt;
+&lt;p&gt;外侧的**管道符（|）**和对齐方式是可选的。表头与内容之间的分隔行每列至少需要 &lt;strong&gt;3 个分隔符&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;| Left | Center | Right |
+|:-----|:------:|------:|
+|aaa   |bbb     |ccc    |
+|ddd   |eee     |fff    |
+
+ A | B
+---|---
+123|456
+
+
+A |B
+--|--
+12|45
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Left&lt;/th&gt;
+&lt;th&gt;Center&lt;/th&gt;
+&lt;th&gt;Right&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;aaa&lt;/td&gt;
+&lt;td&gt;bbb&lt;/td&gt;
+&lt;td&gt;ccc&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ddd&lt;/td&gt;
+&lt;td&gt;eee&lt;/td&gt;
+&lt;td&gt;fff&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;A&lt;/th&gt;
+&lt;th&gt;B&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;123&lt;/td&gt;
+&lt;td&gt;456&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;A&lt;/th&gt;
+&lt;th&gt;B&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;12&lt;/td&gt;
+&lt;td&gt;45&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;行内元素&lt;/h2&gt;
+&lt;h3&gt;链接&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Markdown 支持两种链接风格：行内式和引用式。&lt;/p&gt;
+&lt;h4&gt;行内式&lt;/h4&gt;
+&lt;p&gt;行内链接格式如下：&lt;code&gt;[链接文本](URL &quot;标题&quot;)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;标题是可选的。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This is [an example](http://example.com/ &quot;Title&quot;) inline link.
+
+[This link](http://example.net/) has no title attribute.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;This is &lt;a href=&quot;http://example.com/&quot;&gt;an example&lt;/a&gt; inline link.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://example.net/&quot;&gt;This link&lt;/a&gt; has no title attribute.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;如果你引用的是同一服务器上的本地资源，可以使用相对路径：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;See my [About](/about/) page for details.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;See my &lt;a href=&quot;/about/&quot;&gt;About&lt;/a&gt; page for details.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h4&gt;引用式&lt;/h4&gt;
+&lt;p&gt;你可以预先定义链接引用。格式如下：&lt;code&gt;[id]: URL &quot;标题&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;标题也是可选的。然后在正文中引用链接，格式如下：&lt;code&gt;[链接文本][id]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[id]: http://example.com/  &quot;Optional Title Here&quot;
+This is [an example][id] reference-style link.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;This is &lt;a href=&quot;http://example.com/&quot;&gt;an example&lt;/a&gt; reference-style link.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;具体规则为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方括号中包含链接标识符（&lt;strong&gt;不区分大小写&lt;/strong&gt;，左侧最多可缩进三个空格）；&lt;/li&gt;
+&lt;li&gt;后跟一个冒号；&lt;/li&gt;
+&lt;li&gt;后跟一个或多个空格（或制表符）；&lt;/li&gt;
+&lt;li&gt;后跟链接的 URL；&lt;/li&gt;
+&lt;li&gt;链接 URL 可以选择用尖括号包围；&lt;/li&gt;
+&lt;li&gt;可选地后跟链接的标题属性，用双引号、单引号或圆括号包围。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下三种链接定义是等价的：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[foo]: http://example.com/  &quot;Optional Title Here&quot;
+[foo]: http://example.com/  &apos;Optional Title Here&apos;
+[foo]: http://example.com/  (Optional Title Here)
+[foo]: &amp;lt;http://example.com/&amp;gt;  &quot;Optional Title Here&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用空的方括号时，链接文本本身将作为名称。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[Google]: http://google.com/
+[Google][]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;a href=&quot;http://google.com/&quot;&gt;Google&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;强调&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Markdown 使用**星号（*）&lt;strong&gt;和&lt;/strong&gt;下划线（_）**作为强调标记。&lt;strong&gt;单个&lt;/strong&gt;标记表示 &lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;；&lt;strong&gt;双个&lt;/strong&gt;标记表示 &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;*single asterisks*
+
+_single underscores_
+
+**double asterisks**
+
+__double underscores__
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;em&gt;single asterisks&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;single underscores&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;double asterisks&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;double underscores&lt;/strong&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;但如果你在 * 或 _ 两侧加上空格，它将被视为字面的星号或下划线。&lt;/p&gt;
+&lt;p&gt;你可以使用反斜杠转义：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;\*this text is surrounded by literal asterisks\*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;*this text is surrounded by literal asterisks*&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;代码&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;用**反引号（`）**包裹。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Use the `printf()` function.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Use the &lt;code&gt;printf()&lt;/code&gt; function.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;要在代码片段中包含字面反引号字符，可以使用&lt;strong&gt;多个反引号&lt;/strong&gt;作为开头和结尾的分隔符：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;``There is a literal backtick (`) here.``
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;code&gt;There is a literal backtick (`) here.&lt;/code&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;代码片段两端的反引号分隔符中可以包含空格——开头后一个，结尾前一个。这样你就可以在代码片段的开头或结尾放置字面反引号字符：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;A single backtick in a code span: `` ` ``
+
+A backtick-delimited string in a code span: `` `foo` ``
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;A single backtick in a code span: &lt;code&gt;`&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;A backtick-delimited string in a code span: &lt;code&gt;`foo`&lt;/code&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;图片&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;img /&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Markdown 的图片语法与链接语法类似，同样支持两种风格：行内式和引用式。&lt;/p&gt;
+&lt;h4&gt;行内式&lt;/h4&gt;
+&lt;p&gt;行内图片语法如下：&lt;code&gt;![替代文本](URL &quot;标题&quot;)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;标题是可选的。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;![Alt text](/path/to/img.jpg)
+
+![Alt text](/path/to/img.jpg &quot;Optional title&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp&quot; alt=&quot;Alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp&quot; alt=&quot;Alt text&quot; title=&quot;Optional title&quot; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;具体规则为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个感叹号：!；&lt;/li&gt;
+&lt;li&gt;后跟一对方括号，包含图片的替代属性文本；&lt;/li&gt;
+&lt;li&gt;后跟一对圆括号，包含图片的 URL 或路径，以及可选的用双引号或单引号包围的标题属性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;引用式&lt;/h4&gt;
+&lt;p&gt;引用式图片语法如下：&lt;code&gt;![替代文本][id]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[img id]: https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp  &quot;Optional title attribute&quot;
+![Alt text][img id]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/08/20/5fszgXeOxmL3Wdv.webp&quot; alt=&quot;Alt text&quot; title=&quot;Optional title attribute&quot; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;删除线&lt;/h3&gt;
+&lt;p&gt;HTML 标签：&lt;code&gt;&amp;lt;del&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;这是扩展语法。&lt;/p&gt;
+&lt;p&gt;GFM 添加了删除线文本的语法。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;~~Mistaken text.~~
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;s&gt;Mistaken text.&lt;/s&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;其他&lt;/h2&gt;
+&lt;h3&gt;自动链接&lt;/h3&gt;
+&lt;p&gt;Markdown 支持为 URL 和电子邮件地址创建&quot;自动&quot;链接的快捷方式：只需用尖括号包围 URL 或电子邮件地址即可。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;http://example.com/&amp;gt;
+
+&amp;lt;address@example.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;a href=&quot;http://example.com/&quot;&gt;http://example.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;mailto:address@example.com&quot;&gt;address@example.com&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;GFM 会自动链接标准 URL。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://github.com/emn178/markdown
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;https://github.com/emn178/markdown&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;反斜杠转义&lt;/h3&gt;
+&lt;p&gt;Markdown 允许你使用反斜杠转义来生成字面字符，否则这些字符在 Markdown 格式语法中具有特殊含义。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;\*literal asterisks\*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;*literal asterisks*&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Markdown 为以下字符提供反斜杠转义：&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;\   backslash
+`   backtick
+*   asterisk
+_   underscore
+{}  curly braces
+[]  square brackets
+()  parentheses
+#   hash mark
++   plus sign
+-   minus sign (hyphen)
+.   dot
+!   exclamation mark
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;行内 HTML&lt;/h2&gt;
+&lt;p&gt;对于 Markdown 语法未涵盖的任何标记，你可以直接使用 HTML。无需在前面添加前缀或分隔符来表明你正在从 Markdown 切换到 HTML；直接使用标签即可。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;This is a regular paragraph.
+
+&amp;lt;table&amp;gt;
+    &amp;lt;tr&amp;gt;
+        &amp;lt;td&amp;gt;Foo&amp;lt;/td&amp;gt;
+    &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+
+This is another regular paragraph.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;This is a regular paragraph.&lt;/p&gt;
+&lt;p&gt;&amp;lt;table&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Foo&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;&lt;/p&gt;
+&lt;p&gt;This is another regular paragraph.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;请注意，Markdown 格式语法&lt;strong&gt;不会在块级 HTML 标签内&lt;/strong&gt;进行处理。&lt;/p&gt;
+&lt;p&gt;与块级 HTML 标签不同，Markdown 语法&lt;strong&gt;会在行内标签内&lt;/strong&gt;进行处理。&lt;/p&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;span&amp;gt;**Work**&amp;lt;/span&amp;gt;
+
+&amp;lt;div&amp;gt;
+    **No Work**
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;预览：&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&amp;lt;span&amp;gt;&lt;strong&gt;Work&lt;/strong&gt;&amp;lt;/span&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;div&amp;gt;
+&lt;strong&gt;No Work&lt;/strong&gt;
+&amp;lt;/div&amp;gt;&lt;/p&gt;
+&lt;hr /&gt;
+</content:encoded></item><item><title>LLM 实际上是如何工作的</title><link>https://tsukimi.souloss.cn/posts/how-llms-work/part-1/</link><guid isPermaLink="true">https://tsukimi.souloss.cn/posts/how-llms-work/part-1/</guid><description>一份可视化、交互式的指南，介绍大语言模型是如何构建的——从原始互联网文本到对话助手。基于 Andrej Karpathy 的技术深度解析。</description><pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本文转载自 &lt;strong&gt;ynarwal&lt;/strong&gt; 的 &lt;a href=&quot;https://ynarwal.github.io/how-llms-work/&quot;&gt;How LLMs Actually Work&lt;/a&gt;，基于 Andrej Karpathy 的《Intro to Large Language Models》。&lt;/p&gt;
+&lt;p&gt;原始交互式文章可通过以下链接访问：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;/reposts/how-llms-work/part-1/index-zh.html&quot;&gt;阅读中文版&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意：&lt;/strong&gt; 交互式内容将在独立页面中打开，以获得最佳浏览体验。&lt;/p&gt;
+&lt;/blockquote&gt;
+</content:encoded></item><item><title>Markdown 扩展特性</title><link>https://tsukimi.souloss.cn/posts/markdown-extended/</link><guid isPermaLink="true">https://tsukimi.souloss.cn/posts/markdown-extended/</guid><description>Tsukimi 支持的 Markdown 扩展语法一览</description><pubDate>Wed, 01 May 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本文档展示 Tsukimi 支持的所有 Markdown 扩展指令。在普通 &lt;code&gt;.md&lt;/code&gt; 文件中直接使用 &lt;code&gt;:::&lt;/code&gt; 和 &lt;code&gt;:&lt;/code&gt; 语法，无需 import，无需 MDX。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;GitHub 仓库卡片(::github)&lt;/h2&gt;
+&lt;p&gt;通过 GitHub API 自动拉取仓库信息，生成动态卡片。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;souloss/Tsukimi&quot;}&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::github{repo=&quot;用户名/仓库名&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;repo&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;GitHub 仓库路径，格式 &lt;code&gt;用户名/仓库名&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;提示框(:::callout/:::note 等)&lt;/h2&gt;
+&lt;p&gt;支持通用 &lt;code&gt;:::callout&lt;/code&gt; 和 13 种预设类型，也兼容 GitHub 的 &lt;code&gt;[!TYPE]&lt;/code&gt; 提示框语法。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::note
+即使快速浏览也应注意的信息。
+:::&lt;/p&gt;
+&lt;p&gt;:::tip
+帮助用户更高效完成操作的可选信息。
+:::&lt;/p&gt;
+&lt;p&gt;:::important
+用户成功完成操作必需的关键信息。
+:::&lt;/p&gt;
+&lt;p&gt;:::warning
+存在潜在风险，需立即关注的重要内容。
+:::&lt;/p&gt;
+&lt;p&gt;:::caution
+某操作可能导致的负面后果。
+:::&lt;/p&gt;
+&lt;p&gt;通用写法可以通过 &lt;code&gt;type&lt;/code&gt;、&lt;code&gt;title&lt;/code&gt; 和 &lt;code&gt;color&lt;/code&gt; 自定义：&lt;/p&gt;
+&lt;p&gt;:::callout{type=&quot;question&quot; title=&quot;为什么要使用指令？&quot;}
+通用容器适合表达预设类型之外的提示。
+:::&lt;/p&gt;
+&lt;p&gt;:::note{title=&quot;自定义颜色&quot; color=&quot;#0ea5e9&quot;}
+&lt;code&gt;note&lt;/code&gt; 类型可覆盖默认主题色。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::note
+即使快速浏览也应注意的信息。
+:::
+
+:::tip
+帮助用户更高效完成操作的可选信息。
+:::
+
+:::important
+用户成功完成操作必需的关键信息。
+:::
+
+:::warning
+存在潜在风险，需立即关注的重要内容。
+:::
+
+:::caution
+某操作可能导致的负面后果。
+:::
+
+:::callout{type=&quot;question&quot; title=&quot;为什么要使用指令？&quot;}
+通用容器适合表达预设类型之外的提示。
+:::
+
+:::note{title=&quot;自定义颜色&quot; color=&quot;#0ea5e9&quot;}
+`note` 类型可覆盖默认主题色。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;类型说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类型&lt;/th&gt;
+&lt;th&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;note&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;需要注意的信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;info&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;一般信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;tip&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;有用的可选建议&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;important&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;成功必需的关键信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;warning&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;潜在风险警告&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;caution&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;可能导致负面后果的警告&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;question&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;问题或思考&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;quote&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;引用内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;bug&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;已知问题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;example&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;示例内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;success&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;成功状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;failure&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;失败状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;danger&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;高风险警告&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;:::callout{type=&quot;warn&quot;}&lt;/code&gt; 也可作为 &lt;code&gt;warning&lt;/code&gt; 的别名。&lt;code&gt;title&lt;/code&gt; 设置标题；&lt;code&gt;note&lt;/code&gt; 类型可用 &lt;code&gt;color&lt;/code&gt; 覆盖主题色。GitHub 风格语法会自动转换为对应的提示框：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; [!NOTE]
+&amp;gt; 这段内容会被转换为 `:::note`。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;h2&gt;代码分组(:::code-group)&lt;/h2&gt;
+&lt;p&gt;专用于代码块的选项卡容器，标签自动从代码块语言或 &lt;code&gt;[标签名]&lt;/code&gt; 派生。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::code-group&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;yarn add
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;pnpm add
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::code-group
+```js [npm]
+npm install
+```
+
+```js [yarn]
+yarn add
+```
+
+```js [pnpm]
+pnpm add
+```
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;[标签名]&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;代码块元信息中指定标签名，如 &lt;code&gt;[pnpm]&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:active&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;在代码块元信息中设置默认激活项&lt;/td&gt;
+&lt;td&gt;第一个代码块&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;字段文档(:::field/:::field-group)&lt;/h2&gt;
+&lt;p&gt;用于 API 或配置项的结构化文档展示。支持 &lt;code&gt;@type&lt;/code&gt;、&lt;code&gt;@required&lt;/code&gt;、&lt;code&gt;@optional&lt;/code&gt;、&lt;code&gt;@deprecated&lt;/code&gt;、&lt;code&gt;@default&lt;/code&gt;、&lt;code&gt;@description&lt;/code&gt; 标签。&lt;/p&gt;
+&lt;h3&gt;单个字段&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:::field{名称}&lt;/code&gt; 展示单个字段的类型、约束和描述。&lt;/p&gt;
+&lt;p&gt;:::field{name}&lt;/p&gt;
+&lt;p&gt;@type string&lt;/p&gt;
+&lt;p&gt;@required&lt;/p&gt;
+&lt;p&gt;@description 资源的唯一标识符&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;h3&gt;字段组&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;::::field-group&lt;/code&gt; 将多个字段排列在一起，自动添加分隔线。&lt;/p&gt;
+&lt;p&gt;::::field-group
+:::field{port}&lt;/p&gt;
+&lt;p&gt;@type number&lt;/p&gt;
+&lt;p&gt;@default 3000&lt;/p&gt;
+&lt;p&gt;@description 监听的端口号&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;:::field{host}&lt;/p&gt;
+&lt;p&gt;@type string&lt;/p&gt;
+&lt;p&gt;@default &quot;localhost&quot;&lt;/p&gt;
+&lt;p&gt;@deprecated&lt;/p&gt;
+&lt;p&gt;@description 绑定的主机名（请使用 &lt;code&gt;address&lt;/code&gt; 替代）&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;:::field{debug}&lt;/p&gt;
+&lt;p&gt;@type boolean&lt;/p&gt;
+&lt;p&gt;@optional&lt;/p&gt;
+&lt;p&gt;@description 启用调试日志&lt;/p&gt;
+&lt;p&gt;:::
+::::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::field{name}
+
+@type string
+
+@required
+
+@description 资源的唯一标识符
+
+:::
+
+::::field-group
+:::field{port}
+
+@type number
+
+@default 3000
+
+@description 监听的端口号
+
+:::
+
+:::field{host}
+
+@type string
+
+@default &quot;localhost&quot;
+
+@deprecated
+
+@description 绑定的主机名（请使用 `address` 替代）
+
+:::
+::::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;标签说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;标签&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;@type&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;字段类型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;@required&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标记为必填（绿色标签）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;@optional&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标记为可选（灰色标签）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;@deprecated&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标记为已废弃（红色标签，字段名加删除线）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;@default&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;默认值&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;@description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;字段描述&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;指令说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;指令&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:::field{名称}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;单个字段&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;::::field-group&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;字段组容器，字段间自动添加分隔线&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;代码树(:::code-tree)&lt;/h2&gt;
+&lt;p&gt;左侧文件树 + 右侧代码面板的组合视图。点击文件名切换代码，点击文件夹展开/收起。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::code-tree{title=&quot;My Project&quot; entry=&quot;src/main.ts&quot;}&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import { app } from &apos;./app&apos;
+
+app.listen(3000, () =&amp;gt; {
+  console.log(&apos;Server running on port 3000&apos;)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;import express from &apos;express&apos;
+
+export const app = express()
+
+app.get(&apos;/&apos;, (req, res) =&amp;gt; {
+  res.json({ hello: &apos;world&apos; })
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::code-tree{title=&quot;My Project&quot; entry=&quot;src/main.ts&quot;}
+```ts title=&quot;src/main.ts&quot; :active
+import { app } from &apos;./app&apos;
+
+app.listen(3000, () =&amp;gt; {
+  console.log(&apos;Server running on port 3000&apos;)
+})
+```
+
+```ts title=&quot;src/app.ts&quot;
+import express from &apos;express&apos;
+
+export const app = express()
+
+app.get(&apos;/&apos;, (req, res) =&amp;gt; {
+  res.json({ hello: &apos;world&apos; })
+})
+```
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;代码树标题&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;entry&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;默认激活的文件路径&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;height&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;代码树容器高度&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;dir&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;导入目录路径，自动扫描文件构建代码树&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:active&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;代码块元信息，标记默认激活文件&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;代码块的 &lt;code&gt;title&lt;/code&gt; 属性用于构建文件树路径，以 &lt;code&gt;/&lt;/code&gt; 分隔会自动创建文件夹层级。&lt;/p&gt;
+&lt;h3&gt;从目录导入&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;dir&lt;/code&gt; 属性可以导入整个目录作为代码树，自动扫描目录下所有文件：&lt;/p&gt;
+&lt;p&gt;:::code-tree{dir=&quot;public/demos/sample-web-project&quot; title=&quot;示例 Web 项目&quot; entry=&quot;src/main.ts&quot;}
+:::&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;折叠块(:::details/:::folders)&lt;/h2&gt;
+&lt;h3&gt;基础折叠&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:::details&lt;/code&gt; 创建可展开/收起的内容区域。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::details{title=&quot;点击展开&quot; open=&quot;true&quot;}
+这个内容默认展开。&lt;code&gt;folding&lt;/code&gt;、&lt;code&gt;collapse&lt;/code&gt;、&lt;code&gt;details&lt;/code&gt; 三个指令名称效果完全相同。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::details{title=&quot;点击展开&quot; open=&quot;true&quot;}
+这个内容默认展开。`folding`、`collapse`、`details` 三个指令名称效果完全相同。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;折叠块标题&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;&quot;Details&quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;open=&quot;true&quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;默认展开&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;主题色&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;accent&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;多级折叠&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:::folders&lt;/code&gt; 创建多个独立折叠面板，面板间自动添加分隔线。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::folders
+folder: 第一章：基础概念&lt;/p&gt;
+&lt;p&gt;Astro 是一个&lt;strong&gt;内容优先&lt;/strong&gt;的静态站点生成器。核心特点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;零 JS 默认输出&lt;/li&gt;
+&lt;li&gt;群岛架构&lt;/li&gt;
+&lt;li&gt;支持 React / Vue / Svelte&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;folder: 第二章：组件系统&lt;/p&gt;
+&lt;p&gt;Astro 组件使用 &lt;code&gt;.astro&lt;/code&gt; 后缀，语法类似 HTML + JS：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+const name = &apos;Astro&apos;;
+---
+&amp;lt;h1&amp;gt;Hello {name}&amp;lt;/h1&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;folder: 第三章：内容集合&lt;/p&gt;
+&lt;p&gt;使用 &lt;a href=&quot;https://docs.astro.build/zh-cn/guides/content-collections/&quot;&gt;Content Collections&lt;/a&gt; 管理类型安全的内容。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::folders
+folder: 第一章：基础概念
+
+Astro 是一个**内容优先**的静态站点生成器。核心特点：
+
+1. 零 JS 默认输出
+2. 群岛架构
+3. 支持 React / Vue / Svelte
+
+folder: 第二章：组件系统
+
+Astro 组件使用 `.astro` 后缀，语法类似 HTML + JS：
+
+```astro
+---
+const name = &apos;Astro&apos;;
+---
+&amp;lt;h1&amp;gt;Hello {name}&amp;lt;/h1&amp;gt;
+```
+
+folder: 第三章：内容集合
+
+使用 [Content Collections](https://docs.astro.build/zh-cn/guides/content-collections/) 管理类型安全的内容。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;手风琴模式&lt;/h3&gt;
+&lt;p&gt;添加 &lt;code&gt;accordion&lt;/code&gt; 属性，同一时间只能展开一个面板。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::folders{accordion}
+folder: 安装&lt;/p&gt;
+&lt;p&gt;运行 &lt;code&gt;npm install&lt;/code&gt; 安装依赖。&lt;/p&gt;
+&lt;p&gt;folder: 配置&lt;/p&gt;
+&lt;p&gt;编辑 &lt;code&gt;config.json&lt;/code&gt; 设置偏好。&lt;/p&gt;
+&lt;p&gt;folder: 部署&lt;/p&gt;
+&lt;p&gt;运行 &lt;code&gt;npm run build &amp;amp;&amp;amp; npm run deploy&lt;/code&gt;。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::folders{accordion}
+folder: 安装
+
+运行 `npm install` 安装依赖。
+
+folder: 配置
+
+编辑 `config.json` 设置偏好。
+
+folder: 部署
+
+运行 `npm run build &amp;amp;&amp;amp; npm run deploy`。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;指令说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;指令&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:::details{title=&quot;标题&quot;}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;单个折叠块&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:::folders&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;多个折叠面板&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:::folders{accordion}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;手风琴模式，同时只展开一个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;folder: 标题&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;面板标题行，后跟内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;卡片网格(::::card-grid)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;::::card-grid&lt;/code&gt; 将多个 &lt;code&gt;:::card&lt;/code&gt; 以响应式网格布局排列。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;::::card-grid
+:::card{title=&quot;快速&quot; icon=&quot;lucide:zap&quot; color=&quot;#22c55e&quot;}
+基于 Astro 6 静态输出，页面加载极快。
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;现代&quot; icon=&quot;lucide:code&quot; color=&quot;#3b82f6&quot;}
+Svelte 5 runes 模式、Tailwind CSS 4、TypeScript。
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;丰富&quot; icon=&quot;lucide:bookmark&quot; color=&quot;#a855f7&quot;}
+扩展 Markdown 指令 80+，图表、交互组件一应俱全。
+:::
+::::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::::card-grid
+:::card{title=&quot;快速&quot; icon=&quot;lucide:zap&quot; color=&quot;#22c55e&quot;}
+基于 Astro 6 静态输出，页面加载极快。
+:::
+
+:::card{title=&quot;现代&quot; icon=&quot;lucide:code&quot; color=&quot;#3b82f6&quot;}
+Svelte 5 runes 模式、Tailwind CSS 4、TypeScript。
+:::
+
+:::card{title=&quot;丰富&quot; icon=&quot;lucide:bookmark&quot; color=&quot;#a855f7&quot;}
+扩展 Markdown 指令 80+，图表、交互组件一应俱全。
+:::
+::::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;指令说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;指令&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;::::card-grid&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;卡片网格容器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;:::card{title=&quot;...&quot;}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;单个卡片&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;卡片标题&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;icon&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;卡片图标，支持 &lt;code&gt;lucide:名称&lt;/code&gt; 格式&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;图标和主题色&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;accent&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;href&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;点击跳转链接&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;代码块标注(del/ins/聚焦)&lt;/h2&gt;
+&lt;p&gt;Expressive Code 内置支持行标注，通过代码块元信息指定行号。支持三种标注类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;删除行&lt;/strong&gt; &lt;code&gt;del={行号}&lt;/code&gt; — 红色高亮，表示被删除的代码&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;新增行&lt;/strong&gt; &lt;code&gt;ins={行号}&lt;/code&gt; — 绿色高亮，表示新增的代码&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;聚焦行&lt;/strong&gt; &lt;code&gt;{行号}&lt;/code&gt; — 蓝色高亮，表示需要关注的行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;支持行号范围，如 &lt;code&gt;del={2}&lt;/code&gt;、&lt;code&gt;ins={3-4}&lt;/code&gt;、&lt;code&gt;{5-7}&lt;/code&gt;。&lt;/p&gt;
+&lt;h3&gt;行标注示例&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;function getUser(id: string) {
+  const user = db.findUser(id)
+  const user = db.findById(id)
+  if (!user) {
+    throw new Error(&apos;Not found&apos;)
+  }
+  return user
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```typescript del={2} ins={3} {5}
+function getUser(id: string) {
+  const user = db.findUser(id)
+  const user = db.findById(id)
+  if (!user) {
+    throw new Error(&apos;Not found&apos;)
+  }
+  return user
+}
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;diff 语法&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;diff&lt;/code&gt; 语言标识符，通过 &lt;code&gt;+&lt;/code&gt;/&lt;code&gt;-&lt;/code&gt; 前缀标注行，同时保留语法高亮：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- const user = db.findUser(id)
++ const user = db.findById(id)
+  if (!user) {
+    throw new Error(&apos;Not found&apos;)
+  }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```diff lang=&quot;ts&quot;
+- const user = db.findUser(id)
++ const user = db.findById(id)
+  if (!user) {
+    throw new Error(&apos;Not found&apos;)
+  }
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;参数说明&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;标注&lt;/th&gt;
+&lt;th&gt;语法&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;颜色&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;删除行&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;del={行号}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标记为删除的代码行&lt;/td&gt;
+&lt;td&gt;🔴 红色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;新增行&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;ins={行号}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标记为新增的代码行&lt;/td&gt;
+&lt;td&gt;🟢 绿色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;聚焦行&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;{行号}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;需要关注的代码行&lt;/td&gt;
+&lt;td&gt;🔵 蓝色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;diff 语法&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;diff lang=&quot;语言&quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;使用 &lt;code&gt;+&lt;/code&gt;/&lt;code&gt;-&lt;/code&gt; 前缀标注&lt;/td&gt;
+&lt;td&gt;同上&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;行号支持范围写法：&lt;code&gt;del={2-5}&lt;/code&gt; 表示第 2-5 行，多个范围用空格分隔：&lt;code&gt;ins={3-4} ins={8-10}&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;代码行末还支持 Expressive Code 标记：&lt;code&gt;// [!code ++]&lt;/code&gt;（新增）、&lt;code&gt;// [!code --]&lt;/code&gt;（删除）、&lt;code&gt;// [!code focus]&lt;/code&gt;（聚焦）、&lt;code&gt;// [!code error]&lt;/code&gt;（错误）和 &lt;code&gt;// [!code warning]&lt;/code&gt;（警告）。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```ts
+const oldValue = getValue() // [!code --]
+const newValue = getValueV2() // [!code ++]
+throw new Error(&quot;failed&quot;) // [!code error]
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;h2&gt;代码块折叠&lt;/h2&gt;
+&lt;p&gt;代码块支持两种折叠方式：&lt;strong&gt;自动折叠&lt;/strong&gt;（超过行数阈值自动添加折叠按钮）和&lt;strong&gt;强制折叠&lt;/strong&gt;（通过 &lt;code&gt;collapse&lt;/code&gt; 标记手动指定）。&lt;/p&gt;
+&lt;h3&gt;自动折叠&lt;/h3&gt;
+&lt;p&gt;当代码块行数超过配置的阈值（默认 10 行）时，自动添加折叠按钮。折叠后显示前 5 行预览，底部渐变遮罩提示可展开。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;interface UserProfile {
+  id: string
+  name: string
+  email: string
+  avatar: string
+  bio: string
+  createdAt: Date
+  updatedAt: Date
+  settings: {
+    theme: &apos;light&apos; | &apos;dark&apos; | &apos;system&apos;
+    language: string
+    notifications: boolean
+  }
+}
+
+function formatUserProfile(user: UserProfile): string {
+  const { name, email, bio } = user
+  return `${name} &amp;lt;${email}&amp;gt; — ${bio}`
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;强制折叠&lt;/h3&gt;
+&lt;p&gt;在代码块语言标识后添加 &lt;code&gt;collapse&lt;/code&gt;，强制代码块默认折叠，无论行数多少：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package main
+
+import &quot;fmt&quot;
+
+func main() {
+    fmt.Println(&quot;Hello, World!&quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```go collapse
+package main
+
+import &quot;fmt&quot;
+
+func main() {
+    fmt.Println(&quot;Hello, World!&quot;)
+}
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;配置项&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;配置&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;enable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是否启用代码块折叠功能&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;lineThreshold&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;触发自动折叠的行数阈值&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;10&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;previewLines&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;折叠时显示的预览行数&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;5&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;defaultCollapsed&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;超过阈值时是否默认折叠&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;配置位于 &lt;code&gt;src/config/expressiveCodeConfig.ts&lt;/code&gt; 的 &lt;code&gt;pluginCollapsible&lt;/code&gt; 字段。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;视频播放器(:::video)&lt;/h2&gt;
+&lt;p&gt;支持本地视频、Bilibili 和 YouTube 三种视频源。&lt;/p&gt;
+&lt;h3&gt;本地视频（带封面）&lt;/h3&gt;
+&lt;p&gt;通过 &lt;code&gt;src&lt;/code&gt; 属性指定视频地址，&lt;code&gt;poster&lt;/code&gt; 设置封面图。&lt;/p&gt;
+&lt;p&gt;:::video{src=&quot;https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4&quot; poster=&quot;https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&amp;amp;q=80&quot; ratio=&quot;16/9&quot;}
+:::&lt;/p&gt;
+&lt;h3&gt;Bilibili 视频&lt;/h3&gt;
+&lt;p&gt;通过 &lt;code&gt;bilibili&lt;/code&gt; 属性指定 BV 号即可嵌入。&lt;/p&gt;
+&lt;p&gt;:::video{bilibili=BV1uT4y1P7CX ratio=&quot;16/9&quot;}
+:::&lt;/p&gt;
+&lt;h3&gt;YouTube 视频&lt;/h3&gt;
+&lt;p&gt;通过 &lt;code&gt;youtube&lt;/code&gt; 属性指定视频 ID 即可嵌入。&lt;/p&gt;
+&lt;p&gt;:::video{youtube=dQw4w9WgXcQ ratio=&quot;16/9&quot;}
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- 本地视频（带封面） --&amp;gt;
+:::video{src=&quot;https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4&quot; poster=&quot;https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800&amp;amp;q=80&quot; ratio=&quot;16/9&quot;}
+:::
+
+&amp;lt;!-- Bilibili --&amp;gt;
+:::video{bilibili=BV1uT4y1P7CX ratio=&quot;16/9&quot;}
+:::
+
+&amp;lt;!-- YouTube --&amp;gt;
+:::video{youtube=dQw4w9WgXcQ ratio=&quot;16/9&quot;}
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;src&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;本地视频 URL&lt;/td&gt;
+&lt;td&gt;三选一&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;bilibili&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Bilibili BV 号（可省略 &lt;code&gt;BV&lt;/code&gt; 前缀）&lt;/td&gt;
+&lt;td&gt;三选一&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;youtube&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;YouTube 视频 ID&lt;/td&gt;
+&lt;td&gt;三选一&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;poster&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;封面图片 URL（仅 &lt;code&gt;src&lt;/code&gt; 模式）&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ratio&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;宽高比&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;16/9&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;width&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;视频宽度&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;align&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;视频对齐位置，可使用 CSS 对齐值&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;autoplay&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;自动播放（需同时静音）&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;pip&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;画中画模式&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;auto&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;选项卡(:::tabs)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::tabs&lt;/code&gt; 创建选项卡内容，支持跨组同步切换。&lt;/p&gt;
+&lt;h3&gt;基础选项卡&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;[标签名]&lt;/code&gt; 或 &lt;code&gt;tab: 标签名&lt;/code&gt; 语法定义每个选项卡。&lt;code&gt;tab:&lt;/code&gt; 语法还支持为标签设置颜色。&lt;/p&gt;
+&lt;p&gt;:::tabs
+[pnpm] pnpm add astro&lt;/p&gt;
+&lt;p&gt;[yarn] yarn add astro&lt;/p&gt;
+&lt;p&gt;[npm] npm install astro
+:::&lt;/p&gt;
+&lt;p&gt;:::tabs{align=&quot;right&quot;}
+tab: 稳定版{color=&quot;#22c55e&quot;}&lt;/p&gt;
+&lt;p&gt;推荐用于生产环境。&lt;/p&gt;
+&lt;p&gt;tab: 实验版{color=&quot;#f97316&quot;}&lt;/p&gt;
+&lt;p&gt;用于体验最新功能。
+:::&lt;/p&gt;
+&lt;h3&gt;同步选项卡&lt;/h3&gt;
+&lt;p&gt;多个选项卡组可通过 &lt;code&gt;sync&lt;/code&gt; 属性联动切换：&lt;/p&gt;
+&lt;p&gt;:::tabs{sync=&quot;pkg&quot;}
+[pnpm] &lt;code&gt;pnpm add @astrojs/svelte&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;[yarn] &lt;code&gt;yarn add @astrojs/svelte&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;[npm] &lt;code&gt;npm install @astrojs/svelte&lt;/code&gt;
+:::&lt;/p&gt;
+&lt;p&gt;:::tabs{sync=&quot;pkg&quot;}
+[pnpm] &lt;code&gt;pnpm add svelte&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;[yarn] &lt;code&gt;yarn add svelte&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;[npm] &lt;code&gt;npm install svelte&lt;/code&gt;
+:::&lt;/p&gt;
+&lt;p&gt;:::tabs{align=&quot;center&quot;}
+tab: pnpm&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;pnpm add astro&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;tab: npm&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;npm install astro&lt;/code&gt;
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- 基础选项卡 --&amp;gt;
+:::tabs
+[pnpm] pnpm add astro
+
+[yarn] yarn add astro
+
+[npm] npm install astro
+:::
+
+&amp;lt;!-- 同步选项卡 --&amp;gt;
+:::tabs{sync=&quot;pkg&quot;}
+[pnpm] `pnpm add @astrojs/svelte`
+
+[yarn] `yarn add @astrojs/svelte`
+
+[npm] `npm install @astrojs/svelte`
+:::
+
+&amp;lt;!-- 对齐与 tab: 语法 --&amp;gt;
+:::tabs{align=&quot;center&quot;}
+tab: pnpm{color=&quot;#3b82f6&quot;}
+
+`pnpm add astro`
+
+tab: npm
+
+`npm install astro`
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;[标签名]&lt;/code&gt; / &lt;code&gt;tab: 标签名&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;选项卡标签文本&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;sync&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;同步组名，相同组名的选项卡联动切换&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;align&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标签栏对齐方式&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;tab:&lt;/code&gt; 标签的激活色&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;时间线(:::timeline)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::timeline&lt;/code&gt; 创建时间轴视图，展示事件序列。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::timeline&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2024-01 项目启动，完成基础架构&lt;/li&gt;
+&lt;li&gt;2024-03 首个公开版本发布&lt;/li&gt;
+&lt;li&gt;2024-06 支持自定义主题和国际化&lt;/li&gt;
+&lt;li&gt;2024-09 新增音乐播放器和 Live2D 看板娘&lt;/li&gt;
+&lt;li&gt;2025-01 迁移至 Astro 6 + Svelte 5
+:::&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::timeline
+- 2024-01 项目启动，完成基础架构
+- 2024-03 首个公开版本发布
+- 2024-06 支持自定义主题和国际化
+- 2024-09 新增音乐播放器和 Live2D 看板娘
+- 2025-01 迁移至 Astro 6 + Svelte 5
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;格式说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;格式&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- 日期 描述&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;时间线条目，日期与标题以空格分隔&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- 日期 | 标题 | 描述&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;使用竖线分别指定日期、标题和描述&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;步骤(:::steps)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::steps&lt;/code&gt; 创建带编号的步骤指引。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::steps&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;安装依赖&lt;/p&gt;
+&lt;p&gt;运行 &lt;code&gt;pnpm install&lt;/code&gt; 安装项目依赖。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;配置环境&lt;/p&gt;
+&lt;p&gt;复制 &lt;code&gt;.env.example&lt;/code&gt; 为 &lt;code&gt;.env&lt;/code&gt; 并填写配置。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;启动开发服务器&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pnpm dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;构建生产版本&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pnpm build
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::steps
+1. 安装依赖
+
+   运行 `pnpm install` 安装项目依赖。
+
+2. 配置环境
+
+   复制 `.env.example` 为 `.env` 并填写配置。
+
+3. 启动开发服务器
+
+   ```bash
+   pnpm dev
+   ```
+
+4. 构建生产版本
+
+   ```bash
+   pnpm build
+   ```
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;h2&gt;诗歌(:::poetry)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::poetry&lt;/code&gt; 排版诗歌或歌词，自动保留换行和缩进。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::poetry{title=&quot;水调歌头&quot; author=&quot;苏轼&quot;}
+明月几时有？把酒问青天。
+不知天上宫阙，今夕是何年。
+我欲乘风归去，又恐琼楼玉宇，高处不胜寒。
+起舞弄清影，何似在人间。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::poetry{title=&quot;水调歌头&quot; author=&quot;苏轼&quot;}
+明月几时有？把酒问青天。
+不知天上宫阙，今夕是何年。
+我欲乘风归去，又恐琼楼玉宇，高处不胜寒。
+起舞弄清影，何似在人间。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;诗歌标题&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;author&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;作者&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;date&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;日期或创作时间&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;footer&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;底部落款或补充信息&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;胶卷(:::reel)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::reel&lt;/code&gt; 创建水平滚动的卡片容器。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;::::reel
+:::card{title=&quot;Astro&quot; icon=&quot;lucide:rocket&quot; color=&quot;#ff5d01&quot;}
+内容优先的 Web 框架。
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;Svelte&quot; icon=&quot;lucide:component&quot; color=&quot;#ff3e00&quot;}
+编译型前端框架，无虚拟 DOM。
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;Tailwind&quot; icon=&quot;lucide:paintbrush&quot; color=&quot;#06b6d4&quot;}
+原子化 CSS 框架。
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;TypeScript&quot; icon=&quot;lucide:file-code&quot; color=&quot;#3178c6&quot;}
+类型安全的 JavaScript 超集。
+:::
+::::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::::reel
+:::card{title=&quot;Astro&quot; icon=&quot;lucide:rocket&quot; color=&quot;#ff5d01&quot;}
+内容优先的 Web 框架。
+:::
+
+:::card{title=&quot;Svelte&quot; icon=&quot;lucide:component&quot; color=&quot;#ff3e00&quot;}
+编译型前端框架，无虚拟 DOM。
+:::
+
+:::card{title=&quot;Tailwind&quot; icon=&quot;lucide:paintbrush&quot; color=&quot;#06b6d4&quot;}
+原子化 CSS 框架。
+:::
+
+:::card{title=&quot;TypeScript&quot; icon=&quot;lucide:file-code&quot; color=&quot;#3178c6&quot;}
+类型安全的 JavaScript 超集。
+:::
+::::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可选属性 &lt;code&gt;title&lt;/code&gt;、&lt;code&gt;author&lt;/code&gt;、&lt;code&gt;date&lt;/code&gt; 和 &lt;code&gt;footer&lt;/code&gt; 分别设置标题、作者、日期和底部说明。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;纸张(:::paper)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::paper&lt;/code&gt; 创建纸张风格的容器，适合展示信件或文档。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::paper
+致未来的自己：&lt;/p&gt;
+&lt;p&gt;当你看到这段文字时，希望一切安好。技术日新月异，但创造的初心不变。&lt;/p&gt;
+&lt;p&gt;—— 来自 2024 年的开发者
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::paper
+致未来的自己：
+
+当你看到这段文字时，希望一切安好。技术日新月异，但创造的初心不变。
+
+—— 来自 2024 年的开发者
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可选属性：&lt;code&gt;style&lt;/code&gt; 设置纸张样式，&lt;code&gt;title&lt;/code&gt;、&lt;code&gt;author&lt;/code&gt;、&lt;code&gt;date&lt;/code&gt; 和 &lt;code&gt;footer&lt;/code&gt; 设置页眉页脚信息。纸张内部还可使用 &lt;code&gt;&amp;lt;!-- section: 标题 --&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;!-- line: left|right --&amp;gt;&lt;/code&gt; 注释划分内容。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;引用(:::blockquote/:::quot)&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;:::blockquote&lt;/code&gt; 创建带装饰引号的引用块；&lt;code&gt;:::quot&lt;/code&gt; 创建带图标的紧凑引用卡片。&lt;/p&gt;
+&lt;h3&gt;装饰引用&lt;/h3&gt;
+&lt;p&gt;:::blockquote
+设计应服务于内容，而不是遮挡内容。
+:::&lt;/p&gt;
+&lt;h3&gt;紧凑引用&lt;/h3&gt;
+&lt;p&gt;:::quot{icon=&quot;lucide:quote&quot;}
+Talk is cheap. Show me the code.
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::blockquote
+设计应服务于内容，而不是遮挡内容。
+:::
+
+:::quot{icon=&quot;lucide:quote&quot;}
+Talk is cheap. Show me the code.
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;:::quot&lt;/code&gt; 的 &lt;code&gt;icon&lt;/code&gt; 可填写 &lt;code&gt;lucide:名称&lt;/code&gt;、&lt;code&gt;fa7-solid:名称&lt;/code&gt;、图标名称或图片 URL；省略时使用默认引号图标。引用作者和来源不会由该指令单独渲染，需写入正文。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;网格(:::grid)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::grid&lt;/code&gt; 创建响应式网格布局。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;::::grid{cols=&quot;2&quot;}
+:::card{title=&quot;左侧&quot; icon=&quot;lucide:arrow-left&quot;}
+网格的第一列内容。
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;右侧&quot; icon=&quot;lucide:arrow-right&quot;}
+网格的第二列内容。
+:::
+::::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::::grid{cols=&quot;2&quot;}
+:::card{title=&quot;左侧&quot; icon=&quot;lucide:arrow-left&quot;}
+网格的第一列内容。
+:::
+
+:::card{title=&quot;右侧&quot; icon=&quot;lucide:arrow-right&quot;}
+网格的第二列内容。
+:::
+::::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;cols&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;列数&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;2&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;gap&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;间距&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;16&lt;/code&gt;（px）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;minw&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;最小列宽（自动列数时）&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;240px&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;bg&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;背景样式&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;card&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;对齐容器(:::left/:::center/:::right/:::justify)&lt;/h2&gt;
+&lt;p&gt;使用四种对齐容器调整其中内容的文本对齐方式。&lt;/p&gt;
+&lt;p&gt;:::center
+这段内容居中显示。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::left
+左对齐内容。
+:::
+
+:::center
+居中内容。
+:::
+
+:::right
+右对齐内容。
+:::
+
+:::justify
+两端对齐内容。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr /&gt;
+&lt;h2&gt;弹性布局(:::flex)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::flex&lt;/code&gt; 创建弹性容器，支持方向、对齐等参数。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;::::flex{justify=&quot;center&quot; align=&quot;center&quot; gap=&quot;2rem&quot;}
+:::card{title=&quot;A&quot; icon=&quot;lucide:box&quot;}
+项目 A
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;B&quot; icon=&quot;lucide:box&quot;}
+项目 B
+:::&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;C&quot; icon=&quot;lucide:box&quot;}
+项目 C
+:::
+::::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::::flex{justify=&quot;center&quot; align=&quot;center&quot; gap=&quot;2rem&quot;}
+:::card{title=&quot;A&quot; icon=&quot;lucide:box&quot;}
+项目 A
+:::
+
+:::card{title=&quot;B&quot; icon=&quot;lucide:box&quot;}
+项目 B
+:::
+
+:::card{title=&quot;C&quot; icon=&quot;lucide:box&quot;}
+项目 C
+:::
+::::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;可选值&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;column&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;纵向排列&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;false&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;justify&lt;/code&gt; / &lt;code&gt;main&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;主轴对齐&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;start&lt;/code&gt; / &lt;code&gt;center&lt;/code&gt; / &lt;code&gt;end&lt;/code&gt; / &lt;code&gt;between&lt;/code&gt; / &lt;code&gt;around&lt;/code&gt; / &lt;code&gt;evenly&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;align&lt;/code&gt; / &lt;code&gt;cross&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;交叉轴对齐&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;start&lt;/code&gt; / &lt;code&gt;center&lt;/code&gt; / &lt;code&gt;end&lt;/code&gt; / &lt;code&gt;stretch&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;gap&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;间距&lt;/td&gt;
+&lt;td&gt;CSS 值，如 &lt;code&gt;1rem&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;1rem&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;复制(:::copy)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::copy&lt;/code&gt; 创建可复制的内容区域。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::copy{title=&quot;安装命令&quot;}&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pnpm add @astrojs/svelte
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::copy{title=&quot;安装命令&quot;}
+```bash
+pnpm add @astrojs/svelte
+```
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;label&lt;/code&gt; / &lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;复制区标题&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;画廊(:::gallery)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::gallery&lt;/code&gt; 创建图片画廊，点击可查看大图。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::gallery
+&lt;img src=&quot;https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&amp;amp;q=80&quot; alt=&quot;风景&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&amp;amp;q=80&quot; alt=&quot;城市&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&amp;amp;q=80&quot; alt=&quot;自然&quot; /&gt;
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::gallery
+![风景](https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&amp;amp;q=80)
+
+![城市](https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&amp;amp;q=80)
+
+![自然](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&amp;amp;q=80)
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;cols&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;画廊列数&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;3&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;gap&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;图片间距（px）&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;8&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;图片指令(::image)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;::image&lt;/code&gt; 直接生成图片元素，可显式指定替代文本、尺寸和加载策略。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;::image{src=&quot;/images/albums/AcgExample/cover.webp&quot; alt=&quot;示例图片&quot; width=&quot;480&quot; height=&quot;270&quot;}&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;::image{src=&quot;/images/albums/AcgExample/cover.webp&quot; alt=&quot;示例图片&quot; width=&quot;480&quot; height=&quot;270&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;src&lt;/code&gt; 和 &lt;code&gt;alt&lt;/code&gt; 是常用属性，&lt;code&gt;width&lt;/code&gt;、&lt;code&gt;height&lt;/code&gt; 可传递给 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;；图片默认使用原生懒加载。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;终端录制(:::asciinema)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::asciinema&lt;/code&gt; 嵌入终端录制回放。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::asciinema{src=&quot;/demos/demo.cast&quot;}
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::asciinema{src=&quot;/demos/demo.cast&quot;}
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;src&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;asciinema 录制文件 URL（&lt;code&gt;.cast&lt;/code&gt; 格式）&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;cols&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;终端列数&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;80&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;rows&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;终端行数&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;24&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;色板(:::colors)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::colors&lt;/code&gt; 展示调色板或颜色列表。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::colors{values=&quot;#3b82f6,#22c55e,#ef4444,#f59e0b,#8b5cf6&quot;}
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::colors{values=&quot;#3b82f6,#22c55e,#ef4444,#f59e0b,#8b5cf6&quot;}
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;values&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;颜色值列表，逗号分隔&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;对话(:::chat)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::chat&lt;/code&gt; 创建对话气泡视图，支持标题、日期分隔符和多种发送者标识。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::chat{title=&quot;Tsukimi 功能咨询&quot;}
+{:2025-06-17 14:30}&lt;/p&gt;
+&lt;p&gt;{.} 你好！Tsukimi 支持哪些功能？&lt;/p&gt;
+&lt;p&gt;{对方} 它支持 Markdown 扩展指令、音乐播放器、Live2D 看板娘等丰富功能。&lt;/p&gt;
+&lt;p&gt;{.} 太棒了，怎么开始使用？&lt;/p&gt;
+&lt;p&gt;{对方} 查看文档即可快速上手！
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::chat{title=&quot;Tsukimi 功能咨询&quot;}
+{:2025-06-17 14:30}
+
+{.} 你好！Tsukimi 支持哪些功能？
+
+{对方} 它支持 Markdown 扩展指令、音乐播放器、Live2D 看板娘等丰富功能。
+
+{.} 太棒了，怎么开始使用？
+
+{对方} 查看文档即可快速上手！
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;标识说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;标识&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;{.}&lt;/code&gt; 或 &lt;code&gt;[自己]&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;右侧气泡，主色调&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;{用户名}&lt;/code&gt; 或 &lt;code&gt;[用户名]&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;左侧气泡，显示用户名&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;{:日期时间}&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;居中日期分隔线&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title=&quot;标题&quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;对话框标题&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;npm 包(:::npm-to)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::npm-to&lt;/code&gt; 展示 npm 包信息和安装命令。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::npm-to{package=&quot;astro&quot;}
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::npm-to{package=&quot;包名&quot;}
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;package&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;npm 包名&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;tabs&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;显示的包管理器&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;npm,pnpm,yarn,bun&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;卡片(:::card)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::card&lt;/code&gt; 创建独立卡片，可添加标题、图标和链接。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::card{title=&quot;Tsukimi&quot; icon=&quot;lucide:moon&quot; color=&quot;#a855f7&quot; href=&quot;https://github.com/souloss/Tsukimi&quot;}
+一个功能丰富的 Astro 博客模板，支持丰富的 Markdown 扩展指令。
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::card{title=&quot;Tsukimi&quot; icon=&quot;lucide:moon&quot; color=&quot;#a855f7&quot; href=&quot;https://github.com/souloss/Tsukimi&quot;}
+一个功能丰富的 Astro 博客模板，支持丰富的 Markdown 扩展指令。
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;卡片标题&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;icon&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;图标，支持 &lt;code&gt;lucide:名称&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;图标和主题色&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;accent&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;href&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;点击跳转链接&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;image&lt;/code&gt; / &lt;code&gt;cover&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;链接卡片的预览图片&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;desc&lt;/code&gt; / &lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;链接卡片的描述文字&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;链接卡片样式(:::card with image)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::card&lt;/code&gt; 指定 &lt;code&gt;image&lt;/code&gt; 和 &lt;code&gt;href&lt;/code&gt; 属性即可生成链接预览样式的卡片。&lt;/p&gt;
+&lt;p&gt;效果：&lt;/p&gt;
+&lt;p&gt;:::card{href=&quot;https://astro.build&quot; title=&quot;Astro 官网&quot; image=&quot;https://astro.build/assets/press/astro-icon-light.png&quot; desc=&quot;内容优先的现代 Web 框架。&quot;}
+:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::card{href=&quot;https://astro.build&quot; title=&quot;Astro 官网&quot; image=&quot;https://astro.build/assets/press/astro-icon-light.png&quot; desc=&quot;内容优先的现代 Web 框架。&quot;}
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;href&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;链接地址&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;卡片标题&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;image&lt;/code&gt; / &lt;code&gt;cover&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;预览图片&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;desc&lt;/code&gt; / &lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;描述文字&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;内联指令(:指令[内容]{参数})&lt;/h2&gt;
+&lt;p&gt;以下指令使用行内语法 &lt;code&gt;:指令[内容]{参数}&lt;/code&gt; 在段落中直接使用。&lt;/p&gt;
+&lt;h3&gt;文本标记(:mark)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:mark[文本]&lt;/code&gt; 高亮文本，类似荧光笔效果。&lt;/p&gt;
+&lt;p&gt;这段文字中有:mark[高亮标记]和普通文本。&lt;/p&gt;
+&lt;p&gt;也可以使用标准扩展语法 &lt;code&gt;==文本==&lt;/code&gt; 快速高亮：==重点内容==。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这段文字中有:mark[高亮标记]和普通文本。
+也可以使用标准扩展语法 `==文本==` 快速高亮：==重点内容==。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;高亮颜色，支持 CSS 颜色名 / hex&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;yellow&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;键盘按键(:kbd)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:kbd[按键]&lt;/code&gt; 显示键盘按键样式。&lt;/p&gt;
+&lt;p&gt;按下 :kbd[Ctrl] + :kbd[C] 复制，:kbd[Ctrl] + :kbd[V] 粘贴。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;按下 :kbd[Ctrl] + :kbd[C] 复制，:kbd[Ctrl] + :kbd[V] 粘贴。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;下划线(:u)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:u[文本]&lt;/code&gt; 添加下划线。&lt;/p&gt;
+&lt;p&gt;这是:u[带下划线的文本]。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这是:u[带下划线的文本]。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;color&lt;/code&gt; 可设置下划线颜色，默认使用主题强调色。&lt;/p&gt;
+&lt;h3&gt;着重号(:emp)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:emp[文本]&lt;/code&gt; 添加着重号（CJK 专用），类似日文傍点。&lt;/p&gt;
+&lt;p&gt;这是:emp[重点内容]需要关注。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这是:emp[重点内容]需要关注。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;color&lt;/code&gt; 可设置着重号颜色，默认使用主题强调色。&lt;/p&gt;
+&lt;h3&gt;波浪线(:wavy)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:wavy[文本]&lt;/code&gt; 添加波浪下划线。&lt;/p&gt;
+&lt;p&gt;这是:wavy[波浪线标注的文本]。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这是:wavy[波浪线标注的文本]。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;color&lt;/code&gt; 可设置波浪线颜色，默认使用主题强调色。&lt;/p&gt;
+&lt;h3&gt;删除线(:del)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:del[文本]&lt;/code&gt; 添加删除线（比 &lt;code&gt;~~~~&lt;/code&gt; 更灵活）。&lt;/p&gt;
+&lt;p&gt;原价 :del[¥99]，现价 ¥49。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;原价 :del[¥99]，现价 ¥49。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;上标与下标(:sup/:sub)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:sup[文本]&lt;/code&gt; 和 &lt;code&gt;:sub[文本]&lt;/code&gt; 添加上标和下标。&lt;/p&gt;
+&lt;p&gt;E = mc:sup[2]，H:sub[2]O。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;E = mc:sup[2]，H:sub[2]O。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;:sup&lt;/code&gt; 和 &lt;code&gt;:sub&lt;/code&gt; 都支持 &lt;code&gt;color&lt;/code&gt; 属性，默认使用主题强调色。&lt;/p&gt;
+&lt;h3&gt;彩色文字(:color)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:color[文本]{color=&quot;#hex&quot;}&lt;/code&gt; 设置文字颜色。&lt;/p&gt;
+&lt;p&gt;这是:color[红色文字]{color=&quot;#ef4444&quot;}和:color[蓝色文字]{color=&quot;#3b82f6&quot;}。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这是:color[红色文字]{color=&quot;#ef4444&quot;}和:color[蓝色文字]{color=&quot;#3b82f6&quot;}。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文字颜色，支持 hex / CSS 颜色名&lt;/td&gt;
+&lt;td&gt;✅&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;密码揭示与模糊遮罩(:psw/:blur)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:psw[文本]&lt;/code&gt; 创建密码遮罩，使用 &lt;code&gt;:blur[文本]&lt;/code&gt; 创建模糊遮罩。点击即可揭示。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;密码遮罩：密码是 :psw[s3cret]，点击显示&lt;/li&gt;
+&lt;li&gt;模糊遮罩：:blur[hidden content]，点击揭示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- 密码遮罩：密码是 :psw[s3cret]，点击显示
+- 模糊遮罩：:blur[hidden content]，点击揭示
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;复选框(:checkbox)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:checkbox[状态]&lt;/code&gt; 创建行内复选框。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;:checkbox[checked] 已完成任务&lt;/li&gt;
+&lt;li&gt;:checkbox[unchecked] 待办事项&lt;/li&gt;
+&lt;li&gt;:checkbox[checked] 另一项已完成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- :checkbox[checked] 已完成任务
+- :checkbox[unchecked] 待办事项
+- :checkbox[checked] 另一项已完成
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;也可把文本放在指令内容中，通过 &lt;code&gt;checked=&quot;true&quot;&lt;/code&gt; 指定状态；&lt;code&gt;color&lt;/code&gt; 设置颜色，&lt;code&gt;symbol&lt;/code&gt; 设置符号样式，&lt;code&gt;inline=&quot;true&quot;&lt;/code&gt; 使用行内布局。&lt;/p&gt;
+&lt;h3&gt;单选框(:radio)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:radio[状态]&lt;/code&gt; 创建行内单选框。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;:radio[selected] 已选中选项&lt;/li&gt;
+&lt;li&gt;:radio[unselected] 未选中选项&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- :radio[selected] 已选中选项
+- :radio[unselected] 未选中选项
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;也可使用 &lt;code&gt;checked=&quot;true&quot;&lt;/code&gt; 指定选中状态；&lt;code&gt;color&lt;/code&gt; 设置颜色，&lt;code&gt;inline=&quot;true&quot;&lt;/code&gt; 使用行内布局。&lt;/p&gt;
+&lt;h3&gt;标签(:hashtag)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:hashtag[标签名]&lt;/code&gt; 创建标签样式的行内元素。&lt;/p&gt;
+&lt;p&gt;这篇文章的标签是 :hashtag[TypeScript] :hashtag[Astro] :hashtag[前端]。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这篇文章的标签是 :hashtag[TypeScript] :hashtag[Astro] :hashtag[前端]。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;href&lt;/code&gt; 可设置点击链接，&lt;code&gt;color&lt;/code&gt; 可设置标签颜色；未指定颜色时会按预设色板循环。&lt;/p&gt;
+&lt;h3&gt;徽章(:badge)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:badge[文本]{type=&quot;类型&quot;}&lt;/code&gt; 创建行内徽章。&lt;/p&gt;
+&lt;p&gt;状态：:badge[稳定]{type=&quot;tip&quot;} :badge[实验性]{type=&quot;warning&quot;} :badge[已废弃]{type=&quot;danger&quot;}&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;状态：:badge[稳定]{type=&quot;tip&quot;} :badge[实验性]{type=&quot;warning&quot;} :badge[已废弃]{type=&quot;danger&quot;}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;type&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;徽章类型，同下表&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;blue&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;自定义颜色，覆盖 &lt;code&gt;type&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;—&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;类型说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;type&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;颜色&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;tip&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;提示&lt;/td&gt;
+&lt;td&gt;绿色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;info&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;信息&lt;/td&gt;
+&lt;td&gt;蓝色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;warning&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;警告&lt;/td&gt;
+&lt;td&gt;橙色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;danger&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;危险&lt;/td&gt;
+&lt;td&gt;红色&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;注释(:anno)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:anno[文本](提示内容)&lt;/code&gt; 创建带悬浮提示的注释文本。&lt;/p&gt;
+&lt;p&gt;这个:anno&lt;a href=&quot;%E8%BF%99%E9%87%8C%E6%98%AF%E6%9C%AF%E8%AF%AD%E7%9A%84%E8%A7%A3%E9%87%8A&quot;&gt;术语&lt;/a&gt;需要解释。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;这个:anno[术语](这里是术语的解释)需要解释。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;缩写(:abbr)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:abbr[缩写](全称)&lt;/code&gt; 创建带悬浮提示的缩写。&lt;/p&gt;
+&lt;p&gt;使用 :abbr[HTML](HyperText Markup Language) 构建 :abbr[UI](User Interface)。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;使用 :abbr[HTML](HyperText Markup Language) 构建 :abbr[UI](User Interface)。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;表情符号(:emoji)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:emoji[名称]&lt;/code&gt; 插入 emoji 表情。&lt;/p&gt;
+&lt;p&gt;我喜欢 :emoji[heart] 编程 :emoji[rocket]。&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;我喜欢 :emoji[heart] 编程 :emoji[rocket]。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;必填&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;height&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;emoji 高度&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;1.75em&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;source&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;emoji 来源，可用 &lt;code&gt;twemoji&lt;/code&gt;、&lt;code&gt;qq&lt;/code&gt;、&lt;code&gt;aru&lt;/code&gt;、&lt;code&gt;tieba&lt;/code&gt;、&lt;code&gt;blobcat&lt;/code&gt; 或带 &lt;code&gt;{name}&lt;/code&gt; 的 URL 模板&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;twemoji&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;name&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;表情资源名称；省略时使用指令文本&lt;/td&gt;
+&lt;td&gt;❌&lt;/td&gt;
+&lt;td&gt;指令文本&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;步骤括号(:step-brackets)&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;:step-brackets[数字]&lt;/code&gt; 创建带括号的步骤编号。&lt;/p&gt;
+&lt;p&gt;:step-brackets[1] 安装 → :step-brackets[2] 配置 → :step-brackets[3] 部署&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:step-brackets[1] 安装 → :step-brackets[2] 配置 → :step-brackets[3] 部署
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用 &lt;code&gt;title&lt;/code&gt; 属性可在编号右侧显示步骤标题。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;文件树(:::file-tree)&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;:::file-tree&lt;/code&gt; 创建带图标的文件树视图，支持文件夹折叠和差异标记。&lt;/p&gt;
+&lt;p&gt;:::file-tree&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;src/
+&lt;ul&gt;
+&lt;li&gt;components/
+&lt;ul&gt;
+&lt;li&gt;Header.astro&lt;/li&gt;
+&lt;li&gt;Footer.astro&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;pages/
+&lt;ul&gt;
+&lt;li&gt;index.astro&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;config.ts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;public/
+&lt;ul&gt;
+&lt;li&gt;favicon.svg&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;package.json&lt;/li&gt;
+&lt;li&gt;++ README.md&lt;/li&gt;
+&lt;li&gt;-- CHANGELOG.md
+:::&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::file-tree
+- src/
+  - components/
+    - Header.astro
+    - Footer.astro
+  - pages/
+    - index.astro
+  - config.ts
+- public/
+  - favicon.svg
+- package.json
+- ++ README.md
+- -- CHANGELOG.md
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;语法说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;语法&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- 名称/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文件夹，以 &lt;code&gt;/&lt;/code&gt; 结尾&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- 文件名.扩展名&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- ++ 新增文件&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;差异标记：新增&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- -- 删除文件&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;差异标记：删除&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- ...&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;省略号&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;- 名称 # 注释&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;行末注释&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr /&gt;
+&lt;h2&gt;图表与数学公式&lt;/h2&gt;
+&lt;h3&gt;Mermaid 图表&lt;/h3&gt;
+&lt;p&gt;使用小写 &lt;code&gt;mermaid&lt;/code&gt; 代码块绘制流程图、时序图等。图表在浏览器端渲染，并随主题切换。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;flowchart LR
+  A[Markdown] --&amp;gt; B[Remark]
+  B --&amp;gt; C[HTML]
+  C --&amp;gt; D[浏览器渲染]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```mermaid
+flowchart LR
+  A[Markdown] --&amp;gt; B[Remark]
+  B --&amp;gt; C[HTML]
+  C --&amp;gt; D[浏览器渲染]
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;代码块第一行指定图表类型（例如 &lt;code&gt;flowchart LR&lt;/code&gt;），后续使用 Mermaid 标准语法描述节点、连线和样式。&lt;/p&gt;
+&lt;h3&gt;PlantUML 图表&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;plantuml&lt;/code&gt; 代码块绘制 UML 图。构建时会根据 &lt;code&gt;src/config/plantumlConfig.ts&lt;/code&gt; 的服务器和主题配置生成图像，页面端支持主题切换、缩放、拖拽和全屏。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@startuml
+Alice -&amp;gt; Bob: Hello
+Bob --&amp;gt; Alice: Hi!
+@enduml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```plantuml
+@startuml
+Alice -&amp;gt; Bob: Hello
+Bob --&amp;gt; Alice: Hi!
+@enduml
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;始终使用 &lt;code&gt;@startuml&lt;/code&gt; 和 &lt;code&gt;@enduml&lt;/code&gt; 包住 PlantUML 内容；服务器地址、主题和渲染方式由 &lt;code&gt;src/config/plantumlConfig.ts&lt;/code&gt; 控制。&lt;/p&gt;
+&lt;h3&gt;Markmap 思维导图&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;markmap&lt;/code&gt; 代码块，以 Markdown 标题层级生成可缩放、可拖拽的思维导图。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Tsukimi
+## Markdown
+### 指令
+### 图表
+## 主题
+### 亮暗色切换
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```markmap
+# Tsukimi
+## Markdown
+### 指令
+### 图表
+## 主题
+### 亮暗色切换
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用 &lt;code&gt;#&lt;/code&gt;、&lt;code&gt;##&lt;/code&gt;、&lt;code&gt;###&lt;/code&gt; 等 Markdown 标题表示层级；标题文本会成为思维导图节点。&lt;/p&gt;
+&lt;h3&gt;WaveDrom 时序图&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;wavedrom&lt;/code&gt;（或别名 &lt;code&gt;wave&lt;/code&gt;）代码块编写 WaveJSON。它在构建时生成内联 SVG，适合时钟、总线和握手信号等硬件时序说明。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{ signal: [
+  { name: &quot;clk&quot;,  wave: &quot;p......&quot; },
+  { name: &quot;bus&quot;,  wave: &quot;x.345x.&quot;, data: &quot;head body tail&quot; },
+  { name: &quot;ready&quot;, wave: &quot;0.1..0.&quot; }
+] }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```wavedrom
+{ signal: [
+  { name: &quot;clk&quot;,  wave: &quot;p......&quot; },
+  { name: &quot;bus&quot;,  wave: &quot;x.345x.&quot;, data: &quot;head body tail&quot; },
+  { name: &quot;ready&quot;, wave: &quot;0.1..0.&quot; }
+] }
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;signal&lt;/code&gt; 是信号数组；每个信号用 &lt;code&gt;name&lt;/code&gt; 设置名称、用 &lt;code&gt;wave&lt;/code&gt; 描述每个时间槽的电平，&lt;code&gt;data&lt;/code&gt; 为总线波形提供标签。也可以使用别名 &lt;code&gt;wave&lt;/code&gt; 作为代码块语言。&lt;/p&gt;
+&lt;h3&gt;Bytefield 协议字段图&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;bytefield&lt;/code&gt;（或 &lt;code&gt;bytefield-svg&lt;/code&gt;）代码块，以 bytefield-svg 的 EDN/Clojure DSL 描述网络协议、文件格式和寄存器布局。图表同样在构建时生成内联 SVG，不依赖浏览器脚本。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(def column-labels (mapv #(number-as-hex % 2) (range 32)))
+(def boxes-per-row 32)
+(draw-column-headers)
+(draw-box &quot;Source port&quot; {:span 16})
+(draw-box &quot;Destination port&quot; {:span 16})
+(draw-box &quot;Length&quot; {:span 16})
+(draw-box &quot;Checksum&quot; {:span 16})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```bytefield
+(def column-labels (mapv #(number-as-hex % 2) (range 32)))
+(def boxes-per-row 32)
+(draw-column-headers)
+(draw-box &quot;Source port&quot; {:span 16})
+(draw-box &quot;Destination port&quot; {:span 16})
+(draw-box &quot;Length&quot; {:span 16})
+(draw-box &quot;Checksum&quot; {:span 16})
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;boxes-per-row&lt;/code&gt; 决定每行的 bit 数，&lt;code&gt;draw-column-headers&lt;/code&gt; 绘制列标题，&lt;code&gt;draw-box&lt;/code&gt; 使用 &lt;code&gt;:span&lt;/code&gt; 指定字段占用的 bit 数。&lt;code&gt;bytefield-svg&lt;/code&gt; 的其他 EDN/Clojure 绘图函数也可以直接使用。&lt;/p&gt;
+&lt;h3&gt;Vega-Lite 数据可视化&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;vega-lite&lt;/code&gt;（别名 &lt;code&gt;vegalite&lt;/code&gt;、&lt;code&gt;vl&lt;/code&gt;）代码块编写 JSON 规范。图表会在接近视口时才加载引擎，支持 SVG 导出、工具提示和响应式宽度；未进入视口的图表不会下载运行时。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &quot;$schema&quot;: &quot;https://vega.github.io/schema/vega-lite/v6.json&quot;,
+  &quot;description&quot;: &quot;Monthly notes&quot;,
+  &quot;data&quot;: { &quot;values&quot;: [
+    { &quot;month&quot;: &quot;Jan&quot;, &quot;notes&quot;: 12 },
+    { &quot;month&quot;: &quot;Feb&quot;, &quot;notes&quot;: 19 },
+    { &quot;month&quot;: &quot;Mar&quot;, &quot;notes&quot;: 15 }
+  ] },
+  &quot;mark&quot;: { &quot;type&quot;: &quot;bar&quot;, &quot;cornerRadiusEnd&quot;: 3 },
+  &quot;encoding&quot;: {
+    &quot;x&quot;: { &quot;field&quot;: &quot;month&quot;, &quot;type&quot;: &quot;nominal&quot;, &quot;title&quot;: null },
+    &quot;y&quot;: { &quot;field&quot;: &quot;notes&quot;, &quot;type&quot;: &quot;quantitative&quot;, &quot;title&quot;: &quot;Notes&quot; }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```vega-lite
+{
+  &quot;$schema&quot;: &quot;https://vega.github.io/schema/vega-lite/v6.json&quot;,
+  &quot;description&quot;: &quot;Monthly notes&quot;,
+  &quot;data&quot;: { &quot;values&quot;: [
+    { &quot;month&quot;: &quot;Jan&quot;, &quot;notes&quot;: 12 },
+    { &quot;month&quot;: &quot;Feb&quot;, &quot;notes&quot;: 19 },
+    { &quot;month&quot;: &quot;Mar&quot;, &quot;notes&quot;: 15 }
+  ] },
+  &quot;mark&quot;: { &quot;type&quot;: &quot;bar&quot;, &quot;cornerRadiusEnd&quot;: 3 },
+  &quot;encoding&quot;: {
+    &quot;x&quot;: { &quot;field&quot;: &quot;month&quot;, &quot;type&quot;: &quot;nominal&quot;, &quot;title&quot;: null },
+    &quot;y&quot;: { &quot;field&quot;: &quot;notes&quot;, &quot;type&quot;: &quot;quantitative&quot;, &quot;title&quot;: &quot;Notes&quot; }
+  }
+}
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;data.values&lt;/code&gt; 可直接嵌入小型数据集，也可以改为 &lt;code&gt;data.url&lt;/code&gt; 引用 JSON/CSV；&lt;code&gt;mark&lt;/code&gt; 指定图元类型，&lt;code&gt;encoding&lt;/code&gt; 将字段映射到坐标轴、颜色或大小。代码块语言也支持 &lt;code&gt;vegalite&lt;/code&gt; 和 &lt;code&gt;vl&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;PlantUML、Markmap 和 Vega-Lite 的运行时引擎由统一 loader 按需加载；PlantUML 和 Markmap 仍可在各自配置中关闭，关闭后会退化为普通代码块。WaveDrom 和 Bytefield 是构建期渲染器，不会增加页面运行时脚本。&lt;/p&gt;
+&lt;h3&gt;BMP 位图指令&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;:::bitmap&lt;/code&gt; 适合绘制像素图、协议字段示意和小型图标。&lt;code&gt;.&lt;/code&gt; 或空格表示透明，其余字符表示像素；&lt;code&gt;palette&lt;/code&gt; 按字符首次出现的顺序分配颜色。位图在构建时转换为内联 SVG，不加载外部脚本。&lt;/p&gt;
+&lt;p&gt;:::bitmap{scale=&quot;12&quot; palette=&quot;#0f172a #38bdf8&quot; title=&quot;Tsukimi 像素月亮&quot;}&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;....##....
+...#oo#...
+..#oooo#..
+.#oooooo#.
+#oooooooo#
+#oooooooo#
+.#oooooo#.
+..#oooo#..
+....##....
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:::bitmap{scale=&quot;12&quot; palette=&quot;#0f172a #38bdf8&quot; title=&quot;Tsukimi 像素月亮&quot;}
+```text
+....##....
+...#oo#...
+..#oooo#..
+.#oooooo#.
+#oooooooo#
+#oooooooo#
+.#oooooo#.
+..#oooo#..
+....##....
+```
+:::
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;常用参数：&lt;code&gt;scale&lt;/code&gt;（1–32，默认 8）控制单个像素尺寸；&lt;code&gt;palette&lt;/code&gt; 使用空格或逗号分隔颜色；&lt;code&gt;color&lt;/code&gt; 设置未列入调色板字符的回退颜色；&lt;code&gt;background&lt;/code&gt; 添加背景色；&lt;code&gt;title&lt;/code&gt; 或 &lt;code&gt;alt&lt;/code&gt; 提供无障碍文本。&lt;/p&gt;
+&lt;h3&gt;数学公式&lt;/h3&gt;
+&lt;p&gt;块级公式使用双美元符号：&lt;/p&gt;
+&lt;p&gt;$$
+E = mc^2
+$$&lt;/p&gt;
+&lt;p&gt;本文章通过 frontmatter 开启了行内公式，因此 &lt;code&gt;$a^2 + b^2 = c^2$&lt;/code&gt; 会渲染为公式。其他文章默认只处理块级公式；如需开启行内公式，在 frontmatter 中加入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;math:
+  inline: true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;公式由 KaTeX 渲染。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2&gt;Markdown 处理增强&lt;/h2&gt;
+&lt;h3&gt;文件包含&lt;/h3&gt;
+&lt;p&gt;使用 HTML 注释在构建时插入相对当前 Markdown 文件的内容。Markdown 文件会再次解析，其他文件按原始 HTML 插入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- @include: ./snippet.md --&amp;gt;
+&amp;lt;!-- @include: ./snippet.md{5-10} --&amp;gt;
+&amp;lt;!-- @include: ./snippet.md{5-} --&amp;gt;
+&amp;lt;!-- @include: ./snippet.md{-10} --&amp;gt;
+&amp;lt;!-- @include: ./snippet.md#region --&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;花括号表示行号范围，&lt;code&gt;#region&lt;/code&gt; 表示提取代码区域；找不到文件时会保留错误注释，不会中断构建。&lt;/p&gt;
+&lt;h3&gt;图片宽度与懒加载&lt;/h3&gt;
+&lt;p&gt;图片替代文本中加入 &lt;code&gt;w-百分比&lt;/code&gt; 可设置居中宽度，标题会作为图注：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;![示例图片 w-50%](image.png &quot;图片说明&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;文章中的普通图片和 &lt;code&gt;::image&lt;/code&gt; 图片都会自动使用 &lt;code&gt;loading=&quot;lazy&quot;&lt;/code&gt; 与 &lt;code&gt;lazy-image&lt;/code&gt; 类；&lt;code&gt;data:&lt;/code&gt; 图片会跳过处理。&lt;/p&gt;
+&lt;h3&gt;链接与表格&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;./article.md&lt;/code&gt;、&lt;code&gt;../article.md#section&lt;/code&gt; 形式的相对 Markdown 链接在生产构建时会解析为文章最终 URL，开发环境保持原样。&lt;/li&gt;
+&lt;li&gt;Markdown 表格会包裹在 &lt;code&gt;.table-wrapper&lt;/code&gt; 中，以便在窄屏横向滚动。&lt;/li&gt;
+&lt;li&gt;外部链接自动添加新窗口打开以及 &lt;code&gt;nofollow&lt;/code&gt;、&lt;code&gt;noopener&lt;/code&gt;、&lt;code&gt;noreferrer&lt;/code&gt; 属性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;缩写定义&lt;/h3&gt;
+&lt;p&gt;除了前文的 &lt;code&gt;:abbr&lt;/code&gt; 指令，也支持先在文末定义缩写，再自动标注正文中的完整单词：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;HTML 和 CSS 是 Web 开发的基础。
+
+*[HTML]: Hyper Text Markup Language
+*[CSS]: Cascading Style Sheets
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;代码块显示增强&lt;/h3&gt;
+&lt;p&gt;代码块默认启用自动换行，并提供行号、语言徽章和复制按钮；其中 &lt;code&gt;shellsession&lt;/code&gt; 按项目配置隐藏行号。常见文件名还可直接作为语言标识并自动转换，例如 &lt;code&gt;astro.config.mjs&lt;/code&gt;、&lt;code&gt;deploy.yml&lt;/code&gt;、&lt;code&gt;CNAME&lt;/code&gt; 和 &lt;code&gt;env&lt;/code&gt;；也可以在代码块元信息中使用 &lt;code&gt;title=&quot;文件名&quot;&lt;/code&gt; 明确设置标题。&lt;/p&gt;
+&lt;h3&gt;摘要与阅读统计&lt;/h3&gt;
+&lt;p&gt;在文章中插入 &lt;code&gt;&amp;lt;!-- more --&amp;gt;&lt;/code&gt; 会将其前的内容作为摘要；未插入时使用第一段文字作为摘要。构建时还会按中日韩字符和英文单词分别计算字数与预计阅读分钟数。&lt;/p&gt;
+</content:encoded></item><item><title>Tsukimi 简易指南</title><link>https://tsukimi.souloss.cn/posts/guide/</link><guid isPermaLink="true">https://tsukimi.souloss.cn/posts/guide/</guid><description>如何使用本博客模板。</description><pubDate>Mon, 01 Apr 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本博客模板基于 &lt;a href=&quot;https://astro.build/&quot;&gt;Astro&lt;/a&gt; 构建。本指南中未提及的内容，你可以在 &lt;a href=&quot;https://docs.astro.build/&quot;&gt;Astro 文档&lt;/a&gt; 中找到答案。&lt;/p&gt;
+&lt;h2&gt;文章 Front-matter&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: My First Blog Post
+published: 2023-09-09
+description: This is the first post of my new Astro blog.
+image: ./cover.jpg
+tags: [Foo, Bar]
+category: Front-end
+draft: false
+---
+&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;属性&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;title&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章标题。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;published&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章发布日期。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;pinned&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是否将文章置顶到文章列表顶部。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;priority&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;置顶文章的优先级。数值越小优先级越高（0, 1, 2...）。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章的简短描述，显示在首页。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;image&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章封面图片路径。&amp;lt;br/&amp;gt;1. 以 &lt;code&gt;http://&lt;/code&gt; 或 &lt;code&gt;https://&lt;/code&gt; 开头：使用网络图片&amp;lt;br/&amp;gt;2. 以 &lt;code&gt;/&lt;/code&gt; 开头：使用 &lt;code&gt;public&lt;/code&gt; 目录中的图片&amp;lt;br/&amp;gt;3. 无前缀：相对于 Markdown 文件的路径&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;tags&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章标签。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;category&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章分类。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;licenseName&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章内容的许可证名称。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;author&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章作者。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;sourceLink&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章内容的来源链接或引用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;draft&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文章是否仍为草稿，草稿不会显示。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;文章文件放置位置&lt;/h2&gt;
+&lt;p&gt;文章文件应放置在 &lt;code&gt;src/content/posts/&lt;/code&gt; 目录下。你也可以创建子目录来更好地组织文章和资源。&lt;/p&gt;
+&lt;p&gt;::: file-tree&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;src/content/posts/
+&lt;ul&gt;
+&lt;li&gt;post-1.md&lt;/li&gt;
+&lt;li&gt;post-2/
+&lt;ul&gt;
+&lt;li&gt;cover.webp&lt;/li&gt;
+&lt;li&gt;index.md&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;:::&lt;/p&gt;
+</content:encoded></item><item><title>Markdown Mermaid 图表</title><link>https://tsukimi.souloss.cn/posts/markdown-mermaid/</link><guid isPermaLink="true">https://tsukimi.souloss.cn/posts/markdown-mermaid/</guid><description>一个使用 Mermaid 的 Markdown 博客文章简单示例。</description><pubDate>Sun, 01 Oct 2023 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Markdown Mermaid 图表完全指南&lt;/h1&gt;
+&lt;p&gt;本文演示了如何在 Markdown 文档中使用 Mermaid 创建各种复杂图表，包括流程图、时序图、甘特图、类图和状态图。&lt;/p&gt;
+&lt;h2&gt;流程图示例&lt;/h2&gt;
+&lt;p&gt;流程图非常适合用来表示流程或算法步骤。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;graph TD
+    A[Start] --&amp;gt; B{Condition Check}
+    B --&amp;gt;|Yes| C[Process Step 1]
+    B --&amp;gt;|No| D[Process Step 2]
+    C --&amp;gt; E[Subprocess]
+    D --&amp;gt; E
+    subgraph E [Subprocess Details]
+        E1[Substep 1] --&amp;gt; E2[Substep 2]
+        E2 --&amp;gt; E3[Substep 3]
+    end
+    E --&amp;gt; F{Another Decision}
+    F --&amp;gt;|Option 1| G[Result 1]
+    F --&amp;gt;|Option 2| H[Result 2]
+    F --&amp;gt;|Option 3| I[Result 3]
+    G --&amp;gt; J[End]
+    H --&amp;gt; J
+    I --&amp;gt; J
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;时序图示例&lt;/h2&gt;
+&lt;p&gt;时序图展示了对象之间随时间推移的交互过程。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sequenceDiagram
+    participant User
+    participant WebApp
+    participant Server
+    participant Database
+
+    User-&amp;gt;&amp;gt;WebApp: Submit Login Request
+    WebApp-&amp;gt;&amp;gt;Server: Send Auth Request
+    Server-&amp;gt;&amp;gt;Database: Query User Credentials
+    Database--&amp;gt;&amp;gt;Server: Return User Data
+    Server--&amp;gt;&amp;gt;WebApp: Return Auth Result
+    
+    alt Auth Successful
+        WebApp-&amp;gt;&amp;gt;User: Show Welcome Page
+        WebApp-&amp;gt;&amp;gt;Server: Request User Data
+        Server-&amp;gt;&amp;gt;Database: Get User Preferences
+        Database--&amp;gt;&amp;gt;Server: Return Preferences
+        Server--&amp;gt;&amp;gt;WebApp: Return User Data
+        WebApp-&amp;gt;&amp;gt;User: Load Personalized Interface
+    else Auth Failed
+        WebApp-&amp;gt;&amp;gt;User: Show Error Message
+        WebApp-&amp;gt;&amp;gt;User: Prompt Re-entry
+    end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;甘特图示例&lt;/h2&gt;
+&lt;p&gt;甘特图非常适合用于展示项目排期和时间线。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;gantt
+    title Website Development Project Timeline
+    dateFormat  YYYY-MM-DD
+    axisFormat  %m/%d
+    
+    section Design Phase
+    Requirements Analysis      :a1, 2023-10-01, 7d
+    UI Design                 :a2, after a1, 10d
+    Prototype Creation        :a3, after a2, 5d
+    
+    section Development Phase
+    Frontend Development      :b1, 2023-10-20, 15d
+    Backend Development       :b2, after a2, 18d
+    Database Design           :b3, after a1, 12d
+    
+    section Testing Phase
+    Unit Testing              :c1, after b1, 8d
+    Integration Testing       :c2, after b2, 10d
+    User Acceptance Testing   :c3, after c2, 7d
+    
+    section Deployment
+    Production Deployment     :d1, after c3, 3d
+    Launch                    :milestone, after d1, 0d
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;类图示例&lt;/h2&gt;
+&lt;p&gt;类图展示了系统的静态结构，包括类、属性、方法及其相互关系。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;classDiagram
+    class User {
+        +String username
+        +String password
+        +String email
+        +Boolean active
+        +login()
+        +logout()
+        +updateProfile()
+    }
+    
+    class Article {
+        +String title
+        +String content
+        +Date publishDate
+        +Boolean published
+        +publish()
+        +edit()
+        +delete()
+    }
+    
+    class Comment {
+        +String content
+        +Date commentDate
+        +addComment()
+        +deleteComment()
+    }
+    
+    class Category {
+        +String name
+        +String description
+        +addArticle()
+        +removeArticle()
+    }
+    
+    User &quot;1&quot; -- &quot;*&quot; Article : writes
+    User &quot;1&quot; -- &quot;*&quot; Comment : posts
+    Article &quot;1&quot; -- &quot;*&quot; Comment : has
+    Article &quot;1&quot; -- &quot;*&quot; Category : belongs to
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;状态图示例&lt;/h2&gt;
+&lt;p&gt;状态图展示了对象在其生命周期中所经历的状态序列。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;stateDiagram-v2
+    [*] --&amp;gt; Draft
+    
+    Draft --&amp;gt; UnderReview : submit
+    UnderReview --&amp;gt; Draft : reject
+    UnderReview --&amp;gt; Approved : approve
+    Approved --&amp;gt; Published : publish
+    Published --&amp;gt; Archived : archive
+    Published --&amp;gt; Draft : retract
+    
+    state Published {
+        [*] --&amp;gt; Active
+        Active --&amp;gt; Hidden : temporarily hide
+        Hidden --&amp;gt; Active : restore
+        Active --&amp;gt; [*]
+        Hidden --&amp;gt; [*]
+    }
+    
+    Archived --&amp;gt; [*]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;饼图示例&lt;/h2&gt;
+&lt;p&gt;饼图非常适合用于展示比例和百分比数据。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pie title Website Traffic Sources Analysis
+    &quot;Search Engines&quot; : 45.6
+    &quot;Direct Access&quot; : 30.1
+    &quot;Social Media&quot; : 15.3
+    &quot;Referral Links&quot; : 6.4
+    &quot;Other Sources&quot; : 2.6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;Mermaid 是一个强大的工具，可以在 Markdown 文档中创建各种类型的图表。本文演示了如何使用流程图、时序图、甘特图、类图、状态图和饼图。这些图表可以帮助你更清晰地表达复杂的概念、流程和数据结构。&lt;/p&gt;
+&lt;p&gt;使用 Mermaid 非常简单，只需在代码块中指定 mermaid 语言，然后用简洁的文本语法描述图表，Mermaid 就会自动将这些描述转换为美观的可视化图表。&lt;/p&gt;
+&lt;p&gt;在你的下一篇技术博客或项目文档中尝试使用 Mermaid 图表吧——它们会让你的内容更加专业、更易于理解！&lt;/p&gt;
+</content:encoded></item><item><title>在文章中嵌入视频</title><link>https://tsukimi.souloss.cn/posts/video/</link><guid isPermaLink="true">https://tsukimi.souloss.cn/posts/video/</guid><description>本文演示如何在博客文章中嵌入视频。</description><pubDate>Mon, 01 Aug 2022 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;只需从 YouTube 或其他平台复制嵌入代码，然后粘贴到 Markdown 文件中即可。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: Include Video in the Post
+published: 2023-10-19
+// ...
+---
+
+&amp;lt;iframe width=&quot;100%&quot; height=&quot;468&quot; src=&quot;https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;YouTube&lt;/h2&gt;
+&lt;p&gt;&amp;lt;iframe width=&quot;100%&quot; height=&quot;468&quot; src=&quot;https://www.youtube.com/embed/5gIf0_xpFPI?si=N1WTorLKL0uwLsU_&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; allowfullscreen&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/p&gt;
+&lt;h2&gt;Bilibili&lt;/h2&gt;
+&lt;p&gt;&amp;lt;iframe width=&quot;100%&quot; height=&quot;468&quot; src=&quot;//player.bilibili.com/player.html?bvid=BV1fK4y1s7Qf&amp;amp;p=1&amp;amp;autoplay=0&quot; scrolling=&quot;no&quot; border=&quot;0&quot; frameborder=&quot;no&quot; framespacing=&quot;0&quot; allowfullscreen=&quot;true&quot; &amp;amp;autoplay=0&amp;gt; &amp;lt;/iframe&amp;gt;&lt;/p&gt;
+</content:encoded></item></channel></rss>
