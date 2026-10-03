@@ -1,5 +1,6 @@
 ---
 import { Image as AstroImage, Picture } from "astro:assets";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 import imageManifest from "@/generated/image-manifest.json";
@@ -110,8 +111,13 @@ const placeholderColor =
 	"color-mix(in srgb, var(--primary) 10%, var(--card-bg))";
 const publicSrcSet = (format: "avif" | "webp") =>
 	publicImage?.variants[format]
+		.filter((variant) =>
+			existsSync(path.join(process.cwd(), "public", variant.src.slice(1))),
+		)
 		.map((variant) => `${url(variant.src)} ${variant.width}w`)
 		.join(", ");
+const publicAvifSrcSet = publicSrcSet("avif");
+const publicWebpSrcSet = publicSrcSet("webp");
 const wrapperStyle = [
 	`background: ${placeholderColor}`,
 	aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined,
@@ -170,11 +176,15 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 			/>
 		) : isPublic && publicImage ? (
 			<picture class={imageWrapperClass}>
-				<source type="image/avif" srcset={publicSrcSet("avif")} sizes={responsiveSizes} />
-				<source type="image/webp" srcset={publicSrcSet("webp")} sizes={responsiveSizes} />
+				{publicAvifSrcSet && (
+					<source type="image/avif" srcset={publicAvifSrcSet} sizes={responsiveSizes} />
+				)}
+				{publicWebpSrcSet && (
+					<source type="image/webp" srcset={publicWebpSrcSet} sizes={responsiveSizes} />
+				)}
 				<img
 					src={url(publicImage.src)}
-					srcset={publicSrcSet("webp")}
+					srcset={publicWebpSrcSet || undefined}
 					sizes={responsiveSizes}
 					alt={alt || ""}
 					class={imageClass}
