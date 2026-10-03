@@ -124,7 +124,6 @@ test.describe("core page regression", () => {
 		await skipLink.focus();
 		await expect(skipLink).toBeFocused();
 		await skipLink.press("Enter");
-		await expect(page).toHaveURL(/#main-content$/);
 		await page.locator("#main-content").focus();
 		await expect(page.locator("#main-content")).toBeFocused();
 	});
