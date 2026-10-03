@@ -1,10 +1,10 @@
 name: Deploy to Pages Branch
 
 on:
-  # Deploy the branch used by this repository as well as legacy main.
   push:
-    branches: [ master, main ]
-  # 允许你在 GitHub 上的 Actions 标签中手动触发此"工作流程"
+    branches:
+      - master
+      - main
   workflow_dispatch:
 
 # 需要写入权限来推送到pages分支
