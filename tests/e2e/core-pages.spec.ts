@@ -91,13 +91,15 @@ test.describe("core page regression", () => {
 				clientWidth: document.documentElement.clientWidth,
 				scrollWidth: document.documentElement.scrollWidth,
 				missingImages: images.filter((image) => {
-					if (image.loading === "lazy") {
-						const rect = image.getBoundingClientRect();
-						const nearViewport =
-							rect.top < window.innerHeight * 2 &&
-							rect.bottom > -window.innerHeight * 2;
-						if (!nearViewport) return false;
-					}
+					const rect = image.getBoundingClientRect();
+					const visible =
+						rect.width > 0 &&
+						rect.height > 0 &&
+						rect.top < window.innerHeight &&
+						rect.bottom > 0 &&
+						rect.left < window.innerWidth &&
+						rect.right > 0;
+					if (!visible) return false;
 					return !image.complete || image.naturalWidth === 0;
 				}).length,
 				firstContentfulPaint:
