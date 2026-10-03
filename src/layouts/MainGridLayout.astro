@@ -135,7 +135,11 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 	coverImage={coverImage}
 	canonicalUrl={canonicalUrl}
 >
-	<a class="skip-link" href="#main-content">{i18n(I18nKey.skipToContent)}</a>
+	<a
+		class="skip-link"
+		href="#main-content"
+		onclick="requestAnimationFrame(() => document.getElementById('main-content')?.focus())"
+	>{i18n(I18nKey.skipToContent)}</a>
 	<GridScripts
 		navbarTransparentMode={siteConfig.banner?.navbar?.transparentMode ||
 			backgroundWallpaperConfig.common?.navbar?.transparentMode || "none"}

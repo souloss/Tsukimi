@@ -113,7 +113,11 @@ const isDocsIndexPage = isHomePage && !docSlug;
 		class:list={["min-h-screen docs-page", { "docs-index-page": isDocsIndexPage }]}
 		data-overlayscrollbars-initialize
 	>
-		<a class="skip-link" href="#main-content">{i18n(I18nKey.skipToContent)}</a>
+		<a
+			class="skip-link"
+			href="#main-content"
+			onclick="requestAnimationFrame(() => document.getElementById('main-content')?.focus())"
+		>{i18n(I18nKey.skipToContent)}</a>
 		<ConfigCarrier />
 		<PageProgressBar
 			enable={siteConfig.pageProgressBar?.enable ?? false}
