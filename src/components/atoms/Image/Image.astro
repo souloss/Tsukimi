@@ -20,6 +20,7 @@ interface Props {
 	placeholder?: string;
 	fit?: "cover" | "contain";
 	aspectRatio?: string;
+	quality?: number;
 }
 
 import { url } from "../../../utils/url-utils";
@@ -39,6 +40,7 @@ const {
 	placeholder,
 	fit = "cover",
 	aspectRatio,
+	quality,
 } = Astro.props;
 const className = Astro.props.class;
 
@@ -149,6 +151,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 					sizes={responsiveSizes}
 					formats={["avif", "webp"]}
 					fallbackFormat={img.format === "png" ? "png" : "webp"}
+					quality={quality}
 				/>
 			</div>
 		) : isLocal && img ? (
@@ -163,6 +166,7 @@ const referrerPolicy = !isLocal && isBilibiliImage ? "no-referrer" : undefined;
 				height={height}
 				widths={responsiveWidths}
 				sizes={responsiveSizes}
+				quality={quality}
 			/>
 		) : isPublic && publicImage ? (
 			<picture class={imageWrapperClass}>

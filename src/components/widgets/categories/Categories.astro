@@ -58,7 +58,6 @@ const style = Astro.props.style;
 			return (
 				<a
 					href={c.url}
-					aria-label={`View all posts in the ${c.name.trim()} category`}
 					class="cat-capsule"
 					style={`--cat-hue: ${hue}`}
 				>
@@ -71,7 +70,7 @@ const style = Astro.props.style;
 	</div>
 	<a
 		href="/categories/"
-		class="mt-3 text-sm text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-colors flex items-center gap-1"
+		class="mt-3 text-sm text-black/60 dark:text-white/60 hover:text-[var(--primary)] transition-colors flex items-center gap-1"
 	>
 		{hasMore ? `${i18n(I18nKey.viewAll)} (${allCategories.length})` : i18n(I18nKey.viewAll)}
 		<Icon name="material-symbols:arrow-forward-rounded" class="text-sm" />
@@ -86,7 +85,7 @@ const style = Astro.props.style;
 	padding: 0.375rem 0.75rem;
 	border-radius: 9999px;
 	background: hsl(var(--cat-hue), 70%, 94%);
-	color: hsl(var(--cat-hue), 55%, 38%);
+	color: hsl(var(--cat-hue), 65%, 30%);
 	font-size: 0.75rem;
 	font-weight: 500;
 	text-decoration: none;

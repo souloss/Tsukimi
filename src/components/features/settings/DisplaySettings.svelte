@@ -815,14 +815,12 @@ $effect(() => {
 				>
 					{i18n(I18nKey.themePalette)}
 				</div>
-				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.themePalette)}>
+				<div class="theme-option-grid" role="group" aria-label={i18n(I18nKey.themePalette)}>
 					{#each palettePreviews as preview, index (preview.style)}
 						<button
 							type="button"
 							class="theme-option m3-style-cell"
 							class:selected={paletteStyle === preview.style}
-							role="radio"
-							aria-checked={paletteStyle === preview.style}
 							aria-pressed={paletteStyle === preview.style}
 							aria-label={i18n(paletteLabelKey(preview.style))}
 							title={i18n(paletteLabelKey(preview.style))}
@@ -951,14 +949,12 @@ $effect(() => {
 				>
 					{i18n(I18nKey.texture)}
 				</div>
-				<div class="theme-option-grid" role="radiogroup" aria-label={i18n(I18nKey.texture)}>
+				<div class="theme-option-grid" role="group" aria-label={i18n(I18nKey.texture)}>
 					{#each TEXTURE_PRESETS as preset, index}
 						<button
 							type="button"
 							class="theme-option m3-style-cell"
 							class:selected={texturePreset === preset}
-							role="radio"
-							aria-checked={texturePreset === preset}
 							aria-pressed={texturePreset === preset}
 							aria-label={preset}
 							title={preset}

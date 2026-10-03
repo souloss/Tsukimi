@@ -42,7 +42,6 @@ const title = $derived(
 			type="button"
 			class="flex justify-center items-center cursor-pointer hover:bg-[var(--btn-plain-bg-hover)] px-2 py-2 -ml-2 rounded-lg transition-colors"
 			onclick={onTitleClick}
-			aria-label="Select month or year"
 		>
 			<span
 				class="text-lg font-bold text-neutral-900 dark:text-neutral-100 select-none"

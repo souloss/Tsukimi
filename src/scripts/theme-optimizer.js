@@ -126,8 +126,6 @@ class ThemeOptimizer {
 				block.classList.remove("hide-during-transition");
 			}
 
-			// 强制重新计算样式
-			void block.offsetWidth;
 		});
 
 		// 检查当前是否处于主题切换状态

@@ -163,11 +163,6 @@ const {
 			element.setAttribute("aria-hidden", String(!visible));
 		};
 
-		// 强制重排以确保样式正确应用
-		const forceReflow = function () {
-			void document.body.offsetHeight;
-		};
-
 		// Remove all wallpaper body classes first, then add back only what's needed
 		body.classList.remove(
 			"enable-banner",
@@ -176,8 +171,6 @@ const {
 			"no-banner-layout",
 			"fullscreen-banner",
 		);
-		forceReflow();
-
 		switch (wallpaperMode) {
 			case "banner":
 				// 显示 banner，隐藏全屏壁纸
@@ -203,7 +196,6 @@ const {
 						window.initSemifullScrollDetection();
 					}
 				}
-				forceReflow();
 				break;
 
 			case "fullscreen":
@@ -226,7 +218,6 @@ const {
 					}
 				}
 				document.documentElement.setAttribute("data-wallpaper-mode", "fullscreen");
-				forceReflow();
 				break;
 
 			case "overlay":
@@ -245,7 +236,6 @@ const {
 					navbar.setAttribute("data-dynamic-transparent", "semi");
 					navbar.removeAttribute("data-transparent-mode");
 				}
-				forceReflow();
 				break;
 
 			case "none":
@@ -263,7 +253,6 @@ const {
 					navbar.setAttribute("data-dynamic-transparent", "none");
 					navbar.removeAttribute("data-transparent-mode");
 				}
-				forceReflow();
 				break;
 		}
 	}

@@ -304,6 +304,11 @@ const { headings = [] } = Astro.props;
 			const totalItems = items.length;
 			let hasVisibleItem = false;
 			let visibleCount = 0;
+			const baseBottom = parseFloat(
+				getComputedStyle(document.documentElement).getPropertyValue(
+					"--fab-group-base-bottom",
+				),
+			);
 
 			for (const item of items) {
 				const key = item.getAttribute("data-control-key");
@@ -336,11 +341,6 @@ const { headings = [] } = Astro.props;
 					"--fab-group-bottom",
 				);
 			} else {
-				const baseBottom = parseFloat(
-					getComputedStyle(document.documentElement).getPropertyValue(
-						"--fab-group-base-bottom",
-					),
-				);
 				if (!isNaN(baseBottom) && totalItems > 0) {
 					const minBottom = 1.5;
 					const ratio = visibleCount / totalItems;

@@ -6,7 +6,7 @@ const defaults: FontConfig = {
 	// 是否允许用户切换字体
 	switchable: true,
 	// 默认字体选项
-	defaultFont: "lxgw",
+	defaultFont: "system",
 	// 字体选项列表
 	fonts: [
 		{
