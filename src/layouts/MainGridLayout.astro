@@ -138,7 +138,7 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 	<a
 		class="skip-link"
 		href="#main-content"
-		onclick="const focusTarget = () => { const target = document.getElementById('main-content'); target?.focus(); target?.scrollIntoView({ block: 'start' }); }; focusTarget(); setTimeout(focusTarget, 0); history.replaceState(null, '', '#main-content'); return false"
+		onclick="const focusTarget = () => { const target = document.getElementById('main-content'); target?.focus(); target?.scrollIntoView({ block: 'start' }); }; focusTarget(); setTimeout(focusTarget, 100); history.replaceState(null, '', '#main-content'); return false"
 	>{i18n(I18nKey.skipToContent)}</a>
 	<GridScripts
 		navbarTransparentMode={siteConfig.banner?.navbar?.transparentMode ||
