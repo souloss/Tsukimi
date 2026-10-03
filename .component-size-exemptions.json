@@ -1,0 +1,29 @@
+{
+	"src/components/features/settings/DisplaySettings.svelte": {
+		"reason": "Settings panel keeps one reactive state surface to avoid duplicated subscriptions; extraction is tracked with its existing settings utility module."
+	},
+	"src/components/layout/Banner.astro": {
+		"reason": "Banner combines responsive markup, carousel controls, wallpaper integration, and inline transition setup for one layout boundary."
+	},
+	"src/components/organisms/navigation/SearchModal.svelte": {
+		"reason": "Search modal owns Pagefind loading, composition-aware input handling, focus management, and result rendering in one island."
+	},
+	"src/components/widgets/music-player/MusicPlayer.svelte": {
+		"reason": "Player host coordinates existing hooks, organisms, and feature-gate rendering; presentation is already split below this boundary."
+	},
+	"src/layouts/Layout.astro": {
+		"reason": "Root layout is the single Astro document boundary for head tags, global scripts, and optional islands."
+	},
+	"src/components/features/toc/MobileTOC.svelte": {
+		"reason": "Mobile TOC combines navigation state, focus behavior, and responsive rendering for one client island."
+	},
+	"src/components/comment/Waline.astro": {
+		"reason": "Third-party comment integration keeps provider markup, lifecycle handling, and scoped compatibility styles together."
+	},
+	"src/layouts/DocsLayout.astro": {
+		"reason": "Documentation layout owns sidebar, TOC, language switching, and article transition integration as one route shell."
+	},
+	"src/components/control/FloatingControls.astro": {
+		"reason": "Floating controls are a configuration-driven composition boundary for multiple optional controls and responsive placement."
+	}
+}

@@ -105,6 +105,7 @@ async function getDataPage(vmid, status, typeNum = 1) {
 	const response = await withRetry(() =>
 		axios.get(
 			`${API_BASE}?type=${typeNum}&follow_status=${status}&vmid=${vmid}&ps=1&pn=1`,
+			{ timeout: 15000 },
 		),
 	);
 
@@ -137,7 +138,7 @@ async function getData(
 	const response = await withRetry(() =>
 		axios.get(
 			`${API_BASE}?type=${typeNum}&follow_status=${status}&vmid=${vmid}&ps=${PAGE_SIZE}&pn=${pn}`,
-			{ headers },
+			{ headers, timeout: 15000 },
 		),
 	);
 

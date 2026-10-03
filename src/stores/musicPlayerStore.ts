@@ -9,6 +9,7 @@ import {
 } from "@/components/widgets/music-player/constants";
 import type { RepeatMode, Song } from "@/components/widgets/music-player/types";
 import { musicPlayerConfig } from "@/config";
+import { ensurePersistentState } from "@/utils/persistent-state";
 import { fetchJson } from "@/utils/request-utils";
 
 export interface MusicPlayerState {
@@ -209,6 +210,7 @@ class MusicPlayerStore {
 	}
 
 	private loadVolumeFromStorage(): void {
+		ensurePersistentState();
 		if (typeof localStorage !== "undefined") {
 			const savedVolume = localStorage.getItem(STORAGE_KEY_VOLUME);
 			if (savedVolume) {

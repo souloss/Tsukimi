@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { fetchExternalJson } from "./external-request.mjs";
 
 const API_BASE = "https://api.bgm.tv";
 const CONFIG_PATH = path.join(
@@ -61,9 +62,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function fetchSubjectDetail(subjectId) {
 	try {
-		const response = await fetch(`${API_BASE}/v0/subjects/${subjectId}`);
-		if (!response.ok) return null;
-		return await response.json();
+		return await fetchExternalJson(`${API_BASE}/v0/subjects/${subjectId}`, { source: "bangumi.subject" });
 	} catch (error) {
 		return null;
 	}
@@ -100,19 +99,7 @@ async function fetchCollection(userId, type) {
 	while (hasMore) {
 		const url = `${API_BASE}/v0/users/${userId}/collections?subject_type=2&type=${type}&limit=${limit}&offset=${offset}`;
 		try {
-			const response = await fetch(url);
-
-			if (!response.ok) {
-				if (response.status === 404) {
-					console.log(
-						`   User ${userId} does not exist or has no data of this type.`,
-					);
-					return [];
-				}
-				throw new Error(`API Error ${response.status}`);
-			}
-
-			const data = await response.json();
+			const data = await fetchExternalJson(url, { source: "bangumi.collections" });
 
 			if (data.data && data.data.length > 0) {
 				allData = [...allData, ...data.data];
@@ -128,6 +115,12 @@ async function fetchCollection(userId, type) {
 				await delay(300);
 			}
 		} catch (e) {
+			if (e?.code === "http" && String(e.message).includes("HTTP 404")) {
+				console.log(
+					`   User ${userId} does not exist or has no data of this type.`,
+				);
+				return [];
+			}
 			console.error(`\nFetch failed (Type ${type}):`, e.message);
 			hasMore = false;
 		}

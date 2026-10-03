@@ -42,6 +42,10 @@ const html = contents
 	.filter(({ file }) => file.endsWith(".html"))
 	.map(({ text }) => text)
 	.join("\n");
+const clientArtifacts = contents
+	.filter(({ file }) => /\.(?:js|mjs|css)$/.test(file))
+	.map(({ text }) => text)
+	.join("\n");
 const errors: string[] = [];
 
 const gates = [
@@ -55,19 +59,25 @@ const gates = [
 		name: "music",
 		enabled: await configuredFlag("musicConfig", musicPlayerConfig.enable),
 		markers: ['class="music-player-fab-shell"', 'class="music-sidebar-widget"'],
+		moduleMarkers: ["MusicPlayer"],
 		scope: html,
+		moduleScope: clientArtifacts,
 	},
 	{
 		name: "pio",
 		enabled: await configuredFlag("pioConfig", pioConfig.enable),
 		markers: ['id="pio-container"', 'src="/pio/models/'],
+		moduleMarkers: ["Pio"],
 		scope: html,
+		moduleScope: clientArtifacts,
 	},
 	{
 		name: "context-menu",
 		enabled: contextMenuConfig.enable,
 		markers: ['data-context-menu', 'class="context-menu"'],
+		moduleMarkers: ["ContextMenu"],
 		scope: html,
+		moduleScope: clientArtifacts,
 	},
 	{
 		name: "texture",
@@ -82,6 +92,11 @@ for (const gate of gates) {
 		for (const marker of gate.markers) {
 			if (gate.scope.includes(marker)) {
 				errors.push(`${gate.name} is disabled but artifact contains ${marker}`);
+			}
+		}
+		for (const marker of gate.moduleMarkers ?? []) {
+			if (gate.moduleScope.includes(marker)) {
+				errors.push(`${gate.name} is disabled but client artifact contains ${marker}`);
 			}
 		}
 	}

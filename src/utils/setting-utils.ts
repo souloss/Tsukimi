@@ -25,6 +25,7 @@ import {
 import { isTexturePreset, resolveTextureConfig } from "@/config/textureConfig";
 import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
 import type { TexturePreset } from "@/types/texture";
+import { ensurePersistentState } from "@/utils/persistent-state";
 import { notifyThemeSetting } from "@/utils/theme-state";
 
 function isHomePage(pathname: string): boolean {
@@ -74,6 +75,7 @@ export function resolveTheme(theme: LIGHT_DARK_MODE): LIGHT_DARK_MODE {
 }
 
 export function getHue(): number {
+	ensurePersistentState();
 	// Check global object first
 	if (typeof window === "undefined" || !window.localStorage) {
 		return getDefaultHue();
@@ -420,6 +422,7 @@ function cleanupSystemThemeListener() {
 }
 
 export function getStoredTheme(): LIGHT_DARK_MODE {
+	ensurePersistentState();
 	// Check if in browser environment
 	if (
 		typeof localStorage === "undefined" ||

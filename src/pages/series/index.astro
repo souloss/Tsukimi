@@ -4,6 +4,11 @@ import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getAllSeries } from "@utils/series-utils";
 import { Icon } from "astro-icon/components";
+import { siteConfig } from "@/config";
+
+if (!siteConfig.featurePages.series) {
+	return Astro.redirect("/");
+}
 
 const allSeries = await getAllSeries();
 ---

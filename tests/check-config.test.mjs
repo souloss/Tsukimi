@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { validateConfig } from "../scripts/check-config.mjs";
+import {
+	validateConfig,
+	validateEnvironment,
+} from "../scripts/check-config.mjs";
 
 test("default feature, navigation, and sidebar configuration is consistent", async () => {
 	const errors = await validateConfig();
@@ -58,4 +61,37 @@ test("rejects invalid texture configuration", async () => {
 
 	assert.match(errors.join("\n"), /texture\.defaultPreset is invalid/);
 	assert.match(errors.join("\n"), /texture\.defaultOpacity/);
+});
+
+test("rejects invalid runtime configuration values", async () => {
+	const errors = await validateConfig({
+		site: {
+			lang: "xx",
+			siteURL: "not-a-url",
+			themeColor: { hue: 361 },
+			postListLayout: { defaultMode: "columns", allowSwitch: "yes" },
+			featurePages: {},
+		},
+		navbar: { links: [] },
+		sidebar: { components: { left: [], right: [], drawer: [] } },
+	});
+
+	assert.match(errors.join("\n"), /lang is invalid/);
+	assert.match(errors.join("\n"), /siteURL/);
+	assert.match(errors.join("\n"), /themeColor\.hue/);
+	assert.match(errors.join("\n"), /postListLayout/);
+});
+
+test("validates environment overrides with stable errors", () => {
+	const errors = validateEnvironment({
+		ENABLE_CONTENT_SYNC: "sometimes",
+		NODE_ENV: "staging",
+		DEV_MAX_RENDERED_POSTS: "many",
+		CONTENT_REPO_URL: "file:///private/content",
+	});
+
+	assert.match(errors.join("\n"), /ENABLE_CONTENT_SYNC/);
+	assert.match(errors.join("\n"), /NODE_ENV/);
+	assert.match(errors.join("\n"), /DEV_MAX_RENDERED_POSTS/);
+	assert.match(errors.join("\n"), /CONTENT_REPO_URL/);
 });

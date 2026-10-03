@@ -57,3 +57,26 @@ test("fetchJson rejects responses from a replaced page", async () => {
 		globalThis.fetch = originalFetch;
 	}
 });
+
+test("fetchJson retries transient failures and preserves source context", async () => {
+	const originalFetch = globalThis.fetch;
+	let calls = 0;
+	globalThis.fetch = async () => {
+		calls += 1;
+		if (calls < 3) throw new Error("temporary network failure");
+		return new Response(JSON.stringify({ ok: true }), {
+			headers: { "content-type": "application/json" },
+		});
+	};
+	try {
+		const result = await fetchJson<{ ok: boolean }>("/retry", {
+			retries: 2,
+			retryDelayMs: 1,
+			source: "calendar",
+		});
+		assert.deepEqual(result, { ok: true });
+		assert.equal(calls, 3);
+	} finally {
+		globalThis.fetch = originalFetch;
+	}
+});

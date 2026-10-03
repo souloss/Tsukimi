@@ -1,10 +1,9 @@
 ---
-import { Icon } from "astro-icon/components";
-
 import I18nKey from "../../../i18n/i18nKey";
 import { i18n } from "../../../i18n/translation";
 import { formatDateToYYYYMMDD } from "../../../utils/date-utils";
 import { getTagUrl } from "../../../utils/url-utils";
+import { MetaItem } from "../../molecules";
 import {
 	Category,
 	EncryptedBadge,
@@ -54,12 +53,9 @@ const {
     <PublishedDate date={published} />
 
     {!hideUpdateDate && updated && updated.getTime() !== published.getTime() && (
-        <div class="flex items-center">
-            <div class="meta-icon">
-                <Icon name="material-symbols:edit-calendar-outline-rounded" class="text-xl"></Icon>
-            </div>
+        <MetaItem icon="material-symbols:edit-calendar-outline-rounded">
             <span class="text-50 text-sm font-medium">{formatDateToYYYYMMDD(updated)}</span>
-        </div>
+        </MetaItem>
     )}
 
     <Category category={category} />
@@ -74,9 +70,7 @@ const {
 
     {!showOnlyBasicMeta && (
         <div class:list={["items-center", {"flex": !hideTagsForMobile, "hidden md:flex": hideTagsForMobile}]}>
-            <div class="meta-icon">
-                <Icon name="material-symbols:tag-rounded" class="text-xl"></Icon>
-            </div>
+            <MetaItem icon="material-symbols:tag-rounded">
             <div class="flex flex-row flex-nowrap items-center">
                 {(tags && tags.length > 0) && tags.map((tag, i) => (
                     <>
@@ -90,6 +84,7 @@ const {
                 ))}
                 {!(tags && tags.length > 0) && <div class="transition text-50 text-sm font-medium">{i18n(I18nKey.noTags)}</div>}
             </div>
+            </MetaItem>
         </div>
     )}
     
@@ -100,11 +95,10 @@ const {
             data-pageviews-text={i18n(I18nKey.profileStatsPageViews)}
             data-visits-text={i18n(I18nKey.profileStatsVisits)}
         >
-            <div class="meta-icon">
-                <Icon name="material-symbols:visibility-outline-rounded" class="text-xl"></Icon>
-            </div>
+            <MetaItem icon="material-symbols:visibility-outline-rounded">
             <span class="text-50 text-sm font-medium page-views-display">{i18n(I18nKey.pageViewsLoading)}</span>
-        </div>
+            </MetaItem>
+		</div>
     )}
 
 	{showEncrypted && (

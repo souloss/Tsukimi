@@ -1,9 +1,15 @@
 export class RequestLifecycleError extends Error {
-	readonly code: "aborted" | "timeout" | "stale" | "http" | "invalid";
+	readonly code:
+		| "aborted"
+		| "timeout"
+		| "stale"
+		| "http"
+		| "invalid"
+		| "network";
 
 	constructor(
 		message: string,
-		code: "aborted" | "timeout" | "stale" | "http" | "invalid",
+		code: "aborted" | "timeout" | "stale" | "http" | "invalid" | "network",
 	) {
 		super(message);
 		this.name = "RequestLifecycleError";
@@ -47,6 +53,9 @@ export interface RequestJsonOptions<T> {
 	signal?: AbortSignal;
 	dedupeKey?: string;
 	validate?: (value: unknown) => value is T;
+	retries?: number;
+	retryDelayMs?: number;
+	source?: string;
 }
 
 export async function fetchJson<T = unknown>(
@@ -69,35 +78,53 @@ export async function fetchJson<T = unknown>(
 	options.signal?.addEventListener("abort", onAbort, { once: true });
 
 	const request = (async () => {
+		const retries = Math.max(0, options.retries ?? 0);
+		let attempt = 0;
 		try {
-			const response = await fetch(input, { signal: controller.signal });
-			if (!response.ok) {
-				throw new RequestLifecycleError(
-					`Request failed with HTTP ${response.status}`,
-					"http",
-				);
+			while (true) {
+				try {
+					const response = await fetch(input, { signal: controller.signal });
+					if (!response.ok) {
+						throw new RequestLifecycleError(
+							`Request failed with HTTP ${response.status}${options.source ? ` (${options.source})` : ""}`,
+							"http",
+						);
+					}
+					const contentType = response.headers.get("content-type") ?? "";
+					if (contentType && !contentType.includes("json")) {
+						throw new RequestLifecycleError(
+							`Expected JSON response, received ${contentType}`,
+							"invalid",
+						);
+					}
+					const value: unknown = await response.json();
+					if (generation !== pageGeneration) {
+						throw new RequestLifecycleError(
+							"Request belongs to a replaced page",
+							"stale",
+						);
+					}
+					if (options.validate && !options.validate(value)) {
+						throw new RequestLifecycleError(
+							"Response shape validation failed",
+							"invalid",
+						);
+					}
+					return value as T;
+				} catch (error) {
+					if (
+						error instanceof RequestLifecycleError &&
+						!["http", "network"].includes(error.code)
+					)
+						throw error;
+					if (controller.signal.aborted) throw error;
+					if (attempt >= retries) throw error;
+					attempt += 1;
+					await new Promise((resolve) =>
+						setTimeout(resolve, options.retryDelayMs ?? 100 * attempt),
+					);
+				}
 			}
-			const contentType = response.headers.get("content-type") ?? "";
-			if (contentType && !contentType.includes("json")) {
-				throw new RequestLifecycleError(
-					`Expected JSON response, received ${contentType}`,
-					"invalid",
-				);
-			}
-			const value: unknown = await response.json();
-			if (generation !== pageGeneration) {
-				throw new RequestLifecycleError(
-					"Request belongs to a replaced page",
-					"stale",
-				);
-			}
-			if (options.validate && !options.validate(value)) {
-				throw new RequestLifecycleError(
-					"Response shape validation failed",
-					"invalid",
-				);
-			}
-			return value as T;
 		} catch (error) {
 			if (error instanceof RequestLifecycleError) throw error;
 			if (controller.signal.aborted) {
@@ -116,7 +143,12 @@ export async function fetchJson<T = unknown>(
 					code,
 				);
 			}
-			throw error;
+			throw error instanceof RequestLifecycleError
+				? error
+				: new RequestLifecycleError(
+						`Request failed${options.source ? ` (${options.source})` : ""}`,
+						"network",
+					);
 		} finally {
 			clearTimeout(timeout);
 			options.signal?.removeEventListener("abort", onAbort);

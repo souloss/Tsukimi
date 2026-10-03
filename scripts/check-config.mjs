@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { LinkPresets } from "../src/constants/link-presets.ts";
-import { featurePageRoutes } from "../src/config/featureRoutes.ts";
+import { featurePageRegistry, featurePageRoutes } from "../src/config/featureRoutes.ts";
 import {
 	contextMenuConfig,
 	fabConfig,
@@ -15,22 +15,6 @@ import { isTexturePreset } from "../src/config/textureConfig.ts";
 import { WIDGET_COMPONENT_MAP } from "../src/utils/widget-manager.ts";
 
 const projectRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
-
-const featurePageFiles = {
-	anime: "src/pages/anime.astro",
-	talking: "src/pages/talking.astro",
-	friends: "src/pages/friends.astro",
-	projects: "src/pages/projects.astro",
-	skills: "src/pages/skills.astro",
-	timeline: "src/pages/timeline.astro",
-	albums: "src/pages/albums.astro",
-	devices: "src/pages/devices.astro",
-	series: "src/pages/series/index.astro",
-	reposts: "src/pages/reposts.astro",
-	guestbook: "src/pages/guestbook.astro",
-	sponsor: "src/pages/sponsor.astro",
-	knowledgeGraph: "src/pages/knowledge-graph.astro",
-};
 
 const renderedSidebarTypes = new Set([
 	"profile",
@@ -45,6 +29,41 @@ const renderedSidebarTypes = new Set([
 	"umami-stats",
 	"calendar",
 ]);
+
+const supportedLanguages = new Set(["en", "zh_CN", "zh_TW", "ja", "ko", "es", "th", "vi", "tr", "id"]);
+const booleanEnvironmentKeys = ["ENABLE_CONTENT_SYNC", "DRAFT_PREVIEW"];
+const integerEnvironmentKeys = ["DEV_MAX_RENDERED_POSTS", "TSUKIMI_PERFORMANCE_MAX_TRACKED_BYTES"];
+
+function isHttpUrl(value) {
+	try {
+		const parsed = new URL(value);
+		return parsed.protocol === "http:" || parsed.protocol === "https:";
+	} catch {
+		return false;
+	}
+}
+
+export function validateEnvironment(env = process.env) {
+	const errors = [];
+	for (const key of booleanEnvironmentKeys) {
+		if (env[key] !== undefined && env[key] !== "true" && env[key] !== "false") {
+			errors.push(`${key} must be \\"true\\" or \\"false\\"`);
+		}
+	}
+	if (env.NODE_ENV !== undefined && !["development", "production", "test"].includes(env.NODE_ENV)) {
+		errors.push("NODE_ENV must be development, production, or test");
+	}
+	for (const key of integerEnvironmentKeys) {
+		if (env[key] !== undefined && (!/^\\d+$/.test(env[key]) || Number(env[key]) < 0)) {
+			errors.push(`${key} must be a non-negative integer`);
+		}
+	}
+	for (const key of ["CONTENT_REPO_URL", "DOCS_RENDER_BASE_URL"]) {
+		if (env[key] !== undefined && !isHttpUrl(env[key])) errors.push(`${key} must be an http(s) URL`);
+	}
+	if (env.CONTENT_DIR !== undefined && !env.CONTENT_DIR.trim()) errors.push("CONTENT_DIR must not be empty");
+	return errors;
+}
 
 async function pathExists(path) {
 	try {
@@ -79,7 +98,7 @@ export async function validateConfig({
 		if (!(key in site.featurePages)) {
 			errors.push(`featurePages.${key} has no config value`);
 		}
-		if (!(key in featurePageFiles)) {
+		if (!(key in featurePageRegistry)) {
 			errors.push(`featurePages.${key} has no page file mapping`);
 		}
 	}
@@ -92,9 +111,9 @@ export async function validateConfig({
 		}
 	}
 
-	for (const [key, file] of Object.entries(featurePageFiles)) {
-		if (!(await pathExists(resolve(root, file)))) {
-			errors.push(`${key} route page is missing: ${file}`);
+	for (const [key, route] of Object.entries(featurePageRegistry)) {
+		if (!(await pathExists(resolve(root, route.page)))) {
+			errors.push(`${key} route page is missing: ${route.page}`);
 		}
 	}
 
@@ -122,6 +141,16 @@ export async function validateConfig({
 	}
 
 	const themeColor = site.themeColor ?? {};
+	if (site.lang !== undefined && !supportedLanguages.has(site.lang)) {
+		errors.push(`lang is invalid: ${site.lang}`);
+	}
+	if (
+		themeColor.hue !== undefined &&
+		(typeof themeColor.hue !== "number" || !Number.isFinite(themeColor.hue) || themeColor.hue < 0 || themeColor.hue > 360)
+	) {
+		errors.push("themeColor.hue must be between 0 and 360");
+	}
+	if (site.siteURL !== undefined && !isHttpUrl(site.siteURL)) errors.push("siteURL must be an http(s) URL");
 	if (
 		themeColor.paletteStyle !== undefined &&
 		![
@@ -150,6 +179,23 @@ export async function validateConfig({
 	if (typeof contextMenuConfig.enable !== "boolean") {
 		errors.push("contextMenu.enable must be boolean");
 	}
+	for (const key of ["copySelection", "backToTop", "copyLink"]) {
+		if (contextMenuConfig[key] !== undefined && typeof contextMenuConfig[key] !== "boolean") {
+			errors.push(`contextMenu.${key} must be boolean`);
+		}
+	}
+	const postListLayout = site.postListLayout ?? {};
+	for (const [key, value] of Object.entries({
+		defaultMode: postListLayout.defaultMode,
+		mobileDefaultMode: postListLayout.mobileDefaultMode,
+	})) {
+		if (value !== undefined && value !== "list" && value !== "grid") {
+			errors.push(`postListLayout.${key} must be list or grid`);
+		}
+	}
+	if (postListLayout.allowSwitch !== undefined && typeof postListLayout.allowSwitch !== "boolean") {
+		errors.push("postListLayout.allowSwitch must be boolean");
+	}
 	const texture = site.texture ?? {};
 	if (
 		texture.defaultPreset !== undefined &&
@@ -171,7 +217,7 @@ export async function validateConfig({
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-	const errors = await validateConfig();
+	const errors = [...validateEnvironment(), ...(await validateConfig())];
 	if (errors.length > 0) {
 		console.error(`Configuration validation failed with ${errors.length} error(s):`);
 		for (const error of errors) console.error(`  - ${error}`);

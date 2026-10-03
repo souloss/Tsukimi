@@ -1,5 +1,6 @@
 import type { TexturePreset } from "@/types/texture";
 import type { MaterialPaletteStyle } from "@/utils/material-theme";
+import { ensurePersistentState } from "@/utils/persistent-state";
 
 export interface ThemeSettings {
 	hue: number | null;
@@ -18,6 +19,7 @@ export interface ThemeSettingChange {
 const EVENT_NAME = "tsukimi:theme-setting-change";
 
 export function getThemeSettings(): ThemeSettings {
+	ensurePersistentState();
 	if (typeof localStorage === "undefined") {
 		return {
 			hue: null,
