@@ -48,6 +48,7 @@ function getAssetPath(path: string): string {
 
 class MusicPlayerStore {
 	private audio: HTMLAudioElement | null = null;
+	private audioSourceLoaded = false;
 	private state: MusicPlayerState;
 	private isInitialized = false;
 	private unregisterInteraction: (() => void) | undefined;
@@ -339,8 +340,21 @@ class MusicPlayerStore {
 		if (this.state.playlist.length === 0) {
 			this.showError("本地播放列表为空");
 		} else {
-			this.loadSong(this.state.playlist[0], false);
+			// Keep metadata available for the controls without downloading audio
+			// until the visitor explicitly starts playback.
+			this.state.currentSong = { ...this.state.playlist[0] };
+			this.state.isLoading = false;
 		}
+		this.broadcastState();
+	}
+
+	private loadAudioSource(): void {
+		if (this.audioSourceLoaded || !this.audio || !this.state.currentSong.url) {
+			return;
+		}
+		this.audio.src = getAssetPath(this.state.currentSong.url);
+		this.audioSourceLoaded = true;
+		this.audio.load();
 	}
 
 	private loadSong(song: Song, autoPlay = true): void {
@@ -349,18 +363,20 @@ class MusicPlayerStore {
 		}
 		if (song.url !== this.state.currentSong.url) {
 			this.state.currentSong = { ...song };
-			if (song.url) {
+			if (song.url && autoPlay) {
 				this.state.isLoading = true;
 			} else {
 				this.state.isLoading = false;
 			}
 		}
 		this.state.willAutoPlay = autoPlay;
-		if (this.audio) {
+		if (this.audio && autoPlay) {
 			if (this.audio.src && song.url) {
 				this.audio.src = "";
+				this.audioSourceLoaded = false;
 			}
 			this.audio.src = getAssetPath(song.url);
+			this.audioSourceLoaded = Boolean(song.url);
 			this.audio.load();
 		}
 		this.broadcastState();
@@ -385,6 +401,7 @@ class MusicPlayerStore {
 		if (!this.audio || !this.state.currentSong.url) {
 			return;
 		}
+		this.loadAudioSource();
 		if (this.state.isPlaying) {
 			this.audio.pause();
 		} else {
@@ -396,6 +413,7 @@ class MusicPlayerStore {
 		if (!this.audio || !this.state.currentSong.url) {
 			return;
 		}
+		this.loadAudioSource();
 		this.audio.play().catch(() => {});
 	}
 

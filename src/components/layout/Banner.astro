@@ -376,6 +376,7 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				}
 
 				var timerId = null;
+				var startupTimerId = null;
 				var isPaused = false;
 				var intervalStartTime = 0;
 				var remainingTime = 0;
@@ -534,7 +535,12 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				container.addEventListener('mouseenter', onMouseEnter);
 				container.addEventListener('mouseleave', onMouseLeave);
 
-				startCarousel();
+				// Let the first banner settle before starting the carousel. This keeps
+				// image decoding and animation work out of the initial render window.
+				startupTimerId = setTimeout(function() {
+					startupTimerId = null;
+					startCarousel();
+				}, 8000);
 
 				// 监听设置面板的轮播开关事件
 				var carouselChangeHandler = function(e) {
@@ -552,6 +558,10 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 
 				// 注册清理函数，供下次 Swup 导航或销毁时调用
 				window.__bannerCarouselCleanup = function() {
+					if (startupTimerId !== null) {
+						clearTimeout(startupTimerId);
+						startupTimerId = null;
+					}
 					stopCarousel();
 					remainingTime = 0;
 					intervalStartTime = 0;

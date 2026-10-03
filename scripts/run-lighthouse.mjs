@@ -1,11 +1,10 @@
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 
 const host = "127.0.0.1";
 const port = 4338;
 const chromePort = 9223;
-const existingPreviewPort = 4321;
 const url = `http://${host}:${port}/`;
 const chromePath = process.env.CHROME_PATH ?? findPlaywrightChrome();
 
@@ -14,14 +13,11 @@ if (!chromePath) {
 }
 
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
-const existingUrl = `http://${host}:${existingPreviewPort}/`;
-const previewUrl = (await isHealthy(existingUrl)) ? existingUrl : url;
-const server = previewUrl === url
-	? spawn(pnpm, ["astro", "preview", "--host", host, "--port", String(port)], {
-			stdio: ["ignore", "pipe", "pipe"],
-			env: { ...process.env, ENABLE_CONTENT_SYNC: "false" },
-		})
-	: undefined;
+const previewUrl = url;
+const server = spawn(pnpm, ["astro", "preview", "--host", host, "--port", String(port)], {
+	stdio: ["ignore", "pipe", "pipe"],
+	env: { ...process.env, ENABLE_CONTENT_SYNC: "false" },
+});
 
 let serverOutput = "";
 let browser;
@@ -83,6 +79,9 @@ try {
 	// The preview process may be shared with another local command.
 	browser?.kill("SIGTERM");
 	server?.kill("SIGTERM");
+	// `astro preview` owns a background server process; stop the dedicated
+	// Lighthouse port as well so the next run cannot reuse an old build.
+	spawnSync(pnpm, ["astro", "preview", "stop"], { stdio: "ignore" });
 	if (serverOutput && process.exitCode) console.error(serverOutput);
 }
 
@@ -139,12 +138,4 @@ async function waitForServer(target) {
 		await new Promise((resolve) => setTimeout(resolve, 500));
 	}
 	throw new Error(`Preview server did not start: ${serverOutput}`);
-}
-
-async function isHealthy(target) {
-	try {
-		return (await fetch(target)).ok;
-	} catch {
-		return false;
-	}
 }

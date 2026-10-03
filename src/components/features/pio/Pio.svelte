@@ -21,6 +21,8 @@ const merged = $derived({
 
 let widgetInstance: { destroy: () => Promise<void>; sleep: () => void } | null =
 	null;
+let removeInteractionListeners: (() => void) | undefined;
+let hasStarted = false;
 
 async function initWidget() {
 	if (typeof window === "undefined") {
@@ -129,14 +131,30 @@ onMount(() => {
 		return;
 	}
 
-	// Lazy load via requestIdleCallback
-	if ("requestIdleCallback" in window) {
-		(
-			window as unknown as { requestIdleCallback: typeof requestIdleCallback }
-		).requestIdleCallback(() => initWidget(), { timeout: 5000 });
-	} else {
-		setTimeout(initWidget, 2000);
-	}
+	// Live2D downloads megabytes of model data. Wait for an explicit interaction
+	// so it never competes with the initial page render.
+	const startAfterInteraction = () => {
+		if (hasStarted) return;
+		hasStarted = true;
+		removeInteractionListeners?.();
+		removeInteractionListeners = undefined;
+		if ("requestIdleCallback" in window) {
+			(
+				window as unknown as { requestIdleCallback: typeof requestIdleCallback }
+			).requestIdleCallback(() => initWidget(), { timeout: 1500 });
+		} else {
+			setTimeout(initWidget, 250);
+		}
+	};
+	document.addEventListener("pointerdown", startAfterInteraction, {
+		once: true,
+		passive: true,
+	});
+	document.addEventListener("keydown", startAfterInteraction, { once: true });
+	removeInteractionListeners = () => {
+		document.removeEventListener("pointerdown", startAfterInteraction);
+		document.removeEventListener("keydown", startAfterInteraction);
+	};
 });
 
 onDestroy(async () => {
@@ -151,6 +169,7 @@ onDestroy(async () => {
 	if (typeof document !== "undefined") {
 		document.getElementById("l2d-hide-about")?.remove();
 	}
+	removeInteractionListeners?.();
 });
 </script>
 
