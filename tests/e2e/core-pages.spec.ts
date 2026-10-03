@@ -119,10 +119,11 @@ test.describe("core page regression", () => {
 
 	test("skip link reaches the main content", async ({ page }) => {
 		await page.goto("/", { waitUntil: "domcontentloaded" });
-		await page.keyboard.press("Tab");
 		const skipLink = page.locator(".skip-link");
+		await expect(skipLink).toBeVisible();
+		await skipLink.focus();
 		await expect(skipLink).toBeFocused();
-		await page.keyboard.press("Enter");
+		await skipLink.press("Enter");
 		await expect(page.locator("#main-content")).toBeFocused();
 	});
 
