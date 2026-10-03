@@ -23,7 +23,7 @@ export default defineConfig({
 	webServer: {
 		// Astro 7 backgrounds the server inside agent environments. Keep the
 		// webServer command alive while that managed process serves the port.
-		command: `pnpm astro dev --host 127.0.0.1 --port ${port}; while curl -sf http://127.0.0.1:${port}/ >/dev/null; do sleep 1; done`,
+		command: `pnpm prepare-dev-assets && pnpm astro dev --host 127.0.0.1 --port ${port}; while curl -sf http://127.0.0.1:${port}/ >/dev/null; do sleep 1; done`,
 		url: `http://127.0.0.1:${port}/`,
 		reuseExistingServer: true,
 		timeout: 120_000,

@@ -139,7 +139,7 @@ const iconWebpSrc = hasIconPngFallback
             })}
         </div>
         <div class="flex items-center gap-1">
-            <SearchModal client:idle variant="icon" />
+            <SearchModal client:load variant="icon" />
             {/* 只在 sidebar 模式下显示移动端 TOC 按钮 */}
 			{siteConfig.toc.enable && siteConfig.toc.mobileTop && <MobileTOC client:media="(max-width: 1279px)"></MobileTOC>}
             {!siteConfig.themeColor.fixed && (
