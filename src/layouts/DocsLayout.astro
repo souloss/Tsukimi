@@ -113,6 +113,7 @@ const isDocsIndexPage = isHomePage && !docSlug;
 		class:list={["min-h-screen docs-page", { "docs-index-page": isDocsIndexPage }]}
 		data-overlayscrollbars-initialize
 	>
+		<a class="skip-link" href="#main-content">{i18n(I18nKey.skipToContent)}</a>
 		<ConfigCarrier />
 		<PageProgressBar
 			enable={siteConfig.pageProgressBar?.enable ?? false}
@@ -235,27 +236,28 @@ const isDocsIndexPage = isHomePage && !docSlug;
 				id="swup-container"
 				class="docs-content-wrapper"
 			>
-				<div id="content-wrapper" class="onload-animation">
-					{isFallback && (
-						<div class="docs-fallback-notice">
-							{i18n(I18nKey.docsFallbackNotice)}
-						</div>
-					)}
-					{docSlug && !isHomePage && (
-						<nav class="docs-breadcrumb" aria-label="Breadcrumb">
-							<a href="/docs/" class="docs-breadcrumb-item">{i18n(I18nKey.docs)}</a>
-							<span class="docs-breadcrumb-separator">/</span>
-							<a href={`/docs/${docSlug}/`} class="docs-breadcrumb-item">{docSlug.charAt(0).toUpperCase() + docSlug.slice(1)}</a>
-							{breadcrumbTitle && (
-								<>
-									<span class="docs-breadcrumb-separator">/</span>
-									<span class="docs-breadcrumb-item docs-breadcrumb-current">{breadcrumbTitle}</span>
-								</>
-							)}
-						</nav>
-					)}
-					<slot />
-					{(prevNextLinks.prev || prevNextLinks.next) && (
+				<div id="main-content" tabindex="-1" class="onload-animation">
+					<div id="content-wrapper">
+						{isFallback && (
+							<div class="docs-fallback-notice">
+								{i18n(I18nKey.docsFallbackNotice)}
+							</div>
+						)}
+						{docSlug && !isHomePage && (
+							<nav class="docs-breadcrumb" aria-label="Breadcrumb">
+								<a href="/docs/" class="docs-breadcrumb-item">{i18n(I18nKey.docs)}</a>
+								<span class="docs-breadcrumb-separator">/</span>
+								<a href={`/docs/${docSlug}/`} class="docs-breadcrumb-item">{docSlug.charAt(0).toUpperCase() + docSlug.slice(1)}</a>
+								{breadcrumbTitle && (
+									<>
+										<span class="docs-breadcrumb-separator">/</span>
+										<span class="docs-breadcrumb-item docs-breadcrumb-current">{breadcrumbTitle}</span>
+									</>
+								)}
+							</nav>
+						)}
+						<slot />
+						{(prevNextLinks.prev || prevNextLinks.next) && (
 						<div class="docs-prev-next-nav">
 							{prevNextLinks.prev && (
 								<a href={prevNextLinks.prev.url} class="docs-prev-next-link docs-prev-link">
@@ -277,6 +279,7 @@ const isDocsIndexPage = isHomePage && !docSlug;
 						<Footer />
 					</div>
 				</div>
+			</div>
 			</main>
 
 			<!-- Right Sidebar: TOC — fixed position, extends to viewport edge -->

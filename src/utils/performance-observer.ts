@@ -41,6 +41,54 @@ export interface WebVitalsMetric {
 
 export type MetricCallback = (metric: WebVitalsMetric) => void;
 
+export function observeLongTasks(callback: MetricCallback): () => void {
+	const observer = new PerformanceObserver((list) => {
+		for (const entry of list.getEntries()) {
+			callback({
+				name: "LongTask",
+				value: entry.duration,
+				rating:
+					entry.duration < 50
+						? "good"
+						: entry.duration < 200
+							? "needs-improvement"
+							: "poor",
+				delta: entry.duration,
+				id: `longtask-${Date.now()}`,
+				entries: [entry],
+			});
+		}
+	});
+	observer.observe({ type: "longtask", buffered: true });
+	return () => observer.disconnect();
+}
+
+export function observeResourceErrors(callback: MetricCallback): () => void {
+	const handler = (event: ErrorEvent) => {
+		if (!event.target || !(event.target instanceof Element)) return;
+		callback({
+			name: "ResourceError",
+			value: 1,
+			rating: "poor",
+			delta: 1,
+			id: `resource-error-${Date.now()}`,
+			entries: [],
+		});
+	};
+	window.addEventListener("error", handler, true);
+	return () => window.removeEventListener("error", handler, true);
+}
+
+export function createSampledReporter(
+	callback: MetricCallback,
+	sampleRate = 1,
+): MetricCallback {
+	const rate = Math.min(1, Math.max(0, sampleRate));
+	return (metric) => {
+		if (Math.random() <= rate) callback(metric);
+	};
+}
+
 /**
  * 观察 Cumulative Layout Shift (CLS)
  */
@@ -288,10 +336,12 @@ export function observeNavigationTiming(callback: MetricCallback): () => void {
 		for (const entry of list.getEntries()) {
 			if (entry.entryType === "navigation") {
 				const nav = entry as PerformanceNavigationTiming;
+				const ttfb = nav.responseStart - nav.requestStart;
 				callback({
-					name: "NavigationTiming",
-					value: nav.responseStart - nav.requestStart,
-					rating: "good",
+					name: "TTFB",
+					value: ttfb,
+					rating:
+						ttfb < 800 ? "good" : ttfb < 1800 ? "needs-improvement" : "poor",
 					delta: nav.responseEnd - nav.requestStart,
 					id: `nav-${Date.now()}`,
 					entries: [nav],
@@ -408,6 +458,8 @@ export function initPerformanceMonitoring(
 	cleanups.push(observeINP(callback));
 	cleanups.push(observeFCP(callback));
 	cleanups.push(observeNavigationTiming(callback));
+	cleanups.push(observeLongTasks(callback));
+	cleanups.push(observeResourceErrors(callback));
 
 	if (collectResourceTiming) {
 		cleanups.push(observeResourceTiming(callback));

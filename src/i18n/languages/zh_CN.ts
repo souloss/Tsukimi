@@ -6,6 +6,7 @@ export const zh_CN: Translation = {
 	[Key.about]: "关于我",
 	[Key.archive]: "归档",
 	[Key.search]: "搜索",
+	[Key.skipToContent]: "跳转到主要内容",
 	[Key.other]: "其他",
 
 	// 导航栏标题

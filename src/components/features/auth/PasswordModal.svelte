@@ -83,6 +83,7 @@ onMount(() => {
 		{/if}
 
 		<form class="password-form" onsubmit={handleSubmit}>
+			<label class="sr-only" for="password-input">{i18n(I18nKey.passwordPlaceholder)}</label>
 			<input
 				type="password"
 				id="password-input"
@@ -92,6 +93,8 @@ onMount(() => {
 				onkeypress={handleKeypress}
 				disabled={isLoading}
 				autocomplete="off"
+				aria-describedby={errorMessage ? "password-error" : undefined}
+				aria-invalid={errorMessage ? "true" : "false"}
 			/>
 			<button
 				id="unlock-btn"
@@ -106,7 +109,7 @@ onMount(() => {
 		</form>
 
 		{#if errorMessage}
-			<p class="error-message">{errorMessage}</p>
+			<p id="password-error" class="error-message" role="alert">{errorMessage}</p>
 		{/if}
 	</div>
 </div>

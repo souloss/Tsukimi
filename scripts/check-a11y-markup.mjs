@@ -12,6 +12,9 @@ const errors = [];
 for (const file of htmlFiles) {
 	const html = await readFile(file, "utf8");
 	const relative = path.relative(path.join(projectRoot, "dist"), file);
+	if (/<html\b/i.test(html) && !/\bhtml\b[^>]*\blang=["'][^"']+["']/i.test(html)) errors.push(`${relative}: html is missing lang`);
+	if ((html.match(/<main\b/gi) ?? []).length > 1) errors.push(`${relative}: multiple main landmarks`);
+	for (const link of html.matchAll(/<a\b([^>]*)>/gi)) if (/\bhref=["'](?:["']|\s)/i.test(link[1])) errors.push(`${relative}: anchor has an empty href`);
 	for (const image of html.matchAll(/<img\b([^>]*)>/gi)) {
 		if (!/\balt(?:\s*=|\s|$)/.test(image[1])) {
 			errors.push(`${relative}: image is missing alt text`);

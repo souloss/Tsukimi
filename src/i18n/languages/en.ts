@@ -6,6 +6,7 @@ export const en: Translation = {
 	[Key.about]: "About",
 	[Key.archive]: "Archive",
 	[Key.search]: "Search",
+	[Key.skipToContent]: "Skip to content",
 	[Key.other]: "Other",
 
 	// Navigation bar titles

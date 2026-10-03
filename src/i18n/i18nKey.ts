@@ -3,6 +3,7 @@ enum I18nKey {
 	about = "about",
 	archive = "archive",
 	search = "search",
+	skipToContent = "skipToContent",
 	other = "other",
 
 	// 导航栏标题

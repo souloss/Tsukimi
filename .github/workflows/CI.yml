@@ -25,11 +25,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 22.12.0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
+          version: 10.33.0
           run_install: false
 
       - name: Install dependencies
@@ -46,11 +47,76 @@ jobs:
       - name: Run Tests
         run: pnpm test
 
+      - name: Run Test Coverage
+        run: pnpm test:coverage
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Browser Regression
+        run: pnpm test:e2e
+        env:
+          TZ: UTC
+
+      - name: Upload Browser Diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-diagnostics-${{ github.run_id }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
       - name: Validate Content
         run: pnpm check-content
 
       - name: Validate Configuration
         run: pnpm check-config
+
+      - name: Check toolchain
+        run: pnpm check-doctor
+
+      - name: Validate Route Registry
+        run: pnpm check-route-registry
+
+      - name: Validate Component Boundaries
+        run: pnpm check-component-boundaries
+
+      - name: Validate Component Cycles
+        run: pnpm check-component-cycles
+
+      - name: Validate Component Size
+        run: pnpm check-component-size
+
+      - name: Validate Feature Gate Fixtures
+        run: pnpm check-feature-gate-fixtures
+
+      - name: Validate Accessibility Contracts
+        run: pnpm check-a11y-contracts
+
+      - name: Validate i18n Completeness
+        run: pnpm check-i18n
+
+      - name: Validate Reduced Motion
+        run: pnpm check-reduced-motion
+
+      - name: Validate Static Data
+        run: pnpm check-static-data
+
+      - name: Generate Performance Matrix
+        run: pnpm perf:matrix
+
+      - name: Validate Performance Contracts
+        run: pnpm perf:contracts
+
+      - name: Upload Performance Matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-matrix-${{ github.run_id }}
+          path: docs/generated/performance-matrix.json
+          retention-days: 7
 
       - name: Run Publish Checks
         run: pnpm check-publish
@@ -65,11 +131,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 22.12.0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
+          version: 10.33.0
           run_install: false
 
       - name: Install dependencies
@@ -86,3 +153,46 @@ jobs:
 
       - name: Audit Fonts
         run: pnpm check-fonts
+
+      - name: Validate Static Links
+        run: pnpm check-static-links
+
+      - name: Validate Security Boundaries
+        run: pnpm check-security
+
+  browser-matrix:
+    name: Browser matrix (${{ matrix.browser }})
+    needs: check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.12.0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Install browser
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Run browser regression
+        run: pnpm test:e2e
+        env:
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+          TZ: UTC
+      - name: Upload browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-${{ matrix.browser }}-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7

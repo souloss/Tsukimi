@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "./motion-tokens.css";
 
+.skip-link {
+	position: fixed;
+	top: 0.5rem;
+	left: 0.5rem;
+	z-index: 1000;
+	transform: translateY(-200%);
+	padding: 0.75rem 1rem;
+	border-radius: 0.5rem;
+	background: var(--primary);
+	color: white;
+	font-weight: 700;
+}
+.skip-link:focus { transform: translateY(0); }
+
 /* grid-layout-utils.ts dynamically constructs Tailwind arbitrary-value
    classes that the content scanner cannot detect. Define them as real CSS
    so the layout always works in production builds. */

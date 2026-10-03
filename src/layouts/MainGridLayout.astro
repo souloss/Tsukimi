@@ -9,6 +9,8 @@ import OverlayWallpaper from "@components/misc/OverlayWallpaper.astro";
 import Footer from "@components/organisms/footer/Footer.astro";
 import Navbar from "@components/organisms/navigation/Navbar.astro";
 import SideBar from "@components/widgets/sidebar/SideBar.astro";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 
@@ -133,6 +135,7 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 	coverImage={coverImage}
 	canonicalUrl={canonicalUrl}
 >
+	<a class="skip-link" href="#main-content">{i18n(I18nKey.skipToContent)}</a>
 	<GridScripts
 		navbarTransparentMode={siteConfig.banner?.navbar?.transparentMode ||
 			backgroundWallpaperConfig.common?.navbar?.transparentMode || "none"}
@@ -283,16 +286,18 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 					class={`${mainContentClass} transition-main`}
 				>
 					<div
-						id="content-wrapper"
-						class="onload-animation transition-leaving reading-layout"
+						id="main-content"
+						tabindex="-1"
 					>
-						<!-- the overflow-hidden here prevent long text break the layout-->
-						<!-- make id different from windows.swup global property -->
-						<slot />
-						<div
-							class="footer col-span-full onload-animation hidden lg:block"
-						>
-							<Footer />
+						<div id="content-wrapper" class="onload-animation transition-leaving reading-layout">
+							<!-- the overflow-hidden here prevent long text break the layout-->
+							<!-- make id different from windows.swup global property -->
+							<slot />
+							<div
+								class="footer col-span-full onload-animation hidden lg:block"
+							>
+								<Footer />
+							</div>
 						</div>
 					</div>
 				</main>

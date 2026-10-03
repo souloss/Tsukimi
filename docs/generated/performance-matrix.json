@@ -1,0 +1,137 @@
+{
+  "generatedAt": "2026-10-03T11:31:27.991Z",
+  "profiles": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "cpu": "desktop"
+    },
+    "mobile375": {
+      "width": 375,
+      "height": 812,
+      "cpu": "low-end-mobile"
+    },
+    "mobile390": {
+      "width": 390,
+      "height": 844,
+      "cpu": "low-end-mobile"
+    },
+    "tablet768": {
+      "width": 768,
+      "height": 1024,
+      "cpu": "mobile"
+    }
+  },
+  "routes": {
+    "/": {
+      "available": true,
+      "budgets": {
+        "performance": 0.6,
+        "lcpMs": 4000,
+        "cls": 0.1,
+        "inpMs": 500,
+        "ttfbMs": 800,
+        "fcpMs": 3000
+      }
+    },
+    "/posts/markdown-extended/": {
+      "available": true,
+      "budgets": {
+        "performance": 0.6,
+        "lcpMs": 4000,
+        "cls": 0.1,
+        "inpMs": 500,
+        "ttfbMs": 800,
+        "fcpMs": 3000
+      }
+    },
+    "/archive/": {
+      "available": false,
+      "budgets": {
+        "performance": 0.6,
+        "lcpMs": 4000,
+        "cls": 0.1,
+        "inpMs": 500,
+        "ttfbMs": 800,
+        "fcpMs": 3000
+      }
+    },
+    "/tags/": {
+      "available": false,
+      "budgets": {
+        "performance": 0.6,
+        "lcpMs": 4000,
+        "cls": 0.1,
+        "inpMs": 500,
+        "ttfbMs": 800,
+        "fcpMs": 3000
+      }
+    },
+    "/docs/tsukimi/": {
+      "available": true,
+      "budgets": {
+        "performance": 0.6,
+        "lcpMs": 4000,
+        "cls": 0.1,
+        "inpMs": 500,
+        "ttfbMs": 800,
+        "fcpMs": 3000
+      }
+    },
+    "/anime/": {
+      "available": true,
+      "budgets": {
+        "performance": 0.6,
+        "lcpMs": 4000,
+        "cls": 0.1,
+        "inpMs": 500,
+        "ttfbMs": 800,
+        "fcpMs": 3000
+      }
+    }
+  },
+  "budgets": {
+    "performance": 0.6,
+    "lcpMs": 4000,
+    "cls": 0.1,
+    "inpMs": 500,
+    "ttfbMs": 800,
+    "fcpMs": 3000
+  },
+  "build": {
+    "generatedAt": "2026-10-03T11:31:27.991Z",
+    "pageCount": 142,
+    "totalTrackedBytes": 35502495,
+    "totalTrackedSize": "34670.4 KiB",
+    "fileCounts": {
+      "html": 142,
+      "js": 108,
+      "json": 24,
+      "css": 26,
+      "woff2": 26
+    },
+    "pages": {
+      "home": {
+        "htmlBytes": 274305,
+        "localJsCssBytes": 381061,
+        "localJsCssReferences": 12
+      },
+      "article": {
+        "htmlBytes": 770686,
+        "localJsCssBytes": 494590,
+        "localJsCssReferences": 26
+      },
+      "docs": {
+        "htmlBytes": 180072,
+        "localJsCssBytes": 368375,
+        "localJsCssReferences": 13
+      },
+      "feature": {
+        "route": "/talking/",
+        "htmlBytes": 228120,
+        "localJsCssBytes": 393080,
+        "localJsCssReferences": 15
+      }
+    }
+  }
+}

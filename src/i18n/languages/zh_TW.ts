@@ -6,6 +6,7 @@ export const zh_TW: Translation = {
 	[Key.about]: "關於我",
 	[Key.archive]: "歸檔",
 	[Key.search]: "搜尋",
+	[Key.skipToContent]: "跳至主要內容",
 	[Key.other]: "其他",
 
 	// 導航欄標題

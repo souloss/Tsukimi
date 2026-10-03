@@ -40,6 +40,7 @@ let overlayEl: HTMLDivElement | null = null;
 let modalEl: HTMLDivElement | null = null;
 let inputEl: HTMLInputElement | null = null;
 let resultsListEl: HTMLUListElement | null = null;
+let opener: HTMLElement | null = null;
 
 const fakeResults: SearchResult[] = [
 	{
@@ -208,6 +209,10 @@ function updateActiveClass() {
 }
 
 function openModal() {
+	opener =
+		document.activeElement instanceof HTMLElement
+			? document.activeElement
+			: null;
 	isOpen = true;
 	query = "";
 	results = [];
@@ -220,6 +225,8 @@ function closeModal() {
 	isOpen = false;
 	document.body.style.overflow = "";
 	destroyModal();
+	opener?.focus();
+	opener = null;
 }
 
 function createModal() {
@@ -240,7 +247,33 @@ function createModal() {
 
 	const modal = document.createElement("div");
 	modal.className = "search-modal";
+	modal.setAttribute("role", "dialog");
+	modal.setAttribute("aria-modal", "true");
+	modal.setAttribute("aria-labelledby", "search-modal-title");
+	modal.tabIndex = -1;
 	modal.addEventListener("click", (e) => e.stopPropagation());
+	modal.addEventListener("keydown", (event) => {
+		if (event.key !== "Tab") return;
+		const focusable = Array.from(
+			modal.querySelectorAll<HTMLElement>(
+				'button, input, [href], select, textarea, [tabindex]:not([tabindex="-1"])',
+			),
+		).filter((element) => !element.hasAttribute("disabled"));
+		if (focusable.length === 0) {
+			event.preventDefault();
+			modal.focus();
+			return;
+		}
+		const first = focusable[0];
+		const last = focusable[focusable.length - 1];
+		if (event.shiftKey && document.activeElement === first) {
+			event.preventDefault();
+			last.focus();
+		} else if (!event.shiftKey && document.activeElement === last) {
+			event.preventDefault();
+			first.focus();
+		}
+	});
 
 	const inputRow = document.createElement("div");
 	inputRow.className = "search-modal-input-row";
@@ -248,8 +281,9 @@ function createModal() {
 		<svg class="search-modal-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
 			<path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14z"/>
 		</svg>
-		<input id="search-modal-input" type="text" placeholder="${i18n(I18nKey.search)}" />
-		<button class="search-modal-close-btn" aria-label="Close"><kbd>ESC</kbd></button>
+		<h2 id="search-modal-title" class="sr-only">${i18n(I18nKey.search)}</h2>
+		<input id="search-modal-input" type="text" aria-label="${i18n(I18nKey.search)}" placeholder="${i18n(I18nKey.search)}" />
+		<button class="search-modal-close-btn" aria-label="${i18n(I18nKey.announcementClose)}"><kbd>ESC</kbd></button>
 	`;
 	inputEl = inputRow.querySelector("input")!;
 	const closeBtn = inputRow.querySelector(".search-modal-close-btn")!;
@@ -377,7 +411,7 @@ onDestroy(() => {
 <!-- Trigger buttons (rendered by Svelte in component's DOM position) -->
 {#if variant === "icon"}
 	<button
-		class="search-modal-icon-btn btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90"
+		class="search-modal-icon-btn btn-plain scale-animation rounded-lg w-12 h-12 active:scale-90"
 		onclick={openModal}
 		aria-label={i18n(I18nKey.search)}
 		title="{i18n(I18nKey.search)} (⌘K)"

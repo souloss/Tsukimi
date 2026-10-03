@@ -134,7 +134,7 @@ function handleYearClick(e: MouseEvent) {
 
 <div class="card-base px-8 py-6">
 	{#if groups.length === 0}
-		<div class="text-center py-16 text-black/40 dark:text-white/40">
+				<div class="text-center py-16 text-black/60 dark:text-white/60">
 			{i18n(I18nKey.noData)}
 		</div>
 	{:else}
@@ -218,7 +218,7 @@ function handleYearClick(e: MouseEvent) {
 								<!-- tag list -->
 								<div
 									class="hidden md:block md:w-[15%] text-left text-sm transition
-			                     whitespace-nowrap overflow-ellipsis overflow-hidden text-30"
+				                     whitespace-nowrap overflow-ellipsis overflow-hidden text-50"
 								>
 									{formatTag(post.data.tags)}
 								</div>

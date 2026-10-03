@@ -83,7 +83,7 @@ function toggleScheme(e: MouseEvent) {
 
 <button
 	aria-label="Light/Dark Mode"
-	class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 theme-switch-btn z-50 transition-opacity"
+	class="relative btn-plain scale-animation rounded-lg h-12 w-12 active:scale-90 theme-switch-btn z-50 transition-opacity"
 	class:opacity-50={!mounted}
 	class:pointer-events-none={!mounted}
 	id="scheme-switch"
