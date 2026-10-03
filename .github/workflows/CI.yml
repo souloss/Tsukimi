@@ -104,19 +104,8 @@ jobs:
       - name: Validate Static Data
         run: pnpm check-static-data
 
-      - name: Generate Performance Matrix
-        run: pnpm perf:matrix
-
       - name: Validate Performance Contracts
         run: pnpm perf:contracts
-
-      - name: Upload Performance Matrix
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: performance-matrix-${{ github.run_id }}
-          path: docs/generated/performance-matrix.json
-          retention-days: 7
 
       - name: Run Publish Checks
         run: pnpm check-publish
@@ -147,6 +136,17 @@ jobs:
         env:
           ENABLE_CONTENT_SYNC: false
           BILI_SESSDATA: ${{ secrets.BILI_SESSDATA }}
+
+      - name: Generate Performance Matrix
+        run: pnpm perf:matrix
+
+      - name: Upload Performance Matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-matrix-${{ github.run_id }}
+          path: docs/generated/performance-matrix.json
+          retention-days: 7
 
       - name: Audit Images
         run: pnpm check-images
