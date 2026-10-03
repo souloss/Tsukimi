@@ -459,4 +459,4 @@ copyright:
 
 ---
 
-如果本页面未能解决您的问题，建议查阅[提问的艺术](/problem/question/)了解如何更有效地寻求帮助。
+如果本页面未能解决您的问题，建议查阅[提问的艺术](/docs/tsukimi/problem/question/)了解如何更有效地寻求帮助。

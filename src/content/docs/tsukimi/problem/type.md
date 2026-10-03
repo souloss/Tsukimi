@@ -60,7 +60,7 @@ Typecho文章结构 → Tsukimi文章结构
 
 ### 如何进行迁移
 
-我们提供了详细的[Typecho迁移指南](/transfer/typecho-to-tsukimi/)，包含：
+我们提供了详细的[Typecho迁移指南](/docs/tsukimi/transfer/typecho-to-tsukimi/)，包含：
 - 文章内容导出工具推荐
 - 批量转换脚本
 - 图片资源迁移方法

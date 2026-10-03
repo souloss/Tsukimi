@@ -30,7 +30,7 @@ copyright:
 ### 如果您喜欢Tsukimi的风格，可以考虑以下选择：
 
 1. **从WordPress迁移到Tsukimi**
-   - 我们提供了详细的[WordPress迁移指南](/transfer/wordpress-to-tsukimi/)
+   - 我们提供了详细的[WordPress迁移指南](/docs/tsukimi/transfer/wordpress-to-tsukimi/)
    - 可以将现有WordPress内容导出并转换为Tsukimi格式
    - 迁移后将获得更好的性能和SEO
 
@@ -42,7 +42,7 @@ copyright:
 
 在提问技术问题前，建议先查阅以下基础信息：
 - 项目首页和技术栈说明
-- [快速开始指南](/guide/get-started/)
+- [快速开始指南](/docs/tsukimi/guide/get-started/)
 - [GitHub Pages 部署指南](/docs/tsukimi/guide/deploy/github/)
 
 了解项目的基本技术栈是使用任何工具的第一步，这样可以避免不必要的时间浪费。

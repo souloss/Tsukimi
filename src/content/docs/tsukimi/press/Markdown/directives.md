@@ -1908,7 +1908,7 @@ pnpm run dev
 `````markdown
 :::timeline
 - 2025-06-14 | 新指令系统
-  新增了 **npm-to**、**chat**、**field**、**code-tree** 等指令，详见[文档](/press/markdown/directives/)。
+  新增了 **npm-to**、**chat**、**field**、**code-tree** 等指令，详见[文档](/docs/tsukimi/press/markdown/directives/)。
 
 - 2025-05-21 | 初始版本
   基础指令系统上线。

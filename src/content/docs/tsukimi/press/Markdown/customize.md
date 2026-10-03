@@ -110,4 +110,4 @@ Tsukimi 还支持大量进阶 Markdown 指令，包括：
 - 代码块行内标注（`[!code ++]`、`[!code --]`、`[!code focus]` 等）
 - Tabs 选项卡同步、Timeline 富文本增强、Callout 自定义图标
 
-👉 完整语法和示例请参阅 [Markdown 指令](/press/markdown/directives/)
+👉 完整语法和示例请参阅 [Markdown 指令](/docs/tsukimi/press/markdown/directives/)

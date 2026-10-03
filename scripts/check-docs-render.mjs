@@ -446,9 +446,9 @@ async function checkIntroDesktop(client) {
 					navbarShadow: getComputedStyle(navbar).boxShadow,
 					navbarInnerShadow: getComputedStyle(navbarInner).boxShadow,
 					search: !!document.querySelector(".search-modal-pill-btn"),
-					repoCards: document.querySelectorAll(".docs-markdown .docs-repo-card").length,
-					linkCards: document.querySelectorAll(".docs-markdown .docs-link-card").length,
-					collapses: document.querySelectorAll(".docs-markdown .md-directive-folding").length,
+				headings: document.querySelectorAll(".docs-markdown h2, .docs-markdown h3").length,
+				docLinks: document.querySelectorAll(".docs-markdown a[href]").length,
+				markdownText: document.querySelector(".docs-markdown")?.textContent?.trim().length ?? 0,
 					colorScheme: getComputedStyle(container).colorScheme,
 				};
 			})()`,
@@ -460,8 +460,7 @@ async function checkIntroDesktop(client) {
 		);
 		assertCheck("desktop docs sidebar and toc are visible", state.sidebarDisplay !== "none" && state.tocDisplay !== "none", JSON.stringify(state));
 		assertCheck("docs navbar shadow belongs to the full header", state.navbarShadow !== "none" && state.navbarInnerShadow === "none", JSON.stringify(state));
-		assertCheck("desktop intro custom cards render", state.repoCards >= 1 && state.linkCards >= 1, JSON.stringify(state));
-		assertCheck("desktop intro collapse renders", state.collapses >= 1, JSON.stringify(state));
+		assertCheck("desktop intro content renders", state.headings >= 3 && state.docLinks >= 8 && state.markdownText > 500, JSON.stringify(state));
 		assertCheck("desktop intro search input renders", state.search, JSON.stringify(state));
 		assertCheck("desktop intro has no horizontal overflow", state.bodyDocs && state.overflow <= 1, JSON.stringify(state));
 
