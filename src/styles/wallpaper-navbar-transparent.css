@@ -100,7 +100,7 @@ body.wallpaper-transparent #navbar[data-transparent-mode="semifull"].scrolled {
 
   /* 性能优化 */
   will-change: background, backdrop-filter, box-shadow;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--motion-transition-interactive);
 }
 
 /* 子组件样式 (Sub-Components)

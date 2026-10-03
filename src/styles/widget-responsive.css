@@ -34,7 +34,7 @@
 /* 组件容器基础样式 */
 .widget-container {
   min-height: var(--widget-min-height);
-  transition: all var(--widget-animation-duration) var(--widget-animation-timing);
+  transition: var(--motion-transition-interactive);
   overflow: hidden;
 }
 

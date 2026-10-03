@@ -64,7 +64,7 @@
 /* 桌面端保持原有样式 */
 @media (min-width: 769px) {
   #post-list-container {
-    transition: all 0.3s ease-in-out;
+    transition: var(--motion-transition-interactive);
   }
 }
 

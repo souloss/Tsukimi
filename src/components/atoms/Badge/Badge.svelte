@@ -13,7 +13,7 @@ const { value, class: className = "" }: Props = $props();
 
 <style>
 	.badge {
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		padding: 0 0.5rem;
 		height: 1.75rem;
 		min-width: 2rem;

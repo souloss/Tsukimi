@@ -2,9 +2,14 @@
 	--motion-duration-fast: 120ms;
 	--motion-duration-normal: 220ms;
 	--motion-duration-slow: 360ms;
+	--motion-duration-enter: 360ms;
+	--motion-duration-exit: 220ms;
+	--motion-duration-ambient: 1s;
 	--motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
 	--motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 	--motion-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+	--motion-ease-linear: linear;
+	--motion-transition-interactive: color var(--motion-duration-normal) var(--motion-ease-standard), background-color var(--motion-duration-normal) var(--motion-ease-standard), border-color var(--motion-duration-normal) var(--motion-ease-standard), box-shadow var(--motion-duration-normal) var(--motion-ease-standard), opacity var(--motion-duration-normal) var(--motion-ease-standard), transform var(--motion-duration-normal) var(--motion-ease-standard);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -12,5 +17,8 @@
 		--motion-duration-fast: 1ms;
 		--motion-duration-normal: 1ms;
 		--motion-duration-slow: 1ms;
+		--motion-duration-enter: 1ms;
+		--motion-duration-exit: 1ms;
+		--motion-duration-ambient: 1ms;
 	}
 }

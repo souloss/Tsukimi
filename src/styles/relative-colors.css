@@ -16,7 +16,7 @@
   /* Text color opacity variants (derived from content-meta base) */
   --text-90: oklch(from var(--content-meta) l c h / 0.90);
   --text-75: oklch(from var(--content-meta) l c h / 0.75);
-  --text-50: oklch(from var(--content-meta) l c h / 0.50);
+	--text-50: oklch(from var(--content-meta) l c h / 0.65);
   --text-30: oklch(from var(--content-meta) l c h / 0.30);
   --text-15: oklch(from var(--content-meta) l c h / 0.15);
   --text-10: oklch(from var(--content-meta) l c h / 0.10);

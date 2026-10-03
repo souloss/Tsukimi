@@ -56,7 +56,7 @@ const {
 		height: 2.5rem;
 		border-radius: 0.5rem;
 		background: none;
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		padding-left: 0.5rem;
 		display: flex;
 		align-items: center;
@@ -86,7 +86,7 @@ const {
 		height: 0.25rem;
 		width: 0.25rem;
 		background-color: var(--btn-content);
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		border-radius: 0.25rem;
 		margin-right: 0.5rem;
 		flex-shrink: 0;
@@ -97,7 +97,7 @@ const {
 	}
 
 	.chip-badge {
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		padding: 0 0.5rem;
 		height: 1.75rem;
 		min-width: 2rem;

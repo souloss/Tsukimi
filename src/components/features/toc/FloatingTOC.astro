@@ -65,7 +65,7 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 		opacity: 0;
 		visibility: hidden;
 		transform: translateY(10px) scale(0.95);
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		pointer-events: none;
 		z-index: 52;
 	}
@@ -123,7 +123,7 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 		font-size: 0.9rem;
 		line-height: 1.5;
 		border-radius: 0.5rem;
-		transition: all 0.2s;
+		transition: var(--motion-transition-interactive);
 	}
 
 	:global(.floating-toc-item:hover) {

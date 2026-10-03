@@ -893,7 +893,7 @@ img[data-zoomable="1"] {
   margin-top: 0;
   box-shadow: 0 0 0 3px var(--card-bg);
   z-index: 1;
-  transition: all 0.2s ease;
+  transition: var(--motion-transition-interactive);
 }
 
 .md-timeline-content {
@@ -1260,7 +1260,7 @@ img[data-zoomable="1"] {
   background: var(--bg-muted, var(--line-divider));
   cursor: pointer;
   color: var(--text-secondary);
-  transition: all 0.2s ease;
+  transition: var(--motion-transition-interactive);
   line-height: 1;
 }
 

@@ -2,7 +2,7 @@
 
 /* 相册卡片动画 */
 .album-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--motion-transition-interactive);
 }
 
 /* 瀑布流布局 */

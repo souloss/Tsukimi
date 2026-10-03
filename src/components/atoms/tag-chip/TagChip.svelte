@@ -29,7 +29,7 @@ const { href, label, class: className = "", children }: Props = $props();
 		font-size: 0.875rem;
 		background-color: var(--btn-plain-bg-hover);
 		color: var(--btn-content);
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		text-decoration: none;
 		cursor: pointer;
 	}

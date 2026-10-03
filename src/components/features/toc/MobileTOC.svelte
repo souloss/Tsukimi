@@ -345,7 +345,7 @@ const getActivePadding = (level: number): string => {
 		text-align: left;
 		padding: 8px 12px;
 		border-radius: 8px;
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		border: none;
 		background: transparent;
 		cursor: pointer;
@@ -454,7 +454,7 @@ const getActivePadding = (level: number): string => {
 		text-align: left;
 		padding: 12px;
 		border-radius: 8px;
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 		border: 1px solid var(--line-color);
 		background: transparent;
 		cursor: pointer;

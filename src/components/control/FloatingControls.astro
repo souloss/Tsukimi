@@ -6,13 +6,19 @@ import { fabDeviceClasses } from "../../utils/fab-responsive";
 import FloatingTOC from "../features/toc/FloatingTOC.astro";
 import BackToHome from "./BackToHome.astro";
 import BackToTop from "./BackToTop.astro";
-import MusicFabButton from "./MusicFabButton.svelte";
 
 interface Props {
 	headings?: MarkdownHeading[];
 }
 
 const { headings = [] } = Astro.props;
+
+const MusicFabButton =
+	musicPlayerConfig.enable &&
+	(fabConfig.items.music.enable !== false ||
+		musicPlayerConfig.showFloatingPlayer)
+		? (await import("./MusicFabButton.svelte")).default
+		: null;
 ---
 
 
@@ -30,7 +36,7 @@ const { headings = [] } = Astro.props;
 					]}
 					data-control-key="music"
 				>
-					<MusicFabButton client:idle />
+					{MusicFabButton && <MusicFabButton client:idle />}
 				</div>
 			)
 	}

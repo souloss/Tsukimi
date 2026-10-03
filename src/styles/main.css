@@ -474,7 +474,7 @@ html {
     @apply text-black/75 dark:text-white/75;
   }
   .text-50 {
-    @apply text-black/50 dark:text-white/50;
+    @apply text-black/60 dark:text-white/60;
   }
   .text-30 {
     @apply text-black/30 dark:text-white/30;
@@ -637,7 +637,7 @@ html {
   left: calc(50% - 1px);
   border-left: 2px dashed var(--line-color);
   pointer-events: none;
-  transition: all 0.3s;
+  transition: var(--motion-transition-interactive);
   transform: translateY(-50%);
 }
 
@@ -757,7 +757,7 @@ html {
 
 /* 确保过渡动画平滑 */
 .post-list-container {
-  transition: all 0.3s ease-in-out;
+  transition: var(--motion-transition-interactive);
 }
 
 /* 文章列表布局切换样式 */
@@ -815,7 +815,7 @@ html {
 
 /* 确保过渡动画平滑 */
 .post-list-container {
-  transition: all 0.3s ease-in-out;
+  transition: var(--motion-transition-interactive);
 }
 :root:not(.dark) .custom-md spoiler {
   --_spoiler-mask: color-mix(in oklch, var(--primary) 55%, white 45%);

@@ -44,7 +44,7 @@ const { text = "", variant = "number", active = false } = Astro.props;
 		font-size: 0.75rem;
 		font-weight: bold;
 		flex-shrink: 0;
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 	}
 
 	.toc-badge.active {
@@ -59,7 +59,7 @@ const { text = "", variant = "number", active = false } = Astro.props;
 		border-radius: 50%;
 		background: var(--line-divider);
 		flex-shrink: 0;
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 	}
 
 	.toc-dot.active {
@@ -73,7 +73,7 @@ const { text = "", variant = "number", active = false } = Astro.props;
 		border-radius: 50%;
 		background: var(--line-divider);
 		flex-shrink: 0;
-		transition: all 0.2s ease;
+		transition: var(--motion-transition-interactive);
 	}
 
 	:global(.dark) .toc-dot-small {
