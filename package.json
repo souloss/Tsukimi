@@ -66,6 +66,7 @@
 		"test:coverage": "tsx --test --experimental-test-coverage --test-coverage-lines=50 --test-coverage-functions=50 --test-coverage-branches=40 tests/*.test.mjs tests/*.test.ts",
 		"test:e2e": "playwright test",
 		"perf:lighthouse": "node scripts/run-lighthouse.mjs",
+		"perf:lighthouse:mobile": "node scripts/run-lighthouse.mjs --mobile",
 		"new-post": "node scripts/new-post.js",
 		"format": "biome format --write ./src",
 		"lint": "biome check --write ./src",

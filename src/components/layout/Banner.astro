@@ -97,11 +97,24 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 			data-fade-ms={fadeMs}
 		>
 			{/* Frames stay inert until the active media query selects a slot. */}
-			<div class="banner-image-slot-mobile absolute inset-0 block md:hidden" />
-			{mobileImages.map((src, i) => (
+			<div class="banner-image-slot-mobile absolute inset-0 block md:hidden">
+				{mobileImages[0] && (
+					<Image
+						alt="Mobile banner image 1"
+						class="object-cover h-full w-full"
+						src={mobileImages[0]}
+						position={backgroundWallpaperConfig.banner?.position}
+						widths={[640, 1024, 1536]}
+						sizes="100vw"
+						loading="eager"
+						fetchpriority="high"
+					/>
+				)}
+			</div>
+			{mobileImages.slice(1).map((src, i) => (
 				<template class="banner-tpl-mobile">
 					<Image
-						alt={`Mobile banner image ${i + 1}`}
+						alt={`Mobile banner image ${i + 2}`}
 						class="object-cover h-full w-full"
 						src={src}
 						position={backgroundWallpaperConfig.banner?.position}

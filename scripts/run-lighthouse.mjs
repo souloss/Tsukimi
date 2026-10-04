@@ -13,6 +13,7 @@ if (!chromePath) {
 }
 
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+const formFactor = process.argv.includes("--mobile") ? "mobile" : "desktop";
 const previewUrl = url;
 const server = spawn(pnpm, ["astro", "preview", "--host", host, "--port", String(port)], {
 	stdio: ["ignore", "pipe", "pipe"],
@@ -39,7 +40,12 @@ try {
 		"about:blank",
 	], { stdio: "ignore" });
 	await waitForServer(`http://${host}:${chromePort}/json/version`);
-	const minimums = { performance: 1, accessibility: 1, "best-practices": 1, seo: 1 };
+	const minimums = {
+		performance: formFactor === "mobile" ? 0.95 : 1,
+		accessibility: 1,
+		"best-practices": 1,
+		seo: 1,
+	};
 	let report;
 	let bestScore = -1;
 	for (let attempt = 1; attempt <= 3; attempt += 1) {
@@ -58,7 +64,11 @@ try {
 		console.warn(`Lighthouse attempt ${attempt}/3 did not reach all score targets; retrying.`);
 	}
 
-	const reportPath = process.env.LIGHTHOUSE_OUTPUT ?? ".lighthouseci/lighthouse.json";
+	const reportPath =
+		process.env.LIGHTHOUSE_OUTPUT ??
+		(formFactor === "mobile"
+			? ".lighthouseci/lighthouse-mobile.json"
+			: ".lighthouseci/lighthouse.json");
 	mkdirSync(join(process.cwd(), reportPath, ".."), { recursive: true });
 	writeFileSync(reportPath, JSON.stringify(report, null, 2));
 	const scores = Object.fromEntries(
@@ -86,6 +96,10 @@ try {
 }
 
 async function runLighthouse({ pnpm, previewUrl, chromePort }) {
+	const profileArgs =
+		formFactor === "mobile"
+			? ["--form-factor=mobile"]
+			: ["--preset=desktop"];
 	const lighthouse = spawn(
 		pnpm,
 		[
@@ -96,7 +110,7 @@ async function runLighthouse({ pnpm, previewUrl, chromePort }) {
 			"--output=json",
 			"--output-path=stdout",
 			"--quiet",
-			"--preset=desktop",
+			...profileArgs,
 			"--throttling-method=provided",
 			"--only-categories=performance,accessibility,best-practices,seo",
 		],
