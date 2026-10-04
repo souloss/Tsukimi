@@ -151,6 +151,7 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 		defaultPostListLayout={siteConfig.postListLayout?.defaultMode || "list"}
 		BANNER_HEIGHT={BANNER_HEIGHT}
 		pageScaling={siteConfig.pageScaling}
+		stickyNavbar={stickyNavbar}
 	/>
 
 	{shouldRenderFullscreen && backgroundWallpaperConfig.fullscreen && (
@@ -329,53 +330,6 @@ const stickyNavbar = siteConfig.navbar?.stickyNavbar ?? false;
 		}
 	</style>
 
-
-	<!-- Sticky Navbar 初始化脚本 -->
-	<script is:inline data-swup-ignore-script define:vars={{stickyNavbar}}>
-		(function initStickyNavbar() {
-			// 检查是否有存储的设置
-			let stickyEnabled;
-			const stored = localStorage.getItem('stickyNavbar');
-			if (stored !== null) {
-				stickyEnabled = stored === 'true';
-			} else {
-				// 使用配置的默认值
-				stickyEnabled = stickyNavbar;
-			}
-
-			// 应用设置到 data 属性
-			document.documentElement.setAttribute('data-sticky-navbar', String(stickyEnabled));
-
-			// 使用 body class 作为主要机制 - CSS !important 规则强制固定定位
-			if (stickyEnabled) {
-				document.body.classList.add('sticky-navbar');
-			} else {
-				document.body.classList.remove('sticky-navbar');
-			}
-
-			// 处理 navbar 阴影和 scrolled 状态
-			const navbar = document.getElementById('navbar');
-			const navbarWrapper = document.getElementById('navbar-wrapper');
-			if (stickyEnabled) {
-				if (navbar) {
-					navbar.classList.add('navbar-sticky-shadow');
-					navbar.classList.add('scrolled');
-					navbar.classList.remove('navbar-hidden');
-				}
-				if (navbarWrapper) {
-					navbarWrapper.classList.remove('navbar-hidden');
-				}
-			} else {
-				if (navbar) {
-					navbar.classList.remove('navbar-sticky-shadow');
-				}
-				// 重新初始化滚动检测
-				if (typeof window.initSemifullScrollDetection === 'function') {
-					window.initSemifullScrollDetection();
-				}
-			}
-		})();
-	</script>
 </Layout>
 
 <!--

@@ -101,6 +101,23 @@ const isDocsIndexPage = isHomePage && !docSlug;
 			setOGTypeArticle={false}
 			configHue={configHue}
 		/>
+		{import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: '/pagefind/tsukimi/pagefind.js'}}>
+			window.loadPagefindTsukimi = async function() {
+				if (window.pagefindTsukimi) return;
+				try {
+					const response = await fetch(scriptUrl, { method: "HEAD" });
+					if (!response.ok) throw new Error(`Tsukimi Pagefind script not found: ${response.status}`);
+					const pagefind = await import(scriptUrl);
+					await pagefind.options({ excerptLength: 20 });
+					window.pagefindTsukimi = pagefind;
+					document.dispatchEvent(new CustomEvent("pagefindtsukimiready"));
+				} catch (error) {
+					console.error("Failed to load Tsukimi Pagefind:", error);
+					window.pagefindTsukimi = { search: () => Promise.resolve({ results: [] }), options: () => Promise.resolve() };
+					document.dispatchEvent(new CustomEvent("pagefindtsukimiloaderror"));
+				}
+			};
+		</script>}
 		<slot name="head" />
 		<style
 			define:vars={{
@@ -291,7 +308,7 @@ const isDocsIndexPage = isHomePage && !docSlug;
 				<div class="docs-toc-inner">
 					{siteConfig.toc.enable && (
 						<div class:list={["docs-toc-container", { hidden: isHomePage || headings.length === 0 }]}>
-							<h4 class="docs-toc-title">{i18n(I18nKey.docsTableOfContents)}</h4>
+							<h2 class="docs-toc-title">{i18n(I18nKey.docsTableOfContents)}</h2>
 							<DocsTOC headings={headings} />
 						</div>
 					)}
@@ -315,35 +332,6 @@ const isDocsIndexPage = isHomePage && !docSlug;
 		<IconifyLoader />
 
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
-	{import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: '/pagefind/tsukimi/pagefind.js'}}>
-	window.loadPagefindTsukimi = async function() {
-		if (window.pagefindTsukimi) {return;}
-		try {
-			const response = await fetch(scriptUrl, { method: 'HEAD' });
-			if (!response.ok) {
-				throw new Error(`Tsukimi Pagefind script not found: ${response.status}`);
-			}
-
-			const pagefind = await import(scriptUrl);
-
-			await pagefind.options({
-				excerptLength: 20
-			});
-
-			window.pagefindTsukimi = pagefind;
-
-			document.dispatchEvent(new CustomEvent('pagefindtsukimiready'));
-			console.log('Tsukimi Pagefind loaded and initialized successfully.');
-		} catch (error) {
-			console.error('Failed to load Tsukimi Pagefind:', error);
-			window.pagefindTsukimi = {
-				search: () => Promise.resolve({ results: [] }),
-				options: () => Promise.resolve(),
-			};
-			document.dispatchEvent(new CustomEvent('pagefindtsukimiloaderror'));
-		}
-	};
-	</script>}
 	</body>
 </html>
 

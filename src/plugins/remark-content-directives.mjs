@@ -3449,4 +3449,4 @@ export default function remarkContentDirectives(_options = {}) {
 	};
 }
 
-export { CONTENT_DIRECTIVE_NAMES, remarkContentDirectives };
+export { CONTENT_DIRECTIVE_NAMES, remarkContentDirectives, sanitizeUrl };

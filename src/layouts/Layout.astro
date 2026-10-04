@@ -213,6 +213,8 @@ if (defaultFontItem) {
 	class="bg-[var(--page-bg)] text-[14px] md:text-[16px]"
 	data-wallpaper-mode={defaultWallpaperMode}
 	data-texture-preset={textureConfig.enable ? textureConfig.defaultPreset : "none"}
+	data-performance-endpoint={siteConfig.analytics?.performanceMonitoring?.enable ? siteConfig.analytics.performanceMonitoring.endpoint : undefined}
+	data-performance-sample-rate={siteConfig.analytics?.performanceMonitoring?.sampleRate ?? 0.1}
 	style={`--texture-opacity: ${textureConfig.defaultOpacity}`}
 	data-overlayscrollbars-initialize
 >
@@ -529,5 +531,21 @@ if (defaultFontItem) {
 		setTimeout(() => {
 			import("../scripts/theme-optimizer.js");
 		}, 1000);
+	}
+</script>
+
+<script>
+	import { initSampledPerformanceReporting } from "../utils/performance-observer";
+	const endpoint = document.documentElement.dataset.performanceEndpoint;
+	if (endpoint) {
+		const sampleRate = Number(document.documentElement.dataset.performanceSampleRate ?? 0.1);
+		initSampledPerformanceReporting((metric) => {
+			void fetch(endpoint, {
+				method: "POST",
+				keepalive: true,
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify(metric),
+			});
+		}, { enabled: true, sampleRate });
 	}
 </script>

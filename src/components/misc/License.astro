@@ -59,12 +59,22 @@ const postUrl = sourceLink || decodeURIComponent(Astro.url.toString());
 			<div class="transition text-black/30 dark:text-white/30 text-sm">
 				{i18n(I18nKey.license)}
 			</div>
-			<a
-				href={licenseName ? licenseUrl || undefined : licenseConf.url}
-				target="_blank"
-				class="link text-[var(--primary)] line-clamp-2"
-				>{licenseName || licenseConf.name}</a
-			>
+			{
+				(licenseName ? licenseUrl : licenseConf.url) ? (
+					<a
+						href={licenseName ? licenseUrl : licenseConf.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="link text-[var(--primary)] line-clamp-2"
+					>
+						{licenseName || licenseConf.name}
+					</a>
+				) : (
+					<span class="text-[var(--primary)] line-clamp-2">
+						{licenseName || licenseConf.name}
+					</span>
+				)
+			}
 		</div>
 	</div>
 	<Icon

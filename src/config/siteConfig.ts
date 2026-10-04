@@ -192,6 +192,11 @@ const defaults: SiteConfig = {
 
 	// 统计分析配置
 	analytics: {
+		performanceMonitoring: {
+			enable: false,
+			sampleRate: 0.1,
+			endpoint: "",
+		},
 		umamiAnalytics: {
 			// Umami Website ID，在 Umami 后台获取
 			websiteId: "",

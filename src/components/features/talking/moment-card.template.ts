@@ -146,7 +146,7 @@ function renderMomentCard(
 			.map(
 				(img, i) => `
 				<div class="relative rounded-lg overflow-hidden aspect-square cursor-pointer">
-					<a href="javascript:void(0)" data-src="${escapeHtml(img)}" data-fancybox="talking-${index}-${i}" class="block w-full h-full">
+					<a href="${escapeHtml(img)}" data-src="${escapeHtml(img)}" data-fancybox="talking-${index}-${i}" class="block w-full h-full">
 						<img src="${escapeHtml(img)}" alt="talking moment image" width="1" height="1" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" />
 					</a>
 				</div>`,

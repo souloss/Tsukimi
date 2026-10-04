@@ -242,7 +242,9 @@ const subtitle = i18n(I18nKey.talkingSubtitle);
 						.map(function (img, i) {
 							return (
 								'<div class="relative rounded-lg overflow-hidden aspect-square cursor-pointer">' +
-								'<a href="javascript:void(0)" data-src="' +
+								'<a href="' +
+								escapeHtml(img) +
+								'" data-src="' +
 								escapeHtml(img) +
 								'" data-fancybox="talking-' +
 								index +

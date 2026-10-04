@@ -472,3 +472,45 @@ export function initPerformanceMonitoring(
 		}
 	};
 }
+
+/**
+ * Opt-in, sampled RUM transport. The observer itself never sends data; this
+ * helper keeps the privacy boundary explicit and sends only metric metadata.
+ */
+export function initSampledPerformanceReporting(
+	report: (payload: {
+		name: string;
+		value: number;
+		path: string;
+		connection?: string;
+	}) => void,
+	options: {
+		sampleRate?: number;
+		enabled?: boolean;
+		collectResourceTiming?: boolean;
+	} = {},
+): () => void {
+	const {
+		sampleRate = 0.1,
+		enabled = false,
+		collectResourceTiming = false,
+	} = options;
+	if (!enabled || Math.random() > Math.max(0, Math.min(1, sampleRate)))
+		return () => {};
+	const connection =
+		typeof navigator !== "undefined"
+			? (navigator as Navigator & { connection?: { effectiveType?: string } })
+					.connection?.effectiveType
+			: undefined;
+	return initPerformanceMonitoring(
+		(metric) => {
+			report({
+				name: metric.name,
+				value: metric.value,
+				path: typeof location === "undefined" ? "" : location.pathname,
+				connection,
+			});
+		},
+		{ collectResourceTiming },
+	);
+}

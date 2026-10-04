@@ -7,7 +7,12 @@ export class ExternalRequestError extends Error {
 	}
 }
 
-export async function fetchExternalJson(url, { source, signal, timeoutMs = 10_000, retries = 2, headers } = {}) {
+/**
+ * Fetch an external response with one cancellation path, a bounded timeout,
+ * and retries for transient failures. Build scripts use this helper so a
+ * provider cannot leave a production build waiting forever.
+ */
+export async function fetchExternal(url, { source, signal, timeoutMs = 10_000, retries = 2, headers, parse = "json" } = {}) {
 	const controller = new AbortController();
 	const timeout = setTimeout(() => controller.abort(), timeoutMs);
 	const onAbort = () => controller.abort();
@@ -17,6 +22,7 @@ export async function fetchExternalJson(url, { source, signal, timeoutMs = 10_00
 			try {
 				const response = await fetch(url, { signal: controller.signal, headers });
 				if (!response.ok) throw new ExternalRequestError(`HTTP ${response.status}`, { source, code: "http" });
+				if (parse === "text") return await response.text();
 				const data = await response.json();
 				return data;
 			} catch (error) {
@@ -34,4 +40,12 @@ export async function fetchExternalJson(url, { source, signal, timeoutMs = 10_00
 		clearTimeout(timeout);
 		signal?.removeEventListener("abort", onAbort);
 	}
+}
+
+export function fetchExternalJson(url, options = {}) {
+	return fetchExternal(url, { ...options, parse: "json" });
+}
+
+export function fetchExternalText(url, options = {}) {
+	return fetchExternal(url, { ...options, parse: "text" });
 }

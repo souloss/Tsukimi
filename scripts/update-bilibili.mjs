@@ -1,8 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import axios from "axios";
 import { loadEnv } from "./load-env.js";
+import { fetchExternalJson } from "./external-request.mjs";
+import { readDataSnapshot, writeDataSnapshot } from "./data-snapshot.mjs";
 
 loadEnv();
 
@@ -31,7 +32,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function withRetry(apiCall, retries = 3) {
 	for (let i = 0; i < retries; i++) {
 		try {
-			return await apiCall();
+		return await apiCall();
 		} catch (error) {
 			if (i === retries - 1) throw error;
 			await delay(1000);
@@ -103,24 +104,24 @@ async function getAnimeModeFromConfig() {
 
 async function getDataPage(vmid, status, typeNum = 1) {
 	const response = await withRetry(() =>
-		axios.get(
+		fetchExternalJson(
 			`${API_BASE}?type=${typeNum}&follow_status=${status}&vmid=${vmid}&ps=1&pn=1`,
-			{ timeout: 15000 },
+			{ source: "bilibili.page", timeoutMs: 15_000, retries: 0 },
 		),
 	);
 
 	if (
-		response?.data?.code === 0 &&
-		response?.data?.data?.total !== undefined
+		response?.code === 0 &&
+		response?.data?.total !== undefined
 	) {
 		return {
 			success: true,
-			data: Math.ceil(response.data.data.total / PAGE_SIZE) + 1,
+			data: Math.ceil(response.data.total / PAGE_SIZE) + 1,
 		};
 	}
 	return {
 		success: false,
-		data: response?.data?.message || "Failed to fetch data",
+		data: response?.message || "Failed to fetch data",
 	};
 }
 
@@ -136,19 +137,19 @@ async function getData(
 	const headers = SESSDATA ? { cookie: `SESSDATA=${SESSDATA};` } : {};
 
 	const response = await withRetry(() =>
-		axios.get(
+		fetchExternalJson(
 			`${API_BASE}?type=${typeNum}&follow_status=${status}&vmid=${vmid}&ps=${PAGE_SIZE}&pn=${pn}`,
-			{ headers, timeout: 15000 },
+			{ source: "bilibili.list", headers, timeoutMs: 15_000, retries: 0 },
 		),
 	);
 
-	if (response?.data?.code !== 0) {
+	if (response?.code !== 0) {
 		throw new Error(
-			`Failed to fetch data: ${response?.data?.message || "Unknown error"}`,
+			`Failed to fetch data: ${response?.message || "Unknown error"}`,
 		);
 	}
 
-	return (response?.data?.data?.list || []).map((bangumi) => {
+	return (response?.data?.list || []).map((bangumi) => {
 		// 处理封面图
 		let cover = bangumi?.cover || "";
 		if (cover) {
@@ -370,6 +371,14 @@ async function main() {
 	);
 
 	const finalAnimeList = [...planned, ...watching, ...completed];
+	let outputAnimeList = finalAnimeList;
+	if (outputAnimeList.length === 0) {
+		const snapshot = await readDataSnapshot("bilibili");
+		if (Array.isArray(snapshot?.data)) {
+			outputAnimeList = snapshot.data;
+			console.warn("Bilibili returned no records; using the last valid snapshot.");
+		}
+	}
 
 	const dir = path.dirname(OUTPUT_FILE);
 	try {
@@ -378,9 +387,10 @@ async function main() {
 		await fs.mkdir(dir, { recursive: true });
 	}
 
-	await fs.writeFile(OUTPUT_FILE, JSON.stringify(finalAnimeList, null, 2));
+	await fs.writeFile(OUTPUT_FILE, JSON.stringify(outputAnimeList, null, 2));
+	await writeDataSnapshot("bilibili", outputAnimeList, { source: "bilibili.api" });
 	console.log(`\nUpdate complete! Data saved to: ${OUTPUT_FILE}`);
-	console.log(`Total collected: ${finalAnimeList.length} anime series`);
+	console.log(`Total collected: ${outputAnimeList.length} anime series`);
 	console.log(`  - Planned: ${planned.length}`);
 	console.log(`  - Watching: ${watching.length}`);
 	console.log(`  - Completed: ${completed.length}`);

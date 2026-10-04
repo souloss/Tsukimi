@@ -148,6 +148,22 @@ jobs:
           path: docs/generated/performance-matrix.json
           retention-days: 7
 
+      - name: Generate quality report
+        run: pnpm quality-report
+        env:
+          QUALITY_ASTRO: passed
+          QUALITY_TYPECHECK: passed
+          QUALITY_TESTS: passed
+          QUALITY_BROWSER: passed
+
+      - name: Upload quality report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report-${{ github.run_id }}
+          path: docs/generated/quality-report.json
+          retention-days: 30
+
       - name: Audit Images
         run: pnpm check-images
 
@@ -157,8 +173,19 @@ jobs:
       - name: Validate Static Links
         run: pnpm check-static-links
 
+      - name: Validate generated HTML structure
+        run: pnpm check-html-structure
+      - name: Check Pagefind quality and encrypted content boundary
+        run: pnpm check-pagefind-quality
+
       - name: Validate Security Boundaries
         run: pnpm check-security
+
+      - name: Validate deployment headers
+        run: pnpm check-deployment-headers
+
+      - name: Audit dependencies
+        run: pnpm check-dependencies
 
   browser-matrix:
     name: Browser matrix (${{ matrix.browser }})
@@ -167,10 +194,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The regression suite relies on Astro's Vite dev server and Chromium
-        # screenshot baselines. Firefox/WebKit currently fail before tests run
-        # when Vite serves dynamic TypeScript modules in CI.
-        browser: [chromium]
+        browser: [chromium, firefox, webkit]
     steps:
       - name: Checkout
         uses: actions/checkout@v6

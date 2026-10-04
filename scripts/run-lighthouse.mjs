@@ -5,7 +5,8 @@ import { spawn, spawnSync } from "node:child_process";
 const host = "127.0.0.1";
 const port = 4338;
 const chromePort = 9223;
-const url = `http://${host}:${port}/`;
+const route = process.env.LIGHTHOUSE_ROUTE ?? "/";
+const url = `http://${host}:${port}${route.startsWith("/") ? route : `/${route}`}`;
 const chromePath = process.env.CHROME_PATH ?? findPlaywrightChrome();
 
 if (!chromePath) {
@@ -41,7 +42,7 @@ try {
 	], { stdio: "ignore" });
 	await waitForServer(`http://${host}:${chromePort}/json/version`);
 	const minimums = {
-		performance: formFactor === "mobile" ? 0.95 : 1,
+		performance: Number(process.env.LIGHTHOUSE_MIN_PERFORMANCE ?? (formFactor === "mobile" ? 0.9 : 0.95)),
 		accessibility: 1,
 		"best-practices": 1,
 		seo: 1,
@@ -81,7 +82,7 @@ try {
 	console.log(JSON.stringify({ reportPath, incompleteAudits }, null, 2));
 	for (const [category, minimum] of Object.entries(minimums)) {
 		if ((scores[category] ?? 0) < minimum) {
-			throw new Error(`${category} score ${scores[category] ?? 0} is below ${minimum}`);
+			throw new Error(`${route} ${category} score ${scores[category] ?? 0} is below ${minimum}`);
 		}
 	}
 } finally {

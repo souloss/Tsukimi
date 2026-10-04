@@ -42,7 +42,7 @@ const relativeTime = formatRelativeTime(
 					{moment.images.map((image, imgIndex) => (
 						<div class="relative rounded-lg overflow-hidden aspect-square cursor-pointer">
 							<a
-								href="javascript:void(0)"
+								href={image}
 								data-src={image}
 								data-fancybox={`talking-${index}-${imgIndex}`}
 								class="block w-full h-full"

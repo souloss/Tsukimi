@@ -2,10 +2,8 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import { XMLParser } from "fast-xml-parser";
-import axios from "axios";
-import http from "http";
-import https from "https";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import { fetchExternalText } from "./external-request.mjs";
+import { readDataSnapshot, writeDataSnapshot, writeDataSummary } from "./data-snapshot.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FRIENDS_DATA_PATH = path.join(__dirname, "../src/data/friends.ts");
@@ -22,15 +20,6 @@ async function writeOutput(data) {
 	} finally {
 		await fs.rm(temporaryPath, { force: true });
 	}
-}
-
-// 代理配置：检测环境变量中的代理设置
-const proxyUrl = process.env.https_proxy || process.env.HTTPS_PROXY || process.env.http_proxy || process.env.HTTP_PROXY;
-const httpAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : new http.Agent();
-const httpsAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : new https.Agent();
-
-if (proxyUrl) {
-	console.log(`Using proxy: ${proxyUrl}`);
 }
 
 // ========== 配置读取 ==========
@@ -226,42 +215,13 @@ async function fetchFeed(url) {
 			"Pragma": "no-cache",
 		};
 
-		let data = null;
-
-		// 尝试 1：直接请求
-		const response = await axios.get(url, {
-			timeout: 15000,
+		const data = await fetchExternalText(url, {
+			source: `friends.rss:${url}`,
 			headers,
-			httpAgent,
-			httpsAgent,
-			proxy: proxyUrl ? undefined : false,
+			timeoutMs: 15_000,
+			retries: 2,
 		});
-
-		if (response.status === 200 && response.data && typeof response.data === "string" && response.data.trim().length > 0) {
-			data = response.data;
-		}
-
-		// 尝试 2：加随机参数绕过 CDN 缓存
-		if (!data) {
-			console.log(`  Retrying with cache-busting param...`);
-			const retryResponse = await axios.get(`${url}?_=${Date.now()}`, {
-				timeout: 15000,
-				headers,
-				httpAgent,
-				httpsAgent,
-				proxy: proxyUrl ? undefined : false,
-			});
-			if (retryResponse.status === 200 && retryResponse.data && typeof retryResponse.data === "string" && retryResponse.data.trim().length > 0) {
-				data = retryResponse.data;
-			}
-		}
-
-		if (data) {
-			return data;
-		}
-
-		console.warn(`  No content received (HTTP ${response.status}): ${url}`);
-		return null;
+		return data.trim() ? data : null;
 	} catch (error) {
 		console.warn(`  Failed to fetch: ${url}`, error.message);
 		return null;
@@ -274,6 +234,7 @@ async function main() {
 
 	// 读取配置
 	const config = await getCircleConfig();
+	const startedAt = Date.now();
 	if (!config.showFriendsCircle) {
 		console.log("Friends circle is disabled, skipping.");
 		const emptyData = { lastUpdated: new Date().toISOString(), items: [] };
@@ -304,7 +265,8 @@ async function main() {
 			existingItems = existingData.items;
 		}
 	} catch {
-		// First refresh has no previous snapshot to preserve.
+		const snapshot = await readDataSnapshot("friends-circle");
+		if (Array.isArray(snapshot?.data?.items)) existingItems = snapshot.data.items;
 	}
 
 	for (const friend of friendsWithRss) {
@@ -385,6 +347,15 @@ async function main() {
 	};
 
 	await writeOutput(output);
+	await writeDataSnapshot("friends-circle", output, { source: "friends.rss" });
+	await writeDataSummary("friends-circle", {
+		source: "friends.rss",
+		durationMs: Date.now() - startedAt,
+		successCount,
+		failedCount: failCount,
+		items: finalItems.length,
+		failedSiteUrls: [...failedSiteUrls],
+	});
 	console.log(`Written to: ${OUTPUT_PATH}`);
 	console.log("=== Done ===");
 }

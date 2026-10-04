@@ -76,9 +76,18 @@ test.describe("core page regression", () => {
 		await page.goto("/", { waitUntil: "networkidle" });
 		const metrics = await page.evaluate(() => {
 			const performanceEntries = performance.getEntriesByType("paint");
+			const navigation = performance.getEntriesByType("navigation")[0] as
+				| PerformanceNavigationTiming
+				| undefined;
+			const lcpEntries = performance.getEntriesByType(
+				"largest-contentful-paint",
+			) as PerformanceEntry[];
 			const layoutShifts = performance.getEntriesByType(
 				"layout-shift",
 			) as PerformanceEntry[];
+			const interactionEntries = performance.getEntriesByType(
+				"event",
+			) as (PerformanceEntry & { duration?: number })[];
 			const cumulativeLayoutShift = layoutShifts.reduce((total, entry) => {
 				const value = entry as PerformanceEntry & {
 					value?: number;
@@ -106,15 +115,45 @@ test.describe("core page regression", () => {
 					performanceEntries.find(
 						(entry) => entry.name === "first-contentful-paint",
 					)?.startTime ?? 0,
+				largestContentfulPaint:
+					(
+						lcpEntries.at(-1) as
+							| (PerformanceEntry & { renderTime?: number; loadTime?: number })
+							| undefined
+					)?.renderTime ??
+					(
+						lcpEntries.at(-1) as
+							| (PerformanceEntry & { renderTime?: number; loadTime?: number })
+							| undefined
+					)?.loadTime ??
+					0,
+				ttfb: navigation?.responseStart ?? 0,
 				cumulativeLayoutShift,
+				interactionToNextPaint: interactionEntries.reduce(
+					(max, entry) => Math.max(max, entry.duration ?? 0),
+					0,
+				),
 			};
 		});
 
 		expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 4);
 		expect(metrics.missingImages).toBe(0);
 		expect(metrics.firstContentfulPaint).toBeGreaterThan(0);
-		expect(metrics.firstContentfulPaint).toBeLessThan(5_000);
-		expect(metrics.cumulativeLayoutShift).toBeLessThan(0.1);
+		expect(metrics.firstContentfulPaint).toBeLessThan(
+			Number(process.env.TSUKIMI_FCP_BUDGET_MS ?? 3_000),
+		);
+		expect(metrics.largestContentfulPaint).toBeLessThan(
+			Number(process.env.TSUKIMI_LCP_BUDGET_MS ?? 4_000),
+		);
+		expect(metrics.ttfb).toBeLessThan(
+			Number(process.env.TSUKIMI_TTFB_BUDGET_MS ?? 800),
+		);
+		expect(metrics.cumulativeLayoutShift).toBeLessThan(
+			Number(process.env.TSUKIMI_CLS_BUDGET ?? 0.1),
+		);
+		expect(metrics.interactionToNextPaint).toBeLessThan(
+			Number(process.env.TSUKIMI_INP_BUDGET_MS ?? 500),
+		);
 	});
 
 	test("skip link reaches the main content", async ({ page }) => {
@@ -178,9 +217,49 @@ test.describe("core page regression", () => {
 		}
 	});
 
-	test("core layouts match the visual regression baselines", async ({
+	test("mobile navigation and settings remain keyboard accessible", async ({
 		page,
 	}) => {
+		await page.setViewportSize({ width: 390, height: 844 });
+		await page.goto("/", { waitUntil: "domcontentloaded" });
+		const menu = page.locator("#nav-menu-switch");
+		if (await menu.isVisible()) {
+			await menu.focus();
+			await page.keyboard.press("Enter");
+			await expect(page.locator("#nav-menu-panel")).toBeVisible();
+			await page.keyboard.press("Escape");
+		}
+		const settings = page.locator("#display-settings-switch");
+		await settings.focus();
+		await page.keyboard.press("Enter");
+		const dialog = page.locator(
+			'[role="dialog"][aria-labelledby="display-setting-title"]',
+		);
+		await expect(dialog).toBeVisible();
+		await page.keyboard.press("Escape");
+		await expect(dialog).toBeHidden();
+	});
+
+	test("reduced motion disables continuous animation", async ({ page }) => {
+		await page.emulateMedia({ reducedMotion: "reduce" });
+		await page.goto("/", { waitUntil: "domcontentloaded" });
+		const durations = await page.evaluate(() =>
+			[...document.querySelectorAll<HTMLElement>("*")].map(
+				(element) =>
+					Number.parseFloat(getComputedStyle(element).animationDuration) || 0,
+			),
+		);
+		expect(Math.max(...durations, 0)).toBeLessThanOrEqual(0.01);
+	});
+
+	test("core layouts match the visual regression baselines", async ({
+		page,
+		browserName,
+	}) => {
+		test.skip(
+			browserName !== "chromium",
+			"visual baselines are maintained for Chromium; other browsers run behavioral checks",
+		);
 		const scenarios = [
 			{
 				route: "/",

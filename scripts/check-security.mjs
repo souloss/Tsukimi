@@ -11,6 +11,8 @@ if (await access(dist).then(() => true).catch(() => false)) {
 	for (const file of await glob("**/*.{html,js,json,css}", { cwd: dist, absolute: true })) {
 		const source = await readFile(file, "utf8");
 		if (/(?:sk|api[_-]?key|private[_-]?key)\s*[:=]\s*["'][A-Za-z0-9_\-]{24,}["']/i.test(source)) errors.push(`${path.relative(process.cwd(), file)} may contain a hard-coded secret`);
+		if (/(?:href|src)=["'](?:javascript|vbscript):/i.test(source)) errors.push(`${path.relative(process.cwd(), file)} contains an executable URL protocol`);
+		if (/<script[^>]+src=["']http:/i.test(source)) errors.push(`${path.relative(process.cwd(), file)} loads a script over HTTP`);
 	}
 }
 if (errors.length) {

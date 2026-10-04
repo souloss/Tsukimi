@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import { fetchExternalJson } from "./external-request.mjs";
+import { readDataSnapshot, writeDataSnapshot } from "./data-snapshot.mjs";
 
 const API_BASE = "https://api.bgm.tv";
 const CONFIG_PATH = path.join(
@@ -224,6 +225,13 @@ async function main() {
 			finalAnimeList = [...finalAnimeList, ...processed];
 		}
 	}
+	if (finalAnimeList.length === 0) {
+		const snapshot = await readDataSnapshot("bangumi");
+		if (Array.isArray(snapshot?.data)) {
+			finalAnimeList = snapshot.data;
+			console.warn("Bangumi returned no records; using the last valid snapshot.");
+		}
+	}
 
 	const dir = path.dirname(OUTPUT_FILE);
 	try {
@@ -233,6 +241,7 @@ async function main() {
 	}
 
 	await fs.writeFile(OUTPUT_FILE, JSON.stringify(finalAnimeList, null, 2));
+	await writeDataSnapshot("bangumi", finalAnimeList, { source: "bangumi.api" });
 	console.log(`\nUpdate complete! Data saved to: ${OUTPUT_FILE}`);
 	console.log(`Total collected: ${finalAnimeList.length} anime series`);
 }

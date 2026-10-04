@@ -248,6 +248,11 @@ export type SiteConfig = {
 
 	// 统计分析
 	analytics?: {
+		performanceMonitoring?: {
+			enable?: boolean;
+			sampleRate?: number;
+			endpoint?: string;
+		};
 		googleAnalyticsId?: string; // Google Analytics ID
 		microsoftClarityId?: string; // Microsoft Clarity ID
 		umamiAnalytics?: {

@@ -12,6 +12,7 @@ interface Props {
 	defaultPostListLayout?: string;
 	BANNER_HEIGHT?: number;
 	pageScaling?: { enable: boolean; targetWidth?: number };
+	stickyNavbar?: boolean;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
 	defaultPostListLayout = "list",
 	BANNER_HEIGHT = 35,
 	pageScaling = { enable: false },
+	stickyNavbar = false,
 } = Astro.props;
 ---
 
@@ -35,6 +37,7 @@ const {
 		defaultPostListLayout,
 		BANNER_HEIGHT,
 		pageScaling,
+		stickyNavbar,
 	}}
 >
 	// 立即执行，在页面渲染前应用壁纸模式和布局模式，避免闪烁
@@ -138,6 +141,21 @@ const {
 				}
 			}
 		});
+	})();
+
+	// Apply the persistent navbar preference before the first paint.
+	(function initStickyNavbar() {
+		const stored = localStorage.getItem("stickyNavbar");
+		const stickyEnabled = stored === null ? stickyNavbar : stored === "true";
+		document.documentElement.setAttribute("data-sticky-navbar", String(stickyEnabled));
+		document.body.classList.toggle("sticky-navbar", stickyEnabled);
+		const navbar = document.getElementById("navbar");
+		const wrapper = document.getElementById("navbar-wrapper");
+		navbar?.classList.toggle("navbar-sticky-shadow", stickyEnabled);
+		navbar?.classList.toggle("scrolled", stickyEnabled);
+		navbar?.classList.remove("navbar-hidden");
+		wrapper?.classList.remove("navbar-hidden");
+		if (!stickyEnabled) window.initSemifullScrollDetection?.();
 	})();
 
 	// 根据壁纸模式动态设置 banner 和全屏壁纸的显示

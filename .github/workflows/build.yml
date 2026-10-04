@@ -5,6 +5,7 @@ on:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,14 +18,14 @@ jobs:
   check:
     strategy:
       matrix:
-        node: [ 22, 24 ]
+        node: [ 22.12.0, 24.0.0 ]
     runs-on: ubuntu-latest
     name: Astro Check for Node.js ${{ matrix.node }}
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
         with:
-          node-version: ${{ matrix.node }} # Use LTS
+          node-version: ${{ matrix.node }}
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -34,6 +35,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
         with:
+          version: 10.33.0
           run_install: false # Disable auto-install
 
       - name: Install dependencies
@@ -44,11 +46,14 @@ jobs:
         env:
           # 测试构建时禁用内容同步,使用本地内容
           ENABLE_CONTENT_SYNC: false
+          TZ: UTC
+      - name: Check toolchain
+        run: pnpm check-doctor
 
   build:
     strategy:
       matrix:
-        node: [ 22, 24 ]
+        node: [ 22.12.0, 24.0.0 ]
     runs-on: ubuntu-latest
     name: Astro Build for Node.js ${{ matrix.node }} # Corrected job name
     steps:
@@ -65,6 +70,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
         with:
+          version: 10.33.0
           run_install: false # Disable auto-install
 
       - name: Install dependencies
@@ -74,3 +80,4 @@ jobs:
         run: pnpm build
         env:
           ENABLE_CONTENT_SYNC: false
+          TZ: UTC
