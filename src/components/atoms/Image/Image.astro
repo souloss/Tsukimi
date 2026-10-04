@@ -111,6 +111,7 @@ const placeholderColor =
 	"color-mix(in srgb, var(--primary) 10%, var(--card-bg))";
 const publicSrcSet = (format: "avif" | "webp") =>
 	publicImage?.variants[format]
+		.filter((variant) => variant.width <= Math.max(...responsiveWidths))
 		.filter((variant) =>
 			existsSync(path.join(process.cwd(), "public", variant.src.slice(1))),
 		)

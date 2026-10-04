@@ -113,12 +113,26 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 				</template>
 			))}
 
-			<div class="banner-image-slot-desktop absolute inset-0 hidden md:block" />
-			{desktopImages.map((src, i) => (
+			<div class="banner-image-slot-desktop absolute inset-0 hidden md:block">
+				{desktopImages[0] && (
+					<Image
+						id="banner"
+						alt="Desktop banner image 1"
+						class="object-cover h-full w-full"
+						src={desktopImages[0]}
+						position={backgroundWallpaperConfig.banner?.position}
+						widths={[1024, 1536, 2048, 2560]}
+						sizes="100vw"
+						loading="eager"
+						fetchpriority="high"
+					/>
+				)}
+			</div>
+			{desktopImages.slice(1).map((src, i) => (
 				<template class="banner-tpl-desktop">
 					<Image
 						id="banner"
-						alt={`Desktop banner image ${i + 1}`}
+						alt={`Desktop banner image ${i + 2}`}
 						class="object-cover h-full w-full"
 						src={src}
 						position={backgroundWallpaperConfig.banner?.position}
@@ -230,6 +244,10 @@ const gradientCSS = `linear-gradient(to top, ${gradientColors.map((c) => `${c.co
 
 				function collectFrames(slotClass, tplClass) {
 					var frames = [];
+					var slot = container.querySelector('.' + slotClass);
+					if (slot && slot.innerHTML.trim()) {
+						frames.push(slot.innerHTML);
+					}
 					var tpls = container.querySelectorAll('.' + tplClass);
 					for (var i = 0; i < tpls.length; i++) {
 						frames.push(tpls[i].innerHTML);
