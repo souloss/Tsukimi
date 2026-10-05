@@ -12,6 +12,7 @@
 		"check-docs-render": "node scripts/check-docs-render.mjs",
 		"check-content": "node scripts/check-content.mjs",
 		"check-config": "tsx scripts/check-config.mjs",
+		"check-config-variants": "tsx scripts/check-config-variants.mjs",
 		"check-route-registry": "tsx scripts/check-route-registry.ts",
 		"check-markdown-manifest": "node scripts/check-markdown-manifest.mjs",
 		"generate-markdown-capabilities": "node scripts/generate-markdown-capabilities.mjs",

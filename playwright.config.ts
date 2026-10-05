@@ -12,7 +12,9 @@ export default defineConfig({
 	},
 	fullyParallel: false,
 	workers: 1,
-	reporter: process.env.CI ? "line" : "list",
+	reporter: process.env.CI
+		? [["line"], ["json", { outputFile: "playwright-report/results.json" }]]
+		: "list",
 	use: {
 		browserName: browser,
 		baseURL: `http://127.0.0.1:${port}`,

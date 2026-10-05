@@ -48,7 +48,7 @@ jobs:
         run: pnpm test
 
       - name: Run Test Coverage
-        run: pnpm test:coverage
+        run: pnpm test:coverage 2>&1 | tee coverage-report.txt
 
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
@@ -68,11 +68,26 @@ jobs:
             playwright-report/
           retention-days: 7
 
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics-${{ github.run_id }}
+          path: |
+            coverage-report.txt
+            test-results/
+            playwright-report/
+            .lighthouseci/
+          retention-days: 7
+
       - name: Validate Content
         run: pnpm check-content
 
       - name: Validate Configuration
         run: pnpm check-config
+
+      - name: Validate Configuration Variants
+        run: pnpm check-config-variants
 
       - name: Check toolchain
         run: pnpm check-doctor
@@ -109,6 +124,19 @@ jobs:
 
       - name: Run Publish Checks
         run: pnpm check-publish
+
+      - name: Upload complete check diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: complete-check-diagnostics-${{ github.run_id }}
+          path: |
+            coverage-report.txt
+            test-results/
+            playwright-report/
+            .lighthouseci/
+          if-no-files-found: ignore
+          retention-days: 7
 
   build:
     name: Astro Build
