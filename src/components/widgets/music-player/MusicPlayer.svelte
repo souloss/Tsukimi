@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
 import { onDestroy, onMount } from "svelte";
 import { cubicOut } from "svelte/easing";
 import { fly } from "svelte/transition";
@@ -20,6 +22,7 @@ const showFloatingPlayer = musicPlayerConfig.showFloatingPlayer;
 const floatingEntryMode = musicPlayerConfig.floatingEntryMode ?? "default";
 const useFabEntry = floatingEntryMode === "fab";
 const shouldRenderFloatingUi = showFloatingPlayer && musicPlayerConfig.enable;
+const closeLabel = i18n(Key.announcementClose);
 let unsubscribe: (() => void) | undefined;
 
 function togglePlay() {
@@ -204,7 +207,7 @@ onDestroy(() => {
 
 {#if shouldRenderFloatingUi}
 	{#if state.showError}
-		<div class="fixed bottom-20 right-4 z-[60] max-w-sm">
+		<div class="fixed bottom-20 right-4 z-[60] max-w-sm" role="alert" aria-live="assertive">
 			<div
 				class="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-up"
 			>
@@ -214,6 +217,8 @@ onDestroy(() => {
 				/>
 				<span class="text-sm flex-1">{state.errorMessage}</span>
 				<button
+					type="button"
+					aria-label={closeLabel}
 					onclick={hideError}
 					class="text-white/80 hover:text-white transition-colors"
 				>

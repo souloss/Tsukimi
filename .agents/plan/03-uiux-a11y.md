@@ -130,3 +130,4 @@
 - 2026-10-04 实施：新增移动导航/设置键盘、reduced-motion、触控尺寸、焦点恢复和视觉基线回归；修正 settings modal 的 `aria-modal` 与分页禁用语义。错误/空状态、第三方控件和完整手势审计仍在进行。
 - 2026-10-10 实施：为分类搜索、标签搜索和 Anime 排序补齐显式 label/`aria-label`；密码保护表单已有错误状态关联，新增浏览器回归验证错误密码后的 `aria-invalid`、`aria-describedby` 和 alert。验证：`pnpm check`、`pnpm type-check`、`pnpm test:e2e`（新增路径通过）。第三方评论失败态、播放器和完整设置表单仍待补齐。
 - 2026-10-10 验收：源码审计确认搜索、设置、知识图谱、排序和密码控件均具备可访问名称；`pnpm check-a11y-contracts`、`pnpm check-html-structure`、`pnpm test:e2e`（20/20）通过。UX-002 标记完成，第三方评论容器继续按既有 Axe 排除边界维护。
+- 2026-10-10 实施：音乐播放器错误提示增加 `role=alert`、assertive live region、可访问关闭按钮；Twikoo/Waline 加载容器增加 polite live region，并扩展 a11y contract 至 9 项。验证：`pnpm check-a11y-contracts`、`pnpm check`、`pnpm type-check`、`pnpm test`（47/47）。UX-008 仍需完整错误/空状态重试路径。

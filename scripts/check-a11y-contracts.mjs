@@ -10,6 +10,9 @@ const checks = [
 	["search dialog semantics", "src/components/organisms/navigation/SearchModal.svelte", /role\", \"dialog|aria-modal/],
 	["settings dialog label", "src/components/features/settings/DisplaySettings.svelte", /aria-labelledby=\"display-setting-title\"/],
 	["password input label", "src/components/features/auth/PasswordModal.svelte", /aria-label|<label/],
+	["music error announcement", "src/components/widgets/music-player/MusicPlayer.svelte", /role=\"alert\"[\s\S]*aria-live=\"assertive\"/],
+	["comment loading announcement", "src/components/comment/Twikoo.astro", /role=\"status\"[\s\S]*aria-live=\"polite\"/],
+	["comment loading announcement", "src/components/comment/Waline.astro", /role=\"status\"[\s\S]*aria-live=\"polite\"/],
 ];
 const errors = [];
 for (const [name, relative, pattern] of checks) {
