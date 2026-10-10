@@ -1,4 +1,6 @@
 <script lang="ts">
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 import AccordionDrawer from "../../common/AccordionDrawer.svelte";
 import type { Song } from "../../music-player/types";
 import TrackListItem from "./TrackListItem.svelte";
@@ -21,7 +23,7 @@ const { playlist, currentIndex, isPlaying, show, onClose, onPlaySong }: Props =
 		<div
 			class="playlist-content"
 			role="listbox"
-			aria-label="Playlist"
+			aria-label={i18n(Key.musicPlayerPlaylist)}
 			aria-multiselectable="false"
 		>
 			{#each playlist as song, index}

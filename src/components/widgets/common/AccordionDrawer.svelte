@@ -10,7 +10,12 @@ interface Props {
 const { show, class: className = "", children }: Props = $props();
 </script>
 
-<div class={`accordion-drawer ${className}`} class:open={show}>
+<div
+	class={`accordion-drawer ${className}`}
+	class:open={show}
+	aria-hidden={!show}
+	inert={!show}
+>
 	<div class="accordion-inner">
 		{@render children?.()}
 	</div>

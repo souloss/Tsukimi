@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 
 interface Props {
 	isPlaying: boolean;
@@ -14,7 +16,7 @@ const { isPlaying, isLoading, onclick }: Props = $props();
 	class="btn-regular w-12 h-12 rounded-full"
 	class:opacity-50={isLoading}
 	disabled={isLoading}
-	aria-label={isPlaying ? "暂停" : "播放"}
+	aria-label={isPlaying ? i18n(Key.musicPlayerPause) : i18n(Key.musicPlayerPlay)}
 	{onclick}
 >
 	{#if isLoading}

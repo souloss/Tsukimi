@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 
 import type { Song } from "../../music-player/types";
 
@@ -94,7 +96,7 @@ function handleVolumeKeyDown(event: KeyboardEvent) {
 				type="button"
 				class="volume-btn"
 				onclick={onToggleMute}
-				aria-label="Toggle volume"
+				aria-label={i18n(Key.musicPlayerVolume)}
 			>
 				<Icon
 					icon={isMuted || volume === 0
@@ -113,7 +115,7 @@ function handleVolumeKeyDown(event: KeyboardEvent) {
 				onkeydown={handleVolumeKeyDown}
 				role="slider"
 				tabindex="0"
-				aria-label="Volume"
+				aria-label={i18n(Key.musicPlayerVolume)}
 				aria-valuemin="0"
 				aria-valuemax="100"
 				aria-valuenow={volumePercent}

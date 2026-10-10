@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 
 interface Props {
 	onclick: () => void;
@@ -11,7 +13,7 @@ const { onclick, disabled = false }: Props = $props();
 
 <button
 	class="btn-plain w-10 h-10 rounded-lg"
-	aria-label="上一首"
+	aria-label={i18n(Key.musicPlayerPrevious)}
 	{onclick}
 	{disabled}
 >

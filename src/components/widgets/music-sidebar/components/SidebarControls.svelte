@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 
 import NextButton from "../../music-player/atoms/NextButton.svelte";
 import PlayButton from "../../music-player/atoms/PlayButton.svelte";
@@ -43,7 +45,7 @@ const modeActive = $derived(isShuffled || repeatMode > 0);
 		class="icon-btn mode-btn"
 		class:active-mode={modeActive}
 		onclick={() => onToggleMode?.()}
-		aria-label="Repeat mode"
+		aria-label={isShuffled ? i18n(Key.musicPlayerShuffle) : i18n(Key.musicPlayerRepeat)}
 	>
 		<Icon icon={repeatIcon} class="text-xl" />
 	</button>
@@ -53,7 +55,7 @@ const modeActive = $derived(isShuffled || repeatMode > 0);
 	<button
 		class="icon-btn list-btn"
 		onclick={onTogglePlaylist}
-		aria-label="Playlist"
+		aria-label={i18n(Key.musicPlayerPlaylist)}
 	>
 		<Icon icon="material-symbols:queue-music-rounded" />
 	</button>

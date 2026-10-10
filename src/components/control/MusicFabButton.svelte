@@ -4,19 +4,22 @@ import { onDestroy, onMount } from "svelte";
 
 import type { MusicPlayerState } from "@/stores/musicPlayerStore";
 import { musicPlayerStore } from "@/stores/musicPlayerStore";
+import Key from "../../i18n/i18nKey";
+import { i18n } from "../../i18n/translation";
 
 let state: MusicPlayerState = $state(musicPlayerStore.getState());
 let unsubscribe: (() => void) | undefined;
-
 function toggleControlCenter() {
 	musicPlayerStore.toggleExpanded();
 }
 
-const currentSongTitle = $derived(state.currentSong?.title || "音乐控制中心");
+const currentSongTitle = $derived(
+	state.currentSong?.title || i18n(Key.musicPlayer),
+);
 const ariaLabel = $derived(
 	state.isExpanded
-		? `收起音乐控制中心：${currentSongTitle}`
-		: `打开音乐控制中心：${currentSongTitle}`,
+		? `${i18n(Key.musicPlayerCollapse)}：${currentSongTitle}`
+		: `${i18n(Key.musicPlayer)}：${currentSongTitle}`,
 );
 const statusIcon = $derived(
 	state.isLoading
@@ -42,6 +45,8 @@ onDestroy(() => {
 	class:loading={state.isLoading}
 	class="music-fab btn-card"
 	aria-label={ariaLabel}
+	aria-expanded={state.isExpanded}
+	aria-controls="music-player-panel"
 	title={ariaLabel}
 	onclick={toggleControlCenter}
 >

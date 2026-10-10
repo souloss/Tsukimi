@@ -31,7 +31,7 @@ const { playlist, currentIndex, isPlaying, show, onClose, onPlaySong }: Props =
 			<h3 class="text-lg font-semibold text-90">
 				{i18n(Key.musicPlayerPlaylist)}
 			</h3>
-			<button class="btn-plain w-8 h-8 rounded-lg" onclick={onClose}>
+			<button class="btn-plain w-8 h-8 rounded-lg" onclick={onClose} aria-label={i18n(Key.announcementClose)}>
 				<Icon icon="material-symbols:close" class="text-lg" />
 			</button>
 		</div>

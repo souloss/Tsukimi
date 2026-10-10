@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 
 import type { RepeatMode } from "../types";
 
@@ -27,6 +29,7 @@ const {
 		class:btn-plain={!isActive}
 		{onclick}
 		{disabled}
+		aria-label={i18n(Key.musicPlayerShuffle)}
 	>
 		<Icon icon="material-symbols:shuffle" class="text-lg" />
 	</button>
@@ -36,6 +39,7 @@ const {
 		class:btn-regular={isActive}
 		class:btn-plain={!isActive}
 		{onclick}
+		aria-label={repeatMode === 1 ? i18n(Key.musicPlayerRepeatOne) : i18n(Key.musicPlayerRepeat)}
 	>
 		{#if repeatMode === 1}
 			<Icon icon="material-symbols:repeat-one" class="text-lg" />

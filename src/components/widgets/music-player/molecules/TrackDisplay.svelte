@@ -77,6 +77,7 @@ const {
 					onHideClick?.();
 				}}
 				title={i18n(Key.musicPlayerHide)}
+				aria-label={i18n(Key.musicPlayerHide)}
 			>
 				<Icon icon="material-symbols:visibility-off" class="text-lg" />
 			</button>
@@ -86,6 +87,7 @@ const {
 					e.stopPropagation();
 					onExpandClick?.();
 				}}
+					aria-label={i18n(Key.musicPlayerExpand)}
 			>
 				<Icon icon="material-symbols:expand-less" class="text-lg" />
 			</button>
@@ -104,6 +106,7 @@ const {
 					class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
 					onclick={onHideClick}
 					title={i18n(Key.musicPlayerHide)}
+					aria-label={i18n(Key.musicPlayerHide)}
 				>
 					<Icon
 						icon="material-symbols:visibility-off"
@@ -115,6 +118,7 @@ const {
 					class:text-[var(--primary)]={showPlaylist}
 					onclick={onPlaylistClick}
 					title={i18n(Key.musicPlayerPlaylist)}
+					aria-label={i18n(Key.musicPlayerPlaylist)}
 				>
 					<Icon icon="material-symbols:queue-music" class="text-lg" />
 				</button>

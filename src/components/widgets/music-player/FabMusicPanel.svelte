@@ -3,6 +3,8 @@ import { onDestroy, onMount } from "svelte";
 
 import type { MusicPlayerState } from "@/stores/musicPlayerStore";
 import { musicPlayerStore } from "@/stores/musicPlayerStore";
+import Key from "../../../i18n/i18nKey";
+import { i18n } from "../../../i18n/translation";
 
 import SidebarControls from "../music-sidebar/components/SidebarControls.svelte";
 import SidebarCover from "../music-sidebar/components/SidebarCover.svelte";
@@ -68,7 +70,10 @@ function setVolume(volume: number) {
 </script>
 
 <div
+	id="music-player-panel"
 	class="fab-music-panel card-base shadow-xl rounded-2xl p-4 w-[20rem] max-w-[80vw]"
+	role="region"
+	aria-label={i18n(Key.musicPlayer)}
 >
 	<div class="fab-music-header">
 		<SidebarCover

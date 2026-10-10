@@ -121,6 +121,7 @@ const {
 			class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
 			onclick={onCollapseClick}
 			title={i18n(Key.musicPlayerCollapse)}
+			aria-label={i18n(Key.musicPlayerCollapse)}
 		>
 			<Icon icon="material-symbols:expand-more" class="text-lg" />
 		</button>

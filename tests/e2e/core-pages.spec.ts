@@ -346,7 +346,7 @@ test.describe("core page regression", () => {
 				width: scenario.width,
 				height: scenario.height,
 			});
-			await page.goto(scenario.route, { waitUntil: "networkidle" });
+			await page.goto(scenario.route, { waitUntil: "domcontentloaded" });
 			await disableOptionalWallpaper(page);
 			await page.evaluate((dark) => {
 				document.documentElement.classList.toggle("dark", dark);

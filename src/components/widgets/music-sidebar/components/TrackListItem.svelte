@@ -1,5 +1,7 @@
 <script lang="ts">
 import Icon from "@components/atoms/Icon/LocalIcon.svelte";
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
 
 import type { Song } from "../../music-player/types";
 
@@ -36,7 +38,7 @@ function getAssetPath(path: string): string {
 	role="option"
 	tabindex="0"
 	aria-selected={isCurrent}
-	aria-label={`播放 ${song.title} - ${song.artist}`}
+	aria-label={`${i18n(Key.musicPlayerPlay)} ${song.title} - ${song.artist}`}
 >
 	<div class="cover-shell">
 		<img

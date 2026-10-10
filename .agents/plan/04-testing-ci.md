@@ -113,3 +113,4 @@
 
 - 2026-10-04 实施：CI 已加入生成 HTML 结构、Pagefind 加密边界、部署头和依赖审计；浏览器矩阵覆盖 Chromium/Firefox/WebKit，nightly workflow 已建立。QA-007 仍需要覆盖播放器、密码文章和网络错误路径；QA-002/011 已有 CI artifact 与变体命令。
 - 2026-10-10 实施：QA-007 新增加密文章错误密码路径和主题切换跨刷新路径，验证表单标签、错误提示、`aria-invalid`、`aria-describedby`、localStorage 持久化；完整 `pnpm test:e2e` 20/20 通过。播放器、第三方网络错误和完整设置持久化路径仍待补齐。
+- 2026-10-10 实施：扩充播放器静态无障碍契约与视觉回归验证；完整 `pnpm test:e2e` 在本地播放器关闭覆盖下 20/20 通过，`pnpm build` 与核心专项检查通过。播放器启用配置下的跨 island 键盘打开/播放列表路径未纳入完成证据，QA-007 保持进行中。

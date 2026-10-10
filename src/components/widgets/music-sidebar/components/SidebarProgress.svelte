@@ -1,4 +1,7 @@
 <script lang="ts">
+import Key from "../../../../i18n/i18nKey";
+import { i18n } from "../../../../i18n/translation";
+
 interface Props {
 	currentTime: number;
 	duration: number;
@@ -39,7 +42,7 @@ function handleKeyDown(event: KeyboardEvent) {
 		onkeydown={handleKeyDown}
 		role="slider"
 		tabindex="0"
-		aria-label="Music progress"
+		aria-label={i18n(Key.musicPlayerProgress)}
 		aria-valuemin="0"
 		aria-valuemax="100"
 		aria-valuenow={progressPercent}
