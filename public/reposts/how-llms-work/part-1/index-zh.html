@@ -30,6 +30,7 @@
       <button class="tnav-btn" data-section="s-basemodel">基础模型</button>
       <button class="tnav-btn" data-section="s-posttraining">后训练</button>
       <button class="tnav-btn" data-section="s-psychology">心理学</button>
+      <button class="tnav-btn" data-section="s-mcp">MCP</button>
       <button class="tnav-btn" data-section="s-rag">RAG</button>
       <button class="tnav-btn" data-section="s-security">安全</button>
       <button class="tnav-btn" data-section="s-summary">全流程</button>
@@ -415,6 +416,192 @@
         <div class="psych-title">仅系统 1 — 无深度思考</div>
         <div class="psych-text">每个 Token 大致消耗相同的计算量——没有机制在困难问题上"更努力地思考"。与人类可以参与缓慢、深思熟虑的系统 2 推理（逐步分析棋局）不同，LLM 无论难度如何都以相同速度生成每个 Token。将时间转化为精度是一个活跃的研究前沿。</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━━━━ SECTION MCP: MODEL CONTEXT PROTOCOL ━━━━━━━━ -->
+<section id="s-mcp" class="section" aria-label="模型上下文协议">
+  <div class="section-inner">
+    <div class="fade-up mcp-intro" style="margin-bottom:44px">
+      <div class="chapter-badge" style="color:var(--purple)">LLM 应用 · MCP · 2026-07-28</div>
+      <h2 class="section-title">让模型<br>接上世界</h2>
+      <p class="body-text" style="max-width:760px">模型只会生成 Token；<span class="highlight-p">MCP（Model Context Protocol，模型上下文协议）</span>规定了应用如何把外部数据、可调用的函数和可复用的提示，安全、标准化地接到模型旁边。它像 AI 应用生态里的“USB-C”：模型应用不必为每个数据库、文件系统或 API 单独发明一套接线方式。</p>
+      <p class="body-text" style="max-width:760px">MCP 本身不是模型，也不是 RAG 数据库。它是连接层：RAG 可以通过 MCP 的 Resource 或 Tool 实现，搜索、写文件、调用 API 也可以。下面按官方 <a href="https://modelcontextprotocol.io/specification/2026-07-28" target="_blank" rel="noopener">2026-07-28 规范</a>，把一次无状态请求走完。</p>
+      <p class="mcp-source-links">官方页面：<a href="https://modelcontextprotocol.io/specification/2026-07-28/architecture" target="_blank" rel="noopener">Architecture</a> · <a href="https://modelcontextprotocol.io/specification/2026-07-28/basic" target="_blank" rel="noopener">Base Protocol</a> · <a href="https://modelcontextprotocol.io/specification/2026-07-28/server" target="_blank" rel="noopener">Server Features</a> · <a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization" target="_blank" rel="noopener">Authorization</a> · <a href="https://modelcontextprotocol.io/registry" target="_blank" rel="noopener">Registry</a></p>
+    </div>
+
+    <div class="mcp-architecture fade-up">
+      <div class="mcp-actor mcp-host">
+        <div class="mcp-actor-icon">🧠</div>
+        <div class="mcp-actor-label">Host · 主机应用</div>
+        <div class="mcp-actor-desc">聊天界面、IDE 或 Agent。创建多个 Client，管理连接权限、用户同意、模型协作，并汇总各服务器的上下文。</div>
+      </div>
+      <div class="mcp-bridge" aria-hidden="true"><span>管理调用</span><b>↔</b></div>
+      <div class="mcp-actor mcp-client">
+        <div class="mcp-actor-icon">🔌</div>
+        <div class="mcp-actor-label">Client · 客户端</div>
+        <div class="mcp-actor-desc">由 Host 创建的连接器，一个 Client 只对应一个 Server。每次请求附带版本与能力，并隔离不同服务器。</div>
+      </div>
+      <div class="mcp-bridge" aria-hidden="true"><span>JSON-RPC 2.0 · 每请求自描述</span><b>↔</b></div>
+      <div class="mcp-actor mcp-server">
+        <div class="mcp-actor-icon">🧰</div>
+        <div class="mcp-actor-label">Server · 服务器</div>
+        <div class="mcp-actor-desc">提供专一能力的本地进程或远程服务：文件、数据库、搜索、业务 API，都可以封装在这里；看不到完整对话。</div>
+      </div>
+    </div>
+
+    <div class="mcp-demo fade-up" style="margin-top:24px">
+      <div class="mcp-demo-head">
+        <div>
+          <h3 class="sub-title" style="color:var(--purple);margin-bottom:5px">一次 MCP 请求 · 可视化时序</h3>
+          <p class="mcp-caption">点击步骤，或让动画自动播放。2026-07-28 不再建立会话：每个请求自己携带版本与能力，通常也带可选的客户端身份。</p>
+        </div>
+        <button class="btn btn-primary" id="mcp-run-btn" style="background:var(--purple)" aria-label="播放 MCP 请求流程">▶ 播放流程</button>
+      </div>
+      <div class="mcp-demo-grid">
+        <div class="mcp-timeline" id="mcp-timeline" role="list" aria-label="MCP 请求流程步骤">
+          <button class="mcp-event active" data-mcp-step="0" role="listitem" aria-pressed="true"><span>01</span><strong>发现服务器</strong><small>server/discover · 支持哪些版本？</small></button>
+          <button class="mcp-event" data-mcp-step="1" role="listitem" aria-pressed="false"><span>02</span><strong>自描述请求</strong><small>_meta · 版本 · 身份 · 能力</small></button>
+          <button class="mcp-event" data-mcp-step="2" role="listitem" aria-pressed="false"><span>03</span><strong>发现原语</strong><small>tools/list · resources/list · prompts/list</small></button>
+          <button class="mcp-event" data-mcp-step="3" role="listitem" aria-pressed="false"><span>04</span><strong>选择与调用</strong><small>模型选择 Tool，Client 发 tools/call</small></button>
+          <button class="mcp-event" data-mcp-step="4" role="listitem" aria-pressed="false"><span>05</span><strong>结果或追问</strong><small>结果回到模型；需要输入时走 MRTR</small></button>
+        </div>
+        <div class="mcp-wire" aria-hidden="true"><div class="mcp-wire-line"></div><div class="mcp-wire-packet" id="mcp-wire-packet">●</div></div>
+        <div class="mcp-payload" aria-live="polite">
+          <div class="mcp-payload-title" id="mcp-payload-title">Client → Server · 先问版本</div>
+          <pre id="mcp-payload-code"><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "server/discover",
+  "params": { "_meta": {
+    "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+    "io.modelcontextprotocol/clientCapabilities": {},
+    "io.modelcontextprotocol/clientInfo": { "name": "Demo Host" }
+  } }
+}</code></pre>
+          <p class="mcp-payload-note" id="mcp-payload-note">服务器返回支持的版本（包括 2026-07-28）与能力。没有 initialize，也没有 Mcp-Session-Id：现代协议是无状态的。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcp-primitives fade-up" style="margin-top:52px">
+      <div class="mcp-section-label">服务器提供的三种原语</div>
+      <div class="mcp-primitive-tabs" role="tablist" aria-label="MCP 服务器原语">
+        <button class="mcp-primitive-tab active" data-mcp-primitive="prompt" role="tab" aria-selected="true"><span>💬</span><strong>Prompts</strong><small>用户控制</small></button>
+        <button class="mcp-primitive-tab" data-mcp-primitive="resource" role="tab" aria-selected="false"><span>📄</span><strong>Resources</strong><small>应用控制</small></button>
+        <button class="mcp-primitive-tab" data-mcp-primitive="tool" role="tab" aria-selected="false"><span>⚙️</span><strong>Tools</strong><small>模型控制</small></button>
+      </div>
+      <div class="mcp-primitive-panel" id="mcp-primitive-panel" role="tabpanel" aria-live="polite">
+        <div class="mcp-primitive-icon" id="mcp-primitive-icon">💬</div>
+        <div>
+          <h3 id="mcp-primitive-title">Prompts · 可复用的提示模板</h3>
+          <p id="mcp-primitive-desc">服务器提供带参数的提示和工作流，通常由用户在菜单或斜杠命令中主动选择。Client 通过 <code>prompts/list</code> 发现，再用 <code>prompts/get</code> 获取填好参数的消息；消息内容可含文本、图像、音频或 Resource 链接。</p>
+          <div class="mcp-primitive-example" id="mcp-primitive-example">例：/review-code → “请审查这段代码的安全性，并按严重程度列出问题”</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mcp-details fade-up" style="margin-top:34px">
+      <div class="mcp-detail-card">
+        <div class="mcp-detail-kicker">客户端能力</div>
+        <h3>服务器也能请求什么？</h3>
+        <ul>
+          <li><strong>输入协作</strong>：服务器可通过 <code>InputRequiredResult</code> 请求 sampling、elicitation 或 roots；Client 收集输入后带着 <code>inputResponses</code> 重试，服务器不会主动发 JSON-RPC 请求。</li>
+          <li><strong>扩展协商</strong>：Tasks、Skills over MCP、MCP Apps 等通过 <code>capabilities.extensions</code> 显式选择加入；双方不支持时必须回退或拒绝。</li>
+          <li><strong>兼容旧版</strong>：2025-11-25 及更早版本仍使用 initialize 握手；双时代实现可探测后回退，但 2026-07-28 本身无会话。</li>
+        </ul>
+      </div>
+      <div class="mcp-detail-card">
+        <div class="mcp-detail-kicker">协议底座</div>
+        <h3>消息与连接怎么传？</h3>
+        <ul>
+          <li>所有消息都是 <strong>JSON-RPC 2.0</strong>：Client 发请求，Server 回结果或错误，通知不带 ID；每个请求在 <code>_meta</code> 携带版本与客户端能力，也可带客户端身份。</li>
+          <li><strong>stdio</strong> 是客户端启动子进程后的换行 JSON；<strong>Streamable HTTP</strong> 是对单一端点 POST，响应可为 JSON 或请求范围内的 SSE，并可用 <code>MCP-Protocol-Version</code>、<code>Mcp-Method</code>、<code>Mcp-Name</code> 供网关路由；自定义传输也必须保留同一消息语义。</li>
+          <li>核心消息模式有请求/响应、<strong>MRTR</strong>（返回 <code>input_required</code> 后带答案重试）以及订阅/通知；结果必须带 <code>resultType</code>（<code>complete</code> 或 <code>input_required</code>）。</li>
+          <li>协议错误使用标准 JSON-RPC 代码；规范还定义 <code>-32020</code> HeaderMismatch、<code>-32021</code> 缺少客户端能力、<code>-32022</code> 不支持的协议版本。</li>
+          <li>通用工具包括配置、进度、取消、错误、分页和参数补全；<strong>Tasks</strong> 是可选扩展，用句柄轮询长任务、处理中途输入和持久结果。</li>
+        </ul>
+      </div>
+      <div class="mcp-detail-card">
+        <div class="mcp-detail-kicker">设计原则</div>
+        <h3>为什么拆成三层？</h3>
+        <ul>
+          <li>Server 保持小而专一，多个 Server 可以组合；复杂编排留在 Host，便于独立演进。</li>
+          <li>Server 不能读取完整对话，也不能“看见”其他 Server；跨服务器协作由 Host 控制。</li>
+          <li>核心协议先提供最小能力，其他功能按能力和扩展逐步加入，双方都能渐进升级。</li>
+        </ul>
+      </div>
+      <div class="mcp-detail-card mcp-safety-card">
+        <div class="mcp-detail-kicker">信任边界</div>
+        <h3>为什么一定要人在回路中？</h3>
+        <ul>
+          <li>Tool 可能读写文件、调用外部 API 或执行任意代码；工具描述和 annotations 来自服务器，必须当作不可信提示。</li>
+          <li>Host 应明确展示暴露给模型的工具，在调用前征得用户同意，并让用户看到参数与结果。</li>
+          <li>用户数据和 Resource 未经同意不得转发；HTTP 服务需要 MCP 授权框架与访问范围控制。2026-07-28 将 Roots、Sampling、Logging 标为弃用，分别建议用参数/URI、直接接入模型 API、stderr/OpenTelemetry。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mcp-enterprise fade-up" style="margin-top:52px">
+      <div class="mcp-enterprise-heading">
+        <div>
+          <div class="mcp-section-label">企业接入地图</div>
+          <h3 class="mcp-enterprise-title">把已有系统接到 MCP</h3>
+          <p class="body-text" style="max-width:760px;margin-bottom:0">企业通常已经有 REST、GraphQL、gRPC、数据库和消息系统。<strong>HTTP 转 MCP 不是协议里自动存在的“翻译按钮”</strong>，而是在边界放一个 MCP Server 或 Gateway：接收 MCP 的 JSON-RPC 请求，做身份和规则检查，再把它适配成后端协议；返回时把后端响应、错误和状态映射回 MCP。公共 MCP Registry 主要登记公开服务器的 <code>server.json</code> 元数据；企业内网通常还需要自己的私有目录。</p>
+        </div>
+        <button class="btn btn-ghost" id="mcp-enterprise-run" aria-label="播放企业 MCP 接入流程">▶ 播放接入流程</button>
+      </div>
+
+      <div class="mcp-enterprise-demo">
+        <div class="mcp-enterprise-steps" id="mcp-enterprise-steps" role="list" aria-label="企业 MCP 接入步骤">
+          <button class="mcp-enterprise-step active" data-enterprise-step="0" role="listitem" aria-pressed="true"><span>01</span><strong>发现与登记</strong><small>目录 / DNS / 网关 → MCP endpoint</small></button>
+          <button class="mcp-enterprise-step" data-enterprise-step="1" role="listitem" aria-pressed="false"><span>02</span><strong>协议探测</strong><small>server/discover + 版本兼容</small></button>
+          <button class="mcp-enterprise-step" data-enterprise-step="2" role="listitem" aria-pressed="false"><span>03</span><strong>转换与校验</strong><small>REST / gRPC / SQL → Tool / Resource</small></button>
+          <button class="mcp-enterprise-step" data-enterprise-step="3" role="listitem" aria-pressed="false"><span>04</span><strong>规则与授权</strong><small>OAuth、租户、范围、人工确认</small></button>
+          <button class="mcp-enterprise-step" data-enterprise-step="4" role="listitem" aria-pressed="false"><span>05</span><strong>执行与观测</strong><small>超时、审计、指标、结果回传</small></button>
+        </div>
+        <div class="mcp-enterprise-track" aria-hidden="true">
+          <div class="mcp-enterprise-track-line"><span id="mcp-enterprise-track-dot"></span></div>
+        </div>
+        <div class="mcp-enterprise-panel" aria-live="polite">
+          <div class="mcp-enterprise-route">
+            <div class="mcp-enterprise-system" id="mcp-enterprise-upstream">企业服务目录</div>
+            <div class="mcp-enterprise-arrow">→</div>
+            <div class="mcp-enterprise-system mcp-enterprise-gateway">MCP Gateway / Adapter</div>
+            <div class="mcp-enterprise-arrow">→</div>
+            <div class="mcp-enterprise-system">Host + Model</div>
+          </div>
+          <h4 id="mcp-enterprise-panel-title">先找到“哪个 MCP Server 可以用”</h4>
+          <p id="mcp-enterprise-panel-text">部署平台可以通过企业服务目录、DNS、服务网格或配置中心找到 endpoint。这属于企业部署层；找到地址后，仍要用 MCP 的请求来确认版本和能力。</p>
+          <div class="mcp-enterprise-code" id="mcp-enterprise-code">目录记录：<code>finance-search → https://mcp.example.com/finance</code></div>
+        </div>
+      </div>
+
+      <div class="mcp-enterprise-patterns">
+        <div class="mcp-section-label">常见转换模式</div>
+        <div class="mcp-pattern-grid">
+          <div class="mcp-pattern-card"><span class="mcp-pattern-icon">🌐</span><h4>REST / OpenAPI Facade</h4><p>把一个或多个 HTTP endpoint 映射成 Tool。请求参数由 JSON Schema 描述，状态查询、分页和幂等键保留在 arguments 中。</p></div>
+          <div class="mcp-pattern-card"><span class="mcp-pattern-icon">🗃️</span><h4>数据库与知识库</h4><p>查询、表结构和文档可以分别暴露为 Tool、Resource 或 Resource Template。模型拿到的是被授权的结果，不是整库连接。</p></div>
+          <div class="mcp-pattern-card"><span class="mcp-pattern-icon">⏳</span><h4>长任务与事件</h4><p>同步 API 直接返回 complete；分钟级导入、发布和测试可选 Tasks 扩展，用 task handle 轮询。资源更新则通过订阅流通知。</p></div>
+          <div class="mcp-pattern-card"><span class="mcp-pattern-icon">🔁</span><h4>多协议网关</h4><p>一个 MCP Gateway 可以同时接 REST、GraphQL、gRPC 或内部 RPC，但每个上游都要有清晰的 schema、错误语义和权限映射。</p></div>
+        </div>
+      </div>
+
+      <div class="mcp-policy-board">
+        <div class="mcp-section-label">规则应该放在哪里？</div>
+        <div class="mcp-policy-layout">
+          <div class="mcp-policy-boundary"><div class="mcp-policy-title">Host / MCP Gateway</div><div class="mcp-policy-rule">✓ 工具 allowlist 与租户隔离</div><div class="mcp-policy-rule">✓ OAuth token audience / scope</div><div class="mcp-policy-rule">✓ JSON Schema 与参数约束</div><div class="mcp-policy-rule">✓ 脱敏、人工确认、审计</div></div>
+          <div class="mcp-policy-arrow" aria-hidden="true">→</div>
+          <div class="mcp-policy-boundary mcp-policy-upstream"><div class="mcp-policy-title">后端 API / 数据库</div><div class="mcp-policy-rule">只接收已验证的调用</div><div class="mcp-policy-rule">返回可解释的状态和错误</div><div class="mcp-policy-rule">按服务自身权限再次校验</div><div class="mcp-policy-rule">不把内部凭据交给模型</div></div>
+        </div>
+        <p class="mcp-policy-note"><strong>关键边界：</strong>协议发现回答“支持什么”，企业目录回答“在哪里”，策略层回答“谁能对哪个工具做什么”。三者可以部署在同一个 Gateway，也要在概念上分开。工具描述和 annotations 是不可信输入，不能代替策略引擎。</p>
+      </div>
+    </div>
+
+    <div class="mcp-rag-bridge fade-up" style="margin-top:34px">
+      <span class="mcp-rag-pill">MCP ≠ RAG</span>
+      <p><strong>MCP 是插座和协议，RAG 是一种用法。</strong>比如一个知识库 MCP Server 可以暴露 <code>search_docs</code> Tool，或者暴露可读取的 Resource；Host/Client 负责连接、授权和把结果放进上下文，模型再像前面 RAG 章节一样生成答案。</p>
     </div>
   </div>
 </section>

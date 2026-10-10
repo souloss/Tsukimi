@@ -592,6 +592,204 @@
 })();
 
 // ═══════════════════════════════════════════════
+// MCP SECTION — Stateless request + primitive switcher
+// ═══════════════════════════════════════════════
+(function() {
+  const events = Array.from(document.querySelectorAll('.mcp-event'));
+  const runBtn = document.getElementById('mcp-run-btn');
+  const title = document.getElementById('mcp-payload-title');
+  const code = document.querySelector('#mcp-payload-code code');
+  const note = document.getElementById('mcp-payload-note');
+  if (!events.length || !title || !code || !note) return;
+
+  const steps = [
+    {
+      title: 'Client → Server · 发现版本',
+      code: `{\n  "jsonrpc": "2.0",\n  "id": 1,\n  "method": "server/discover",\n  "params": {\n    "_meta": {\n      "io.modelcontextprotocol/protocolVersion": "2026-07-28",\n      "io.modelcontextprotocol/clientCapabilities": {},\n      "io.modelcontextprotocol/clientInfo": { "name": "Demo Host" }\n    }\n  }\n}`,
+      note: '服务器返回支持的协议版本与能力。2026-07-28 没有 initialize，也没有 Mcp-Session-Id；每个请求可以被任意实例独立处理。'
+    },
+    {
+      title: 'Client → Server · 请求自描述',
+      code: `{\n  "jsonrpc": "2.0",\n  "id": 2,\n  "method": "tools/list",\n  "params": {\n    "_meta": {\n      "io.modelcontextprotocol/protocolVersion": "2026-07-28",\n      "io.modelcontextprotocol/clientCapabilities": {}\n    }\n  }\n}`,
+      note: '版本与客户端能力放在每个请求的 _meta 中，客户端身份可选；Streamable HTTP 还可以把部分元数据映射到 HTTP 头，但正文才是事实来源。'
+    },
+    {
+      title: 'Server → Client · 返回能力清单',
+      code: `{\n  "jsonrpc": "2.0",\n  "id": 2,\n  "result": {\n    "resultType": "complete",\n    "tools": [{\n      "name": "search_docs",\n      "inputSchema": { "type": "object" }\n    }]\n  }\n}`,
+      note: 'Client 还可以分页发现 resources/list、resources/templates/list、prompts/list。能力和列表可按权限变化，结果可带 ttlMs/cacheScope，服务器应稳定排序，便于缓存。'
+    },
+    {
+      title: 'Client → Server · 模型选择后调用',
+      code: `{\n  "jsonrpc": "2.0",\n  "id": 3,\n  "method": "tools/call",\n  "params": {\n    "name": "search_docs",\n    "arguments": { "query": "MCP" },\n    "_meta": {\n      "io.modelcontextprotocol/protocolVersion": "2026-07-28",\n      "io.modelcontextprotocol/clientCapabilities": {}\n    }\n  }\n}`,
+      note: '模型决定是否使用工具，但 Host 可以在真正执行前要求用户确认。Tool 的输入由 JSON Schema 描述，调用可能读取数据、调用 API 或改变外部世界。'
+    },
+    {
+      title: 'Server → Client → 模型 · 结果或追问',
+      code: `{\n  "jsonrpc": "2.0",\n  "id": 3,\n  "result": {\n    "resultType": "complete",\n    "content": [{\n      "type": "text",\n      "text": "找到 3 篇相关文档"\n    }],\n    "structuredContent": { "count": 3 }\n  }\n}`,
+      note: '结果可以是文本、图片、音频、Resource 链接、嵌入 Resource 或结构化 JSON。若服务器需要用户输入，则返回 InputRequiredResult，Client 收集 inputResponses 后重试（MRTR）。'
+    }
+  ];
+
+  let current = 0;
+  let timer;
+  function showStep(index) {
+    current = index;
+    events.forEach((event, i) => {
+      const active = i === index;
+      event.classList.toggle('active', active);
+      event.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    const step = steps[index];
+    title.textContent = step.title;
+    code.textContent = step.code;
+    note.textContent = step.note;
+  }
+  events.forEach((event, index) => event.addEventListener('click', () => {
+    clearInterval(timer);
+    if (runBtn) { runBtn.disabled = false; runBtn.textContent = '▶ 播放流程'; }
+    showStep(index);
+  }));
+  if (runBtn) runBtn.addEventListener('click', () => {
+    clearInterval(timer);
+    let index = 0;
+    runBtn.disabled = true;
+    runBtn.textContent = '播放中…';
+    showStep(index);
+    timer = setInterval(() => {
+      index += 1;
+      if (index >= steps.length) {
+        clearInterval(timer);
+        runBtn.disabled = false;
+        runBtn.textContent = '▶ 再次播放';
+        return;
+      }
+      showStep(index);
+    }, 1800);
+  });
+
+  const primitiveData = {
+    prompt: {
+      icon: '💬', title: 'Prompts · 可复用的提示模板',
+      desc: '服务器提供带参数的提示和工作流，通常由用户在菜单或斜杠命令中主动选择。Client 通过 prompts/list 发现，再用 prompts/get 获取填好参数的消息；消息内容可含文本、图像、音频或 Resource 链接。',
+      example: '例：/review-code → “请审查这段代码的安全性，并按严重程度列出问题”'
+    },
+    resource: {
+      icon: '📄', title: 'Resources · 可读取的上下文',
+      desc: '服务器把文件、数据库模式、文档或业务数据用 URI 暴露出来。应用决定何时加入上下文；Client 用 resources/list、resources/read，也可订阅更新或读取 URI 模板。',
+      example: '例：file:///project/README.md → resources/read → 文本或 base64 二进制内容'
+    },
+    tool: {
+      icon: '⚙️', title: 'Tools · 模型可调用的函数',
+      desc: '服务器注册带名称、描述和 inputSchema 的函数，可选 outputSchema。模型可以根据用户问题选择它；Client 发 tools/call，结果支持文本、图片、音频、Resource 链接和 structuredContent。',
+      example: '例：search_docs({ query: "MCP" }) → 返回文档片段，再交给模型回答'
+    }
+  };
+  const icon = document.getElementById('mcp-primitive-icon');
+  const primitiveTitle = document.getElementById('mcp-primitive-title');
+  const primitiveDesc = document.getElementById('mcp-primitive-desc');
+  const primitiveExample = document.getElementById('mcp-primitive-example');
+  document.querySelectorAll('.mcp-primitive-tab').forEach(tab => tab.addEventListener('click', () => {
+    const data = primitiveData[tab.dataset.mcpPrimitive];
+    if (!data) return;
+    document.querySelectorAll('.mcp-primitive-tab').forEach(t => {
+      const active = t === tab;
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    icon.textContent = data.icon;
+    primitiveTitle.textContent = data.title;
+    primitiveDesc.textContent = data.desc;
+    primitiveExample.textContent = data.example;
+  }));
+})();
+
+// ═══════════════════════════════════════════════
+// MCP ENTERPRISE SECTION — Discovery, adapters and policy
+// ═══════════════════════════════════════════════
+(function() {
+  const events = Array.from(document.querySelectorAll('.mcp-enterprise-step'));
+  const runBtn = document.getElementById('mcp-enterprise-run');
+  const title = document.getElementById('mcp-enterprise-panel-title');
+  const text = document.getElementById('mcp-enterprise-panel-text');
+  const code = document.getElementById('mcp-enterprise-code');
+  if (!events.length || !title || !text || !code) return;
+
+  const steps = [
+    {
+      upstream: '企业服务目录',
+      title: '先找到“在哪里”',
+      text: '服务目录、DNS、服务网格或配置中心负责把 finance-search 映射到一个 MCP endpoint。这是企业部署层的发现；公共 MCP Registry 通过 server.json 为公开服务器提供元数据，内网服务通常需要自己的私有目录。找到地址不代表服务器已经同意你的调用。',
+      code: '目录记录：finance-search → https://mcp.example.com/finance'
+    },
+    {
+      upstream: 'MCP endpoint',
+      title: '再确认“说什么版本”',
+      text: 'Client 可以先调用 server/discover，也可以直接发一个带 _meta 的请求。服务器返回支持的协议版本和能力；如果版本不支持，客户端根据 UnsupportedProtocolVersion 重试共同版本。',
+      code: 'server/discover → 2026-07-28 · tools · resources · prompts'
+    },
+    {
+      upstream: 'REST / gRPC / SQL',
+      title: '适配器负责协议转换',
+      text: 'Gateway 把 tools/list 的 Tool 定义映射到 OpenAPI、gRPC 方法或 SQL 查询模板，再把 tools/call 的 arguments 转成上游请求。响应映射成 content、structuredContent 和 resultType；上游错误也要保留可解释的状态。',
+      code: 'tools/call(search_docs) → GET /v1/search?q=MCP → complete'
+    },
+    {
+      upstream: 'Policy engine',
+      title: '在边界执行规则',
+      text: '先验证 Bearer token 的签发者、受众和 scope，再按用户、租户、工具、参数和数据分类做 allowlist、脱敏、人工确认、限流和审计。HTTP 授权可通过 /.well-known/oauth-protected-resource 找到授权服务器，再读取 OAuth/OIDC 元数据，并按最小权限逐步申请 scope。',
+      code: '403 + WWW-Authenticate: insufficient_scope · scope="finance:read"'
+    },
+    {
+      upstream: '可观测执行',
+      title: '可取消、可追踪、可回放',
+      text: 'Gateway 处理超时、取消、重试、熔断和幂等键，记录调用者、工具、参数摘要、结果类型、延迟和 trace context。长任务使用 Tasks 扩展；资源变化使用订阅流通知。',
+      code: 'audit: tenant=acme tool=search_docs status=complete latency=182ms'
+    }
+  ];
+
+  let timer;
+  function showStep(index) {
+    const step = steps[index];
+    events.forEach((event, i) => {
+      const active = i === index;
+      event.classList.toggle('active', active);
+      event.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    document.getElementById('mcp-enterprise-upstream').textContent = step.upstream;
+    title.textContent = step.title;
+    text.textContent = step.text;
+    code.textContent = step.code;
+  }
+
+  events.forEach((event, index) => event.addEventListener('click', () => {
+    clearInterval(timer);
+    if (runBtn) {
+      runBtn.disabled = false;
+      runBtn.textContent = '▶ 播放接入流程';
+    }
+    showStep(index);
+  }));
+
+  if (runBtn) runBtn.addEventListener('click', () => {
+    clearInterval(timer);
+    let index = 0;
+    runBtn.disabled = true;
+    runBtn.textContent = '播放中…';
+    showStep(index);
+    timer = setInterval(() => {
+      index += 1;
+      if (index >= steps.length) {
+        clearInterval(timer);
+        runBtn.disabled = false;
+        runBtn.textContent = '▶ 再次播放';
+        return;
+      }
+      showStep(index);
+    }, 2100);
+  });
+})();
+
+// ═══════════════════════════════════════════════
 // RAG SECTION — Scatter canvas + demo animation
 // ═══════════════════════════════════════════════
 (function() {
