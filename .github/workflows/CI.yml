@@ -15,6 +15,37 @@ permissions:
   contents: read
 
 jobs:
+  changelog:
+    name: Generate change summary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.12.0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+      - name: Generate pull request changelog preview
+        if: github.event_name == 'pull_request'
+        run: pnpm changelog:generate -- --from "origin/${GITHUB_BASE_REF}" --to "$GITHUB_SHA" --output changelog-output/CHANGELOG.md
+      - name: Generate push changelog preview
+        if: github.event_name != 'pull_request'
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          base_sha="$BEFORE_SHA"
+          if [ -z "$base_sha" ] || [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then base_sha="HEAD^"; fi
+          pnpm changelog:generate -- --from "$base_sha" --to "$GITHUB_SHA" --output changelog-output/CHANGELOG.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: changelog-${{ github.run_id }}
+          path: changelog-output/CHANGELOG.md
+          retention-days: 30
+
   check:
     name: Astro Check
     runs-on: ubuntu-latest

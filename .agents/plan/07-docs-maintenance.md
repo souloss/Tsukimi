@@ -45,7 +45,7 @@
 
 ## DOC-006 变更日志（P3）
 
-- 状态：进行中
+- 状态：已完成
 
 - 目标：记录版本变更、性能变化、配置变化和破坏性修改。
 - 范围：建立 changelog 结构或自动生成脚本，区分 feature、fix、performance、breaking。
@@ -80,3 +80,8 @@
 ## 实施记录（2026-10-04）
 
 - 2026-10-04 实施：新增 ARC/data/performance/content-security ADR，quality dashboard 产物、状态枚举和审计记录格式已建立。DOC-006/007 仍需发布自动化和跨提交历史存储。
+
+## 实施记录（2026-10-10）
+
+- DOC-006 验收完成：新增 `pnpm changelog:generate`，按 conventional commit 类型生成 Breaking Changes、Added、Fixed、Performance、Security、Changed、Documentation、Tests 和 Maintenance 分组；支持 `!`/`BREAKING CHANGE`、提交链接和 token/key/password/带凭据 URL 脱敏。CI 对 push/PR 生成 30 天保留的 changelog artifact，不自动改写正式 `CHANGELOG.md`。
+- DOC-007 部分实施：质量报告继续输出 commit、性能矩阵和资源页数，并通过 CI artifact 保留；本轮补充指标来源和 changelog 报告说明。跨提交历史合并、基线差异和可视化仍需 CI 持久化存储，暂不关闭任务。

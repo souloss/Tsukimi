@@ -47,6 +47,7 @@
 		"perf:contracts": "node scripts/check-performance-contracts.mjs",
 		"resource-report": "node scripts/resource-report.mjs",
 		"quality-report": "node scripts/quality-dashboard.mjs",
+		"changelog:generate": "node scripts/generate-changelog.mjs",
 		"preview:drafts": "node scripts/preview-drafts.mjs",
 		"init-content": "node scripts/init-content-repo.js",
 		"optimize-images": "node scripts/optimize-images.mjs",

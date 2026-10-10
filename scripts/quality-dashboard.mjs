@@ -10,6 +10,9 @@ const resource = await readJson("docs/generated/resource-report.json");
 const report = {
 	generatedAt: new Date().toISOString(),
 	commit: process.env.GITHUB_SHA ?? "local",
+	ref: process.env.GITHUB_REF ?? process.env.GITHUB_REF_NAME ?? "local",
+	baseCommit: process.env.GITHUB_BASE_SHA ?? process.env.GITHUB_EVENT_BEFORE ?? null,
+	run: process.env.GITHUB_RUN_ID ?? null,
 	performance,
 	resourcePages: resource ? Object.keys(resource.pages ?? {}).length : 0,
 	checks: {
