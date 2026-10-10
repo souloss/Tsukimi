@@ -15,11 +15,14 @@ const { sortByLabel = "Sort", sortOptions = [] } = Astro.props;
 			<span class="text-sm text-[var(--text-muted)] mr-2">
 				{sortByLabel}:
 			</span>
-			<select class="anime-sort-select px-3 py-1.5 rounded-lg bg-[var(--btn-regular-bg)] border border-[var(--line-divider)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50">
+			<label>
+				<span class="sr-only">{sortByLabel}</span>
+				<select aria-label={sortByLabel} class="anime-sort-select px-3 py-1.5 rounded-lg bg-[var(--btn-regular-bg)] border border-[var(--line-divider)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50">
 				{sortOptions.map((option) => (
 					<option value={option.value}>{option.label}</option>
 				))}
-			</select>
+				</select>
+			</label>
 		</div>
 	)
 }

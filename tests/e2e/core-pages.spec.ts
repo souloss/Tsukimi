@@ -188,6 +188,26 @@ test.describe("core page regression", () => {
 		await expect(trigger).toBeFocused();
 	});
 
+	test("encrypted post exposes an accessible invalid password state", async ({
+		page,
+	}) => {
+		await page.goto("/posts/encrypted-post/", {
+			waitUntil: "domcontentloaded",
+		});
+		const input = page.locator("#password-input");
+		await expect(input).toBeVisible();
+		await expect(page.locator('label[for="password-input"]')).toBeAttached();
+		await expect(input).toHaveAttribute("aria-invalid", "false");
+
+		await input.fill("definitely-not-the-password");
+		await page.locator("#unlock-btn").click();
+		await expect(page.locator("#password-error")).toBeVisible({
+			timeout: 15_000,
+		});
+		await expect(input).toHaveAttribute("aria-invalid", "true");
+		await expect(input).toHaveAttribute("aria-describedby", "password-error");
+	});
+
 	test("primary controls meet the mobile touch target", async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
 		await page.goto("/", { waitUntil: "domcontentloaded" });
