@@ -111,7 +111,7 @@
 
 - 已验证：`pnpm build`、`pnpm perf:budget`（142 页，33.8 MiB/45.0 MiB）、`pnpm perf:matrix`（6 路由、4 profile）、`pnpm perf:contracts`、`pnpm check-images`、`pnpm check-fonts`、`pnpm check-motion-tokens`、`pnpm test:e2e`（18/18）。移动 Lighthouse（`pnpm perf:lighthouse:mobile`）通过，性能 0.99、无障碍/最佳实践/SEO 均为 1。
 - 已完成项：PERF-003、PERF-008、PERF-010。
-- 未完成边界：图片审计仍报告 19 个缺少固有尺寸的图片；性能矩阵目前是构建体积和预算元数据，不是每条路由的真实 Lighthouse/Web Vitals 采集；`performance-observer` 已支持默认关闭、采样率和 endpoint 的 opt-in 上报；第三方请求、转场内存、可重复构建和历史趋势仍没有完整 CI 门禁。Lighthouse 已改为可配置预算，默认桌面 0.95、移动 0.90。
+- 未完成边界：性能矩阵目前是构建体积和预算元数据，不是每条路由的真实 Lighthouse/Web Vitals 采集；`performance-observer` 已支持默认关闭、采样率和 endpoint 的 opt-in 上报；第三方请求、转场内存、可重复构建和历史趋势仍没有完整 CI 门禁。图片审计中的外部/动态图片继续作为显式例外统计。Lighthouse 已改为可配置预算，默认桌面 0.95、移动 0.90。
 
 ## 后续发现（审计更新）
 
@@ -120,3 +120,4 @@
 ## 实施记录（2026-10-04）
 
 - 2026-10-04 实施：Playwright 已采集 FCP/LCP/CLS/TTFB/INP 预算并覆盖 375/390/768/1024；新增可配置 Lighthouse 路由矩阵和 opt-in sampled reporting。PERF-001/004/005/006/007/009/011/012 仍需真实部署或历史数据闭环。
+- 2026-10-10 实施：图片审计区分本地和外部/动态图片尺寸缺口；当前生产构建 248 张图片中本地图片固有尺寸缺口为 0，19 个缺口均为外部 URL、PlantUML 或动态 Markdown 资源并保留计数。验证：`pnpm check-images`、`pnpm test`。

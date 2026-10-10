@@ -25,6 +25,8 @@ export async function auditImages({ distRoot = defaultDistRoot } = {}) {
 	const errors = [];
 	let imageCount = 0;
 	let missingDimensions = 0;
+	let missingLocalDimensions = 0;
+	let missingExternalDimensions = 0;
 	let missingDecoding = 0;
 	let localRasterCount = 0;
 	let legacyRasterCount = 0;
@@ -47,6 +49,8 @@ export async function auditImages({ distRoot = defaultDistRoot } = {}) {
 			if (attributes.decoding !== "async") missingDecoding += 1;
 			if (!("width" in attributes) && !("height" in attributes)) {
 				missingDimensions += 1;
+				if (isLocalRaster(src)) missingLocalDimensions += 1;
+				else missingExternalDimensions += 1;
 			}
 			if (isLocalRaster(src)) {
 				localRasterCount += 1;
@@ -60,6 +64,8 @@ export async function auditImages({ distRoot = defaultDistRoot } = {}) {
 		pageCount: htmlFiles.length,
 		imageCount,
 		missingDimensions,
+		missingLocalDimensions,
+		missingExternalDimensions,
 		missingDecoding,
 		localRasterCount,
 		legacyRasterCount,
@@ -79,7 +85,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 			: "0.0";
 		console.log(
 			`Image audit passed: ${report.imageCount} images across ${report.pageCount} pages; ` +
-			`${report.missingDimensions} without intrinsic dimensions; ` +
+			`${report.missingDimensions} without intrinsic dimensions ` +
+			`(${report.missingLocalDimensions} local, ${report.missingExternalDimensions} external/dynamic); ` +
 			`${report.missingDecoding} use the browser decoding default; ` +
 			`${legacyRate}% of local raster references use png/jpg/gif.`,
 		);

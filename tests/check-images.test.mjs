@@ -22,6 +22,8 @@ test("audits image loading metadata in generated HTML", async () => {
 	assert.deepEqual(report.errors, []);
 	assert.equal(report.imageCount, 2);
 	assert.equal(report.missingDimensions, 1);
+	assert.equal(report.missingLocalDimensions, 0);
+	assert.equal(report.missingExternalDimensions, 1);
 });
 
 test("reports missing image loading metadata", async () => {
@@ -32,4 +34,6 @@ test("reports missing image loading metadata", async () => {
 	assert.equal(report.errors.length, 1);
 	assert.match(report.errors.join("\n"), /missing loading/);
 	assert.equal(report.missingDecoding, 1);
+	assert.equal(report.missingLocalDimensions, 1);
+	assert.equal(report.missingExternalDimensions, 0);
 });
