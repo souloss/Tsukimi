@@ -601,4 +601,20 @@ class MusicPlayerStore {
 	}
 }
 
-export const musicPlayerStore = new MusicPlayerStore();
+function getMusicPlayerStore(): MusicPlayerStore {
+	if (typeof window === "undefined") {
+		return new MusicPlayerStore();
+	}
+
+	const sharedWindow = window as Window & {
+		__tsukimiMusicPlayerStore?: MusicPlayerStore;
+	};
+	if (!sharedWindow.__tsukimiMusicPlayerStore) {
+		sharedWindow.__tsukimiMusicPlayerStore = new MusicPlayerStore();
+	}
+	return sharedWindow.__tsukimiMusicPlayerStore;
+}
+
+// Astro can hydrate the FAB and player as separate islands. Keep one browser
+// store so both islands control the same audio element and UI state.
+export const musicPlayerStore = getMusicPlayerStore();

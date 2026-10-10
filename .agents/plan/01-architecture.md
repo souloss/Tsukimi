@@ -80,7 +80,7 @@
 
 - 已验证：`pnpm check-component-boundaries`（274 个组件文件）、`pnpm check-component-cycles`、`pnpm check-component-size`、`pnpm check-feature-gates`、`pnpm check-feature-gate-fixtures`、`pnpm check-config`、`pnpm check-route-registry`、`pnpm type-check`、`pnpm check`、`pnpm test`。
 - 已完成项：ARC-002、ARC-004、ARC-005、ARC-006、ARC-009。
-- 未完成边界：ARC-001 仍没有完整的 molecules/barrel 体系；ARC-003 尚无每个 feature 的独立入口和隔离测试；ARC-008 尚无 Swup、多标签页和迁移失败路径的浏览器验证。
+- 未完成边界：ARC-001 仍没有完整的 molecules/barrel 体系；ARC-003 尚无每个 feature 的独立入口和隔离测试；ARC-008 的音乐播放器跨 island 状态边界已闭环，但 Swup、多标签页和迁移失败路径仍需验证。
 
 ## 后续发现（审计更新）
 
@@ -89,3 +89,5 @@
 ## 实施记录（2026-10-04）
 
 - 2026-10-04 实施：`scripts/external-request.mjs` 与数据快照协议已覆盖 feed/Bangumi/Bilibili 的超时、重试和回退；`pnpm test`、`pnpm build`、`pnpm check` 通过。ARC-001/003/008 仍保留边界项，避免把已有稳定入口误记为完整分层。
+- 2026-10-10 实施：音乐播放器 store 改为浏览器 window 单例，解决 `MusicFabButton` 与 `MusicPlayer` 两个 Astro island 状态分裂；全局音量快捷键跳过按钮、链接和菜单交互目标。启用播放器配置下 `pnpm test:e2e` 21/21 通过，`pnpm type-check` 通过。ARC-008 保持进行中，等待 Swup、多标签页和迁移失败路径验收。
+- 2026-10-10 补充：功能门禁只扫描 HTML 实际引用的客户端资源，避免禁用功能的 orphan chunk 造成误报；干净默认关闭构建的 `pnpm check-feature-gates` 与 fixture 检查通过。

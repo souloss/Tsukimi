@@ -42,8 +42,13 @@ const html = contents
 	.filter(({ file }) => file.endsWith(".html"))
 	.map(({ text }) => text)
 	.join("\n");
-const clientArtifacts = contents
-	.filter(({ file }) => /\.(?:js|mjs|css)$/.test(file))
+const referencedAssets = new Set(
+	[...html.matchAll(/(?:src|href)=["']([^"']+\.(?:js|mjs|css))["']/g)]
+		.map(([, asset]) => path.join(distRoot, decodeURIComponent(asset.replace(/^\//, ""))))
+		.map((asset) => path.normalize(asset)),
+);
+const referencedClientArtifacts = contents
+	.filter(({ file }) => referencedAssets.has(path.normalize(file)))
 	.map(({ text }) => text)
 	.join("\n");
 const errors: string[] = [];
@@ -59,9 +64,9 @@ const gates = [
 		name: "music",
 		enabled: await configuredFlag("musicConfig", musicPlayerConfig.enable),
 		markers: ['class="music-player-fab-shell"', 'class="music-sidebar-widget"'],
-		moduleMarkers: ["MusicPlayer"],
+		moduleMarkers: ["music-player-fab-shell", "MusicPlayer"],
 		scope: html,
-		moduleScope: clientArtifacts,
+		moduleScope: referencedClientArtifacts,
 	},
 	{
 		name: "pio",
@@ -69,7 +74,7 @@ const gates = [
 		markers: ['id="pio-container"', 'src="/pio/models/'],
 		moduleMarkers: ["Pio"],
 		scope: html,
-		moduleScope: clientArtifacts,
+		moduleScope: referencedClientArtifacts,
 	},
 	{
 		name: "context-menu",
@@ -77,7 +82,7 @@ const gates = [
 		markers: ['data-context-menu', 'class="context-menu"'],
 		moduleMarkers: ["ContextMenu"],
 		scope: html,
-		moduleScope: clientArtifacts,
+		moduleScope: referencedClientArtifacts,
 	},
 	{
 		name: "texture",

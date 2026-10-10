@@ -188,6 +188,44 @@ test.describe("core page regression", () => {
 		await expect(trigger).toBeFocused();
 	});
 
+	test("music FAB opens with keyboard and toggles the playlist", async ({
+		page,
+	}) => {
+		await page.goto("/", { waitUntil: "domcontentloaded" });
+		const fab = page.locator("button.music-fab");
+		await fab
+			.waitFor({ state: "attached", timeout: 5_000 })
+			.catch(() => undefined);
+		test.skip(
+			(await fab.count()) === 0,
+			"music player is disabled by the local configuration override",
+		);
+		await expect(fab).toBeVisible();
+		await expect(fab).toHaveAttribute("aria-expanded", "false");
+		await fab.focus();
+		await fab.press("Enter");
+		await expect(fab).toHaveAttribute("aria-expanded", "true");
+
+		const panel = page.locator("#music-player-panel");
+		await expect(panel).toBeVisible();
+		await expect(panel).toHaveAttribute("role", "region");
+
+		const playlistToggle = panel.locator("button.list-btn");
+		await expect(playlistToggle).toHaveAccessibleName(
+			/playlist|播放列表|プレイリスト/i,
+		);
+		await playlistToggle.click();
+		const playlist = panel.locator('[role="listbox"]');
+		const playlistDrawer = panel.locator(".playlist-drawer");
+		await expect(playlistDrawer).toHaveAttribute("aria-hidden", "false");
+		await expect(playlist).toHaveAccessibleName(
+			/playlist|播放列表|プレイリスト/i,
+		);
+		await playlistToggle.click();
+		await expect(playlistDrawer).toHaveAttribute("aria-hidden", "true");
+		await expect(playlistDrawer).toHaveAttribute("inert", "");
+	});
+
 	test("theme switch persists across a reload", async ({ page }) => {
 		await page.goto("/", { waitUntil: "domcontentloaded" });
 		await page.evaluate(() => localStorage.removeItem("theme"));
@@ -275,14 +313,24 @@ test.describe("core page regression", () => {
 		await page.goto("/", { waitUntil: "domcontentloaded" });
 		const menu = page.locator("#nav-menu-switch");
 		if (await menu.isVisible()) {
+			await expect(menu).toHaveAttribute("aria-expanded", "false");
 			await menu.focus();
 			await page.keyboard.press("Enter");
 			await expect(page.locator("#nav-menu-panel")).toBeVisible();
+			await expect(menu).toHaveAttribute("aria-expanded", "true");
+			await expect(
+				page.locator("#nav-menu-panel a, #nav-menu-panel button").first(),
+			).toBeFocused();
 			await page.keyboard.press("Escape");
+			await expect(page.locator("#nav-menu-panel")).toBeHidden();
+			await expect(menu).toHaveAttribute("aria-expanded", "false");
+			await expect(menu).toBeFocused();
 		}
 		const settings = page.locator("#display-settings-switch");
+		await expect(settings).toHaveAttribute("aria-expanded", "false");
 		await settings.focus();
 		await page.keyboard.press("Enter");
+		await expect(settings).toHaveAttribute("aria-expanded", "true");
 		const dialog = page.locator(
 			'[role="dialog"][aria-labelledby="display-setting-title"]',
 		);

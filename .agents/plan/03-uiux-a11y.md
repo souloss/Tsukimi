@@ -123,7 +123,7 @@
 
 ## 后续发现（审计更新）
 
-- 后续发现：保留现有 Axe 排除的第三方评论边界，继续补充 UX-003/004/008/009/010 的错误态、播放器和触控路径。
+- 后续发现：保留现有 Axe 排除的第三方评论边界，继续补充 UX-003/004/008/009/010 的 TOC 键盘、焦点恢复、错误态、播放器手势和全主题审计。
 
 ## 实施记录（2026-10-04）
 
@@ -132,3 +132,5 @@
 - 2026-10-10 验收：源码审计确认搜索、设置、知识图谱、排序和密码控件均具备可访问名称；`pnpm check-a11y-contracts`、`pnpm check-html-structure`、`pnpm test:e2e`（20/20）通过。UX-002 标记完成，第三方评论容器继续按既有 Axe 排除边界维护。
 - 2026-10-10 实施：音乐播放器错误提示增加 `role=alert`、assertive live region、可访问关闭按钮；Twikoo/Waline 加载容器增加 polite live region，并扩展 a11y contract 至 9 项。验证：`pnpm check-a11y-contracts`、`pnpm check`、`pnpm type-check`、`pnpm test`（47/47）。UX-008 仍需完整错误/空状态重试路径。
 - 2026-10-10 实施：音乐播放器控制按钮统一使用现有 i18n accessible name；浮动入口补充 `aria-expanded`/`aria-controls`，播放列表折叠抽屉同步 `aria-hidden` 与 `inert`，进度条、歌曲项和播放列表均移除硬编码 accessible name。验证：`pnpm check-a11y-contracts`、`pnpm check-html-structure`、`pnpm test:e2e`（20/20）、`pnpm build`。播放器跨 island 的完整打开/播放列表路径仍待独立状态契约和真实启用配置验证。
+- 2026-10-10 实施：播放器启用配置下通过 FAB 键盘激活、播放列表展开/折叠、移动导航和设置键盘路径；共享浏览器 store 修复跨 island 状态同步，全局音量快捷键不再拦截按钮 Enter。`pnpm test:e2e` 21/21、`pnpm check`、`pnpm type-check` 通过。UX-003 仍需 TOC 全键位覆盖；UX-004 仍需抽屉/转场焦点恢复和 focusable-hidden 全面验收。
+- 2026-10-10 补充：移动导航按钮补充 `aria-controls`/`aria-expanded`，打开后聚焦首个菜单项，Escape/外部关闭恢复按钮焦点；设置面板回归同时断言展开状态。专项键盘用例通过。

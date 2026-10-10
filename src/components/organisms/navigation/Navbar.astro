@@ -148,7 +148,7 @@ const iconWebpSrc = hasIconPngFallback
                     </button>
             )}
             <ThemeSwitch client:idle></ThemeSwitch>
-            <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
+            <button aria-label="Menu" name="Nav Menu" aria-controls="nav-menu-panel" aria-expanded="false" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
                 <Icon name="material-symbols:unfold-more" class="text-[1.25rem]"></Icon>
             </button>
         </div>
@@ -175,6 +175,14 @@ async function loadButtonScript() {
         };
         const handleKeydown = async (event: KeyboardEvent) => {
             const panel = document.getElementById("display-setting");
+            const menuPanel = document.getElementById("nav-menu-panel");
+            if (event.key === "Escape" && menuPanel && !menuPanel.classList.contains("float-panel-closed")) {
+                event.preventDefault();
+                await panelManager.closePanel("nav-menu-panel");
+                menuBtn?.setAttribute("aria-expanded", "false");
+                menuBtn?.focus();
+                return;
+            }
             if (!panel || panel.classList.contains("float-panel-closed")) return;
             if (event.key === "Escape") {
                 event.preventDefault();
@@ -200,6 +208,10 @@ async function loadButtonScript() {
         const handlePanelClosed = (event: Event) => {
             const panelEvent = event as CustomEvent<{ id?: string }>;
             if (panelEvent.detail?.id === "display-setting") settingBtn?.setAttribute("aria-expanded", "false");
+            if (panelEvent.detail?.id === "nav-menu-panel") {
+                menuBtn?.setAttribute("aria-expanded", "false");
+                menuBtn?.focus();
+            }
         };
         document.addEventListener("tsukimi:panel-closed", handlePanelClosed);
 		(window as any).__tsukimiThemePanelCleanup = () => {
@@ -218,9 +230,17 @@ async function loadButtonScript() {
 
         if (menuBtn) {
             menuBtn.onclick = async function () {
-                await panelManager.togglePanel('nav-menu-panel');
+                const isOpen = await panelManager.togglePanel('nav-menu-panel');
+                menuBtn.setAttribute('aria-expanded', String(isOpen));
+                if (isOpen) {
+                    const first = document.querySelector<HTMLElement>('#nav-menu-panel a, #nav-menu-panel button');
+                    first?.focus();
+                } else {
+                    menuBtn.focus();
+                }
             };
         }
+
     } catch (error) {
         console.error('Failed to load panel manager:', error);
         // 备用逻辑：直接操作 DOM class

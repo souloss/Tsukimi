@@ -138,7 +138,10 @@ function handleVolumeKeyDown(event: KeyboardEvent) {
 	if (
 		target?.tagName === "INPUT" ||
 		target?.tagName === "TEXTAREA" ||
-		target?.contentEditable === "true"
+		target?.contentEditable === "true" ||
+		target?.closest(
+			"button, a, select, option, [role='button'], [role='menuitem']",
+		)
 	) {
 		return;
 	}
