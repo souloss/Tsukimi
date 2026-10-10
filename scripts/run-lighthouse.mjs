@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { get } from "node:http";
 import { join } from "node:path";
 import { spawn, spawnSync } from "node:child_process";
 
@@ -45,7 +46,7 @@ try {
 		performance: Number(process.env.LIGHTHOUSE_MIN_PERFORMANCE ?? (formFactor === "mobile" ? 0.9 : 0.95)),
 		accessibility: 1,
 		"best-practices": 1,
-		seo: 1,
+		seo: Number(process.env.LIGHTHOUSE_MIN_SEO ?? 1),
 	};
 	let report;
 	let bestScore = -1;
@@ -143,10 +144,17 @@ function findPlaywrightChrome() {
 }
 
 async function waitForServer(target) {
-	for (let attempt = 0; attempt < 60; attempt += 1) {
+	for (let attempt = 0; attempt < 120; attempt += 1) {
 		try {
-			const response = await fetch(target);
-			if (response.ok) return;
+			const response = await new Promise((resolve, reject) => {
+				const request = get(target, (result) => {
+					result.resume();
+					resolve(result);
+				});
+				request.setTimeout(1000, () => request.destroy(new Error("Request timed out")));
+				request.on("error", reject);
+			});
+			if (response.statusCode >= 200 && response.statusCode < 400) return;
 		} catch {
 			// The preview process is still starting.
 		}
