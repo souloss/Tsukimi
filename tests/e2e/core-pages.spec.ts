@@ -188,6 +188,37 @@ test.describe("core page regression", () => {
 		await expect(trigger).toBeFocused();
 	});
 
+	test("theme switch persists across a reload", async ({ page }) => {
+		await page.goto("/", { waitUntil: "domcontentloaded" });
+		await page.evaluate(() => localStorage.removeItem("theme"));
+		await page.reload({ waitUntil: "domcontentloaded" });
+		const switcher = page.locator("#scheme-switch");
+		await expect(switcher).toBeVisible();
+		const before = await page
+			.locator("html")
+			.evaluate((element) => element.classList.contains("dark"));
+		await switcher.click();
+		await expect
+			.poll(() =>
+				page
+					.locator("html")
+					.evaluate((element) => element.classList.contains("dark")),
+			)
+			.toBe(!before);
+		await expect
+			.poll(() => page.evaluate(() => localStorage.getItem("theme")))
+			.toBe(before ? "light" : "dark");
+		await page.reload({ waitUntil: "domcontentloaded" });
+		await expect
+			.poll(() =>
+				page
+					.locator("html")
+					.evaluate((element) => element.classList.contains("dark")),
+			)
+			.toBe(!before);
+		await page.evaluate(() => localStorage.removeItem("theme"));
+	});
+
 	test("encrypted post exposes an accessible invalid password state", async ({
 		page,
 	}) => {
