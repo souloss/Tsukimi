@@ -491,7 +491,7 @@ html {
     @apply text-black/60 dark:text-white/60;
   }
   .text-30 {
-    @apply text-black/30 dark:text-white/30;
+    @apply text-black/55 dark:text-white/65;
   }
   .text-25 {
     @apply text-black/25 dark:text-white/25;

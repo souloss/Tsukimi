@@ -155,21 +155,21 @@ onMount(() => {
 	.description {
 		margin: 0;
 		font-size: 0.875rem;
-		color: rgba(0, 0, 0, 0.4);
+		color: rgba(0, 0, 0, 0.7);
 	}
 
 	:global(.dark) .description {
-		color: rgba(255, 255, 255, 0.4);
+		color: rgba(255, 255, 255, 0.75);
 	}
 
 	.hint-text {
 		margin: 0;
 		font-size: 0.75rem;
-		color: rgba(0, 0, 0, 0.5);
+		color: rgba(0, 0, 0, 0.65);
 	}
 
 	:global(.dark) .hint-text {
-		color: rgba(255, 255, 255, 0.5);
+		color: rgba(255, 255, 255, 0.75);
 	}
 
 	.password-form {

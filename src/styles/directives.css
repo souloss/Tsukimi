@@ -515,8 +515,8 @@
 /* ── DEL (inline) ──────────────────────────────────────────────── */
 
 .md-tag-del {
+	color: var(--text-primary);
   text-decoration: line-through;
-  opacity: 0.5;
 }
 
 /* ── ALIGN ─────────────────────────────────────────────────────── */
@@ -2940,17 +2940,17 @@ abbr[title]:hover::after {
 
 .md-field-badge-required {
   background: color-mix(in srgb, oklch(0.65 0.17 145) 15%, transparent);
-  color: oklch(0.55 0.17 145);
+	color: #166534;
 }
 
 .md-field-badge-optional {
   background: color-mix(in srgb, oklch(0.65 0.15 250) 15%, transparent);
-  color: oklch(0.55 0.15 250);
+	color: #1d4ed8;
 }
 
 .md-field-badge-deprecated {
   background: color-mix(in srgb, oklch(0.6 0.18 25) 15%, transparent);
-  color: oklch(0.5 0.18 25);
+	color: #b91c1c;
 }
 
 .md-field-description {

@@ -32,7 +32,7 @@ permalink: /spec/friends/
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">站点名称</p>
       <p class="text-xs font-medium truncate">Tsukimi Blog</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="Tsukimi Blog">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="Tsukimi Blog" aria-label="复制站点名称" title="复制站点名称">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>
@@ -42,7 +42,7 @@ permalink: /spec/friends/
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">站点描述</p>
       <p class="text-xs font-medium truncate">一个使用 Tsukimi 主题的 Astro 博客</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="一个使用 Tsukimi 主题的 Astro 博客">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="一个使用 Tsukimi 主题的 Astro 博客" aria-label="复制站点描述" title="复制站点描述">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>
@@ -52,7 +52,7 @@ permalink: /spec/friends/
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">站点链接</p>
       <p class="text-xs font-medium truncate">https://tsukimi.souloss.cn/</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="https://tsukimi.souloss.cn/">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="https://tsukimi.souloss.cn/" aria-label="复制站点链接" title="复制站点链接">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>
@@ -62,7 +62,7 @@ permalink: /spec/friends/
       <p class="text-[0.65rem] text-neutral-400 dark:text-neutral-500 mb-0.5">头像链接</p>
       <p class="text-xs font-medium truncate">/favicon.png</p>
     </div>
-    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="/favicon.png">
+    <button class="friend-copy-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="/favicon.png" aria-label="复制头像链接" title="复制头像链接">
       <iconify-icon icon="material-symbols:content-copy-outline" class="text-sm"></iconify-icon>
     </button>
   </div>
@@ -104,7 +104,7 @@ permalink: /spec/friends/
     <div class="pb-4">
       <p class="font-semibold text-sm mb-1">评论区留言申请</p>
       <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed mb-2">申请模板，把内容复制修改后到评论区中发送</p>
-      <div class="relative rounded-lg bg-black/5 dark:bg-white/5 px-3 py-2 pr-9 text-[0.7rem] leading-relaxed overflow-x-auto whitespace-pre"><button class="friend-copy-btn absolute top-1.5 right-1.5 w-6 h-6 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" data-copy="站点名称：您的站点名称
+      <div class="relative rounded-lg bg-black/5 dark:bg-white/5 px-3 py-2 pr-9 text-[0.7rem] leading-relaxed overflow-x-auto whitespace-pre"><button class="friend-copy-btn absolute top-1.5 right-1.5 w-6 h-6 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 hover:opacity-80 transition-opacity cursor-pointer" aria-label="复制友链申请模板" title="复制友链申请模板" data-copy="站点名称：您的站点名称
 站点描述：您的站点描述
 站点链接：您的站点链接
 头像链接：您的站点头像"><iconify-icon icon="material-symbols:content-copy-outline" class="text-xs"></iconify-icon></button>站点名称：您的站点名称

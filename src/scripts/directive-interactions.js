@@ -469,7 +469,7 @@ function initCodeTree() {
     files.forEach((file) => {
       const active = file === fileInfo;
       file.classList.toggle('md-code-tree-file-active', active);
-      file.setAttribute('aria-selected', String(active));
+    file.setAttribute('aria-pressed', String(active));
       file.tabIndex = active ? 0 : -1;
     });
     container.querySelectorAll('.md-code-tree-panel').forEach((panel) => {

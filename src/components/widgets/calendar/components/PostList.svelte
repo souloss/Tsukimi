@@ -33,9 +33,9 @@ function getTitleClass(isCurrentPost: boolean): string {
 
 function getDateClass(isCurrentPost: boolean): string {
 	if (isCurrentPost) {
-		return "text-xs ml-2 whitespace-nowrap transition-colors text-[var(--primary)]/80";
+		return "text-xs ml-2 whitespace-nowrap transition-colors text-neutral-700 dark:text-neutral-200";
 	}
-	return "text-xs ml-2 whitespace-nowrap transition-colors text-neutral-400 group-hover:text-[var(--primary)]/70";
+	return "text-xs ml-2 whitespace-nowrap transition-colors text-neutral-600 dark:text-neutral-300 group-hover:text-[var(--primary)]";
 }
 </script>
 

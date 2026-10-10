@@ -330,8 +330,8 @@ onMount(() => {
 							<span
 								class="text-xs ml-2 whitespace-nowrap transition-colors
 								{isCurrentPost
-									? 'text-[var(--primary)]/80'
-									: 'text-neutral-400 group-hover:text-[var(--primary)]/70'}"
+					? 'text-neutral-700 dark:text-neutral-200'
+					: 'text-neutral-600 dark:text-neutral-300 group-hover:text-[var(--primary)]'}"
 							>
 								{dateStr}
 							</span>

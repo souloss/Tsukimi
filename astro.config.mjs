@@ -150,6 +150,11 @@ export default defineConfig({
 			},
 			styleOverrides: {
 				codeBackground: "var(--codeblock-bg)",
+				gutterForeground: "var(--text-secondary)",
+				lineNumbers: {
+					foreground: "var(--text-secondary)",
+					highlightForeground: "var(--text-primary)",
+				},
 				borderRadius: "0.75rem",
 				borderColor: "none",
 				codeFontSize: "0.875rem",

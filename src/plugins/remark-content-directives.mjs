@@ -275,29 +275,30 @@ function getIconSvg(name, size = "1em") {
 }
 
 const NAMED_COLORS = {
-	red: "#ef4444",
-	orange: "#f97316",
-	yellow: "#eab308",
-	green: "#22c55e",
-	blue: "#3b82f6",
-	purple: "#a855f7",
-	pink: "#ec4899",
-	cyan: "#06b6d4",
+	// Keep text-bearing directive colors dark enough for WCAG AA on light cards.
+	red: "#b91c1c",
+	orange: "#c2410c",
+	yellow: "#a16207",
+	green: "#15803d",
+	blue: "#1d4ed8",
+	purple: "#7e22ce",
+	pink: "#be185d",
+	cyan: "#0e7490",
 	accent: "var(--accent-color,#4a7c59)",
 	// Semantic type aliases for badge/callout use
-	tip: "#22c55e",
-	info: "#3b82f6",
-	note: "#3b82f6",
-	warning: "#f97316",
-	caution: "#ef4444",
-	danger: "#ef4444",
-	success: "#22c55e",
-	important: "#a855f7",
-	question: "#3b82f6",
-	quote: "#06b6d4",
-	bug: "#ef4444",
+	tip: "#15803d",
+	info: "#1d4ed8",
+	note: "#1d4ed8",
+	warning: "#c2410c",
+	caution: "#b91c1c",
+	danger: "#b91c1c",
+	success: "#15803d",
+	important: "#7e22ce",
+	question: "#4338ca",
+	quote: "#0e7490",
+	bug: "#b91c1c",
 	example: "#6b7280",
-	failure: "#ef4444",
+	failure: "#b91c1c",
 };
 
 /** Resolve color name to CSS value */
@@ -725,28 +726,28 @@ const EMOJI_UNICODE_MAP = {
 // ---------------------------------------------------------------------------
 const CALLOUT_COLORS = {
 	info: {
-		bar: "#3b82f6",
+		bar: "#1d4ed8",
 		bg: "rgba(59,130,246,0.08)",
 		border: "rgba(59,130,246,0.22)",
 	},
 	tip: {
-		bar: "#10b981",
+		bar: "#15803d",
 		bg: "rgba(16,185,129,0.08)",
 		border: "rgba(16,185,129,0.22)",
 	},
 	warn: {
-		bar: "#f59e0b",
+		bar: "#c2410c",
 		bg: "rgba(245,158,11,0.08)",
 		border: "rgba(245,158,11,0.22)",
 	},
 	danger: {
-		bar: "#dc2626",
+		bar: "#b91c1c",
 		bg: "rgba(220,38,38,0.08)",
 		border: "rgba(220,38,38,0.22)",
 	},
 	note: null,
 	question: {
-		bar: "#6366f1",
+		bar: "#4338ca",
 		bg: "rgba(99,102,241,0.08)",
 		border: "rgba(99,102,241,0.22)",
 	},
@@ -756,32 +757,32 @@ const CALLOUT_COLORS = {
 		border: "rgba(107,114,128,0.22)",
 	},
 	bug: {
-		bar: "#dc2626",
+		bar: "#b91c1c",
 		bg: "rgba(220,38,38,0.08)",
 		border: "rgba(220,38,38,0.22)",
 	},
 	example: {
-		bar: "#8b5cf6",
+		bar: "#7e22ce",
 		bg: "rgba(139,92,246,0.08)",
 		border: "rgba(139,92,246,0.22)",
 	},
 	success: {
-		bar: "#10b981",
+		bar: "#15803d",
 		bg: "rgba(16,185,129,0.08)",
 		border: "rgba(16,185,129,0.22)",
 	},
 	failure: {
-		bar: "#dc2626",
+		bar: "#b91c1c",
 		bg: "rgba(220,38,38,0.08)",
 		border: "rgba(220,38,38,0.22)",
 	},
 	caution: {
-		bar: "#f97316",
+		bar: "#c2410c",
 		bg: "rgba(249,115,22,0.08)",
 		border: "rgba(249,115,22,0.22)",
 	},
 	important: {
-		bar: "#7c3aed",
+		bar: "#7e22ce",
 		bg: "rgba(124,58,237,0.08)",
 		border: "rgba(124,58,237,0.22)",
 	},
@@ -1758,7 +1759,9 @@ function processBlockDirective(node) {
 				(copyLabel ? `<span class="md-copy-label">${copyLabel}</span>` : "") +
 				'<input id="' +
 				copyUid +
-				'" readonly value="' +
+				'" readonly aria-label="' +
+				escapeHtml(copyLabel || "Copyable content") +
+				'" value="' +
 				safeText +
 				'" class="md-copy-input"><button type="button" class="md-copy-btn" aria-label="Copy" title="Copy" data-copy-target="' +
 				copyUid +
@@ -2221,11 +2224,11 @@ function processBlockDirective(node) {
 						uid +
 						"-file-" +
 						idx +
-						'" role="tab" aria-controls="' +
+						'" aria-controls="' +
 						uid +
 						"-panel-" +
 						idx +
-						'" aria-selected="' +
+						'" aria-pressed="' +
 						(isActive ? "true" : "false") +
 						'" tabindex="' +
 						(isActive ? "0" : "-1") +
@@ -2306,7 +2309,7 @@ function processBlockDirective(node) {
 								"md-code-tree-panel" +
 								(isActive ? " md-code-tree-panel-active" : ""),
 							id: `${uid}-panel-${pi}`,
-							role: "tabpanel",
+							role: "region",
 							"aria-labelledby": `${uid}-file-${pi}`,
 							"aria-hidden": isActive ? "false" : "true",
 						},
@@ -2328,7 +2331,7 @@ function processBlockDirective(node) {
 							(treeTitle
 								? `<div class="md-code-tree-title">${escapeHtml(treeTitle)}</div>`
 								: "") +
-							'<div class="md-code-tree-body"><div class="md-code-tree-sidebar vp-file-tree" role="tablist" aria-label="Files">' +
+							'<div class="md-code-tree-body"><div class="md-code-tree-sidebar vp-file-tree" role="group" aria-label="Files">' +
 							sidebarHtml +
 							"</div>" +
 							'<div class="md-code-tree-panels">',

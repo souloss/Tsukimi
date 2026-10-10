@@ -413,7 +413,7 @@ onDestroy(() => {
 	<button
 		class="search-modal-icon-btn btn-plain scale-animation rounded-lg w-12 h-12 active:scale-90"
 		onclick={openModal}
-		aria-label={i18n(I18nKey.search)}
+		aria-label={`${i18n(I18nKey.search)} ⌘ K`}
 		title="{i18n(I18nKey.search)} (⌘K)"
 	>
 		<Icon icon="material-symbols:search" class="text-[1.25rem]" />
@@ -422,7 +422,7 @@ onDestroy(() => {
 	<button
 		class="search-modal-pill-btn"
 		onclick={openModal}
-		aria-label={i18n(I18nKey.search)}
+		aria-label={`${i18n(I18nKey.search)} ⌘ K`}
 		title="{i18n(I18nKey.search)} (⌘K)"
 	>
 		<Icon icon="material-symbols:search-rounded" width="20" height="20" />

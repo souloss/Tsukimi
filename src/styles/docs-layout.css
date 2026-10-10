@@ -37,7 +37,7 @@
 	--docs-brand: var(--primary);
 	--docs-brand-dim: var(--primary-15);
 	--docs-brand-soft: var(--primary-30);
-	--docs-on-brand: var(--deep-text);
+	--docs-on-brand: #ffffff;
 
 	/* Borders & dividers */
 	--docs-divider: var(--line-divider);
@@ -56,6 +56,10 @@
 
 	/* Transitions */
 	--docs-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root.dark {
+	--docs-on-brand: var(--deep-text);
 }
 
 .dark {
