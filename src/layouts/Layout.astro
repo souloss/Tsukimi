@@ -539,13 +539,36 @@ if (defaultFontItem) {
 	const endpoint = document.documentElement.dataset.performanceEndpoint;
 	if (endpoint) {
 		const sampleRate = Number(document.documentElement.dataset.performanceSampleRate ?? 0.1);
-		initSampledPerformanceReporting((metric) => {
+		const queue: Array<{ name: string; value: number; path: string; connection?: string }> = [];
+		let flushTimer: number | undefined;
+		const flush = () => {
+			if (!queue.length) return;
+			const payload = JSON.stringify({ metrics: queue.splice(0, 50) });
+			if (navigator.sendBeacon) {
+				const accepted = navigator.sendBeacon(
+					endpoint,
+					new Blob([payload], { type: "application/json" }),
+				);
+				if (accepted) return;
+			}
 			void fetch(endpoint, {
 				method: "POST",
 				keepalive: true,
 				headers: { "content-type": "application/json" },
-				body: JSON.stringify(metric),
-			});
+				body: payload,
+			}).catch(() => undefined);
+		};
+		const scheduleFlush = () => {
+			if (flushTimer) return;
+			flushTimer = window.setTimeout(() => {
+				flushTimer = undefined;
+				flush();
+			}, 5000);
+		};
+		initSampledPerformanceReporting((metric) => {
+			queue.push(metric);
+			scheduleFlush();
 		}, { enabled: true, sampleRate });
+		window.addEventListener("pagehide", flush, { once: true });
 	}
 </script>

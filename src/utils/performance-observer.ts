@@ -41,8 +41,39 @@ export interface WebVitalsMetric {
 
 export type MetricCallback = (metric: WebVitalsMetric) => void;
 
+type SupportedEntryType =
+	| "event"
+	| "first-input"
+	| "layout-shift"
+	| "longtask"
+	| "largest-contentful-paint"
+	| "navigation"
+	| "paint"
+	| "resource";
+
+function createObserver(
+	type: SupportedEntryType,
+	callback: PerformanceObserverCallback,
+	extraOptions: Partial<PerformanceObserverInit> = {},
+): PerformanceObserver | null {
+	if (typeof PerformanceObserver === "undefined") return null;
+	const supported = PerformanceObserver.supportedEntryTypes;
+	if (Array.isArray(supported) && !supported.includes(type)) return null;
+	try {
+		const observer = new PerformanceObserver(callback);
+		observer.observe({
+			type,
+			buffered: true,
+			...extraOptions,
+		} as PerformanceObserverInit);
+		return observer;
+	} catch {
+		return null;
+	}
+}
+
 export function observeLongTasks(callback: MetricCallback): () => void {
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("longtask", (list) => {
 		for (const entry of list.getEntries()) {
 			callback({
 				name: "LongTask",
@@ -59,8 +90,7 @@ export function observeLongTasks(callback: MetricCallback): () => void {
 			});
 		}
 	});
-	observer.observe({ type: "longtask", buffered: true });
-	return () => observer.disconnect();
+	return () => observer?.disconnect();
 }
 
 export function observeResourceErrors(callback: MetricCallback): () => void {
@@ -94,9 +124,10 @@ export function createSampledReporter(
  */
 export function observeCLS(callback: MetricCallback): () => void {
 	let clsValue = 0;
+	let reportedClsValue = 0;
 	let clsEntries: LayoutShift[] = [];
 
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("layout-shift", (list) => {
 		for (const entry of list.getEntries()) {
 			const layoutShift = entry as LayoutShift;
 			if (!layoutShift.hadRecentInput) {
@@ -106,11 +137,11 @@ export function observeCLS(callback: MetricCallback): () => void {
 		}
 	});
 
-	observer.observe({ type: "layout-shift", buffered: true });
-
 	// 每隔 1 秒上报一次 CLS 值
 	const intervalId = setInterval(() => {
-		if (clsValue > 0) {
+		if (clsValue > reportedClsValue) {
+			const delta = clsValue - reportedClsValue;
+			reportedClsValue = clsValue;
 			callback({
 				name: "CLS",
 				value: clsValue,
@@ -120,31 +151,18 @@ export function observeCLS(callback: MetricCallback): () => void {
 						: clsValue < 0.25
 							? "needs-improvement"
 							: "poor",
-				delta: clsValue,
+				delta,
 				id: `cls-${Date.now()}`,
 				entries: clsEntries,
 			});
 		}
 	}, 1000);
 
-	// 最终上报
-	const snoopOnPreviousEntries = () => {
-		clsEntries = [];
-		new PerformanceObserver((list) => {
-			for (const entry of list.getEntries()) {
-				const layoutShift = entry as LayoutShift;
-				if (!layoutShift.hadRecentInput) {
-					clsEntries.push(layoutShift);
-				}
-			}
-		}).observe({ type: "layout-shift", buffered: true });
-	};
-
 	// 返回清理函数
 	return () => {
 		clearInterval(intervalId);
-		observer.disconnect();
-		snoopOnPreviousEntries();
+		observer?.disconnect();
+		clsEntries = [];
 	};
 }
 
@@ -158,7 +176,7 @@ export function observeLCP(
 	let lcpValue = 0;
 	const lcpEntries: LargestContentfulPaint[] = [];
 
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("largest-contentful-paint", (list) => {
 		const entries = list.getEntries();
 		const lastEntry = entries[entries.length - 1];
 		if (lastEntry) {
@@ -185,11 +203,9 @@ export function observeLCP(
 		}
 	});
 
-	observer.observe({ type: "largest-contentful-paint", buffered: true });
-
 	// 返回清理函数
 	return () => {
-		observer.disconnect();
+		observer?.disconnect();
 	};
 }
 
@@ -200,7 +216,7 @@ export function observeFID(callback: MetricCallback): () => void {
 	// FID 已弃用，使用 INP 代替
 	let fidValue = 0;
 
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("first-input", (list) => {
 		for (const entry of list.getEntries()) {
 			const firstInput = entry as PerformanceEventTiming;
 			if (firstInput) {
@@ -223,11 +239,9 @@ export function observeFID(callback: MetricCallback): () => void {
 		}
 	});
 
-	observer.observe({ type: "first-input", buffered: true });
-
 	// 返回清理函数
 	return () => {
-		observer.disconnect();
+		observer?.disconnect();
 	};
 }
 
@@ -239,35 +253,34 @@ export function observeINP(callback: MetricCallback): () => void {
 	const inpEntries: PerformanceEventTiming[] = [];
 	let pendingEntries: PerformanceEventTiming[] = [];
 
-	const observer = new PerformanceObserver((list) => {
-		for (const entry of list.getEntries()) {
-			const eventTiming = entry as PerformanceEventTiming;
-			// 使用类型断言访问 interactionId
-			if ((eventTiming as { interactionId?: number }).interactionId) {
-				pendingEntries.push(eventTiming);
+	const observer = createObserver(
+		"event",
+		(list) => {
+			for (const entry of list.getEntries()) {
+				const eventTiming = entry as PerformanceEventTiming;
+				// 使用类型断言访问 interactionId
+				if ((eventTiming as { interactionId?: number }).interactionId) {
+					pendingEntries.push(eventTiming);
+				}
 			}
-		}
-	});
-
-	// 使用类型断言来传递非标准选项
-	observer.observe({
-		type: "event",
-		buffered: true,
-		...({ durationThreshold: 16 } as PerformanceObserverInit),
-	});
+		},
+		{ durationThreshold: 16 } as Partial<PerformanceObserverInit>,
+	);
 
 	// 检查待处理的交互
 	const checkPendingEntries = () => {
+		let changed = false;
 		for (const entry of pendingEntries) {
 			const duration = entry.duration;
 			if (duration > inpValue) {
 				inpValue = duration;
 				inpEntries.push(entry);
+				changed = true;
 			}
 		}
 		pendingEntries = [];
 
-		if (inpValue > 0) {
+		if (changed) {
 			callback({
 				name: "INP",
 				value: inpValue,
@@ -289,7 +302,7 @@ export function observeINP(callback: MetricCallback): () => void {
 	// 返回清理函数
 	return () => {
 		clearInterval(intervalId);
-		observer.disconnect();
+		observer?.disconnect();
 	};
 }
 
@@ -299,7 +312,7 @@ export function observeINP(callback: MetricCallback): () => void {
 export function observeFCP(callback: MetricCallback): () => void {
 	let fcpValue = 0;
 
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("paint", (list) => {
 		for (const entry of list.getEntries()) {
 			if (entry.name === "first-contentful-paint") {
 				fcpValue = entry.startTime;
@@ -320,11 +333,9 @@ export function observeFCP(callback: MetricCallback): () => void {
 		}
 	});
 
-	observer.observe({ type: "paint", buffered: true });
-
 	// 返回清理函数
 	return () => {
-		observer.disconnect();
+		observer?.disconnect();
 	};
 }
 
@@ -332,7 +343,7 @@ export function observeFCP(callback: MetricCallback): () => void {
  * 观察 Navigation Timing API
  */
 export function observeNavigationTiming(callback: MetricCallback): () => void {
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("navigation", (list) => {
 		for (const entry of list.getEntries()) {
 			if (entry.entryType === "navigation") {
 				const nav = entry as PerformanceNavigationTiming;
@@ -350,11 +361,9 @@ export function observeNavigationTiming(callback: MetricCallback): () => void {
 		}
 	});
 
-	observer.observe({ type: "navigation", buffered: true });
-
 	// 返回清理函数
 	return () => {
-		observer.disconnect();
+		observer?.disconnect();
 	};
 }
 
@@ -365,7 +374,7 @@ export function observeResourceTiming(
 	callback: MetricCallback,
 	resourceFilter?: (resource: PerformanceResourceTiming) => boolean,
 ): () => void {
-	const observer = new PerformanceObserver((list) => {
+	const observer = createObserver("resource", (list) => {
 		for (const entry of list.getEntries()) {
 			const resource = entry as PerformanceResourceTiming;
 			if (resourceFilter && !resourceFilter(resource)) {
@@ -382,11 +391,9 @@ export function observeResourceTiming(
 		}
 	});
 
-	observer.observe({ type: "resource", buffered: true });
-
 	// 返回清理函数
 	return () => {
-		observer.disconnect();
+		observer?.disconnect();
 	};
 }
 

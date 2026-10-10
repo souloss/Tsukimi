@@ -43,7 +43,7 @@ TSUKIMI_PERFORMANCE_BASELINE=/path/to/baseline.json pnpm perf:check
 
 ## 运行时 Web Vitals
 
-`src/utils/performance-observer.ts` 提供 CLS、LCP、FID、INP、FCP、TTFB 等观察器。调用方负责决定是否上报，以及上报到哪个分析服务；默认不产生额外网络请求。
+`src/utils/performance-observer.ts` 提供 CLS、LCP、FID、INP、FCP、TTFB 等观察器。观察器会先检查浏览器是否支持对应 entry type，清理函数会断开所有 observer 和定时器。调用方负责决定是否上报，以及上报到哪个分析服务；默认不产生额外网络请求。启用页面入口会将指标批量发送，优先使用 `sendBeacon`，失败时使用捕获错误的 keepalive 请求。
 
 接入新的页面或分析服务时，应确认：
 

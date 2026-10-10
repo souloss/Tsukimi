@@ -127,3 +127,4 @@
 - PERF-001 验收完成：Lighthouse 矩阵覆盖首页、文章、归档、标签、文档和已启用的友链功能页，并分别执行 desktop 与 mobile profile。六路由均达到性能门禁（desktop >= 0.95、mobile >= 0.90）、无障碍 1、最佳实践 1；可抓取路由首页和文章 SEO 为 1，`robots.txt` 明确禁止抓取的归档、标签、文档和友链页按 0.66 预期值校验。桌面和移动报告分别写入 `.lighthouseci/matrix.json` 与 `.lighthouseci/mobile-matrix.json`，矩阵记录 `expectedSeo` 与 `crawlable` 字段。
 - 矩阵脚本增加构建路由存在性检查，功能页默认使用当前已启用的 `/friends/`，避免禁用功能路由被误当成 Lighthouse/preview 故障；preview readiness 改为直连 HTTP 检查并允许较慢的本地启动。
 - 验证：`pnpm build`（144 页、33.8 MiB/45.0 MiB）、`pnpm perf:lighthouse:matrix`、`pnpm perf:lighthouse:matrix:mobile`；两套矩阵均完成 6/6 路由。
+- PERF-004 部分实施：运行时观察器增加 entry type 能力检测、完整清理、CLS 增量和 INP 去重；页面入口改为采样队列批量上报，优先 `sendBeacon`，网络失败不产生未处理 rejection。验证：`pnpm type-check`、`pnpm check`、`pnpm test`（53/53）。真实部署样本、endpoint 可用性和隐私留存仍需部署环境闭环，任务保持进行中。
