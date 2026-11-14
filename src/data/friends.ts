@@ -18,13 +18,13 @@ export const friendsData: FriendItem[] = [
 	{
 		id: 1,
 		title: "aiHot",
-		imgurl: "https://www.google.com/s2/favicons?domain=aihot.virxact.com&sz=64",
+		imgurl: "https://www.google.com/s2/favicons?domain=aihot.news&sz=64",
 		desc: "AI 热点资讯聚合",
-		siteurl: "https://aihot.virxact.com",
+		siteurl: "https://aihot.news",
 		tags: ["AI", "News"],
 		weight: 20,
 		enabled: true,
-		rss: "https://aihot.virxact.com/feed/daily.xml",
+		rss: "https://aihot.news/feed/daily.xml",
 	},
 	{
 		id: 2,
